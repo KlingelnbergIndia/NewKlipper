@@ -1,0 +1,54 @@
+{
+  "ClientProfile": {
+    "Clients": [
+      {
+        "Id": "AttendancePushApp",
+        "Name": "Attendance Data Pusher Application",
+        "Secret": "Adpa@98765",
+        "AllowedScopes": [
+          "AttendanceApi"
+        ]
+      },
+      {
+        "Id": "KlipperApi",
+        "Name": "Klingelnberg India Platform for Personnel Enterprise Resources Api",
+        "Secret": "Klipperapi@12345",
+        "AllowedScopes": [
+          "AttendanceApi",
+          "EmployeeApi",
+          "OperationalsApi"
+        ]
+      },
+      {
+        "Id": "Klipper.Desktop.WPF",
+        "Name": "WPF Client for Klipper",
+        "Secret": "KlipperWPF@98765",
+        "AllowedScopes": [
+          "KlipperApi"
+        ]
+      }
+
+    ]
+  },
+  "ApiProfile": {
+    "Apis": [
+      {
+        "Name": "AttendanceApi",
+        "DisplayName": "Attendace Api"
+      },
+      {
+        "Name": "EmployeeApi",
+        "DisplayName": "Employee Api"
+      },
+      {
+        "Name": "OperationalsApi",
+        "DisplayName": "Operationals Api"
+      },
+      {
+        "Name": "KlipperApi",
+        "DisplayName": "Klipper Api"
+      }
+    ]
+
+  }
+  }

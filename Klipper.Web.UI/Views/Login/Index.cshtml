@@ -1,0 +1,61 @@
+﻿@model Klipper.Web.UI.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Klipper Login";
+}
+<link href="~/css/loginPage.css" rel="stylesheet" />
+
+<div class="sidenav">
+    <div class="login-main-text" style="margin-left: auto;margin-right: auto; display:block;">
+        <img src="~/images/KLLogo.png" class="img-responsive" />
+        <h5>Klingelnberg Attendance portal &copy;@DateTime.Now.Year</h5>
+    </div>
+</div>
+<div class="main" style="margin-top:-100PX;">
+    <div class="col-md-6 col-sm-12">
+        <div class="login-form">
+            @if (@TempData["successMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>Success!</strong><br /> @TempData["successMessage"]
+                </div>
+            }
+            else if (@TempData["errorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>Error!</strong><br /> @TempData["errorMessage"]
+                </div>
+            }
+
+            <form method="post" asp-action="Authenticate">
+                <div asp-validation-summary="ModelOnly" class="text-danger">
+
+                </div>
+                <div class="form-group">
+                    <label>User Name</label>
+                    <input type="text" asp-for="@Model.UserName" class="form-control" placeholder="User Name" value="Gourav.Joshi">
+                    <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" asp-for="@Model.Password" class="form-control" placeholder="Password" value="Gourav$xyz987">
+                    <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-black">Login</button>
+                <button type="submit" class="btn btn-secondary">Register</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<style>
+    body > nav {
+        display: none;
+    }
+    #sidebar-wrapper {
+        display: none;
+    }
+</style>
