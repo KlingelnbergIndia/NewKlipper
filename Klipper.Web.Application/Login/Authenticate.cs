@@ -19,7 +19,8 @@ namespace Klipper.Web.Application.Login
                 PasswordHash = ToSha256(password)
             };
             _client = new HttpClient();
-            _client.BaseAddress = new Uri("http://localhost:7000/");
+            Uri apiUrl = new Uri(Common.AddressResolver.GetAddress("KlipperApi"));
+            _client.BaseAddress = apiUrl;
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(user, Newtonsoft.Json.Formatting.Indented);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             _response = _client.PostAsync("api/auth/login", httpContent).Result;
