@@ -62,15 +62,6 @@ namespace KlipperApi
                     .AllowAnyHeader()
                     .AllowCredentials());
             });
-
-            //services.AddMvcCore(options =>
-            //        {
-            //            var policy = new AuthorizationPolicyBuilder()
-            //                .RequireAuthenticatedUser()
-            //                .Build();
-            //            options.Filters.Add(new AuthorizeFilter(policy));
-            //        }
-            //    )
             services.AddMvcCore()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddApiExplorer()
@@ -123,7 +114,6 @@ namespace KlipperApi
                 });
 
             //Register policy requirements here...
-            //services.AddAuthorizationPolicyRequirements();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
