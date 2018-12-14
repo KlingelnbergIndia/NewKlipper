@@ -63,14 +63,15 @@ namespace KlipperApi
                     .AllowCredentials());
             });
 
-            services.AddMvcCore(options =>
-                    {
-                        var policy = new AuthorizationPolicyBuilder()
-                            .RequireAuthenticatedUser()
-                            .Build();
-                        options.Filters.Add(new AuthorizeFilter(policy));
-                    }
-                )
+            //services.AddMvcCore(options =>
+            //        {
+            //            var policy = new AuthorizationPolicyBuilder()
+            //                .RequireAuthenticatedUser()
+            //                .Build();
+            //            options.Filters.Add(new AuthorizeFilter(policy));
+            //        }
+            //    )
+            services.AddMvcCore()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddApiExplorer()
                 .AddAuthorization(options =>
@@ -122,7 +123,7 @@ namespace KlipperApi
                 });
 
             //Register policy requirements here...
-            services.AddAuthorizationPolicyRequirements();
+            //services.AddAuthorizationPolicyRequirements();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -152,7 +153,7 @@ namespace KlipperApi
             // this is not needed if you use the client library directly or the new policy-based authorization framework in ASP.NET Core
             //app.UsePolicyServerClaims();
             app.UseMiddleware<SerilogMiddleware>();
-            app.UseAuthentication();
+           // app.UseAuthentication();
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseMvc();

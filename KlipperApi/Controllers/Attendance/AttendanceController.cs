@@ -29,7 +29,7 @@ namespace KlipperApi.Controllers.Attendance
 
         [Route("{employeeId}/{startDate}/{endDate}")]
         [HttpGet]
-        [Authorize(Policy = "ReadAttendance")]
+        //[Authorize(Policy = "ReadAttendance")]
         public async Task<IActionResult> Get(int employeeId, string startDate, string endDate)
         {
             var start = DateTime.Parse(startDate);
