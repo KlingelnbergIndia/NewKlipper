@@ -34,8 +34,11 @@ namespace Klipper.Web.Application.Login
             _response = _client.PostAsync("api/auth/login", httpContent).Result;
             var responseData = _response.Content.ReadAsStringAsync().Result;
 
-            var jsonObject = JObject.Parse(responseData);
-            _employeeID = Convert.ToInt32(jsonObject["id"].ToString()) ;
+            if (_response.ReasonPhrase != "Unauthorized")
+            {
+                var jsonObject = JObject.Parse(responseData);
+                _employeeID = Convert.ToInt32(jsonObject["id"].ToString());
+            }
 
             SetStatusMessage();
             return _response.IsSuccessStatusCode ? true : false;
