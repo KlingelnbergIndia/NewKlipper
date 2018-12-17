@@ -1,9 +1,14 @@
-﻿using System;
+﻿using Models.Core.Employment;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Klipper.Web.Application.Login
 {
@@ -11,6 +16,8 @@ namespace Klipper.Web.Application.Login
     {
         private HttpClient _client;
         HttpResponseMessage _response;
+        private string _userName;
+        private int _employeeID;
         public bool Login(string userName, string password)
         {
             var user = new
@@ -18,15 +25,33 @@ namespace Klipper.Web.Application.Login
                 UserName = userName,
                 PasswordHash = ToSha256(password)
             };
+            _userName = userName;
             _client = new HttpClient();
             Uri apiUrl = new Uri(Common.AddressResolver.GetAddress("KlipperApi"));
             _client.BaseAddress = apiUrl;
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(user, Newtonsoft.Json.Formatting.Indented);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             _response = _client.PostAsync("api/auth/login", httpContent).Result;
-            SetStatusMessage();
+            var responseData = _response.Content.ReadAsStringAsync().Result;
 
+            var jsonObject = JObject.Parse(responseData);
+            _employeeID = Convert.ToInt32(jsonObject["id"].ToString()) ;
+
+            SetStatusMessage();
             return _response.IsSuccessStatusCode ? true : false;
+        }
+
+        //we need to write saparate api to get these data.
+        public async Task<Employee> GetEmployeeDataAsync()
+        {
+            _client = new HttpClient();
+            Uri apiUrl = new Uri(Common.AddressResolver.GetAddress("EmployeeApi"));
+            _client.BaseAddress = apiUrl;
+            _response = _client.GetAsync($"api/Employees/{_employeeID}").Result;
+
+            string jsonString = await _response.Content.ReadAsStringAsync();
+            Employee empData = JsonConvert.DeserializeObject<Employee>(jsonString);
+            return empData;
         }
 
         public LoginResponse ResponseStatus
@@ -79,6 +104,5 @@ namespace Klipper.Web.Application.Login
 
             return string.Empty;
         }
-
     }
 }

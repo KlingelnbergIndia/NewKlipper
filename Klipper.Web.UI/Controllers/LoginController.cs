@@ -6,6 +6,7 @@ using Klipper.Web.Application.Login;
 using Klipper.Web.UI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models.Core.Employment;
 
 namespace Klipper.Web.UI.Controllers
 {
@@ -28,7 +29,11 @@ namespace Klipper.Web.UI.Controllers
             _auth.Login(login.UserName,login.Password);
             if (_auth.ResponseStatus== LoginResponse.Success)
             {
-                HttpContext.Session.SetString("UserName", login.UserName);
+                Employee empData = _auth.GetEmployeeDataAsync().Result;
+                HttpContext.Session.SetString("UserName", $"{empData.FirstName} {empData.LastName}");
+                HttpContext.Session.SetString("Title", empData.Title);
+                HttpContext.Session.SetInt32("ID", empData.ID);
+
                 return RedirectToAction("Index", "Home");
             }
 

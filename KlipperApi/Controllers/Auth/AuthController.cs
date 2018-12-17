@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using KlipperAuthorization;
 using KlipperApi.Controllers.Employees;
+using System.Linq;
 
 namespace KlipperApi.Controllers.Auth
 {
@@ -80,12 +81,13 @@ namespace KlipperApi.Controllers.Auth
                     claims: claims.ToArray(),
                     signingCredentials: new Microsoft.IdentityModel.Tokens.SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
                     );
-
+                User currentUserInfo = (_userRepository.GetAllUsers().Result).Where(x => x.UserName == user.UserName).FirstOrDefault();
                 return Ok(new
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
                     Expiration = token.ValidTo,
-                    Username = user.UserName
+                    Username = user.UserName,
+                    ID = currentUserInfo.ID
                 });
             }
             ModelState.AddModelError("", "Error in user authentication");
