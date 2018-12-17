@@ -30,7 +30,7 @@ namespace Klipper.Web.UI.Controllers
             if (_auth.ResponseStatus== LoginResponse.Success)
             {
                 Employee empData = _auth.GetEmployeeDataAsync().Result;
-                HttpContext.Session.SetString("UserName", $"{empData.FirstName} {empData.LastName}");
+                HttpContext.Session.SetString("EmployeeName", $"{empData.FirstName} {empData.LastName}");
                 HttpContext.Session.SetString("Title", empData.Title);
                 HttpContext.Session.SetInt32("ID", empData.ID);
 
