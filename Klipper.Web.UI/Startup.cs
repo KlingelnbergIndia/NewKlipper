@@ -41,12 +41,9 @@ namespace Klipper.Web.UI
             });
 
             services.AddTransient<IAuthenticate, Authenticate>();
-<<<<<<< HEAD
             services.AddScoped<IEmployeeAttendanceRecordData, EmployeeAttendanceRecordData>();
-=======
             services.AddTransient<IAttendanceService, AttendanceService>();
             services.AddSingleton<IAttendanceAccessor, AttendanceAccessor>();
->>>>>>> feature/UI_Attendance_sort
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
