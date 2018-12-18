@@ -81,7 +81,7 @@ namespace KlipperApi.Controllers.Auth
                     claims: claims.ToArray(),
                     signingCredentials: new Microsoft.IdentityModel.Tokens.SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
                     );
-                User currentUserInfo = (_userRepository.GetAllUsers().Result).Where(x => x.UserName == user.UserName).FirstOrDefault();
+                User currentUserInfo = (_userRepository.GetAllUsers().Result).Where(x => x.UserName.ToLower() == user.UserName.ToLower()).FirstOrDefault();
                 return Ok(new
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
