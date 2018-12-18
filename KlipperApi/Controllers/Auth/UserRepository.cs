@@ -4,6 +4,7 @@ using MongoDB.Driver;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace KlipperApi.Controllers.Auth
@@ -161,12 +162,22 @@ namespace KlipperApi.Controllers.Auth
 
         public async Task<User> GetByUserName(string userName)
         {
-            var filter = Builders<User>.Filter.Eq(s => s.UserName, userName);
+            //var filter = Builders<User>.Filter.Eq(s => s.UserName, userName);
             try
             {
-                return await _context.Users
-                                .Find(filter)
-                                .FirstOrDefaultAsync();
+
+                var userData = await Task.Run(()=> {
+                    var data = _context.Users
+                    .AsQueryable()
+                    .Where(x => x.UserName.ToLower() == userName.ToLower())
+                    .FirstOrDefault();
+                    return data;
+                });
+
+                return userData;
+                //return await _context.Users
+                //                .Find(filter)
+                //                .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {
