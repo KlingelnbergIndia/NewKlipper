@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Klipper.Web.Application.Attendance.DataAccess;
+using Klipper.Web.Application.Attendance.Service;
 using Klipper.Web.Application.Login;
 using Klipper.Web.UI.Services;
 using Microsoft.AspNetCore.Builder;
@@ -39,7 +41,12 @@ namespace Klipper.Web.UI
             });
 
             services.AddTransient<IAuthenticate, Authenticate>();
+<<<<<<< HEAD
             services.AddScoped<IEmployeeAttendanceRecordData, EmployeeAttendanceRecordData>();
+=======
+            services.AddTransient<IAttendanceService, AttendanceService>();
+            services.AddSingleton<IAttendanceAccessor, AttendanceAccessor>();
+>>>>>>> feature/UI_Attendance_sort
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
