@@ -9,5 +9,6 @@ namespace Klipper.Web.Application.Attendance.DataAccess
     public interface IAttendanceAccessor
     {
         IEnumerable<AccessEvent> GetAttendanceByDateIDAsync(int employeeId, DateTime startDate, DateTime endDate);
+        Task<IEnumerable<AccessEvent>> GetAttendanceByEmployeeIdAsync(int employeeId);
     }
 }

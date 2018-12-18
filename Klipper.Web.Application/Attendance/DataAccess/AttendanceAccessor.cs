@@ -12,6 +12,20 @@ namespace Klipper.Web.Application.Attendance.DataAccess
 {
     public class AttendanceAccessor : IAttendanceAccessor
     {
+
+        public async Task<IEnumerable<AccessEvent>> GetAttendanceByEmployeeIdAsync(int employeeId)
+        {
+            var client = CommonHelper.GetClient(AddressResolver.GetAddress("KlipperApi", false));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var str = "api/attendance/employeeId?employeeId=" + employeeId.ToString();
+            HttpResponseMessage response = await client.GetAsync(str);
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var accessEvents = JsonConvert.DeserializeObject<List<AccessEvent>>(jsonString);
+
+            return accessEvents;
+        }
+
+
         public IEnumerable<AccessEvent> GetAttendanceByDateIDAsync(int employeeId, DateTime startDate, DateTime endDate)
         {
             var client = CommonHelper.GetClient(AddressResolver.GetAddress("KlipperApi", false));
