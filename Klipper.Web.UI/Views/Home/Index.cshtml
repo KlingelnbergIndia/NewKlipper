@@ -1,4 +1,51 @@
-﻿@{
+﻿@model Klipper.Web.UI.Models.EmployeeAttendanceRecordViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
+<div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Date
+				</th>
+				<th>
+					Time In
+				</th>
+				<th>
+					Time Out
+				</th>
+				<th>
+					Deficit Hours
+				</th>
+				<th>
+					Working Hours
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+		@foreach (var item in Model.EmployeeAttendance_Record)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Date)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.TimeIn)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.TimeOut)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.DeficitHours)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.WorkingHours)
+				</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+</div>

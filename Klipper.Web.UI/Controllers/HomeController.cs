@@ -5,15 +5,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Klipper.Web.UI.Models;
+using Klipper.Web.UI.Services;
 
 namespace Klipper.Web.UI.Controllers
 {
     [AuthenticateSession]
     public class HomeController : Controller
     {
+        private IEmployeeAttendanceRecordData _employeeAttendanceRecordData;
+        public HomeController(IEmployeeAttendanceRecordData employeeAttendanceRecordData)
+        {
+            _employeeAttendanceRecordData = employeeAttendanceRecordData;
+        }
         public IActionResult Index()
         {
-            return View();
+            var model = new EmployeeAttendanceRecordViewModel();
+            model.EmployeeAttendance_Record = _employeeAttendanceRecordData.GetEmployeeOneWeekAttendanceRecord();
+            return View(model);
         }
 
         public IActionResult About()
