@@ -12,7 +12,7 @@ namespace Klipper.Web.UI
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            string user = filterContext.HttpContext.Session.GetString("UserName");
+            string user = filterContext.HttpContext.Session.GetString("EmployeeName");
             if (user == null)
                 filterContext.Result = new RedirectResult("/");
         }
