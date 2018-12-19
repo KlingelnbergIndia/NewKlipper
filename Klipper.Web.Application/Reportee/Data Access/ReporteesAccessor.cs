@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Klipper.Web.Application.Reportee.Data_Access
 {
-    class ReporteesAccessor : IReporteeAccessor
+    public class ReporteesAccessor : IReporteeAccessor
     {
         public async Task<List<Employee>> GetReporteesByEmployeeId(int employeeId)
         {

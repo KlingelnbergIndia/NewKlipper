@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Klipper.Web.Application.Reportee.Service
 {
     public interface IReportee
     {
-        List<Employee> GetReporteesByEmployeeID(int imployeeId);
+        Task<List<Employee>> GetReporteesByEmployeeID(int imployeeId);
     }
 }

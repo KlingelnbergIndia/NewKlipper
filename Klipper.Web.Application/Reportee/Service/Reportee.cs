@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using Klipper.Web.Application.Reportee.Data_Access;
 using Models.Core.Employment;
 
 namespace Klipper.Web.Application.Reportee.Service
 {
     public class Reportee : IReportee
     {
-        private IReportee _reportee;
+        private IReporteeAccessor _reporteeAccessor;
 
-        public Reportee(IReportee reportee)
+        public Reportee(IReporteeAccessor reporteeAccessor)
         {
-            _reportee = reportee;
+            _reporteeAccessor = reporteeAccessor;
         }
 
-        public List<Employee> GetReporteesByEmployeeID(int employeeId)
+        public Task<List<Employee>> GetReporteesByEmployeeID(int employeeId)
         {
-            var reporteeData = _reportee.GetReporteesByEmployeeID(employeeId);
+            var reporteeData = _reporteeAccessor.GetReporteesByEmployeeId(employeeId);
             return reporteeData;
         }
     }
