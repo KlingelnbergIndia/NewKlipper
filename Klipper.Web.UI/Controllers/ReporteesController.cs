@@ -22,6 +22,7 @@ namespace Klipper.Web.UI.Controllers
             _reportee = reportee;
         }
 
+        //api/Reportees/41?employeeId=41
         [HttpGet("{id}")]
         public async Task<IActionResult> GetReporteesbyId(int employeeId)
         {

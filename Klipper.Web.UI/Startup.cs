@@ -45,7 +45,7 @@ namespace Klipper.Web.UI
             services.AddTransient<IReportee, Reportee>();
             services.AddSingleton<IReporteeAccessor, ReporteesAccessor>();
             services.AddTransient<IAttendanceService, AttendanceService>();
-            services.AddSingleton<IAttendanceAccessor, AttendanceAccessor>()
+            services.AddSingleton<IAttendanceAccessor, AttendanceAccessor>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
