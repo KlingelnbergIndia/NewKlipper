@@ -41,5 +41,14 @@ namespace Klipper.Web.UI.Controllers
             return Ok(await _attendanceService.GetAttendance(employeeId));
         }
 
+        //// api/Attendance/date?date=16-10-2018
+        //[HttpGet]
+        //[Route("date")]
+        //public async Task<IActionResult> Get(String date)
+        //{
+
+
+        //    return Ok(await _attendanceService.GetAttendanceDetailByDate(date));
+        //}
     }
 }

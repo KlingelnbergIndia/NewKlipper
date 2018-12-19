@@ -44,7 +44,7 @@ namespace Klipper.Web.Application.Attendance.Service
                 if (minTime == maxTime)
                 {
                     timeRecord.TimeOut = TimeSpan.Zero;
-                       
+
                 }
                 else
                 {
@@ -57,8 +57,16 @@ namespace Klipper.Web.Application.Attendance.Service
                 TimeSpan workingHours = (calculationData - minTime) + (maxTime - calculationData);
                 timeRecord.TotalWorkingHours = workingHours;
                 timeRecord.Date = entry.ToShortDateString();
-
-                timeRecord.DeficitHours = workingHours - totalHour;
+                var extrahour= workingHours - totalHour;
+                if(extrahour>TimeSpan.Zero)
+                {
+                    timeRecord.OverTime = extrahour;
+                }
+                else
+                {
+                    timeRecord.LateBy =  totalHour- workingHours ;
+                }
+               
 
                 listOfTimeRecord.Add(timeRecord);
             }

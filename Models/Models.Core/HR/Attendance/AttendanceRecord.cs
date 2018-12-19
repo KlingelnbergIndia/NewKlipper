@@ -10,6 +10,8 @@ namespace Models.Core.HR.Attendance
         public String Date;
         public TimeSpan TimeIn;
         public TimeSpan TimeOut;
-        public TimeSpan DeficitHours;
+        public TimeSpan LateBy;
+        public TimeSpan OverTime;
+       
     }
 }
