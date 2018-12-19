@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Klipper.Web.Application.Attendance.DataAccess;
+using Klipper.Web.Application.Attendance.Service;
 using Klipper.Web.Application.Login;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,7 +40,8 @@ namespace Klipper.Web.UI
             });
 
             services.AddTransient<IAuthenticate, Authenticate>();
-
+            services.AddTransient<IAttendanceService, AttendanceService>();
+            services.AddSingleton<IAttendanceAccessor, AttendanceAccessor>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

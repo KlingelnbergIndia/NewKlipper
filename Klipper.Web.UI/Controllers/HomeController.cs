@@ -3,17 +3,31 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Klipper.Web.Application.Attendance.Service;
 using Microsoft.AspNetCore.Mvc;
 using Klipper.Web.UI.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Models.Core.HR.Attendance;
 
 namespace Klipper.Web.UI.Controllers
 {
     [AuthenticateSession]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private IAttendanceService _attendanceService;
+
+        public HomeController(IAttendanceService attendanceService)
         {
-            return View();
+            _attendanceService = attendanceService;
+            
+        }
+        public async Task<IActionResult> Index()
+        {
+            var employeeId = HttpContext.Session.GetInt32("ID");
+            int id = employeeId ?? 0;
+            var model = await _attendanceService.GetAttendance(id);
+            return View((IEnumerable<AttendanceRecord>) model);
         }
 
         public IActionResult About()
