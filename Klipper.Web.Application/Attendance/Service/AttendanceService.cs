@@ -40,11 +40,17 @@ namespace Klipper.Web.Application.Attendance.Service
                 var filterByDay = accessEvents.Where(K => K.EventTime.Date == entry && K.AccessPointID == 16).ToList();
                 var minTime = filterByDay.Select(x => x.EventTime.TimeOfDay).Min();
                 var maxTime = filterByDay.Select(x => x.EventTime.TimeOfDay).Max();
-
                 timeRecord.TimeIn = minTime;
-                timeRecord.TimeOut = maxTime;
-
-
+                if (minTime == maxTime)
+                {
+                    timeRecord.TimeOut = TimeSpan.Zero;
+                       
+                }
+                else
+                {
+                    timeRecord.TimeOut = maxTime;
+                }
+ 
                 TimeSpan calculationData = TimeSpan.Parse("12:00:00");
                 TimeSpan totalHour = TimeSpan.Parse("9:00:00");
 
