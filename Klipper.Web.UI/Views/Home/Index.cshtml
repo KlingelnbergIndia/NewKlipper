@@ -1,8 +1,7 @@
-﻿@model Klipper.Web.UI.Models.EmployeeAttendanceRecordViewModel
+﻿@model IEnumerable<Models.Core.HR.Attendance.AttendanceRecord>
 @{
     ViewData["Title"] = "Home Page";
 }
-<<<<<<< HEAD
 
 <div>
 	<table class="table">
@@ -27,7 +26,7 @@
 			</tr>
 		</thead>
 		<tbody>
-		@foreach (var item in Model.EmployeeAttendance_Record)
+		@foreach (var item in Model)
 		{
 			<tr>
 				<td>
@@ -43,12 +42,11 @@
 					@Html.DisplayFor(modelItem => item.DeficitHours)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.WorkingHours)
+					@Html.DisplayFor(modelItem => item.TotalWorkingHours)
 				</td>
 			</tr>
 		}
 		</tbody>
 	</table>
 </div>
-=======
->>>>>>> feature/UserLogin
+
