@@ -13,18 +13,7 @@
 <div class="main" style="margin-top:-100PX;">
     <div class="col-md-6 col-sm-12">
         <div class="login-form">
-            @if (@TempData["successMessage"] != null)
-            {
-                <div class="alert alert-success">
-                    <strong>Success!</strong><br /> @TempData["successMessage"]
-                </div>
-            }
-            else if (@TempData["errorMessage"] != null)
-            {
-                <div class="alert alert-danger">
-                    <strong>Error!</strong><br /> @TempData["errorMessage"]
-                </div>
-            }
+
 
             <form method="post" asp-action="Authenticate">
                 <div asp-validation-summary="ModelOnly" class="text-danger">
@@ -43,6 +32,14 @@
                 <button type="submit" class="btn btn-black">Login</button>
 
             </form>
+
+            <br>
+            @if (@TempData["errorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["errorMessage"]
+                </div>
+            }
         </div>
     </div>
 </div>

@@ -98,7 +98,7 @@ namespace Klipper.Web.Application.Login
             }
             else if (_response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return "Invalid username or password.";
+                return "Please enter valid username and password.";
             }
             else if (_response.StatusCode == HttpStatusCode.InternalServerError)
             {

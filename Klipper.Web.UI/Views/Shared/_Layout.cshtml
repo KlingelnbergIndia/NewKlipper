@@ -19,6 +19,9 @@
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
+        <a class="navbar-brand" href="#">
+            <img src="~/images/KLLogo.png" alt="logo" style="height:65px;margin-top:-23px;margin-left:15px;">
+        </a>
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -32,8 +35,8 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>*@
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>*@
                     @*<li><a asp-area="" asp-controller="Login" class="" asp-action="Logout">Logout</a></li>*@
                 </ul>
             </div>
@@ -45,10 +48,11 @@
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
+                @*<img src="~/images/KLLogo.png" alt="logo"></img>*@
                 <li class="sidebar-brand">
                     <a href="#">
-                        <span class="glyphicon glyphicon-user"></span>&nbsp; @Context.Session.GetString("EmployeeName")
-                        <div style="margin-top:-35px;color:darkkhaki;font-size:.7em;">&nbsp; @Context.Session.GetString("Title")</div>
+                        <span class="glyphicon glyphicon-user"></span>&nbsp; @Context.Session.GetString("EmployeeName") 
+                        <div style="margin-top:-35px;color:darkkhaki;font-size:.7em;float:left;margin-left:18px;">@Context.Session.GetString("Title")</div>
                     </a>
                 </li>
 
@@ -82,7 +86,7 @@
 
     <div class="container body-content">
         @*@RenderBody()*@
-        <hr />
+        @*<hr />*@
         <footer>
             @*<p>&copy; 2018 - Klipper.Web.UI</p>*@
         </footer>
