@@ -1,0 +1,37 @@
+﻿@model Models.Core.Reportees.Reportees
+
+@{
+    ViewData["Title"] = "GetReporteesbyId";
+}
+
+
+
+<div>
+    <h4>Reportees</h4>
+    <hr />
+    <dl class="dl-horizontal">
+    </dl>
+</div>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+               
+            </tr>
+            <tr>
+                <th>
+
+                    <select onmousedown="this.size = 5;" onmouseup="this.size = 1;">
+                        @foreach (var item in Model.FullNameOfReporteeswithTheirIds)
+                        {
+
+                            <option value="@Html.DisplayFor(modelItem => item)">@Html.DisplayFor(modelItem => item)</option>
+                        }
+                    </select>
+                </th>
+            </tr>
+
+        </thead>
+    </table>
+
+</div>

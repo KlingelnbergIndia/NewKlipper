@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Klipper.Web.Application\Klipper.Web.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

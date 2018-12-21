@@ -41,5 +41,17 @@ namespace KlipperApi.Controllers.Attendance
 
             return Ok(filteredEvents);
         }
+
+        [Route("employeeId")]
+        [HttpGet]
+        //[Authorize(Policy = "ReadAttendance")]
+        public async Task<IActionResult> Get(int employeeId)
+        {
+
+            var accessEvents = await _attendanceAccessor.GetAttendanceByEmployeeIdAsync(employeeId) as List<AccessEvent>;
+
+
+            return Ok(accessEvents);
+        }
     }
 }
