@@ -28,10 +28,14 @@ namespace Klipper.Web.Application.Attendance.Service
         {
 
             var accessEvents = await _attendanceAccessor.GetAttendanceByEmployeeIdAsync(employeeId) as List<AccessEvent>;
-
+          
+            foreach (var eachEntry in accessEvents)
+            {
+                eachEntry.EventTime = TimeZoneInfo.ConvertTimeFromUtc(eachEntry.EventTime, TimeZoneInfo.FindSystemTimeZoneById("India Standard Time"));
+            }
             var distinctDay = accessEvents.Select(x => x.EventTime.Date).Distinct();
 
-            var lastTenEntry = distinctDay.OrderByDescending(i => i.Date).Take(10);
+            var lastTenEntry = distinctDay.OrderByDescending(i => i.Date).Take(7);
             List<AttendanceRecord> listOfTimeRecord = new List<AttendanceRecord>();
             foreach (var entry in lastTenEntry)
             {
