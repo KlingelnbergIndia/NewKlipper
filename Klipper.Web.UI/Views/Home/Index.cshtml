@@ -3,26 +3,29 @@
 	ViewData["Title"] = "Home Page";
 }
 
+<style>
+	th,td {text-align: center}
+</style>
 <div>
 	<table class="table">
 		<thead>
 			<tr>
-				<th style="text-align: center">
+				<th>
 					Date
 				</th>
-				<th style="text-align: center">
+				<th>
 					Time In
 				</th>
-				<th style="text-align: center">
+				<th>
 					Time Out
 				</th>
-				<th style="text-align: center">
+				<th>
 					Late By
 				</th>
-				<th style="text-align: center">
+				<th>
 					OverTime
 				</th>
-				<th style="text-align:center">
+				<th>
 					Total Working Hours
 				</th>
 			</tr>
@@ -30,40 +33,40 @@
 		<tbody>
 			@foreach (var item in Model)
 			{
-				var lateByColor = "crimson"; 
-				var overTimeColor = "aquamarine";
-				if (item.LateBy == TimeSpan.Zero)
+				var lateByColor = "White";
+				var overTimeColor = "White";
+				if (item.LateBy != TimeSpan.Zero)
 				{
-					lateByColor = "White";
+					lateByColor = "crimson";
 				}
-				if (item.OverTime == TimeSpan.Zero)
+				if (item.OverTime != TimeSpan.Zero)
 				{
-					overTimeColor = "White";
+					overTimeColor = "aquamarine";
 				}
 				<tr>
-					<td style="text-align: center">
+					<td>
 						@Html.DisplayFor(modelItem => item.Date)
 					</td>
-					<td style="text-align: center">
+					<td>
 						@Html.DisplayFor(modelItem => item.TimeIn)
 					</td>
 					@if (item.TimeOut == TimeSpan.Zero)
 					{
-						<td style="text-align: center">-</td>
+						<td>-</td>
 					}
 					else
 					{
-						<td style="text-align: center">
+						<td>
 							@Html.DisplayFor(modelItem => item.TimeOut)
 						</td>
 					}
-					<td style="background:@lateByColor;text-align: center">
+					<td style="background:@lateByColor">
 						@Html.DisplayFor(modelItem => item.LateBy)
 					</td>
-					<td style="background:@overTimeColor;text-align: center">
+					<td style="background:@overTimeColor">
 						@Html.DisplayFor(modelItem => item.OverTime)
 					</td>
-					<td style="text-align: center">
+					<td>
 						@Html.DisplayFor(modelItem => item.TotalWorkingHours)
 					</td>
 				</tr>
