@@ -1,8 +1,11 @@
 ﻿@model IEnumerable<Models.Core.HR.Attendance.AttendanceRecord>
 @{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
 }
 
+<style>
+	th,td {text-align: center}
+</style>
 <div>
 	<table class="table">
 		<thead>
@@ -17,35 +20,57 @@
 					Time Out
 				</th>
 				<th>
-					Deficit Hours
+					Late By
 				</th>
 				<th>
-					Working Hours
+					OverTime
 				</th>
-				<th></th>
+				<th>
+					Total Working Hours
+				</th>
 			</tr>
 		</thead>
 		<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.Date)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.TimeIn)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.TimeOut)
-				</td>
-				<td>
-					
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.TotalWorkingHours)
-				</td>
-			</tr>
-		}
+			@foreach (var item in Model)
+			{
+				var lateByColor = "White";
+				var overTimeColor = "White";
+				if (item.LateBy != TimeSpan.Zero)
+				{
+					lateByColor = "crimson";
+				}
+				if (item.OverTime != TimeSpan.Zero)
+				{
+					overTimeColor = "aquamarine";
+				}
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Date)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.TimeIn)
+					</td>
+					@if (item.TimeOut == TimeSpan.Zero)
+					{
+						<td>-</td>
+					}
+					else
+					{
+						<td>
+							@Html.DisplayFor(modelItem => item.TimeOut)
+						</td>
+					}
+					<td style="background:@lateByColor">
+						@Html.DisplayFor(modelItem => item.LateBy)
+					</td>
+					<td style="background:@overTimeColor">
+						@Html.DisplayFor(modelItem => item.OverTime)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.TotalWorkingHours)
+					</td>
+				</tr>
+			}
 		</tbody>
 	</table>
 </div>
