@@ -21,24 +21,12 @@ namespace Klipper.Web.UI.Controllers
             return View();
         }
 
-        //api/Attendance/41/2018-09-01/2018-10-01
-        [HttpGet]
-        [Route("{employeeId}/{startDate}/{endDate}")]
-        public async Task<IActionResult> Get(int employeeId, DateTime startDate, DateTime endDate)
-        {
-
-
-            return Ok(_attendanceService.GetAttendanceByDate(employeeId, startDate, endDate));
-        }
-
         // api/Attendance/employeeId?employeeId=45
         [HttpGet]
         [Route("employeeId")]
         public async Task<IActionResult> Get(int employeeId)
         {
-
-
-            return Ok(await _attendanceService.GetAttendance(employeeId));
+            return Ok(await _attendanceService.GetAttendance(employeeId, 7 , "Indian standard time"));
         }
 
         //// api/Attendance/date?date=16-10-2018

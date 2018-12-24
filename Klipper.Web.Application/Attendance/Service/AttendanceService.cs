@@ -17,65 +17,13 @@ namespace Klipper.Web.Application.Attendance.Service
             _attendanceAccessor = attendanceAccessor;
         }
 
-        public IEnumerable<AccessEvent> GetAttendanceByDate(int employeeId, DateTime startDate, DateTime endDate)
+        public async Task<List<AttendanceRecord>> GetAttendance(int employeeId, int noOfDays, string timeZoneStr)
         {
-            var accessEvents = _attendanceAccessor.GetAttendanceByDateIDAsync(employeeId, startDate, endDate) as List<AccessEvent>;
-            var distinctDay = accessEvents.Select(x => x.EventTime.Date).Distinct();
-            return accessEvents;
-        }
+            AccessEvents accessEvents = await _attendanceAccessor.GetAccessEventsAsync(employeeId);
 
-        public async Task<List<AttendanceRecord>> GetAttendance(int employeeId)
-        {
+            var distictDays = accessEvents.DistinctDays(timeZoneStr, noOfDays);
 
-            var accessEvents = await _attendanceAccessor.GetAttendanceByEmployeeIdAsync(employeeId) as List<AccessEvent>;
-          
-            foreach (var eachEntry in accessEvents)
-            {
-                eachEntry.EventTime = TimeZoneInfo.ConvertTimeFromUtc(eachEntry.EventTime, TimeZoneInfo.FindSystemTimeZoneById("India Standard Time"));
-            }
-            var distinctDay = accessEvents.Select(x => x.EventTime.Date).Distinct();
-
-            var lastTenEntry = distinctDay.OrderByDescending(i => i.Date).Take(7);
-            List<AttendanceRecord> listOfTimeRecord = new List<AttendanceRecord>();
-            foreach (var entry in lastTenEntry)
-            {
-                AttendanceRecord timeRecord = new AttendanceRecord();
-
-                var filterByDay = accessEvents.Where(K => K.EventTime.Date == entry && K.AccessPointID == 16).ToList();
-                var minTime = filterByDay.Select(x => x.EventTime.TimeOfDay).Min();
-                var maxTime = filterByDay.Select(x => x.EventTime.TimeOfDay).Max();
-                timeRecord.TimeIn = minTime;
-                if (minTime == maxTime)
-                {
-                    timeRecord.TimeOut = TimeSpan.Zero;
-
-                }
-                else
-                {
-                    timeRecord.TimeOut = maxTime;
-                }
- 
-                TimeSpan calculationData = TimeSpan.Parse("12:00:00");
-                TimeSpan totalHour = TimeSpan.Parse("9:00:00");
-
-                TimeSpan workingHours = (calculationData - minTime) + (maxTime - calculationData);
-                timeRecord.TotalWorkingHours = workingHours;
-                timeRecord.Date = entry.ToShortDateString();
-                var extrahour= workingHours - totalHour;
-                if(extrahour>TimeSpan.Zero)
-                {
-                    timeRecord.OverTime = extrahour;
-                }
-                else
-                {
-                    timeRecord.LateBy =  totalHour- workingHours ;
-                }
-               
-
-                listOfTimeRecord.Add(timeRecord);
-            }
-
-            return listOfTimeRecord;
+            return distictDays.Select(x => x.CalculateWorkingHours()).ToList();
         }
     }
 }

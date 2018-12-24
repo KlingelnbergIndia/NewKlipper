@@ -26,7 +26,7 @@ namespace Klipper.Web.UI.Controllers
         {
             var employeeId = HttpContext.Session.GetInt32("ID");
             int id = employeeId ?? 0;
-            var model = await _attendanceService.GetAttendance(id);
+            var model = await _attendanceService.GetAttendance(id,7,"Indian standard format");
             return View((IEnumerable<AttendanceRecord>) model);
         }
 
