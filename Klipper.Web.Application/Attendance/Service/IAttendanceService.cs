@@ -8,8 +8,7 @@ namespace Klipper.Web.Application.Attendance.Service
 {
     public interface IAttendanceService
     {
-        IEnumerable<AccessEvent> GetAttendanceByDate(int employeeId, DateTime startDate, DateTime endDate);
-        Task<List<AttendanceRecord>> GetAttendance(int employeeId);
+        Task<List<AttendanceRecord>> GetAttendance(int employeeId,int noOfDays, string timeZoneStr);
        // Task<> GetAttendanceDetailByDate(date)
     }
 }

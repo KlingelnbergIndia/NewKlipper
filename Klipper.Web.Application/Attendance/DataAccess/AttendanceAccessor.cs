@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Klipper.Web.Application.Attendance.DataAccess
 {
@@ -20,8 +21,15 @@ namespace Klipper.Web.Application.Attendance.DataAccess
             var str = "api/attendance/employeeId?employeeId=" + employeeId.ToString();
             HttpResponseMessage response = await client.GetAsync(str);
             var jsonString = await response.Content.ReadAsStringAsync();
-            var accessEvents = JsonConvert.DeserializeObject<List<AccessEvent>>(jsonString);
+            var accessEvents = JsonConvert.DeserializeObject<IEnumerable<AccessEvent>>(jsonString);
 
+            return accessEvents;
+        }
+
+        public async Task<AccessEvents> GetAccessEventsAsync(int employeeId)
+        {
+            List<AccessEvent> acccessEvent = (await GetAttendanceByEmployeeIdAsync(employeeId)).ToList();
+            AccessEvents accessEvents = new AccessEvents(acccessEvent);
             return accessEvents;
         }
 
