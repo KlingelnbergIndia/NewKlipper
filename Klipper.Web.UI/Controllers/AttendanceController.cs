@@ -24,7 +24,7 @@ namespace Klipper.Web.UI.Controllers
         //api/Attendance/41/2018-09-01/2018-10-01
         [HttpGet]
         [Route("{employeeId}/{startDate}/{endDate}")]
-        public async Task<IActionResult> Get(int employeeId, DateTime startDate, DateTime endDate)
+        public IActionResult Get(int employeeId, DateTime startDate, DateTime endDate)
         {
 
 

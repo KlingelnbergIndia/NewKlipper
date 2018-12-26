@@ -20,7 +20,6 @@ namespace Klipper.Web.UI.Controllers
         public HomeController(IAttendanceService attendanceService)
         {
             _attendanceService = attendanceService;
-            
         }
         public async Task<IActionResult> Index()
         {
