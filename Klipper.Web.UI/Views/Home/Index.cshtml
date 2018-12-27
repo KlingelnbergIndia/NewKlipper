@@ -35,40 +35,50 @@
             {
                 var lateByColor = "White";
                 var overTimeColor = "White";
-                if (item.LateBy._hours != 0 && item.LateBy._minute !=0)
+                if (item.LateBy._hours != 0 || item.LateBy._minute !=0)
                 {
                     lateByColor = "crimson";
                 }
-                if (item.OverTime._hours != 0 && item.OverTime._minute != 0)
+                if (item.OverTime._hours != 0 || item.OverTime._minute != 0)
                 {
                     overTimeColor = "aquamarine";
                 }
 				<tr>
 					<td>
-						@Html.DisplayFor(modelItem => item.Date)
+						@item.Date.ToString("D")
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.TimeIn)
+						@Html.DisplayFor(modelItem => item.TimeIn._hours)
+						:
+						@Html.DisplayFor(modelItem => item.TimeIn._minute)
 					</td>
-					@if (item.TimeOut._hours != 0 && item.TimeOut._minute != 0)
+					@if (item.TimeOut._hours == 0 && item.TimeOut._minute == 0)
                     {
 						<td>-</td>
 					}
 					else
 					{
 						<td>
-							@Html.DisplayFor(modelItem => item.TimeOut)
+							@Html.DisplayFor(modelItem => item.TimeOut._hours)
+							:
+							@Html.DisplayFor(modelItem => item.TimeOut._minute)
 						</td>
 					}
-					<td style="background:@lateByColor">
-						@Html.DisplayFor(modelItem => item.LateBy)
-					</td>
-					<td style="background:@overTimeColor">
-						@Html.DisplayFor(modelItem => item.OverTime)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.TotalWorkingHours)
-					</td>
+						<td style="background:@lateByColor">
+							@Html.DisplayFor(modelItem => item.LateBy._hours)
+							:
+							@Html.DisplayFor(modelItem => item.LateBy._minute)
+						</td>
+						<td style="background:@overTimeColor">
+							@Html.DisplayFor(modelItem => item.OverTime._hours)
+							:
+							@Html.DisplayFor(modelItem => item.OverTime._minute)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.TotalWorkingHours._hours)
+							:
+							@Html.DisplayFor(modelItem => item.TotalWorkingHours._minute)
+						</td>
 				</tr>
 			}
 		</tbody>
