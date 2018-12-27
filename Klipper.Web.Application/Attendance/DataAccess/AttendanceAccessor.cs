@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Klipper.Web.Application.Attendance.DomainModel;
 
 namespace Klipper.Web.Application.Attendance.DataAccess
 {

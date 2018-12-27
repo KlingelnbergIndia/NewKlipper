@@ -32,17 +32,17 @@
 		</thead>
 		<tbody>
 			@foreach (var item in Model)
-			{
-				var lateByColor = "White";
-				var overTimeColor = "White";
-				if (item.LateBy != TimeSpan.Zero)
-				{
-					lateByColor = "crimson";
-				}
-				if (item.OverTime != TimeSpan.Zero)
-				{
-					overTimeColor = "aquamarine";
-				}
+            {
+                var lateByColor = "White";
+                var overTimeColor = "White";
+                if (item.LateBy._hours != 0 && item.LateBy._minute !=0)
+                {
+                    lateByColor = "crimson";
+                }
+                if (item.OverTime._hours != 0 && item.OverTime._minute != 0)
+                {
+                    overTimeColor = "aquamarine";
+                }
 				<tr>
 					<td>
 						@Html.DisplayFor(modelItem => item.Date)
@@ -50,8 +50,8 @@
 					<td>
 						@Html.DisplayFor(modelItem => item.TimeIn)
 					</td>
-					@if (item.TimeOut == TimeSpan.Zero)
-					{
+					@if (item.TimeOut._hours != 0 && item.TimeOut._minute != 0)
+                    {
 						<td>-</td>
 					}
 					else

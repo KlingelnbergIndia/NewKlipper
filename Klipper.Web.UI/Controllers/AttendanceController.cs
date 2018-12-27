@@ -26,7 +26,8 @@ namespace Klipper.Web.UI.Controllers
         [Route("employeeId")]
         public async Task<IActionResult> Get(int employeeId)
         {
-            return Ok(await _attendanceService.GetAttendance(employeeId, 7 , "Indian standard time"));
+            var result= await _attendanceService.GetAttendance(employeeId, 7, "India Standard Time");
+            return Ok(result);
         }
 
         //// api/Attendance/date?date=16-10-2018

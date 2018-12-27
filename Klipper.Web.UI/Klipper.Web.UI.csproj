@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
+    <Folder Include="Views\Attendance\" />
   </ItemGroup>
 
 </Project>
