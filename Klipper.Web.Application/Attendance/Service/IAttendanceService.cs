@@ -1,4 +1,5 @@
-﻿using Models.Core.HR.Attendance;
+﻿using Klipper.Web.Application.Attendance.DomainModel;
+using Models.Core.HR.Attendance;
 using System;
 using System.Collections.Generic;
 using System.Text;

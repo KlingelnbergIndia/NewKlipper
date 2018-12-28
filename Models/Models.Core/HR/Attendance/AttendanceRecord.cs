@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models.Core.HR.Attendance;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,12 +7,12 @@ namespace Models.Core.HR.Attendance
 {
     public class AttendanceRecord
     {
-        public TimeSpan TotalWorkingHours;
-        public String Date;
-        public TimeSpan TimeIn;
-        public TimeSpan TimeOut;
-        public TimeSpan LateBy;
-        public TimeSpan OverTime;
-       
+        public Time TotalWorkingHours;
+        public DateTime Date;
+        public Time TimeIn;
+        public Time TimeOut;
+        public Time LateBy;
+        public Time OverTime;
+        
     }
 }

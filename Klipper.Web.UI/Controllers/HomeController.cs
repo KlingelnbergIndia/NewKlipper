@@ -9,6 +9,7 @@ using Klipper.Web.UI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Models.Core.HR.Attendance;
+using Klipper.Web.Application.Attendance.DomainModel;
 
 namespace Klipper.Web.UI.Controllers
 {
@@ -25,7 +26,7 @@ namespace Klipper.Web.UI.Controllers
         {
             var employeeId = HttpContext.Session.GetInt32("ID");
             int id = employeeId ?? 0;
-            var model = await _attendanceService.GetAttendance(id,7,"Indian standard format");
+            var model = await _attendanceService.GetAttendance(id, 7, "India Standard Time");
             return View((IEnumerable<AttendanceRecord>) model);
         }
 
