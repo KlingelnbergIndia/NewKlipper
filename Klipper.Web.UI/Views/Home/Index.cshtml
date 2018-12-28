@@ -1,41 +1,43 @@
 ﻿@model IEnumerable<Models.Core.HR.Attendance.AttendanceRecord>
 @{
-	ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home Page";
 }
 
 <style>
-	th,td {text-align: center}
+    th, td {
+        text-align: center
+    }
 </style>
 <div>
-	<table class="table">
-		<thead>
-			<tr>
-				<th>
-					Date
-				</th>
-				<th>
-					Time In
-				</th>
-				<th>
-					Time Out
-				</th>
-				<th>
-					Late By
-				</th>
-				<th>
-					OverTime
-				</th>
-				<th>
-					Total Working Hours
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var item in Model)
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Time In
+                </th>
+                <th>
+                    Time Out
+                </th>
+                <th>
+                    Late By
+                </th>
+                <th>
+                    OverTime
+                </th>
+                <th>
+                    Total Working Hours
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
             {
                 var lateByColor = "White";
                 var overTimeColor = "White";
-                if (item.LateBy._hours != 0 || item.LateBy._minute !=0)
+                if (item.LateBy._hours != 0 || item.LateBy._minute != 0)
                 {
                     lateByColor = "crimson";
                 }
@@ -43,45 +45,45 @@
                 {
                     overTimeColor = "aquamarine";
                 }
-				<tr>
-					<td>
-						@item.Date.ToString("D")
-					</td>
-					<td>
-						@item.TimeIn._hours.ToString("D2")
-						:
-						@item.TimeIn._minute.ToString("D2")
-					</td>
-					@if (item.TimeOut._hours == 0 && item.TimeOut._minute == 0)
+                <tr>
+                    <td>
+                        @item.Date.ToString("D")
+                    </td>
+                    <td>
+                        @item.TimeIn._hours.ToString("D2")
+                        :
+                        @item.TimeIn._minute.ToString("D2")
+                    </td>
+                    @if (item.TimeOut._hours == 0 && item.TimeOut._minute == 0)
                     {
-						<td>-</td>
-					}
-					else
-					{
-						<td>
-							@item.TimeOut._hours.ToString("D2")
-							:
-							@item.TimeOut._minute.ToString("D2")
-						</td>
-					}
-						<td style="background:@lateByColor">
-							@item.LateBy._hours.ToString("D2")
-							:
-							@item.LateBy._minute.ToString("D2")
-						</td>
-						<td style="background:@overTimeColor">
-							@item.OverTime._hours.ToString("D2")
-							:
-							@item.OverTime._minute.ToString("D2")
-						</td>
-						<td>
-							@item.TotalWorkingHours._hours.ToString("D2")
-							:
-							@item.TotalWorkingHours._minute.ToString("D2")
-						</td>
-				</tr>
-			}
-		</tbody>
-	</table>
+                        <td>-</td>
+                    }
+                    else
+                    {
+                        <td>
+                            @item.TimeOut._hours.ToString("D2")
+                            :
+                            @item.TimeOut._minute.ToString("D2")
+                        </td>
+                    }
+                    <td style="background:@lateByColor">
+                        @item.LateBy._hours.ToString("D2")
+                        :
+                        @item.LateBy._minute.ToString("D2")
+                    </td>
+                    <td style="background:@overTimeColor">
+                        @item.OverTime._hours.ToString("D2")
+                        :
+                        @item.OverTime._minute.ToString("D2")
+                    </td>
+                    <td>
+                        @item.TotalWorkingHours._hours.ToString("D2")
+                        :
+                        @item.TotalWorkingHours._minute.ToString("D2")
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
