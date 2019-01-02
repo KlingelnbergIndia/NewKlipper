@@ -23,9 +23,12 @@ namespace Klipper.Web.Application.Attendance.Service
         public async Task<List<AttendanceRecord>> GetAttendance(int employeeId, int noOfDays, string timeZoneStr)
         {
             AccessEvents accessEvents = await _attendanceAccessor.GetAccessEventsAsync(employeeId);
+
+
             var specificDistictDays = accessEvents.DistinctDays(noOfDays);
             var specificDaysAccessEvents = accessEvents.GetNoOfDaysRecord(specificDistictDays);
             accessEvents = specificDaysAccessEvents.ConvertTimeZone(timeZoneStr);
+
             List<AttendanceRecords> listOfAttendanceRecord = accessEvents.CalculateWorkingHours(specificDistictDays);
             DomainModelToApiModel domainModelToApiModel = new DomainModelToApiModel();
             return domainModelToApiModel.FromDomainModel(listOfAttendanceRecord);
