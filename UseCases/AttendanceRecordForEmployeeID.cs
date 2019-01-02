@@ -15,6 +15,7 @@ namespace UseCases
         {
             _accessEventsRepository = accessEventsRepository;
         }
+<<<<<<< HEAD
 
         public AttendanceRecordForEmployeeID()
         {
@@ -79,6 +80,12 @@ namespace UseCases
             {
                 return new Time(maxTime.Hours, maxTime.Minutes);
             }
+=======
+        AttendanceRecordDTO GetAttendanceRecordForEmployeeID(int id)
+        {
+            AccessEvents accessEvents = _accessEventsRepository.GetAccessEventsByEmployeeId(id);
+            return new AttendanceRecordDTO();
+>>>>>>> Implemented changes related to architecture refactoring of Login Usecase
         }
     }
 }

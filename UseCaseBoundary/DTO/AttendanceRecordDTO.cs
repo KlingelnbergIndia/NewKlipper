@@ -2,7 +2,7 @@
 
 namespace UseCaseBoundary.Model
 {
-    public class AttendanceRecord
+    public class AttendanceRecordDTO
     {
         public Time WorkingHours;
         public DateTime Date;
