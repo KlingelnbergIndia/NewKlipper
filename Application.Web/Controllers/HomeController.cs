@@ -5,14 +5,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Application.Web.Models;
+using UseCaseBoundary.Model;
+using UseCases;
 
 namespace Application.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            //var employeeId = HttpContext.Session.GetInt32("ID");
+            //int id = employeeId ?? 0;
+            int id = 45;
+            AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID();
+            var model=await attendanceService.GetAttendanceRecord(id, 7);
+            return View(model);
         }
 
         public IActionResult About()
