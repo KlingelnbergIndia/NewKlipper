@@ -15,17 +15,12 @@ namespace UseCases
         {
             _accessEventsRepository = accessEventsRepository;
         }
-<<<<<<< HEAD
 
-        public AttendanceRecordForEmployeeID()
-        {
-        }
-
-        public async Task<List<AttendanceRecord>> GetAttendanceRecord(int employeeId, int noOfDays)
+        public async Task<List<AttendanceRecordDTO>> GetAttendanceRecord(int employeeId, int noOfDays)
         {
             AccessEvents accessEvents = _accessEventsRepository.GetAccessEventsByEmployeeId(employeeId);
             var listOfAccessEventByDate = accessEvents.GetNoOfDaysAccessEventsByDate(noOfDays);
-            List<AttendanceRecord> listOfAttendanceRecord = new List<AttendanceRecord>();
+            List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
             foreach (var perDayAccessEvents in listOfAccessEventByDate)
             {
                 var listOfAccessEventByDay = perDayAccessEvents.Select(x => x).ToList();
@@ -34,7 +29,7 @@ namespace UseCases
                 var timeOut = perDayAccessEvents.Select(x => x.EventTime.TimeOfDay).Max();
                 var workingHours = accessEventsPerDay.CalculateWorkingHours();
                 var extraHour = workingHours - TimeSpan.Parse("9:00:00");
-                AttendanceRecord attendanceRecord = new AttendanceRecord()
+                AttendanceRecordDTO attendanceRecord = new AttendanceRecordDTO()
                 {
                     Date = perDayAccessEvents.Key.Date,
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
@@ -70,6 +65,7 @@ namespace UseCases
                 return new Time(0, 0);
             }
         }
+
         private Time GetTimeOut(TimeSpan minTime, TimeSpan maxTime)
         {
             if (minTime == maxTime)
@@ -80,12 +76,7 @@ namespace UseCases
             {
                 return new Time(maxTime.Hours, maxTime.Minutes);
             }
-=======
-        AttendanceRecordDTO GetAttendanceRecordForEmployeeID(int id)
-        {
-            AccessEvents accessEvents = _accessEventsRepository.GetAccessEventsByEmployeeId(id);
-            return new AttendanceRecordDTO();
->>>>>>> Implemented changes related to architecture refactoring of Login Usecase
         }
+
     }
 }

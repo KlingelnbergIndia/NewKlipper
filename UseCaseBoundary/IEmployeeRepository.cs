@@ -4,6 +4,6 @@ namespace UseCaseBoundary
 {
     public interface IEmployeeRepository
     {
-        Employee GetEmployee(int EmployeeId);
+        Employee GetEmployee(string UserName);
     }
 }

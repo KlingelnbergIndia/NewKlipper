@@ -16,9 +16,9 @@ namespace DomainModel
         public string Password { get; set; }
         public List<EmployeeRoles> Role { get; set; }
 
-        bool Authenticate(string userName, string password)
+        public bool Authenticate(string userName, string password)
         {
-            return false;
+            return UserName.Equals(userName) && Password.Equals(password);
         }
     }
 }
