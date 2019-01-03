@@ -18,7 +18,7 @@ namespace UseCases
 
         public async Task<List<AttendanceRecordDTO>> GetAttendanceRecord(int employeeId, int noOfDays)
         {
-            AccessEvents accessEvents = _accessEventsRepository.GetAccessEvents(employeeId);
+            AccessEvents accessEvents = _accessEventsRepository.GetAccessEventsByEmployeeId(employeeId);
             var listOfAccessEventByDate = accessEvents.GetNoOfDaysAccessEventsByDate(noOfDays);
             List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
             foreach (var perDayAccessEvents in listOfAccessEventByDate)
@@ -61,7 +61,9 @@ namespace UseCases
         {
             if (extrahour < TimeSpan.Zero)
             {
-                return new Time(extrahour.Hours, extrahour.Minutes);
+                int latebyHours = Math.Abs(extrahour.Hours);
+                int latebyMinutes = Math.Abs(extrahour.Minutes);
+                return new Time(latebyHours, latebyMinutes);
             }
             else
             {
