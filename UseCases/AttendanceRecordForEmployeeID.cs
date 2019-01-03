@@ -18,7 +18,7 @@ namespace UseCases
 
         public async Task<List<AttendanceRecordDTO>> GetAttendanceRecord(int employeeId, int noOfDays)
         {
-            AccessEvents accessEvents = _accessEventsRepository.GetAccessEventsByEmployeeId(employeeId);
+            AccessEvents accessEvents = _accessEventsRepository.GetAccessEvents(employeeId);
             var listOfAccessEventByDate = accessEvents.GetNoOfDaysAccessEventsByDate(noOfDays);
             List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
             foreach (var perDayAccessEvents in listOfAccessEventByDate)
