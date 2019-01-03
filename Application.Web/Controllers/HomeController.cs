@@ -25,10 +25,28 @@ namespace Application.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
+            var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;           
+            
             AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(_accessEventRepository);
-            var model = await attendanceService.GetAttendanceRecord(employeeId, 7);
-            return View(model);
+            var listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(employeeId, 7);
+            foreach (var attendanceRecord in listOfAttendanceRecord)
+            {
+                if (attendanceRecord.TimeIn._hour != 0)
+                {
+                    DateTime TimeInByUTC = new DateTime(2018, 12, 10, attendanceRecord.TimeIn._hour, attendanceRecord.TimeIn._minute, 00);
+                    DateTime TimeInByIST = TimeZoneInfo.ConvertTimeFromUtc(TimeInByUTC, TimeZoneInfo.FindSystemTimeZoneById("India Standard Time"));
+                    Time timeIn = new Time(TimeInByIST.Hour, TimeInByIST.Minute);
+                    attendanceRecord.TimeIn = timeIn;
+                }
+                if (attendanceRecord.TimeOut._hour != 0)
+                {
+                    DateTime TimeOutByUTC = new DateTime(2018, 12, 10, attendanceRecord.TimeOut._hour, attendanceRecord.TimeOut._minute, 00);
+                    DateTime TimeOutByIST = TimeZoneInfo.ConvertTimeFromUtc(TimeOutByUTC, TimeZoneInfo.FindSystemTimeZoneById("India Standard Time"));
+                    Time timeOut = new Time(TimeOutByIST.Hour, TimeOutByIST.Minute);
+                    attendanceRecord.TimeOut = timeOut;
+                }
+            }
+            return View(listOfAttendanceRecord);
         }
 
 

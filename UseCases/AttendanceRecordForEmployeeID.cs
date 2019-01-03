@@ -25,15 +25,15 @@ namespace UseCases
             {
                 var listOfAccessEventByDay = perDayAccessEvents.Select(x => x).ToList();
                 AccessEvents accessEventsPerDay = new AccessEvents(listOfAccessEventByDay);
-                var timeIn = perDayAccessEvents.Select(x => x.EventTime.TimeOfDay).Min();
-                var timeOut = perDayAccessEvents.Select(x => x.EventTime.TimeOfDay).Max();
+                var timeIn = accessEventsPerDay.GetTimeIn();
+                var timeOut = accessEventsPerDay.GetTimeOut();
                 var workingHours = accessEventsPerDay.CalculateWorkingHours();
                 var extraHour = workingHours - TimeSpan.Parse("9:00:00");
                 AttendanceRecordDTO attendanceRecord = new AttendanceRecordDTO()
                 {
                     Date = perDayAccessEvents.Key.Date,
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
-                    TimeOut = GetTimeOut(timeIn, timeOut),
+                    TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
                     OverTime = GetOverTime(extraHour),
                     LateBy = GetLateByTime(extraHour)
@@ -66,18 +66,6 @@ namespace UseCases
             else
             {
                 return new Time(0, 0);
-            }
-        }
-
-        private Time GetTimeOut(TimeSpan minTime, TimeSpan maxTime)
-        {
-            if (minTime == maxTime)
-            {
-                return new Time(0, 0);
-            }
-            else
-            {
-                return new Time(maxTime.Hours, maxTime.Minutes);
             }
         }
 

@@ -32,6 +32,24 @@ namespace DomainModel
             return workingHours;
         }
 
+        public TimeSpan GetTimeIn()
+        {
+           return accessEvents.Select(x => x.EventTime.TimeOfDay).Min();
+        }
+
+        public TimeSpan GetTimeOut()
+        {
+            var minTime = accessEvents.Select(x => x.EventTime.TimeOfDay).Min();
+            var maxTime = accessEvents.Select(x => x.EventTime.TimeOfDay).Max();
+            if (minTime == maxTime)
+            {
+                return TimeSpan.Zero;
+            }
+            else
+            {
+                return maxTime;
+            }
+        }
     }
 
 }
