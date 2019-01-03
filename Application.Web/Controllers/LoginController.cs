@@ -34,15 +34,13 @@ namespace Application.Web.Controllers
             {
                 //HttpContext.Session.SetString("EmployeeName", $"{loggedInUserDetails.FirstName} {loggedInUserDetails.LastName}");
                 //HttpContext.Session.SetString("Title", loggedInUserDetails.Title);
-                //HttpContext.Session.SetInt32("ID", loggedInUserDetails.ID);
 
-                HttpContext.Session.SetInt32("ID", 66);
-
+                HttpContext.Session.SetInt32("ID", loggedInUserDetails.Id());
                 return RedirectToAction("Index", "Home");
             }
             HttpContext.Session.Clear();
             TempData["errorMessage"] = "Invalid username or password";
-            return RedirectToAction("Index");
+            return RedirectToAction("Login");
         }
 
         public IActionResult Logout()

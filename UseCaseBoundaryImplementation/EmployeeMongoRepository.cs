@@ -44,7 +44,7 @@ namespace UseCaseBoundaryImplementation
 
         private List<EmployeeRoles> ConvertStringRolesToEnumRoles(List<string> roles)
         {
-            List<EmployeeRoles> empRoles = null;
+            List<EmployeeRoles> empRoles = new List<EmployeeRoles>();
             foreach (var role in roles)
             {
                 switch (role)

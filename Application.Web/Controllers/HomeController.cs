@@ -9,6 +9,7 @@ using UseCaseBoundary;
 using UseCaseBoundary.Model;
 using UseCases;
 using UseCaseBoundaryImplementation;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Web.Controllers
 {
@@ -17,11 +18,10 @@ namespace Application.Web.Controllers
         public async Task<IActionResult> Index()
         {
             IAccessEventsRepository accessEventRepository = new AccessEventRepository();
-            //var employeeId = HttpContext.Session.GetInt32("ID");
-            //int id = employeeId ?? 0;
-            int id = 45;
+            var employeeId = HttpContext.Session.GetInt32("ID");
+            int id = employeeId ?? 0;
             AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(accessEventRepository);
-            var model=await attendanceService.GetAttendanceRecord(id, 7);
+            var model=await attendanceService.GetAttendanceRecord(id, 70);
             return View(model);
         }
 

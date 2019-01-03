@@ -45,6 +45,8 @@ namespace DomainModel
 
         public bool Authenticate(string userName, string password)
         {
+            userName = userName.ToLower();
+            _userName = _userName.ToLower();
             return _userName.Equals(userName) && _password.Equals(password);
         }
     }

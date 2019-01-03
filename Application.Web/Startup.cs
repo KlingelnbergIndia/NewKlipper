@@ -32,8 +32,12 @@ namespace Application.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(2);
+            });
 
             services.AddTransient<IEmployeeRepository, EmployeeMongoRepository>();
+            services.AddTransient<IAccessEventsRepository, AccessEventRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -53,7 +57,7 @@ namespace Application.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {
