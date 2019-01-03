@@ -17,9 +17,9 @@ namespace UseCaseBoundaryImplementation
             _context = AttendanceDBContext.Instance;
         }
 
-        public AccessEvents GetAccessEventsByEmployeeId(int id)
+        public AccessEvents GetAccessEvents(int employeeid)
         {
-            var filter = Builders<AccessEvent>.Filter.Eq("ID", id);
+            var filter = Builders<AccessEventEntityModel>.Filter.Eq("ID", employeeid);
             var listOfEntityAccessEvent = _context.AccessEvents
                 .Find(filter)
                 .ToList();
@@ -29,7 +29,7 @@ namespace UseCaseBoundaryImplementation
             return accessEvents;
         }
 
-        public List<DomainModel.Model.AccessEvent> ConvertEntityAccessEventToDomainModelAccessEvent(List<AccessEvent> listOfEntityAccessEvent)
+        public List<DomainModel.Model.AccessEvent> ConvertEntityAccessEventToDomainModelAccessEvent(List<AccessEventEntityModel> listOfEntityAccessEvent)
         {
             List<DomainModel.Model.AccessEvent> listOfDomainModelAccessEvent = new List<DomainModel.Model.AccessEvent>();
             foreach (var domainModelAccessEvent in listOfEntityAccessEvent)

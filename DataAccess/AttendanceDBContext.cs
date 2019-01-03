@@ -34,7 +34,7 @@ namespace DataAccess
             _database = mongoClient.GetDatabase("AttendanceDB");
         }
 
-        public IMongoCollection<AccessEvent> AccessEvents => _database.GetCollection<AccessEvent>("AccessEvents");
+        public IMongoCollection<AccessEventEntityModel> AccessEvents => _database.GetCollection<AccessEventEntityModel>("AccessEvents");
         //public IMongoCollection<AccessPoint> AccessPoints => _database.GetCollection<AccessPoint>("AccessPoints");
     }
 }

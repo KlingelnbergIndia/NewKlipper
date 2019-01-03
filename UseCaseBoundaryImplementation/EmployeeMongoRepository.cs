@@ -20,21 +20,22 @@ namespace UseCaseBoundaryImplementation
         }
         public Employee GetEmployee(string userName)
         {
-            var filterForAuthDBContext = Builders<Users>.Filter.Eq("UserName", userName);
+            var filterForAuthDBContext = Builders<UsersEntityModel>.Filter.Eq("UserName", userName);
             var employeeFromAuthDBContext = _authDBContext.Users.Find(filterForAuthDBContext).First();
 
             var filterForEmployeeDBContext = Builders<EmployeeEntityModel>.Filter.Eq("ID", employeeFromAuthDBContext.ID);
             var employeeFromEmployeeDBContext = _employeeDBContext.Employees.Find(filterForEmployeeDBContext).First();
 
-            Employee employeeDomain = new Employee();
-            employeeDomain.EmployeeId = employeeFromAuthDBContext.ID;
-            employeeDomain.UserName = employeeFromAuthDBContext.UserName;
-            employeeDomain.Password = employeeFromAuthDBContext.PasswordHash;
-            employeeDomain.Role = ConvertRoleStringToEnum(employeeFromEmployeeDBContext.Roles);
-            return employeeDomain;
+            int _id = employeeFromAuthDBContext.ID;
+            string _userName = employeeFromAuthDBContext.UserName;
+            string _password = employeeFromAuthDBContext.PasswordHash;
+            List<EmployeeRoles> _roles = ConvertStringRolesToEnumRoles(employeeFromEmployeeDBContext.Roles);
+            Employee domainEmployee = new Employee(_id, _userName, _password, _roles);
+
+            return domainEmployee;
         }
 
-        List<EmployeeRoles> ConvertRoleStringToEnum(List<string> roles)
+        private List<EmployeeRoles> ConvertStringRolesToEnumRoles(List<string> roles)
         {
             List<EmployeeRoles> empRoles = null;
             foreach (var role in roles)

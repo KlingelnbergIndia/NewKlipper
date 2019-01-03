@@ -1,4 +1,5 @@
-﻿using DomainModel;
+﻿using System.Collections.Generic;
+using DomainModel;
 using UseCaseBoundary;
 using UseCaseBoundary.Model;
 
@@ -18,10 +19,12 @@ namespace UseCases
             bool result  = employee.Authenticate(userName, password);
             if (result)
             {
-                EmployeeDTO employeeDto = new EmployeeDTO();
-                employeeDto.EmployeeId = employee.EmployeeId;
-                employeeDto.UserName = employee.UserName;
-                employeeDto.Role = employee.Role;
+                int id = employee.Id();
+                string username = employee.UserName();
+                List<EmployeeRoles> roles = employee.Roles();
+
+                EmployeeDTO employeeDto = new EmployeeDTO(id, username, roles);
+
                 return employeeDto;
             }
             else

@@ -6,6 +6,6 @@ namespace UseCaseBoundary
 {
     public interface IAccessEventsRepository
     {
-        AccessEvents GetAccessEventsByEmployeeId(int id);
+        AccessEvents GetAccessEvents(int employeeid);
     }
 }

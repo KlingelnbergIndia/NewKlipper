@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace DataAccess.EntityModel
 {
-    public class AccessEvent
+    public class AccessEventEntityModel
     {
         [BsonId]
         [JsonConverter(typeof(ObjectIdConverter))]

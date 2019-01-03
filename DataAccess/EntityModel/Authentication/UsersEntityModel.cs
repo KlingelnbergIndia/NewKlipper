@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace DataAccess.EntityModel.Authentication
 {
-    public class Users
+    public class UsersEntityModel
     {
         [BsonId]
         [JsonConverter(typeof(ObjectIdConverter))]
