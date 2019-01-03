@@ -27,7 +27,7 @@ namespace Application.Web.Controllers
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(_accessEventRepository);
-            var model = await attendanceService.GetAttendanceRecord(employeeId, 70);
+            var model = await attendanceService.GetAttendanceRecord(employeeId, 7);
             return View(model);
         }
 
