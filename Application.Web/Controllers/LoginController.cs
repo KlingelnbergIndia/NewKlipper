@@ -32,11 +32,8 @@ namespace Application.Web.Controllers
 
             if (loggedInUserDetails != null)
             {
-                //HttpContext.Session.SetString("EmployeeName", $"{loggedInUserDetails.FirstName} {loggedInUserDetails.LastName}");
-                //HttpContext.Session.SetString("Title", loggedInUserDetails.Title);
-                HttpContext.Session.SetString("EmployeeName", "Test Name");
-                HttpContext.Session.SetString("Title", "test employee");
-
+                HttpContext.Session.SetString("EmployeeName", $"{loggedInUserDetails.FirstName()} {loggedInUserDetails.LastName()}");
+                HttpContext.Session.SetString("Title", loggedInUserDetails.Title());
                 HttpContext.Session.SetInt32("ID", loggedInUserDetails.Id());
                 return RedirectToAction("Index", "Home");
             }

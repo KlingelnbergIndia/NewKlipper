@@ -36,8 +36,12 @@ namespace UseCaseBoundaryImplementation
             int _id = employeeFromAuthDBContext.ID;
             string _userName = employeeFromAuthDBContext.UserName;
             string _password = employeeFromAuthDBContext.PasswordHash;
+            string firstName = employeeFromEmployeeDBContext.FirstName;
+            string lastName = employeeFromEmployeeDBContext.LastName;
+            string title = employeeFromEmployeeDBContext.Title;
+
             List<EmployeeRoles> _roles = ConvertStringRolesToEnumRoles(employeeFromEmployeeDBContext.Roles);
-            Employee domainEmployee = new Employee(_id, _userName, _password, _roles);
+            Employee domainEmployee = new Employee(_id, _userName, _password, firstName, lastName, title, _roles);
 
             return domainEmployee;
         }

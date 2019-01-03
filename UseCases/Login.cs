@@ -21,9 +21,18 @@ namespace UseCases
             {
                 int id = employee.Id();
                 string username = employee.UserName();
+                string firstName = employee.FirstName();
+                string lastName = employee.LastName();
+                string title = employee.Title();
                 List<EmployeeRoles> roles = employee.Roles();
 
-                EmployeeDTO employeeDto = new EmployeeDTO(id, username, roles);
+                EmployeeDTO employeeDto = new EmployeeDTO(
+                    id, 
+                    username, 
+                    firstName,
+                    lastName,
+                    title,
+                    roles);
 
                 return employeeDto;
             }
