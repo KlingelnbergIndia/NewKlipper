@@ -15,12 +15,16 @@ namespace Application.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private IAccessEventsRepository _accessEventRepository;
+        public HomeController(IAccessEventsRepository accessEventRepository)
+        {
+            _accessEventRepository = accessEventRepository;
+        }
         public async Task<IActionResult> Index()
         {
-            IAccessEventsRepository accessEventRepository = new AccessEventRepository();
             var employeeId = HttpContext.Session.GetInt32("ID");
             int id = employeeId ?? 0;
-            AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(accessEventRepository);
+            AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(_accessEventRepository);
             var model=await attendanceService.GetAttendanceRecord(id, 70);
             return View(model);
         }
