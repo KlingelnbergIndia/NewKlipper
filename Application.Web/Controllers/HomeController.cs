@@ -10,9 +10,11 @@ using UseCaseBoundary.Model;
 using UseCases;
 using UseCaseBoundaryImplementation;
 using Microsoft.AspNetCore.Http;
+using Klipper.Web.UI;
 
 namespace Application.Web.Controllers
 {
+    [AuthenticateSession]
     public class HomeController : Controller
     {
         private IAccessEventsRepository _accessEventRepository;
@@ -20,33 +22,15 @@ namespace Application.Web.Controllers
         {
             _accessEventRepository = accessEventRepository;
         }
+
         public async Task<IActionResult> Index()
         {
-            var employeeId = HttpContext.Session.GetInt32("ID");
-            int id = employeeId ?? 0;
+            var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(_accessEventRepository);
-            var model=await attendanceService.GetAttendanceRecord(id, 70);
+            var model = await attendanceService.GetAttendanceRecord(employeeId, 70);
             return View(model);
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

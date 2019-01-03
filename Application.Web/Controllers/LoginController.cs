@@ -34,6 +34,8 @@ namespace Application.Web.Controllers
             {
                 //HttpContext.Session.SetString("EmployeeName", $"{loggedInUserDetails.FirstName} {loggedInUserDetails.LastName}");
                 //HttpContext.Session.SetString("Title", loggedInUserDetails.Title);
+                HttpContext.Session.SetString("EmployeeName", "Test Name");
+                HttpContext.Session.SetString("Title", "test employee");
 
                 HttpContext.Session.SetInt32("ID", loggedInUserDetails.Id());
                 return RedirectToAction("Index", "Home");
@@ -47,7 +49,7 @@ namespace Application.Web.Controllers
         {
             HttpContext.Session.Clear();
             TempData["successMessage"] = "Logged out!";
-            return RedirectToAction("Index");
+            return RedirectToAction("Login");
         }
 
         private static string ToSha256(string input)

@@ -33,7 +33,7 @@ namespace Application.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddSession(options => {
-                options.IdleTimeout = TimeSpan.FromMinutes(2);
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
             });
 
             services.AddTransient<IEmployeeRepository, EmployeeMongoRepository>();
