@@ -34,7 +34,7 @@ namespace DataAccess
             _database = mongoClient.GetDatabase("AuthDB");
         }
 
-        public IMongoCollection<Users> Users => _database.GetCollection<Users>("Users");
+        public IMongoCollection<UsersEntityModel> Users => _database.GetCollection<UsersEntityModel>("Users");
 
     }
 }
