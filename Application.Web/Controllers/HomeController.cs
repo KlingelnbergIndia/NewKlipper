@@ -25,24 +25,28 @@ namespace Application.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;           
-            
+            //var employeeId = HttpContext.Session.GetInt32("ID");
+            var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(_accessEventRepository);
-            var listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(employeeId, 7);
-            foreach (var attendanceRecord in listOfAttendanceRecord)
+            var listOfAttendanceRecord=await attendanceService.GetAttendanceRecord(employeeId, 7);
+            foreach(var attendanceRecord in listOfAttendanceRecord)
             {
-                if (attendanceRecord.TimeIn._hour != 0)
+                if (attendanceRecord.TimeIn.Hour != 0)
                 {
-                    DateTime TimeInByUTC = new DateTime(2018, 12, 10, attendanceRecord.TimeIn._hour, attendanceRecord.TimeIn._minute, 00);
-                    DateTime TimeInByIST = TimeZoneInfo.ConvertTimeFromUtc(TimeInByUTC, TimeZoneInfo.FindSystemTimeZoneById("India Standard Time"));
-                    Time timeIn = new Time(TimeInByIST.Hour, TimeInByIST.Minute);
+                    DateTime timeInByUTC = new DateTime(attendanceRecord.Date.Year, attendanceRecord.Date.Month,
+                        attendanceRecord.Date.Day, attendanceRecord.TimeIn.Hour, attendanceRecord.TimeIn._minute, 00);
+                    DateTime timeInByIST = TimeZoneInfo.ConvertTimeFromUtc(timeInByUTC, 
+                        TimeZoneInfo.FindSystemTimeZoneById(TimeZone.CurrentTimeZone.StandardName));
+                    Time timeIn = new Time(timeInByIST.Hour, timeInByIST.Minute);
                     attendanceRecord.TimeIn = timeIn;
                 }
-                if (attendanceRecord.TimeOut._hour != 0)
+                if (attendanceRecord.TimeOut.Hour != 0)
                 {
-                    DateTime TimeOutByUTC = new DateTime(2018, 12, 10, attendanceRecord.TimeOut._hour, attendanceRecord.TimeOut._minute, 00);
-                    DateTime TimeOutByIST = TimeZoneInfo.ConvertTimeFromUtc(TimeOutByUTC, TimeZoneInfo.FindSystemTimeZoneById("India Standard Time"));
-                    Time timeOut = new Time(TimeOutByIST.Hour, TimeOutByIST.Minute);
+                    DateTime timeOutByUTC = new DateTime(attendanceRecord.Date.Year, attendanceRecord.Date.Month,
+                        attendanceRecord.Date.Day, attendanceRecord.TimeOut.Hour, attendanceRecord.TimeOut._minute, 00);
+                    DateTime timeOutByIST = TimeZoneInfo.ConvertTimeFromUtc(timeOutByUTC, 
+                        TimeZoneInfo.FindSystemTimeZoneById(TimeZone.CurrentTimeZone.StandardName));
+                    Time timeOut = new Time(timeOutByIST.Hour, timeOutByIST.Minute);
                     attendanceRecord.TimeOut = timeOut;
                 }
             }

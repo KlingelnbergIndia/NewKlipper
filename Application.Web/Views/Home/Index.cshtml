@@ -37,11 +37,11 @@
             {
                 var lateByColor = "White";
                 var overTimeColor = "White";
-                if (item.LateBy._hour != 0 || item.LateBy._minute != 0)
+                if (item.LateBy.Hour != 0 || item.LateBy._minute != 0)
                 {
                     lateByColor = "crimson";
                 }
-                if (item.OverTime._hour != 0 || item.OverTime._minute != 0)
+                if (item.OverTime.Hour != 0 || item.OverTime._minute != 0)
                 {
                     overTimeColor = "aquamarine";
                 }
@@ -50,34 +50,34 @@
                         @item.Date.ToString("D")
                     </td>
                     <td>
-                        @item.TimeIn._hour.ToString("D2")
+                        @item.TimeIn.Hour.ToString("D2")
                         :
                         @item.TimeIn._minute.ToString("D2")
                     </td>
-                    @if (item.TimeOut._hour == 0 && item.TimeOut._minute == 0)
+                    @if (item.TimeOut.Hour == 0 && item.TimeOut._minute == 0)
                     {
                         <td>-</td>
                     }
                     else
                     {
                         <td>
-                            @item.TimeOut._hour.ToString("D2")
+                            @item.TimeOut.Hour.ToString("D2")
                             :
                             @item.TimeOut._minute.ToString("D2")
                         </td>
                     }
                     <td style="background:@lateByColor">
-                        @item.LateBy._hour.ToString("D2")
+                        @item.LateBy.Hour.ToString("D2")
                         :
                         @item.LateBy._minute.ToString("D2")
                     </td>
                     <td style="background:@overTimeColor">
-                        @item.OverTime._hour.ToString("D2")
+                        @item.OverTime.Hour.ToString("D2")
                         :
                         @item.OverTime._minute.ToString("D2")
                     </td>
                     <td>
-                        @item.WorkingHours._hour.ToString("D2")
+                        @item.WorkingHours.Hour.ToString("D2")
                         :
                         @item.WorkingHours._minute.ToString("D2")
                     </td>
