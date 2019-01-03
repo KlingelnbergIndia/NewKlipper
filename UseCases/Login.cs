@@ -16,6 +16,10 @@ namespace UseCases
         public EmployeeDTO LoginUser(string userName, string password)
         {
             Employee employee = _employeeRepository.GetEmployee(userName);
+            if (employee == null)
+            {
+                return null;
+            }
             bool result  = employee.Authenticate(userName, password);
             if (result)
             {
