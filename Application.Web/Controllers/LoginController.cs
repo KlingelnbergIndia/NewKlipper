@@ -36,6 +36,8 @@ namespace Application.Web.Controllers
                 //HttpContext.Session.SetString("Title", loggedInUserDetails.Title);
                 //HttpContext.Session.SetInt32("ID", loggedInUserDetails.ID);
 
+                HttpContext.Session.SetInt32("ID", 66);
+
                 return RedirectToAction("Index", "Home");
             }
             HttpContext.Session.Clear();

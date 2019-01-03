@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DataAccess;
 using DataAccess.EntityModel.Authentication;
 using DataAccess.EntityModel.Employment;
@@ -20,11 +21,17 @@ namespace UseCaseBoundaryImplementation
         }
         public Employee GetEmployee(string userName)
         {
-            var filterForAuthDBContext = Builders<UsersEntityModel>.Filter.Eq("UserName", userName);
-            var employeeFromAuthDBContext = _authDBContext.Users.Find(filterForAuthDBContext).First();
+            var employeeFromAuthDBContext = _authDBContext.Users.AsQueryable()
+                .Where(x => x.UserName.ToLower() == userName.ToLower())
+                .FirstOrDefault();
+
+            if (employeeFromAuthDBContext == null)
+            {
+                return null;
+            }
 
             var filterForEmployeeDBContext = Builders<EmployeeEntityModel>.Filter.Eq("ID", employeeFromAuthDBContext.ID);
-            var employeeFromEmployeeDBContext = _employeeDBContext.Employees.Find(filterForEmployeeDBContext).First();
+            var employeeFromEmployeeDBContext = _employeeDBContext.Employees.Find(filterForEmployeeDBContext).FirstOrDefault();
 
             int _id = employeeFromAuthDBContext.ID;
             string _userName = employeeFromAuthDBContext.UserName;
