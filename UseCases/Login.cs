@@ -13,7 +13,7 @@ namespace UseCases
             _employeeRepository = employeeRepository;
         }
 
-        EmployeeDTO LoginUser(string userName, string password)
+        public EmployeeDTO LoginUser(string userName, string password)
         {
             Employee employee = _employeeRepository.GetEmployee(userName);
             bool result  = employee.Authenticate(userName, password);
