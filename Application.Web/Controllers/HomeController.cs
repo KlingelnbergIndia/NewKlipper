@@ -5,8 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Application.Web.Models;
+using UseCaseBoundary;
 using UseCaseBoundary.Model;
 using UseCases;
+using UseCaseBoundaryImplementation;
 
 namespace Application.Web.Controllers
 {
@@ -14,10 +16,11 @@ namespace Application.Web.Controllers
     {
         public async Task<IActionResult> Index()
         {
+            IAccessEventsRepository accessEventRepository = new AccessEventRepository();
             //var employeeId = HttpContext.Session.GetInt32("ID");
             //int id = employeeId ?? 0;
             int id = 45;
-            AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID();
+            AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(accessEventRepository);
             var model=await attendanceService.GetAttendanceRecord(id, 7);
             return View(model);
         }

@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UseCaseBoundaryImplementation\UseCaseBoundaryImplementation.csproj" />
     <ProjectReference Include="..\UseCaseBoundary\UseCaseBoundary.csproj" />
     <ProjectReference Include="..\UseCases\UseCases.csproj" />
   </ItemGroup>
