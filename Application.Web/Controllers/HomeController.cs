@@ -26,8 +26,18 @@ namespace Application.Web.Controllers
         public async Task<IActionResult> Index(string searchFilter)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            AttendanceRecordForEmployee attendanceRecordForEmployee = new AttendanceRecordForEmployee(_accessEventRepository);
-            var listOfAttendanceRecord=await attendanceRecordForEmployee.GetAttendanceRecord(employeeId, 7);
+            List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
+
+            if (searchFilter == SearchFilter.AccessEventsByDateRange.ToString())
+            {
+                AttendanceRecordsOfEmployeeForDateRange attendanceRecordForEmployee = new AttendanceRecordsOfEmployeeForDateRange(_accessEventRepository);
+                listOfAttendanceRecord = await attendanceRecordForEmployee.GetAttendanceRecord(employeeId,DateTime.Now.AddDays(-50), DateTime.Now);
+            }
+            else
+            {
+                AttendanceRecordForEmployee attendanceRecordForEmployee = new AttendanceRecordForEmployee(_accessEventRepository);
+                listOfAttendanceRecord = await attendanceRecordForEmployee.GetAttendanceRecord(employeeId, 7);
+            }
 
             listOfAttendanceRecord = ConvertRecordsTimeToIST(listOfAttendanceRecord);
             return View(listOfAttendanceRecord);
@@ -56,7 +66,7 @@ namespace Application.Web.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private Time ConvertTimeZone(DateTime date,Time time)
+        private Time ConvertTimeZone(DateTime date, Time time)
         {
             DateTime TimeZone_UTC = new DateTime(date.Year, date.Month,
                       date.Day, time.Hour, time.Minute, 00);
