@@ -18,18 +18,38 @@ namespace Application.Web.Controllers
     public class HomeController : Controller
     {
         private IAccessEventsRepository _accessEventRepository;
+        //private int _employeeIdFromSession;
         public HomeController(IAccessEventsRepository accessEventRepository)
         {
             _accessEventRepository = accessEventRepository;
+            //_employeeIdFromSession = HttpContext.Session.GetInt32("ID") ?? 0;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchFilter)
         {
-            var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(_accessEventRepository);
-            var model = await attendanceService.GetAttendanceRecord(employeeId, 7);
+            int employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
+            List<AttendanceRecordDTO> model;
+
+            if (searchFilter == SearchFilter.AccessEventsByDateRange.ToString())
+            {
+                AttendanceRecordsOfEmployeeForDateRange attendanceRecords = new AttendanceRecordsOfEmployeeForDateRange(_accessEventRepository);
+                model = await attendanceRecords.GetAttendanceRecord(employeeId, DateTime.Now.AddDays(-50), DateTime.Now);
+            }
+            else
+            {
+                AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(_accessEventRepository);
+                model = await attendanceService.GetAttendanceRecord(employeeId, 7);
+            }
+
             return View(model);
         }
+
+        //public async Task<IActionResult> Index(string id)
+        //{
+        //    AttendanceRecordsOfEmployeeForDateRange attendanceService = new AttendanceRecordsOfEmployeeForDateRange(_accessEventRepository);
+        //    var model = await attendanceService.GetAttendanceRecord(_employeeIdFromSession, DateTime.Now.AddDays(-50), DateTime.Now);
+        //    return View(model);
+        //}
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
