@@ -47,5 +47,14 @@ namespace UseCaseBoundaryImplementation
             return listOfDomainModelAccessEvent;
         }
 
+        public AccessEvents GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
+        {
+            var accessEvents = _context.AccessEvents.AsQueryable()
+                .Where(x => x.EmployeeID == employeeId && x.EventTime <= toDate && x.EventTime >= fromDate)
+                .ToList();
+
+            var listOfDomainModelAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
+            return new AccessEvents(listOfDomainModelAccessEvent);
+        }
     }
 }

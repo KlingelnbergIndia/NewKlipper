@@ -23,25 +23,32 @@ namespace Application.Web.Controllers
             _accessEventRepository = accessEventRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchFilter)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             AttendanceRecordForEmployee attendanceRecordForEmployee = new AttendanceRecordForEmployee(_accessEventRepository);
             var listOfAttendanceRecord=await attendanceRecordForEmployee.GetAttendanceRecord(employeeId, 7);
-            foreach(var attendanceRecord in listOfAttendanceRecord)
+
+            listOfAttendanceRecord = ConvertRecordsTimeToIST(listOfAttendanceRecord);
+            return View(listOfAttendanceRecord);
+        }
+
+        private List<AttendanceRecordDTO> ConvertRecordsTimeToIST(List<AttendanceRecordDTO> listOfAttendanceRecord)
+        {
+            foreach (var attendanceRecord in listOfAttendanceRecord)
             {
-                if (attendanceRecord.TimeIn.Hour != 0 && attendanceRecord.TimeIn.Minute!=0)
+                if (attendanceRecord.TimeIn.Hour != 0 && attendanceRecord.TimeIn.Minute != 0)
                 {
-                    attendanceRecord.TimeIn =ConvertTimeZone(attendanceRecord.Date, attendanceRecord.TimeIn);
+                    attendanceRecord.TimeIn = ConvertTimeZone(attendanceRecord.Date, attendanceRecord.TimeIn);
                 }
                 if (attendanceRecord.TimeOut.Hour != 0 && attendanceRecord.TimeIn.Minute != 0)
                 {
                     attendanceRecord.TimeOut = ConvertTimeZone(attendanceRecord.Date, attendanceRecord.TimeOut);
                 }
             }
-            return View(listOfAttendanceRecord);
-        }
 
+            return listOfAttendanceRecord;
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
