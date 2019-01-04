@@ -54,7 +54,7 @@ namespace Application.Web.Controllers
             DateTime TimeZone_UTC = new DateTime(date.Year, date.Month,
                       date.Day, time.Hour, time.Minute, 00);
             DateTime TimeZone_IST = TimeZoneInfo.ConvertTimeFromUtc(TimeZone_UTC,
-                TimeZoneInfo.FindSystemTimeZoneById(TimeZone.CurrentTimeZone.StandardName));
+                TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id));
             Time convertedTime = new Time(TimeZone_IST.Hour, TimeZone_IST.Minute);
             return convertedTime;
         }

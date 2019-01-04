@@ -63,7 +63,7 @@ namespace Application.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Login}/{action=Login}/{searchFilter?}");
+                    template: "{controller=Login}/{action=Login}/{id?}");
 
             });
         }

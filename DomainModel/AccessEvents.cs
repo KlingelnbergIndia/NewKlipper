@@ -23,11 +23,6 @@ namespace DomainModel
             return acessEventsByDate;
         }
 
-        public IEnumerable<AccessEvent> GetAllAccessEvents()
-        {
-            return accessEvents;
-        }
-
         public TimeSpan CalculateWorkingHours()
         {
             var accessEventsOfMainEntry = _accessEvents.Where(K => K.AccessPointID == 16).ToList();
