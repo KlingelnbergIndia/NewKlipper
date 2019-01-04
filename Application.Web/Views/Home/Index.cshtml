@@ -66,16 +66,30 @@
                             @item.TimeOut.Minute.ToString("D2")
                         </td>
                     }
-                    <td style="background:@lateByColor">
-                        @item.LateBy.Hour.ToString("D2")
-                        :
-                        @item.LateBy.Minute.ToString("D2")
-                    </td>
-                    <td style="background:@overTimeColor">
-                        @item.OverTime.Hour.ToString("D2")
-                        :
-                        @item.OverTime.Minute.ToString("D2")
-                    </td>
+                    @if (item.LateBy.Hour == 0 && item.LateBy.Minute == 0)
+                    {
+                        <td>-</td>
+                    }
+                    else
+                    {
+                        <td style="background:@lateByColor">
+                            @item.LateBy.Hour.ToString("D2")
+                            :
+                            @item.LateBy.Minute.ToString("D2")
+                        </td>
+                    }
+                    @if (item.OverTime.Hour == 0 && item.OverTime.Minute == 0)
+                    {
+                        <td>-</td>
+                    }
+                    else
+                    {
+                        <td style="background:@overTimeColor">
+                            @item.OverTime.Hour.ToString("D2")
+                            :
+                            @item.OverTime.Minute.ToString("D2")
+                        </td>
+                    }
                     <td>
                         @item.WorkingHours.Hour.ToString("D2")
                         :
