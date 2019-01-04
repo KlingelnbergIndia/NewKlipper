@@ -7,7 +7,7 @@ using DomainModel;
 using MongoDB.Driver;
 using UseCaseBoundary;
 
-namespace RepositoryImplementation
+namespace UseCaseBoundaryImplementation
 {
     public class AccessEventMongoDBRepository : IAccessEventsRepository
     {
