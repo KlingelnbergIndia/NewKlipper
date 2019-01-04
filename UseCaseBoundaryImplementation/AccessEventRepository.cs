@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DataAccess;
 using DataAccess.EntityModel;
 using DomainModel;
@@ -19,7 +20,7 @@ namespace UseCaseBoundaryImplementation
 
         public AccessEvents GetAccessEvents(int employeeid)
         {
-            var filter = Builders<AccessEventEntityModel>.Filter.Eq("ID", employeeid);
+            var filter = Builders<AccessEventEntityModel>.Filter.Eq("EmployeeID", employeeid);
             var listOfEntityAccessEvent = _context.AccessEvents
                 .Find(filter)
                 .ToList();

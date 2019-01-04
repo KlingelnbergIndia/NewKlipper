@@ -1,9 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Application.Web</title>
+    <title>Klipper Web</title>
+    <link href="~/css/simple-sidebar.css" rel="stylesheet" />
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -18,6 +20,9 @@
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
+        <a class="navbar-brand" href="#">
+            <img src="~/images/KLLogo.png" alt="logo" style="height:65px;margin-top:-23px;margin-left:15px;">
+        </a>
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -26,26 +31,60 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Application.Web</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Klipper-Attendance portal</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>*@
                 </ul>
             </div>
         </div>
     </nav>
 
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                @*<img src="~/images/KLLogo.png" alt="logo"></img>*@
+                <li class="sidebar-brand">
+                    <a href="#">
+                        <span class="glyphicon glyphicon-user"></span>&nbsp; @Context.Session.GetString("EmployeeName")
+                        <div style="margin-top:-35px;color:darkkhaki;font-size:.7em;float:left;margin-left:18px;">@Context.Session.GetString("Title")</div>
+                    </a>
+                </li>
+
+                <li>&nbsp;</li>
+                <li>
+                    <a href="#">
+                        <span class="glyphicon glyphicon-duplicate"></span>&nbsp;Summary
+                    </a>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Login" class="" asp-action="Logout">
+                        <span class="glyphicon glyphicon-off"></span>&nbsp; Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+
     <partial name="_CookieConsentPartial" />
 
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2019 - Application.Web</p>
-        </footer>
     </div>
 
     <environment include="Development">
@@ -72,3 +111,13 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+
+<script>
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+
+    });
+    $("#wrapper").toggleClass("toggled");
+</script>

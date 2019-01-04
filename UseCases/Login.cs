@@ -13,17 +13,30 @@ namespace UseCases
             _employeeRepository = employeeRepository;
         }
 
-        EmployeeDTO LoginUser(string userName, string password)
+        public EmployeeDTO LoginUser(string userName, string password)
         {
             Employee employee = _employeeRepository.GetEmployee(userName);
+            if (employee == null)
+            {
+                return null;
+            }
             bool result  = employee.Authenticate(userName, password);
             if (result)
             {
                 int id = employee.Id();
                 string username = employee.UserName();
+                string firstName = employee.FirstName();
+                string lastName = employee.LastName();
+                string title = employee.Title();
                 List<EmployeeRoles> roles = employee.Roles();
 
-                EmployeeDTO employeeDto = new EmployeeDTO(id, username, roles);
+                EmployeeDTO employeeDto = new EmployeeDTO(
+                    id, 
+                    username, 
+                    firstName,
+                    lastName,
+                    title,
+                    roles);
 
                 return employeeDto;
             }

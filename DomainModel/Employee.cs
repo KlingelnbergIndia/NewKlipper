@@ -14,13 +14,19 @@ namespace DomainModel
         private int _id;
         private string _userName;
         private string _password;
+        private string _firstName;
+        private string _lastName;
+        private string _title;
         private List<EmployeeRoles> _roles;
-        public Employee(int id, string userName, string password, List<EmployeeRoles> roles)
+        public Employee(int id, string userName, string password, string firstName, string lastName,string title, List<EmployeeRoles> roles)
         {
             _id = id;
             _userName = userName;
             _password = password;
+            _firstName = firstName;
+            _lastName = lastName;
             _roles = roles;
+            _title = title;
         }
 
         public int Id()
@@ -38,6 +44,20 @@ namespace DomainModel
             return _password;
         }
 
+        public string FirstName()
+        {
+            return _firstName;
+        }
+        public string LastName()
+        {
+            return _lastName;
+        }
+
+        public string Title()
+        {
+            return _title;
+        }
+
         public List<EmployeeRoles> Roles()
         {
             return _roles;
@@ -45,6 +65,8 @@ namespace DomainModel
 
         public bool Authenticate(string userName, string password)
         {
+            userName = userName.ToLower();
+            _userName = _userName.ToLower();
             return _userName.Equals(userName) && _password.Equals(password);
         }
     }

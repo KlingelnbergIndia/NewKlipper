@@ -9,40 +9,28 @@ using UseCaseBoundary;
 using UseCaseBoundary.Model;
 using UseCases;
 using UseCaseBoundaryImplementation;
+using Microsoft.AspNetCore.Http;
+using Klipper.Web.UI;
 
 namespace Application.Web.Controllers
 {
+    [AuthenticateSession]
     public class HomeController : Controller
     {
+        private IAccessEventsRepository _accessEventRepository;
+        public HomeController(IAccessEventsRepository accessEventRepository)
+        {
+            _accessEventRepository = accessEventRepository;
+        }
+
         public async Task<IActionResult> Index()
         {
-            IAccessEventsRepository accessEventRepository = new AccessEventRepository();
-            //var employeeId = HttpContext.Session.GetInt32("ID");
-            //int id = employeeId ?? 0;
-            int id = 45;
-            AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(accessEventRepository);
-            var model=await attendanceService.GetAttendanceRecord(id, 7);
+            var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
+            AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(_accessEventRepository);
+            var model = await attendanceService.GetAttendanceRecord(employeeId, 7);
             return View(model);
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

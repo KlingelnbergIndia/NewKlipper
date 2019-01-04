@@ -40,7 +40,10 @@ namespace UseCases
                 };
                 listOfAttendanceRecord.Add(attendanceRecord);
             }
-            return listOfAttendanceRecord;
+            return await Task.Run(()=> 
+            {
+                return listOfAttendanceRecord;
+            });
         }
 
         private Time GetOverTime(TimeSpan extrahour)

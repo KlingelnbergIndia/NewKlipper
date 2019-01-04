@@ -50,9 +50,9 @@
                         @item.Date.ToString("D")
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TimeIn._hour)
+                        @item.TimeIn._hour.ToString("D2")
                         :
-                        @Html.DisplayFor(modelItem => item.TimeIn._minute)
+                        @item.TimeIn._minute.ToString("D2")
                     </td>
                     @if (item.TimeOut._hour == 0 && item.TimeOut._minute == 0)
                     {
@@ -61,28 +61,29 @@
                     else
                     {
                         <td>
-                            @Html.DisplayFor(modelItem => item.TimeOut._hour)
+                            @item.TimeOut._hour.ToString("D2")
                             :
-                            @Html.DisplayFor(modelItem => item.TimeOut._minute)
+                            @item.TimeOut._minute.ToString("D2")
                         </td>
                     }
                     <td style="background:@lateByColor">
-                        @Html.DisplayFor(modelItem => item.LateBy._hour)
+                        @item.LateBy._hour.ToString("D2")
                         :
-                        @Html.DisplayFor(modelItem => item.LateBy._minute)
+                        @item.LateBy._minute.ToString("D2")
                     </td>
                     <td style="background:@overTimeColor">
-                        @Html.DisplayFor(modelItem => item.OverTime._hour)
+                        @item.OverTime._hour.ToString("D2")
                         :
-                        @Html.DisplayFor(modelItem => item.OverTime._minute)
+                        @item.OverTime._minute.ToString("D2")
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.WorkingHours._hour)
+                        @item.WorkingHours._hour.ToString("D2")
                         :
-                        @Html.DisplayFor(modelItem => item.WorkingHours._minute)
+                        @item.WorkingHours._minute.ToString("D2")
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
