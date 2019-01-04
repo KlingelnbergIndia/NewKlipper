@@ -3,39 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web.API", "Web.API", "{AFD5F13F-1BF2-4F7C-AAE3-B62559EE1C6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainModel", "DomainModel\DomainModel.csproj", "{FBA5DB2B-5296-4F4B-9EE0-885031B6D0A2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web.Client", "Web.Client", "{14158242-B4B6-4270-B1F9-02B93E726087}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UseCases", "UseCases\UseCases.csproj", "{2DD265B9-157B-4122-97EA-DE923844FCC9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Klipper.Web.UI", "Klipper.Web.UI\Klipper.Web.UI.csproj", "{43FAADDA-44F3-417F-9958-BA690F7F0191}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UseCaseBoundary", "UseCaseBoundary\UseCaseBoundary.csproj", "{FDB48A52-DD3B-4860-BE20-1A30038DA024}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Klipper.Web.Application", "Klipper.Web.Application\Klipper.Web.Application.csproj", "{A42ECE3A-C9CC-4D3C-BD8F-F5E1E2119D0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UseCaseBoundaryImplementation", "UseCaseBoundaryImplementation\UseCaseBoundaryImplementation.csproj", "{A9799A34-6D09-4C44-83E7-AC372DDAB3C0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AttendanceApi", "AttendanceApi\AttendanceApi.csproj", "{ADE57CA7-BBF4-43B4-A1DE-5D093C4DBBE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Web", "Application.Web\Application.Web.csproj", "{411AE8F2-FDE6-4763-974D-2D0F0DB47444}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer", "AuthServer\AuthServer.csproj", "{98373D6A-73A2-4914-AC47-153A34F9F492}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeApi", "EmployeeApi\EmployeeApi.csproj", "{555F8CBC-E73F-4855-9C30-6D6DFC091611}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KlipperApi", "KlipperApi\KlipperApi.csproj", "{6D2F15FF-885F-43CE-A5E3-5CF265EBA54A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KlipperAuthorization", "KlipperAuthorization\KlipperAuthorization.csproj", "{354DB21C-395F-4682-A48A-35357282DBD3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OperationalsApi", "OperationalsApi\OperationalsApi.csproj", "{144CEEEE-245F-46C6-8863-83A93344D4C4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models.Core", "Models\Models.Core\Models.Core.csproj", "{C0920552-900A-4C2B-B79D-6BAB7B22146C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModel", "DomainModel\DomainModel.csproj", "{FBA5DB2B-5296-4F4B-9EE0-885031B6D0A2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseCases", "UseCases\UseCases.csproj", "{2DD265B9-157B-4122-97EA-DE923844FCC9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseCaseBoundary", "UseCaseBoundary\UseCaseBoundary.csproj", "{FDB48A52-DD3B-4860-BE20-1A30038DA024}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseCaseBoundaryImplementation", "UseCaseBoundaryImplementation\UseCaseBoundaryImplementation.csproj", "{A9799A34-6D09-4C44-83E7-AC372DDAB3C0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Web", "Application.Web\Application.Web.csproj", "{411AE8F2-FDE6-4763-974D-2D0F0DB47444}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{03D4175A-6B67-4E1B-8032-C30E3107F169}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{03D4175A-6B67-4E1B-8032-C30E3107F169}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,42 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{43FAADDA-44F3-417F-9958-BA690F7F0191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{43FAADDA-44F3-417F-9958-BA690F7F0191}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{43FAADDA-44F3-417F-9958-BA690F7F0191}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43FAADDA-44F3-417F-9958-BA690F7F0191}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A42ECE3A-C9CC-4D3C-BD8F-F5E1E2119D0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A42ECE3A-C9CC-4D3C-BD8F-F5E1E2119D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A42ECE3A-C9CC-4D3C-BD8F-F5E1E2119D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A42ECE3A-C9CC-4D3C-BD8F-F5E1E2119D0B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADE57CA7-BBF4-43B4-A1DE-5D093C4DBBE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADE57CA7-BBF4-43B4-A1DE-5D093C4DBBE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADE57CA7-BBF4-43B4-A1DE-5D093C4DBBE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADE57CA7-BBF4-43B4-A1DE-5D093C4DBBE5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{98373D6A-73A2-4914-AC47-153A34F9F492}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{98373D6A-73A2-4914-AC47-153A34F9F492}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{98373D6A-73A2-4914-AC47-153A34F9F492}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{98373D6A-73A2-4914-AC47-153A34F9F492}.Release|Any CPU.Build.0 = Release|Any CPU
-		{555F8CBC-E73F-4855-9C30-6D6DFC091611}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{555F8CBC-E73F-4855-9C30-6D6DFC091611}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{555F8CBC-E73F-4855-9C30-6D6DFC091611}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{555F8CBC-E73F-4855-9C30-6D6DFC091611}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D2F15FF-885F-43CE-A5E3-5CF265EBA54A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D2F15FF-885F-43CE-A5E3-5CF265EBA54A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D2F15FF-885F-43CE-A5E3-5CF265EBA54A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D2F15FF-885F-43CE-A5E3-5CF265EBA54A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{354DB21C-395F-4682-A48A-35357282DBD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{354DB21C-395F-4682-A48A-35357282DBD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{354DB21C-395F-4682-A48A-35357282DBD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{354DB21C-395F-4682-A48A-35357282DBD3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{144CEEEE-245F-46C6-8863-83A93344D4C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{144CEEEE-245F-46C6-8863-83A93344D4C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{144CEEEE-245F-46C6-8863-83A93344D4C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{144CEEEE-245F-46C6-8863-83A93344D4C4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C0920552-900A-4C2B-B79D-6BAB7B22146C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0920552-900A-4C2B-B79D-6BAB7B22146C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C0920552-900A-4C2B-B79D-6BAB7B22146C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C0920552-900A-4C2B-B79D-6BAB7B22146C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FBA5DB2B-5296-4F4B-9EE0-885031B6D0A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FBA5DB2B-5296-4F4B-9EE0-885031B6D0A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBA5DB2B-5296-4F4B-9EE0-885031B6D0A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -106,17 +48,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{43FAADDA-44F3-417F-9958-BA690F7F0191} = {14158242-B4B6-4270-B1F9-02B93E726087}
-		{A42ECE3A-C9CC-4D3C-BD8F-F5E1E2119D0B} = {14158242-B4B6-4270-B1F9-02B93E726087}
-		{ADE57CA7-BBF4-43B4-A1DE-5D093C4DBBE5} = {AFD5F13F-1BF2-4F7C-AAE3-B62559EE1C6B}
-		{98373D6A-73A2-4914-AC47-153A34F9F492} = {AFD5F13F-1BF2-4F7C-AAE3-B62559EE1C6B}
-		{555F8CBC-E73F-4855-9C30-6D6DFC091611} = {AFD5F13F-1BF2-4F7C-AAE3-B62559EE1C6B}
-		{6D2F15FF-885F-43CE-A5E3-5CF265EBA54A} = {AFD5F13F-1BF2-4F7C-AAE3-B62559EE1C6B}
-		{354DB21C-395F-4682-A48A-35357282DBD3} = {AFD5F13F-1BF2-4F7C-AAE3-B62559EE1C6B}
-		{144CEEEE-245F-46C6-8863-83A93344D4C4} = {AFD5F13F-1BF2-4F7C-AAE3-B62559EE1C6B}
-		{C0920552-900A-4C2B-B79D-6BAB7B22146C} = {AFD5F13F-1BF2-4F7C-AAE3-B62559EE1C6B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6736F535-09B4-4181-B590-EB39F956B2CE}
