@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DomainModel.Model;
+using DomainModel;
 
 namespace DomainModel
 {
@@ -14,7 +14,7 @@ namespace DomainModel
             _accessEvents = events;
         }
 
-        public List<IGrouping<DateTime, AccessEvent>> GetNoOfDaysAccessEventsByDate(int noOfDays)
+        public List<IGrouping<DateTime, AccessEvent>> AccessEventsByDate(int noOfDays)
         {
             var acessEventsByDate = _accessEvents.GroupBy(x => x.EventTime.Date)
                                                 .OrderByDescending(i => i.Key.Date)

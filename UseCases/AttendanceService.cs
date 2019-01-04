@@ -8,10 +8,10 @@ using UseCaseBoundary.Model;
 
 namespace UseCases
 {
-    public class AttendanceRecordForEmployee
+    public class AttendanceService
     {
         private IAccessEventsRepository _accessEventsRepository;
-        public AttendanceRecordForEmployee(IAccessEventsRepository accessEventsRepository)
+        public AttendanceService(IAccessEventsRepository accessEventsRepository)
         {
             _accessEventsRepository = accessEventsRepository;
         }
@@ -19,7 +19,7 @@ namespace UseCases
         public async Task<List<AttendanceRecordDTO>> GetAttendanceRecord(int employeeId, int noOfDays)
         {
             AccessEvents accessEvents = _accessEventsRepository.GetAccessEvents(employeeId);
-            var listOfAccessEventByDate = accessEvents.GetNoOfDaysAccessEventsByDate(noOfDays);
+            var listOfAccessEventByDate = accessEvents.AccessEventsByDate(noOfDays);
             List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
             foreach (var perDayAccessEvents in listOfAccessEventByDate)
             {

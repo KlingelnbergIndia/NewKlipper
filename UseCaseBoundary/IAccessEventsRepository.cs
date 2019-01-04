@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using DomainModel;
-using DomainModel.Model;
 
 namespace UseCaseBoundary
 {

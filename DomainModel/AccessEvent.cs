@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DomainModel.Model
+namespace DomainModel
 {
     public class AccessEvent
     {

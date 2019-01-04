@@ -26,7 +26,7 @@ namespace Application.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            AttendanceRecordForEmployee attendanceRecordForEmployee = new AttendanceRecordForEmployee(_accessEventRepository);
+            AttendanceService attendanceRecordForEmployee = new AttendanceService(_accessEventRepository);
             var listOfAttendanceRecord=await attendanceRecordForEmployee.GetAttendanceRecord(employeeId, 7);
             foreach(var attendanceRecord in listOfAttendanceRecord)
             {
