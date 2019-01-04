@@ -8,10 +8,10 @@ using UseCaseBoundary.Model;
 
 namespace UseCases
 {
-    public class AttendanceService
+    public class AttendanceRecordForEmployee
     {
         private IAccessEventsRepository _accessEventsRepository;
-        public AttendanceService(IAccessEventsRepository accessEventsRepository)
+        public AttendanceRecordForEmployee(IAccessEventsRepository accessEventsRepository)
         {
             _accessEventsRepository = accessEventsRepository;
         }
