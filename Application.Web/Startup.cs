@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UseCaseBoundary;
-using UseCaseBoundaryImplementation;
+using RepositoryImplementation;
 
 namespace Application.Web
 {
@@ -36,8 +36,8 @@ namespace Application.Web
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
             });
 
-            services.AddTransient<IEmployeeRepository, EmployeeMongoRepository>();
-            services.AddTransient<IAccessEventsRepository, AccessEventRepository>();
+            services.AddTransient<IEmployeeRepository, EmployeeMongoDBRepository>();
+            services.AddTransient<IAccessEventsRepository, AccessEventMongoDBRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

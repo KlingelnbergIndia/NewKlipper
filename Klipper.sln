@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UseCases", "UseCases\UseCas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UseCaseBoundary", "UseCaseBoundary\UseCaseBoundary.csproj", "{FDB48A52-DD3B-4860-BE20-1A30038DA024}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UseCaseBoundaryImplementation", "UseCaseBoundaryImplementation\UseCaseBoundaryImplementation.csproj", "{A9799A34-6D09-4C44-83E7-AC372DDAB3C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryImplementation", "UseCaseBoundaryImplementation\RepositoryImplementation.csproj", "{A9799A34-6D09-4C44-83E7-AC372DDAB3C0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Web", "Application.Web\Application.Web.csproj", "{411AE8F2-FDE6-4763-974D-2D0F0DB47444}"
 EndProject

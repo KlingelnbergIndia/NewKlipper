@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace UseCaseBoundary.Model
+﻿namespace UseCaseBoundary.Model
 {
     public class Time
     {
-        public int _hour;
-        public int _minute;
+        public int Hour;
+        public int Minute;
         public Time(int hours, int minutes)
         {
-            _hour = hours;
-            _minute = minutes;
+            Hour = hours;
+            Minute = minutes;
         }
     }
 }

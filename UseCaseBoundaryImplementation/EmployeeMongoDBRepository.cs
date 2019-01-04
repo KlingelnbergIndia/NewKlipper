@@ -7,14 +7,14 @@ using DomainModel;
 using MongoDB.Driver;
 using UseCaseBoundary;
 
-namespace UseCaseBoundaryImplementation
+namespace RepositoryImplementation
 {
-    public class EmployeeMongoRepository : IEmployeeRepository
+    public class EmployeeMongoDBRepository : IEmployeeRepository
     {
         private readonly AuthDBContext _authDBContext = null;
         private readonly EmployeeDBContext _employeeDBContext = null;
 
-        public EmployeeMongoRepository()
+        public EmployeeMongoDBRepository()
         {
             _authDBContext = AuthDBContext.Instance;
             _employeeDBContext = EmployeeDBContext.Instance;

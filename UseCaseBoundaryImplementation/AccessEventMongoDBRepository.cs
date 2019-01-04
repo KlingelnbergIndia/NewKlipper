@@ -7,13 +7,13 @@ using DomainModel;
 using MongoDB.Driver;
 using UseCaseBoundary;
 
-namespace UseCaseBoundaryImplementation
+namespace RepositoryImplementation
 {
-    public class AccessEventRepository : IAccessEventsRepository
+    public class AccessEventMongoDBRepository : IAccessEventsRepository
     {
         private readonly AttendanceDBContext _context = null;
 
-        public AccessEventRepository()
+        public AccessEventMongoDBRepository()
         {
             _context = AttendanceDBContext.Instance;
         }
