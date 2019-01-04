@@ -23,7 +23,7 @@ namespace UseCases
             List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
             foreach (var perDayAccessEvents in listOfAccessEventByDate)
             {
-                var listOfMainEntryPointAccessEventOfADay = perDayAccessEvents.Select(x => x).Where(K => K.AccessPointID == 16).ToList();
+                var listOfMainEntryPointAccessEventOfADay = perDayAccessEvents.Select(x => x).Where(K => K.AccessPointName=="Main Entry").ToList();
                 AccessEvents accessEventsPerDay = new AccessEvents(listOfMainEntryPointAccessEventOfADay);
                 var timeIn = accessEventsPerDay.GetTimeIn();
                 var timeOut = accessEventsPerDay.GetTimeOut();
