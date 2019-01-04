@@ -32,6 +32,11 @@ namespace DomainModel
             return workingHours;
         }
 
+        public IEnumerable<AccessEvent> GetAllAccessEvents()
+        {
+            return _accessEvents;
+        }
+
         public TimeSpan GetTimeIn()
         {
            return _accessEvents.Select(x => x.EventTime.TimeOfDay).Min();
