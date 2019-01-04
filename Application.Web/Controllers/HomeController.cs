@@ -18,44 +18,45 @@ namespace Application.Web.Controllers
     public class HomeController : Controller
     {
         private IAccessEventsRepository _accessEventRepository;
-        //private int _employeeIdFromSession;
         public HomeController(IAccessEventsRepository accessEventRepository)
         {
             _accessEventRepository = accessEventRepository;
-            //_employeeIdFromSession = HttpContext.Session.GetInt32("ID") ?? 0;
         }
 
-        public async Task<IActionResult> Index(string searchFilter)
+        public async Task<IActionResult> Index()
         {
-            int employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            List<AttendanceRecordDTO> model;
-
-            if (searchFilter == SearchFilter.AccessEventsByDateRange.ToString())
+            var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
+            AttendanceRecordForEmployee attendanceRecordForEmployee = new AttendanceRecordForEmployee(_accessEventRepository);
+            var listOfAttendanceRecord=await attendanceRecordForEmployee.GetAttendanceRecord(employeeId, 7);
+            foreach(var attendanceRecord in listOfAttendanceRecord)
             {
-                AttendanceRecordsOfEmployeeForDateRange attendanceRecords = new AttendanceRecordsOfEmployeeForDateRange(_accessEventRepository);
-                model = await attendanceRecords.GetAttendanceRecord(employeeId, DateTime.Now.AddDays(-50), DateTime.Now);
+                if (attendanceRecord.TimeIn.Hour != 0 && attendanceRecord.TimeIn.Minute!=0)
+                {
+                    attendanceRecord.TimeIn =ConvertTimeZone(attendanceRecord.Date, attendanceRecord.TimeIn);
+                }
+                if (attendanceRecord.TimeOut.Hour != 0 && attendanceRecord.TimeIn.Minute != 0)
+                {
+                    attendanceRecord.TimeOut = ConvertTimeZone(attendanceRecord.Date, attendanceRecord.TimeOut);
+                }
             }
-            else
-            {
-                AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(_accessEventRepository);
-                model = await attendanceService.GetAttendanceRecord(employeeId, 7);
-            }
-
-            return View(model);
+            return View(listOfAttendanceRecord);
         }
-
-        //public async Task<IActionResult> Index(string id)
-        //{
-        //    AttendanceRecordsOfEmployeeForDateRange attendanceService = new AttendanceRecordsOfEmployeeForDateRange(_accessEventRepository);
-        //    var model = await attendanceService.GetAttendanceRecord(_employeeIdFromSession, DateTime.Now.AddDays(-50), DateTime.Now);
-        //    return View(model);
-        //}
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private Time ConvertTimeZone(DateTime date,Time time)
+        {
+            DateTime TimeZone_UTC = new DateTime(date.Year, date.Month,
+                      date.Day, time.Hour, time.Minute, 00);
+            DateTime TimeZone_IST = TimeZoneInfo.ConvertTimeFromUtc(TimeZone_UTC,
+                TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id));
+            Time convertedTime = new Time(TimeZone_IST.Hour, TimeZone_IST.Minute);
+            return convertedTime;
         }
     }
 }

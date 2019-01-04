@@ -36,8 +36,8 @@ namespace Application.Web
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
             });
 
-            services.AddTransient<IEmployeeRepository, EmployeeMongoRepository>();
-            services.AddTransient<IAccessEventsRepository, AccessEventRepository>();
+            services.AddTransient<IEmployeeRepository, EmployeeMongoDBRepository>();
+            services.AddTransient<IAccessEventsRepository, AccessEventMongoDBRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -63,7 +63,7 @@ namespace Application.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Login}/{action=Login}/{searchFilter?}");
+                    template: "{controller=Login}/{action=Login}/{id?}");
 
             });
         }

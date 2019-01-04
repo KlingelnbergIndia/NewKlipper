@@ -8,6 +8,5 @@ namespace UseCaseBoundary
     public interface IAccessEventsRepository
     {
         AccessEvents GetAccessEvents(int employeeid);
-        AccessEvents GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate);
     }
 }

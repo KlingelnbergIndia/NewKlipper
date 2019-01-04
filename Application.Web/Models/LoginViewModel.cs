@@ -8,10 +8,10 @@ namespace Application.Web.Models
 {
     public class LoginViewModel
     {
-        [Required]
-        [MinLength(8)]
+        [Required(ErrorMessage = "User name field is required.")]
+        [MinLength(5)]
         public string UserName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Password field is required.")]
         public string Password { get; set; }
     }
 }
