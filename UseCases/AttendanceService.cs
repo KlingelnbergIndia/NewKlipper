@@ -19,19 +19,17 @@ namespace UseCases
         public async Task<List<AttendanceRecordDTO>> GetAttendanceRecord(int employeeId, int noOfDays)
         {
             AccessEvents accessEvents = _accessEventsRepository.GetAccessEvents(employeeId);
-            var listOfAccessEventByDate = accessEvents.AccessEventsByDate(noOfDays);
+            var workRecordByDate = accessEvents.WorkRecord(noOfDays);
             List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
-            foreach (var perDayAccessEvents in listOfAccessEventByDate)
+            foreach (var perDayWorkRecord in workRecordByDate)
             {
-                var listOfMainEntryPointAccessEventOfADay = perDayAccessEvents.Select(x => x).Where(K => K.AccessPointName=="Main Entry").ToList();
-                AccessEvents accessEventsPerDay = new AccessEvents(listOfMainEntryPointAccessEventOfADay);
-                var timeIn = accessEventsPerDay.GetTimeIn();
-                var timeOut = accessEventsPerDay.GetTimeOut();
-                var workingHours = accessEventsPerDay.CalculateWorkingHours();
+                var timeIn = perDayWorkRecord.GetTimeIn();
+                var timeOut = perDayWorkRecord.GetTimeOut();
+                var workingHours = perDayWorkRecord.CalculateWorkingHours();
               
                 AttendanceRecordDTO attendanceRecord = new AttendanceRecordDTO()
                 {
-                    Date = perDayAccessEvents.Key.Date,
+                    Date = perDayWorkRecord.Date,
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
