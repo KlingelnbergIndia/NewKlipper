@@ -23,20 +23,20 @@ namespace UseCases
             List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
             foreach (var perDayAccessEvents in listOfAccessEventByDate)
             {
-                var listOfAccessEventByDay = perDayAccessEvents.Select(x => x).ToList();
-                AccessEvents accessEventsPerDay = new AccessEvents(listOfAccessEventByDay);
+                var listOfMainEntryPointAccessEventOfADay = perDayAccessEvents.Select(x => x).Where(K => K.AccessPointID == 16).ToList();
+                AccessEvents accessEventsPerDay = new AccessEvents(listOfMainEntryPointAccessEventOfADay);
                 var timeIn = accessEventsPerDay.GetTimeIn();
                 var timeOut = accessEventsPerDay.GetTimeOut();
                 var workingHours = accessEventsPerDay.CalculateWorkingHours();
-                var extraHour = workingHours - TimeSpan.Parse("9:00:00");
+              
                 AttendanceRecordDTO attendanceRecord = new AttendanceRecordDTO()
                 {
                     Date = perDayAccessEvents.Key.Date,
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
-                    OverTime = GetOverTime(extraHour),
-                    LateBy = GetLateByTime(extraHour)
+                    OverTime = GetOverTime(workingHours),
+                    LateBy = GetLateByTime(workingHours)
                 };
                 listOfAttendanceRecord.Add(attendanceRecord);
             }
@@ -46,23 +46,25 @@ namespace UseCases
             });
         }
 
-        private Time GetOverTime(TimeSpan extrahour)
+        private Time GetOverTime(TimeSpan workingHours)
         {
-            if (extrahour > TimeSpan.Zero)
+            var extraHour = GetExtraHours(workingHours);
+            if (extraHour.Hour > 0 || extraHour.Minute > 0)
             {
-                return new Time(extrahour.Hours, extrahour.Minutes);
+                return extraHour;
             }
             else
             {
                 return new Time(0, 0);
             }
         }
-        private Time GetLateByTime(TimeSpan extrahour)
+        private Time GetLateByTime(TimeSpan workingHours)
         {
-            if (extrahour < TimeSpan.Zero)
+            var extraHour = GetExtraHours(workingHours);
+            if (extraHour.Hour < 0 || extraHour.Minute < 0)
             {
-                int latebyHours = Math.Abs(extrahour.Hours);
-                int latebyMinutes = Math.Abs(extrahour.Minutes);
+                int latebyHours = Math.Abs(extraHour.Hour);
+                int latebyMinutes = Math.Abs(extraHour.Minute);
                 return new Time(latebyHours, latebyMinutes);
             }
             else
@@ -71,5 +73,11 @@ namespace UseCases
             }
         }
 
+        private Time GetExtraHours(TimeSpan workingHours)
+        {
+            TimeSpan TotalWorkingHours = TimeSpan.Parse("9:00:00");
+            var extraHour = workingHours - TotalWorkingHours;
+            return new Time(extraHour.Hours, extraHour.Minutes);
+        }
     }
 }

@@ -25,29 +25,18 @@ namespace Application.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var employeeId = HttpContext.Session.GetInt32("ID");
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            AttendanceRecordForEmployeeID attendanceService = new AttendanceRecordForEmployeeID(_accessEventRepository);
-            var listOfAttendanceRecord=await attendanceService.GetAttendanceRecord(employeeId, 7);
+            AttendanceRecordForEmployee attendanceRecordForEmployee = new AttendanceRecordForEmployee(_accessEventRepository);
+            var listOfAttendanceRecord=await attendanceRecordForEmployee.GetAttendanceRecord(employeeId, 7);
             foreach(var attendanceRecord in listOfAttendanceRecord)
             {
-                if (attendanceRecord.TimeIn.Hour != 0)
+                if (attendanceRecord.TimeIn.Hour != 0 && attendanceRecord.TimeIn.Minute!=0)
                 {
-                    DateTime timeInByUTC = new DateTime(attendanceRecord.Date.Year, attendanceRecord.Date.Month,
-                        attendanceRecord.Date.Day, attendanceRecord.TimeIn.Hour, attendanceRecord.TimeIn._minute, 00);
-                    DateTime timeInByIST = TimeZoneInfo.ConvertTimeFromUtc(timeInByUTC, 
-                        TimeZoneInfo.FindSystemTimeZoneById(TimeZone.CurrentTimeZone.StandardName));
-                    Time timeIn = new Time(timeInByIST.Hour, timeInByIST.Minute);
-                    attendanceRecord.TimeIn = timeIn;
+                    attendanceRecord.TimeIn =ConvertTimeZone(attendanceRecord.Date, attendanceRecord.TimeIn);
                 }
-                if (attendanceRecord.TimeOut.Hour != 0)
+                if (attendanceRecord.TimeOut.Hour != 0 && attendanceRecord.TimeIn.Minute != 0)
                 {
-                    DateTime timeOutByUTC = new DateTime(attendanceRecord.Date.Year, attendanceRecord.Date.Month,
-                        attendanceRecord.Date.Day, attendanceRecord.TimeOut.Hour, attendanceRecord.TimeOut._minute, 00);
-                    DateTime timeOutByIST = TimeZoneInfo.ConvertTimeFromUtc(timeOutByUTC, 
-                        TimeZoneInfo.FindSystemTimeZoneById(TimeZone.CurrentTimeZone.StandardName));
-                    Time timeOut = new Time(timeOutByIST.Hour, timeOutByIST.Minute);
-                    attendanceRecord.TimeOut = timeOut;
+                    attendanceRecord.TimeOut = ConvertTimeZone(attendanceRecord.Date, attendanceRecord.TimeOut);
                 }
             }
             return View(listOfAttendanceRecord);
@@ -58,6 +47,16 @@ namespace Application.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private Time ConvertTimeZone(DateTime date,Time time)
+        {
+            DateTime TimeZone_UTC = new DateTime(date.Year, date.Month,
+                      date.Day, time.Hour, time.Minute, 00);
+            DateTime TimeZone_IST = TimeZoneInfo.ConvertTimeFromUtc(TimeZone_UTC,
+                TimeZoneInfo.FindSystemTimeZoneById(TimeZone.CurrentTimeZone.StandardName));
+            Time convertedTime = new Time(TimeZone_IST.Hour, TimeZone_IST.Minute);
+            return convertedTime;
         }
     }
 }
