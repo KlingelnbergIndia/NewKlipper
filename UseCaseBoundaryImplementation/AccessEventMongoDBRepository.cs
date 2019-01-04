@@ -35,12 +35,14 @@ namespace UseCaseBoundaryImplementation
             List<DomainModel.AccessEvent> listOfDomainModelAccessEvent = new List<DomainModel.AccessEvent>();
             foreach (var domainModelAccessEvent in listOfEntityAccessEvent)
             {
-                DomainModel.AccessEvent accessEvent = new DomainModel.AccessEvent();
+                DomainModel.AccessEvent accessEvent =
+                    new DomainModel.AccessEvent(
+                        domainModelAccessEvent.AccessPointID,
+                        domainModelAccessEvent.AccessPointName,
+                        domainModelAccessEvent.EmployeeID,
+                        domainModelAccessEvent.EventTime);
 
-                accessEvent.AccessPointID = domainModelAccessEvent.AccessPointID;
-                accessEvent.AccessPointName = domainModelAccessEvent.AccessPointName;
-                accessEvent.EmployeeID = domainModelAccessEvent.EmployeeID;
-                accessEvent.EventTime = domainModelAccessEvent.EventTime;
+
                 listOfDomainModelAccessEvent.Add(accessEvent);
             }
 

@@ -16,7 +16,7 @@ namespace DomainModel
 
         public TimeSpan CalculateWorkingHours()
         {
-            var accessEventsOfMainEntry = _accessEvents.Where(K => K.AccessPointID == 16).ToList();
+            var accessEventsOfMainEntry = _accessEvents.Where(accessEvent => accessEvent.FromMainDoor()).ToList();
             var minTime = accessEventsOfMainEntry.Select(x => x.EventTime.TimeOfDay).Min();
             var maxTime = accessEventsOfMainEntry.Select(x => x.EventTime.TimeOfDay).Max();
             TimeSpan workingHours = (maxTime - minTime);
