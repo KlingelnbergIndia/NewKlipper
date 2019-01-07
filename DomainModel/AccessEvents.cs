@@ -23,6 +23,16 @@ namespace DomainModel
                 .Select(x => new PerDayWorkRecord(x.Key, x.Select(y => y).ToList()))
                 .ToList();
         }
+
+        public IList<PerDayWorkRecord> GetAllAccessEvents()
+        {
+            return
+                _accessEvents
+                .GroupBy(x => x.EventTime.Date)
+                .OrderByDescending(i => i.Key.Date)
+                .Select(x => new PerDayWorkRecord(x.Key, x.Select(y => y).ToList()))
+                .ToList();
+        }
     }
 
 }
