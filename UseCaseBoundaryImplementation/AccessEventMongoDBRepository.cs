@@ -30,17 +30,19 @@ namespace UseCaseBoundaryImplementation
             return accessEvents;
         }
 
-        public List<DomainModel.Model.AccessEvent> ConvertEntityAccessEventToDomainModelAccessEvent(List<AccessEventEntityModel> listOfEntityAccessEvent)
+        public List<DomainModel.AccessEvent> ConvertEntityAccessEventToDomainModelAccessEvent(List<AccessEventEntityModel> listOfEntityAccessEvent)
         {
-            List<DomainModel.Model.AccessEvent> listOfDomainModelAccessEvent = new List<DomainModel.Model.AccessEvent>();
+            List<DomainModel.AccessEvent> listOfDomainModelAccessEvent = new List<DomainModel.AccessEvent>();
             foreach (var domainModelAccessEvent in listOfEntityAccessEvent)
             {
-                DomainModel.Model.AccessEvent accessEvent = new DomainModel.Model.AccessEvent();
+                DomainModel.AccessEvent accessEvent =
+                    new DomainModel.AccessEvent(
+                        domainModelAccessEvent.AccessPointID,
+                        domainModelAccessEvent.AccessPointName,
+                        domainModelAccessEvent.EmployeeID,
+                        domainModelAccessEvent.EventTime);
 
-                accessEvent.AccessPointID = domainModelAccessEvent.AccessPointID;
-                accessEvent.AccessPointName = domainModelAccessEvent.AccessPointName;
-                accessEvent.EmployeeID = domainModelAccessEvent.EmployeeID;
-                accessEvent.EventTime = domainModelAccessEvent.EventTime;
+
                 listOfDomainModelAccessEvent.Add(accessEvent);
             }
 
