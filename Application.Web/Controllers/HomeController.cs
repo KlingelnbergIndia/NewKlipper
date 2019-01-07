@@ -33,7 +33,7 @@ namespace Application.Web.Controllers
                 var fromDate = DateTime.Parse(HttpContext.Request.Form["fromDate"].ToString());
                 var toDate = DateTime.Parse(HttpContext.Request.Form["toDate"].ToString());
 
-                AttendanceRecordsOfEmployeeForDateRange attendanceRecordForEmployee = new AttendanceRecordsOfEmployeeForDateRange(_accessEventRepository);
+                AttendanceForSpecificDateRangeService attendanceRecordForEmployee = new AttendanceForSpecificDateRangeService(_accessEventRepository);
                 listOfAttendanceRecord = await attendanceRecordForEmployee.GetAttendanceRecord(employeeId, fromDate, toDate);
 
                 ViewData["resultMessage"] = String.Format(
@@ -44,7 +44,7 @@ namespace Application.Web.Controllers
             }
             else
             {
-                AttendanceRecordForEmployee attendanceRecordForEmployee = new AttendanceRecordForEmployee(_accessEventRepository);
+                AttendanceService attendanceRecordForEmployee = new AttendanceService(_accessEventRepository);
                 listOfAttendanceRecord = await attendanceRecordForEmployee.GetAttendanceRecord(employeeId, 7);
             }
 

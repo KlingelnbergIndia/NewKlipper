@@ -9,10 +9,10 @@ using UseCaseBoundary.Model;
 
 namespace UseCases
 {
-    public class AttendanceRecordsOfEmployeeForDateRange
+    public class AttendanceForSpecificDateRangeService
     {
         private IAccessEventsRepository _accessEventsRepository;
-        public AttendanceRecordsOfEmployeeForDateRange(IAccessEventsRepository accessEventsRepository)
+        public AttendanceForSpecificDateRangeService(IAccessEventsRepository accessEventsRepository)
         {
             _accessEventsRepository = accessEventsRepository;
         }
@@ -20,10 +20,9 @@ namespace UseCases
         public async Task<List<AttendanceRecordDTO>> GetAttendanceRecord(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
-
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents().GroupBy(x=> DateTime.Parse(x.EventTime.ToShortDateString()));
-            List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
 
+            List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
             foreach (var perDayAccessEvents in datewiseAccessEvents)
             {
                 var listOfMainEntryPointAccessEventOfADay = perDayAccessEvents.Select(x => x).Where(K => K.AccessPointName == "Main Entry").ToList();
