@@ -30,8 +30,17 @@ namespace Application.Web.Controllers
 
             if (searchFilter == SearchFilter.AccessEventsByDateRange.ToString())
             {
+                var fromDate = DateTime.Parse(HttpContext.Request.Form["fromDate"].ToString());
+                var toDate = DateTime.Parse(HttpContext.Request.Form["toDate"].ToString());
+
                 AttendanceRecordsOfEmployeeForDateRange attendanceRecordForEmployee = new AttendanceRecordsOfEmployeeForDateRange(_accessEventRepository);
-                listOfAttendanceRecord = await attendanceRecordForEmployee.GetAttendanceRecord(employeeId,DateTime.Now.AddDays(-50), DateTime.Now);
+                listOfAttendanceRecord = await attendanceRecordForEmployee.GetAttendanceRecord(employeeId, fromDate, toDate);
+
+                ViewData["resultMessage"] = String.Format(
+                    "Attendance from {0} to {1}. Total days:{2}", 
+                    fromDate.ToShortDateString(), 
+                    toDate.ToShortDateString(),
+                    listOfAttendanceRecord.Count());
             }
             else
             {

@@ -49,8 +49,9 @@ namespace UseCaseBoundaryImplementation
 
         public AccessEvents GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
         {
+            DateTime toDateWithMaxTimeOfTheDay = toDate.Date + DateTime.MaxValue.TimeOfDay;
             var accessEvents = _context.AccessEvents.AsQueryable()
-                .Where(x => x.EmployeeID == employeeId && x.EventTime <= toDate && x.EventTime >= fromDate)
+                .Where(x => x.EmployeeID == employeeId && x.EventTime <= toDateWithMaxTimeOfTheDay && x.EventTime >= fromDate)
                 .ToList();
 
             var listOfDomainModelAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);

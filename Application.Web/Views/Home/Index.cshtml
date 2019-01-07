@@ -9,7 +9,18 @@
     }
 </style>
 <div>
-    <table class="table">
+    <form class="panel panel-info form-inline" method="post" action="?searchFilter=AccessEventsByDateRange">
+        <div class="panel-heading">
+            <label for="from">From</label>
+            <input type="date" id="fromDate" name="fromDate" class="form-control input-sm" value="2018-10-10">
+            <label for="to">to</label>
+            <input type="date" id="toDate" name="toDate" class="form-control input-sm" value="2019-01-01" onkeydown="return false">
+            <button type="submit" class="btn btn-default btn-sm">Show</button>
+            <i>&nbsp; @ViewData["resultMessage"]</i>
+
+        </div>
+    </form>
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>Date</th>
@@ -24,16 +35,9 @@
         <tbody>
             @foreach (var item in Model)
             {
-                var lateByColor = "White";
-                var overTimeColor = "White";
-                if (item.LateBy.Hour != 0 || item.LateBy.Minute != 0)
-                {
-                    lateByColor = "crimson";
-                }
-                if (item.OverTime.Hour != 0 || item.OverTime.Minute != 0)
-                {
-                    overTimeColor = "aquamarine";
-                }
+                string lateByClass = "alert alert-danger";
+                string overTimeClass = "alert alert-success";
+
                 <tr>
                     <td style="vertical-align: text-top;">@item.Date.ToString("dd MMMM yyyy")</td>
                     <td>@item.Date.ToString("dddd")</td>
@@ -52,7 +56,7 @@
                     }
                     else
                     {
-                        <td style="background:@lateByColor">@item.LateBy.Hour.ToString("D2"):@item.LateBy.Minute.ToString("D2")</td>
+                        <td class="@lateByClass">@item.LateBy.Hour.ToString("D2"):@item.LateBy.Minute.ToString("D2")</td>
                     }
                     @if (item.OverTime.Hour == 0 && item.OverTime.Minute == 0)
                     {
@@ -60,7 +64,7 @@
                     }
                     else
                     {
-                        <td style="background:@overTimeColor">@item.OverTime.Hour.ToString("D2"):@item.OverTime.Minute.ToString("D2")</td>
+                        <td class="@overTimeClass">@item.OverTime.Hour.ToString("D2"):@item.OverTime.Minute.ToString("D2")</td>
                     }
                     <td>@item.WorkingHours.Hour.ToString("D2"):@item.WorkingHours.Minute.ToString("D2")</td>
                 </tr>
@@ -68,4 +72,5 @@
         </tbody>
     </table>
 </div>
+
 
