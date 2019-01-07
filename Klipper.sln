@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Web", "Applicat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{03D4175A-6B67-4E1B-8032-C30E3107F169}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Klipper.Tests", "Klipper.Tests\Klipper.Tests.csproj", "{0CBFF4CA-2DAB-473E-8C0A-3E4E324744C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{03D4175A-6B67-4E1B-8032-C30E3107F169}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03D4175A-6B67-4E1B-8032-C30E3107F169}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03D4175A-6B67-4E1B-8032-C30E3107F169}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CBFF4CA-2DAB-473E-8C0A-3E4E324744C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CBFF4CA-2DAB-473E-8C0A-3E4E324744C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CBFF4CA-2DAB-473E-8C0A-3E4E324744C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CBFF4CA-2DAB-473E-8C0A-3E4E324744C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
