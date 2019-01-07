@@ -46,6 +46,40 @@ namespace UseCases
             });
         }
 
+        public async Task<List<AttendanceRecordDTO>> GetAttendanceRecord(int employeeId, DateTime fromDate, DateTime toDate)
+        {
+            var accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
+            var datewiseAccessEvents = accessEvents.GetAllAccessEvents().GroupBy(x => DateTime.Parse(x.EventTime.ToShortDateString()));
+
+            List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
+            foreach (var perDayAccessEvents in datewiseAccessEvents)
+            {
+                var listOfMainEntryPointAccessEventOfADay = perDayAccessEvents.Select(x => x).Where(K => K.AccessPointName == "Main Entry").ToList();
+                AccessEvents accessEventsPerDay = new AccessEvents(listOfMainEntryPointAccessEventOfADay);
+                var timeIn = accessEventsPerDay.GetTimeIn();
+                var timeOut = accessEventsPerDay.GetTimeOut();
+                var workingHours = accessEventsPerDay.CalculateWorkingHours();
+
+                AttendanceRecordDTO attendanceRecord = new AttendanceRecordDTO()
+                {
+                    Date = perDayAccessEvents.Key.Date,
+                    TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
+                    TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
+                    WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
+                    OverTime = GetOverTime(workingHours),
+                    LateBy = GetLateByTime(workingHours)
+                };
+                listOfAttendanceRecord.Add(attendanceRecord);
+            }
+
+            return await Task.Run(() =>
+            {
+                return listOfAttendanceRecord
+                    .OrderByDescending(x => x.Date)
+                    .ToList();
+            });
+        }
+
         private Time GetOverTime(TimeSpan workingHours)
         {
             var extraHour = GetExtraHours(workingHours);

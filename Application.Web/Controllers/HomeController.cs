@@ -26,6 +26,7 @@ namespace Application.Web.Controllers
         public async Task<IActionResult> Index(string searchFilter)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
             List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
 
             if (searchFilter == SearchFilter.AccessEventsByDateRange.ToString())
@@ -33,8 +34,7 @@ namespace Application.Web.Controllers
                 var fromDate = DateTime.Parse(HttpContext.Request.Form["fromDate"].ToString());
                 var toDate = DateTime.Parse(HttpContext.Request.Form["toDate"].ToString());
 
-                AttendanceForSpecificDateRangeService attendanceRecordForEmployee = new AttendanceForSpecificDateRangeService(_accessEventRepository);
-                listOfAttendanceRecord = await attendanceRecordForEmployee.GetAttendanceRecord(employeeId, fromDate, toDate);
+                listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(employeeId, fromDate, toDate);
 
                 ViewData["resultMessage"] = String.Format(
                     "Attendance from {0} to {1}. Total days:{2}", 
@@ -44,8 +44,7 @@ namespace Application.Web.Controllers
             }
             else
             {
-                AttendanceService attendanceRecordForEmployee = new AttendanceService(_accessEventRepository);
-                listOfAttendanceRecord = await attendanceRecordForEmployee.GetAttendanceRecord(employeeId, 7);
+                listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(employeeId, 7);
             }
 
             listOfAttendanceRecord = ConvertRecordsTimeToIST(listOfAttendanceRecord);
