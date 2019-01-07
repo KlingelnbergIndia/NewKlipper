@@ -1,0 +1,523 @@
+[
+  /* 1 */
+  {
+    "_id": "5be2d369973d123ef016d91b",
+    "ID": 16181011,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-01T03:04:55.000Z"
+  },
+
+  /* 2 */
+  {
+    "_id": "5be2d38a973d123ef016d92b",
+    "ID": 16181027,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-01T07:56:20.000Z"
+  },
+
+  /* 3 */
+  {
+    "_id": "5be2d39e973d123ef016d935",
+    "ID": 19181037,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-01T07:56:58.000Z"
+  },
+
+  /* 4 */
+  {
+    "_id": "5be2d3be973d123ef016d945",
+    "ID": 16181053,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-01T12:05:19.000Z"
+  },
+
+  /* 5 */
+  {
+    "_id": "5be2d3de973d123ef016d955",
+    "ID": 19181069,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-01T08:20:05.000Z"
+  },
+
+  /* 6 */
+  {
+    "_id": "5be2d3e6973d123ef016d959",
+    "ID": 19181073,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-01T10:19:48.000Z"
+  },
+
+  /* 7 */
+  {
+    "_id": "5be2d3f4973d123ef016d960",
+    "ID": 19181080,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-01T11:28:42.000Z"
+  },
+
+  /* 8 */
+  {
+    "_id": "5be2d410973d123ef016d96e",
+    "ID": 16181094,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-03T03:09:00.000Z"
+  },
+
+  /* 9 */
+  {
+    "_id": "5be2d412973d123ef016d96f",
+    "ID": 16181095,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-03T03:09:05.000Z"
+  },
+
+  /* 10 */
+  {
+    "_id": "5be2d482973d123ef016d9a7",
+    "ID": 161810200,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-04T03:16:14.000Z"
+  },
+
+  /* 11 */
+  {
+    "_id": "5be2d4c4973d123ef016d9c8",
+    "ID": 161810233,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-04T07:56:25.000Z"
+  },
+
+  /* 12 */
+  {
+    "_id": "5be2d4e8973d123ef016d9da",
+    "ID": 161810251,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-04T11:54:13.000Z"
+  },
+
+  /* 13 */
+  {
+    "_id": "5be2d52d973d123ef016d9fc",
+    "ID": 191810285,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-04T07:56:54.000Z"
+  },
+
+  /* 14 */
+  {
+    "_id": "5be2d535973d123ef016da00",
+    "ID": 191810289,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-04T08:31:13.000Z"
+  },
+
+  /* 15 */
+  {
+    "_id": "5be2d53b973d123ef016da03",
+    "ID": 191810292,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-04T11:21:03.000Z"
+  },
+
+  /* 16 */
+  {
+    "_id": "5be2d559973d123ef016da12",
+    "ID": 161810356,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-05T11:53:24.000Z"
+  },
+
+  /* 17 */
+  {
+    "_id": "5be2d631973d123ef016da7e",
+    "ID": 161810464,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-08T04:25:16.000Z"
+  },
+
+  /* 18 */
+  {
+    "_id": "5be2d653973d123ef016da8f",
+    "ID": 161810481,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-08T07:56:32.000Z"
+  },
+
+  /* 19 */
+  {
+    "_id": "5be2d67f973d123ef016daa5",
+    "ID": 161810503,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-08T13:01:08.000Z"
+  },
+
+  /* 20 */
+  {
+    "_id": "5be2d6ab973d123ef016dabb",
+    "ID": 181810525,
+    "AccessPointID": 18,
+    "AccessPointName": "Gym",
+    "AccessPointIPAddress": "192.168.1.203",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-08T12:52:12.000Z"
+  },
+
+  /* 21 */
+  {
+    "_id": "5be2d6c1973d123ef016dac6",
+    "ID": 191810536,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-08T11:53:02.000Z"
+  },
+
+  /* 22 */
+  {
+    "_id": "5be2d6c9973d123ef016daca",
+    "ID": 191810540,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-08T12:37:29.000Z"
+  },
+
+  /* 23 */
+  {
+    "_id": "5be2d6d1973d123ef016dace",
+    "ID": 161810544,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-09T02:10:23.000Z"
+  },
+
+  /* 24 */
+  {
+    "_id": "5be2d76c973d123ef016db15",
+    "ID": 161810616,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-09T13:12:13.000Z"
+  },
+
+  /* 25 */
+  {
+    "_id": "5be2d782973d123ef016db20",
+    "ID": 191810627,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-09T08:00:31.000Z"
+  },
+
+  /* 26 */
+  {
+    "_id": "5be2d792973d123ef016db28",
+    "ID": 191810635,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-09T12:31:18.000Z"
+  },
+
+  /* 27 */
+  {
+    "_id": "5be2d8ef973d123ef016dbd4",
+    "ID": 161810807,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-12T02:58:11.000Z"
+  },
+
+  /* 28 */
+  {
+    "_id": "5be2d91f973d123ef016dbec",
+    "ID": 191810295,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-04T11:45:29.000Z"
+  },
+
+  /* 29 */
+  {
+    "_id": "5be2d949973d123ef016dbff",
+    "ID": 161810314,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-10-05T03:19:32.000Z"
+  },
+
+  /* 30 */
+  {
+    "_id": "5be2dac2973d123ef016dc9a",
+    "ID": 161891490,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-25T02:46:15.000Z"
+  },
+
+  /* 31 */
+  {
+    "_id": "5be2dac8973d123ef016dc9d",
+    "ID": 161891493,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-25T02:53:40.000Z"
+  },
+
+  /* 32 */
+  {
+    "_id": "5be2dacc973d123ef016dc9f",
+    "ID": 161891495,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-25T03:13:38.000Z"
+  },
+
+  /* 33 */
+  {
+    "_id": "5be2dafe973d123ef016dcb7",
+    "ID": 191891568,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-25T04:11:02.000Z"
+  },
+
+  /* 34 */
+  {
+    "_id": "5be2db02973d123ef016dcb9",
+    "ID": 191891570,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-25T04:16:50.000Z"
+  },
+
+  /* 35 */
+  {
+    "_id": "5be2db14973d123ef016dcc2",
+    "ID": 191891579,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-25T08:10:05.000Z"
+  },
+
+  /* 36 */
+  {
+    "_id": "5be2db36973d123ef016dcd3",
+    "ID": 161891596,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-26T03:03:25.000Z"
+  },
+
+  /* 37 */
+  {
+    "_id": "5be2db80973d123ef016dcf8",
+    "ID": 161891535,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-25T10:35:02.000Z"
+  },
+
+  /* 38 */
+  {
+    "_id": "5be2dbf0973d123ef016dd2f",
+    "ID": 161891639,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-26T12:11:57.000Z"
+  },
+
+  /* 39 */
+  {
+    "_id": "5be2dc2d973d123ef016dd4d",
+    "ID": 191891669,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-26T06:12:36.000Z"
+  },
+
+  /* 40 */
+  {
+    "_id": "5be2dc35973d123ef016dd50",
+    "ID": 191891672,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-26T06:42:56.000Z"
+  }
+
+
+]
