@@ -34,7 +34,7 @@ namespace Application.Web.Controllers
                 var fromDate = DateTime.Parse(HttpContext.Request.Form["fromDate"].ToString());
                 var toDate = DateTime.Parse(HttpContext.Request.Form["toDate"].ToString());
 
-                listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(employeeId, fromDate, toDate);
+                listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
 
                 ViewData["resultMessage"] = String.Format(
                     "Attendance from {0} to {1}. Total days:{2}", 

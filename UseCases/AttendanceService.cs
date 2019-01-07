@@ -46,7 +46,7 @@ namespace UseCases
             });
         }
 
-        public async Task<List<AttendanceRecordDTO>> GetAttendanceRecord(int employeeId, DateTime fromDate, DateTime toDate)
+        public async Task<List<AttendanceRecordDTO>> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents().GroupBy(x => DateTime.Parse(x.EventTime.ToShortDateString()));
