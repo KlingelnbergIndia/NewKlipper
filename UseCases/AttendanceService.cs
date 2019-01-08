@@ -19,19 +19,17 @@ namespace UseCases
         public async Task<List<AttendanceRecordDTO>> GetAttendanceRecord(int employeeId, int noOfDays)
         {
             AccessEvents accessEvents = _accessEventsRepository.GetAccessEvents(employeeId);
-            var listOfAccessEventByDate = accessEvents.GetNoOfDaysAccessEventsByDate(noOfDays);
+            var workRecordByDate = accessEvents.WorkRecord(noOfDays);
             List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
-            foreach (var perDayAccessEvents in listOfAccessEventByDate)
+            foreach (var perDayWorkRecord in workRecordByDate)
             {
-                var listOfMainEntryPointAccessEventOfADay = perDayAccessEvents.Select(x => x).Where(K => K.AccessPointName=="Main Entry").ToList();
-                AccessEvents accessEventsPerDay = new AccessEvents(listOfMainEntryPointAccessEventOfADay);
-                var timeIn = accessEventsPerDay.GetTimeIn();
-                var timeOut = accessEventsPerDay.GetTimeOut();
-                var workingHours = accessEventsPerDay.CalculateWorkingHours();
+                var timeIn = perDayWorkRecord.GetTimeIn();
+                var timeOut = perDayWorkRecord.GetTimeOut();
+                var workingHours = perDayWorkRecord.CalculateWorkingHours();
               
                 AttendanceRecordDTO attendanceRecord = new AttendanceRecordDTO()
                 {
-                    Date = perDayAccessEvents.Key.Date,
+                    Date = perDayWorkRecord.Date,
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
@@ -49,20 +47,18 @@ namespace UseCases
         public async Task<List<AttendanceRecordDTO>> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
-            var datewiseAccessEvents = accessEvents.GetAllAccessEvents().GroupBy(x => DateTime.Parse(x.EventTime.ToShortDateString()));
+            var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
 
             List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
             foreach (var perDayAccessEvents in datewiseAccessEvents)
             {
-                var listOfMainEntryPointAccessEventOfADay = perDayAccessEvents.Select(x => x).Where(K => K.AccessPointName == "Main Entry").ToList();
-                AccessEvents accessEventsPerDay = new AccessEvents(listOfMainEntryPointAccessEventOfADay);
-                var timeIn = accessEventsPerDay.GetTimeIn();
-                var timeOut = accessEventsPerDay.GetTimeOut();
-                var workingHours = accessEventsPerDay.CalculateWorkingHours();
+                var timeIn = perDayAccessEvents.GetTimeIn();
+                var timeOut = perDayAccessEvents.GetTimeOut();
+                var workingHours = perDayAccessEvents.CalculateWorkingHours();
 
                 AttendanceRecordDTO attendanceRecord = new AttendanceRecordDTO()
                 {
-                    Date = perDayAccessEvents.Key.Date,
+                    Date = perDayAccessEvents.Date,
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
