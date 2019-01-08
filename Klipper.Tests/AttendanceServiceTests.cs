@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Threading.Tasks;
 using UseCaseBoundary.Model;
+using System.Reflection;
 
 namespace Klipper.Tests
 {
@@ -84,9 +85,13 @@ namespace Klipper.Tests
 
         private AccessEvents DummyAccessEvents()
         {
+            string currentDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+
+            string accessEventsFilePath = currentDirectory.Remove(currentDirectory.Length - 3) + "AccessEventsDummyData.json";
+
             List<AccessEvent> dummyAccessEvent = new List<AccessEvent>();
 
-            var jsonData = File.ReadAllText(@"C:\NewKlipper\NewKlipper\Klipper.Tests\AccessEventsDummyData.json");
+            var jsonData = File.ReadAllText(accessEventsFilePath);
 
             dummyAccessEvent = JsonConvert.DeserializeObject<List<AccessEvent>>(jsonData);
 
