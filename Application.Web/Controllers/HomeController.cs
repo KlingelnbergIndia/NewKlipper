@@ -11,6 +11,7 @@ using UseCases;
 using UseCaseBoundaryImplementation;
 using Microsoft.AspNetCore.Http;
 using Klipper.Web.UI;
+using System.Dynamic;
 
 namespace Application.Web.Controllers
 {
@@ -18,9 +19,12 @@ namespace Application.Web.Controllers
     public class HomeController : Controller
     {
         private IAccessEventsRepository _accessEventRepository;
-        public HomeController(IAccessEventsRepository accessEventRepository)
+        private IEmployeeRepository _employeeRepository;
+
+        public HomeController(IAccessEventsRepository accessEventRepository,IEmployeeRepository employeeRepository)
         {
             _accessEventRepository = accessEventRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public async Task<IActionResult> Index(string searchFilter)
@@ -51,6 +55,35 @@ namespace Application.Web.Controllers
             return View(listOfAttendanceRecord);
         }
 
+        public async Task<IActionResult> Reportees(string searchFilter)
+        {
+            dynamic mymodel = new ExpandoObject();
+
+            var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
+            ReporteeService reporteeService = new ReporteeService(_employeeRepository);
+
+            var reportees =  reporteeService.GetReporteesData(employeeId);
+
+            ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
+            List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
+
+            foreach (var reportee in reportees)
+            {
+                string reporteeNameWithId = reportee.FirstName + " " + reportee.LastName + " - " + reportee.ID;
+                reporteeViewModel.reportees.Add(reporteeNameWithId);
+            }
+
+            mymodel.reportees = reporteeViewModel.reportees;
+
+            listOfAttendanceRecord =  await attendanceService.GetAttendanceRecord(reportees[0].ID, 7);
+            mymodel.listOfAttendanceRecord = ConvertRecordsTimeToIST(listOfAttendanceRecord);
+
+            return View(mymodel);
+
+        }
+
+        
         private List<AttendanceRecordDTO> ConvertRecordsTimeToIST(List<AttendanceRecordDTO> listOfAttendanceRecord)
         {
             foreach (var attendanceRecord in listOfAttendanceRecord)
@@ -67,6 +100,8 @@ namespace Application.Web.Controllers
 
             return listOfAttendanceRecord;
         }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
