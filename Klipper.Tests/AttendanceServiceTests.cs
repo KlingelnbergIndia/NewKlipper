@@ -86,9 +86,9 @@ namespace Klipper.Tests
 
         private AccessEvents DummyAccessEvents()
         {
-            string cuurentDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+            string currentDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
 
-            string accessEventsFilePath = cuurentDirectory.Remove(cuurentDirectory.Length - 3) + "AccessEventsDummyData.json";
+            string accessEventsFilePath = currentDirectory.Remove(currentDirectory.Length - 3) + "AccessEventsDummyData.json";
 
             List<AccessEvent> dummyAccessEvent = new List<AccessEvent>();
 
