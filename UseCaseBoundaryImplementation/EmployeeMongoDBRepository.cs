@@ -33,17 +33,51 @@ namespace UseCaseBoundaryImplementation
             var filterForEmployeeDBContext = Builders<EmployeeEntityModel>.Filter.Eq("ID", employeeFromAuthDBContext.ID);
             var employeeFromEmployeeDBContext = _employeeDBContext.Employees.Find(filterForEmployeeDBContext).FirstOrDefault();
 
+            List<int> reportees = new List<int>();
+
             int _id = employeeFromAuthDBContext.ID;
             string _userName = employeeFromAuthDBContext.UserName;
             string _password = employeeFromAuthDBContext.PasswordHash;
             string firstName = employeeFromEmployeeDBContext.FirstName;
             string lastName = employeeFromEmployeeDBContext.LastName;
             string title = employeeFromEmployeeDBContext.Title;
+            reportees = employeeFromEmployeeDBContext.Reportees;
 
             List<EmployeeRoles> _roles = ConvertStringRolesToEnumRoles(employeeFromEmployeeDBContext.Roles);
-            Employee domainEmployee = new Employee(_id, _userName, _password, firstName, lastName, title, _roles);
+            Employee domainEmployee = new Employee(_id, _userName, _password, firstName, lastName, title, _roles, reportees);
 
             return domainEmployee;
+        }
+
+        public Employee GetEmployee(int employeeId)
+        {
+            var employeeFromAuthDBContext = _authDBContext.Users.AsQueryable()
+                .Where(x => x.ID == employeeId)
+                .FirstOrDefault();
+
+            if (employeeFromAuthDBContext == null)
+            {
+                return null;
+            }
+
+            var filterForEmployeeDBContext = Builders<EmployeeEntityModel>.Filter.Eq("ID", employeeFromAuthDBContext.ID);
+            var employeeFromEmployeeDBContext = _employeeDBContext.Employees.Find(filterForEmployeeDBContext).FirstOrDefault();
+
+            List<int> reportees = new List<int>();
+
+            int _id = employeeFromAuthDBContext.ID;
+            string _userName = employeeFromAuthDBContext.UserName;
+            string _password = employeeFromAuthDBContext.PasswordHash;
+            string firstName = employeeFromEmployeeDBContext.FirstName;
+            string lastName = employeeFromEmployeeDBContext.LastName;
+            string title = employeeFromEmployeeDBContext.Title;
+            reportees = employeeFromEmployeeDBContext.Reportees;
+
+            List<EmployeeRoles> _roles = ConvertStringRolesToEnumRoles(employeeFromEmployeeDBContext.Roles);
+            Employee domainEmployee = new Employee(_id, _userName, _password, firstName, lastName, title, _roles,reportees);
+
+            return domainEmployee;
+
         }
 
         private List<EmployeeRoles> ConvertStringRolesToEnumRoles(List<string> roles)
