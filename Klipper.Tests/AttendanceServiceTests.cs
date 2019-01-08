@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Threading.Tasks;
 using UseCaseBoundary.Model;
-using DomainModel.Model;
 
 namespace Klipper.Tests
 {
