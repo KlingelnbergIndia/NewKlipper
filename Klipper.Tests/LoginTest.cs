@@ -7,6 +7,49 @@ using System.Collections.Generic;
 
 namespace Tests
 {
+
+    public class EmployeeBuilder
+    {
+        private string userName;
+        private string password;
+        private int id;
+        private List<EmployeeRoles> employeeRoles = new List<EmployeeRoles>();
+        private List<int> reportees = new List<int>();
+
+        public EmployeeBuilder()
+        {
+            id = 1;
+            userName = "dummy";
+            password = "dummy";
+            employeeRoles.Add(EmployeeRoles.Employee);
+
+        }
+        public EmployeeBuilder WithUserName(string userName)
+        {
+            this.userName = userName;
+            return this;
+        }
+
+        public EmployeeBuilder WithPassword(string password)
+        {
+            this.password = password;
+            return this;
+        }
+
+        public EmployeeBuilder WithID(int id)
+        {
+            this.id = id;
+            return this;
+        }
+        public Employee Build()
+        {
+            return new Employee(id, userName, password, "Sidhdesh",
+                "Vadgaonkar", "Software Developer", employeeRoles, reportees);
+        }
+
+    }
+
+
     public class LoginTest
     {
         private IEmployeeRepository _employeeRepository;
@@ -20,26 +63,36 @@ namespace Tests
         [Test]
         public void GivenValidUserIdAndPasswordLoginSucceeds()
         {
+
+            // Setup
             Login login = new Login(_employeeRepository);
 
-            var dummyEmployee = DummyEmployee(48, "Sidhdesh.Vadgaonkar", "26-12-1995", "Sidhdesh",
-                "Vadgaonkar", "Software Developer");
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .Build();
 
             _employeeRepository.GetEmployee("sidhdesh.vadgaonkar").
                 Returns(dummyEmployee);
 
+            // Execute the use case
             var employeeDto = login.LoginUser("sidhdesh.vadgaonkar", "26-12-1995");
+
 
             Assert.IsNotNull(employeeDto);
         }
 
         [Test]
-        public void GivenInvalidUserIdAndPasswordLoginFails()
+        public void GivenInvalidUserIdAndCorrectPasswordLoginFails()
         {
             Login login = new Login(_employeeRepository);
 
-            var dummyEmployee = DummyEmployee(48, "Sidhdesh.Vadgaonkar", "26-12-1995", "Sidhdesh",
-                "Vadgaonkar", "Software Developer");
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .Build();
 
             _employeeRepository.GetEmployee("sidhdesh.vadgaonkar").
                 Returns(dummyEmployee);
@@ -54,8 +107,11 @@ namespace Tests
         {
             Login login = new Login(_employeeRepository);
 
-            var dummyEmployee = DummyEmployee(48, "Sidhdesh.Vadgaonkar", "26-12-1995", "Sidhdesh",
-                "Vadgaonkar", "Software Developer");
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .Build();
 
             _employeeRepository.GetEmployee("sidhdesh.vadgaonkar").
                 Returns(dummyEmployee);
@@ -70,14 +126,17 @@ namespace Tests
         }
 
         [Test]
-        public void EmployeeIdIsNotCaseSensitive()
+        public void EmployeeUserNameIsNotCaseSensitive()
         {
             Login login = new Login(_employeeRepository);
 
-            var dummyEmployee = DummyEmployee(48, "Sidhdesh.Vadgaonkar", "26-12-1995", "Sidhdesh",
-                "Vadgaonkar", "Software Developer");
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .Build();
 
-            _employeeRepository.GetEmployee("SiDhDeSh.vaDgAonKar").
+            _employeeRepository.GetEmployee("sidhdesh.vadgaonkar").
                 Returns(dummyEmployee);
 
             var employeeDto = login.LoginUser("SiDhDeSh.vaDgAonKar", "26-12-1995");
@@ -85,24 +144,5 @@ namespace Tests
             Assert.IsNotNull(employeeDto);
         }
 
-
-        private Employee DummyEmployee(
-            int id,
-            string userName,
-            string password,
-            string firstName,
-            string lastName,
-            string title
-            )
-        {
-            List<EmployeeRoles> employeeRoles = new List<EmployeeRoles>();
-            employeeRoles.Add(EmployeeRoles.Employee);
-
-            Employee dummyEmployee = new
-                Employee(id, userName, password, firstName,
-                lastName, title, employeeRoles);
-
-            return dummyEmployee;
-        }
     }
 }
