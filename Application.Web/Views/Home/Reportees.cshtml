@@ -6,9 +6,10 @@
 </head>
 <body>
     <div>
+        <p class="h2">Select a Reportee</p>
         @using (Html.BeginForm("GetSelectedreportee", "Home", FormMethod.Post))
         {
-        <select id="reporteesId"  name="selectMenu">
+        <select id="reporteesId"  name="selectMenu" class="dropup">
             <option selected value="0">---Select---</option>
             @foreach (var item in Model.reportees)
             {
@@ -16,12 +17,12 @@
             }
         </select>
             
-            <input type ="submit" value="Send"/>
+            <input type ="submit" value="Get Data" class="btn btn-default"/>
         }
 
-        @if (Model.Name != string.Empty)
+        @if (Model.Name != string.Empty && Model.Name != null)
         {
-            <h1>@Model.Name</h1>
+            <p class="breadcrumb">Attendance Record of @Model.Name</p>
 
         <table class="table table-striped table-bordered">
             <thead>
