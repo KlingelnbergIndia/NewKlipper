@@ -28,7 +28,6 @@ namespace Klipper.Tests
 
         public AccessEvents Build()
         {
-
             List<AccessEvent> dummyAccessEvent = new List<AccessEvent>();
 
             var jsonData = File.ReadAllText(accessEventsFilePath);
@@ -38,7 +37,6 @@ namespace Klipper.Tests
             AccessEvents dummyAccessEvents = new AccessEvents(dummyAccessEvent);
 
             return dummyAccessEvents;
-
         }
     }
 

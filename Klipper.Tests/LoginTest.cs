@@ -103,6 +103,25 @@ namespace Tests
         }
 
         [Test]
+        public void GivenValidUserIdAndIncorrectPasswordLoginFails()
+        {
+            Login login = new Login(employeeDataContainer);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .Build();
+
+            employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
+                Returns(dummyEmployee);
+
+            var employeeDetails = login.LoginUser("sidhdesh.vadgaonkar", "2-12-1995");
+
+            Assert.IsNull(employeeDetails);
+        }
+
+        [Test]
         public void OnSuccessfullLoginEmployeeNameAndTitleAreDisplayed()
         {
             Login login = new Login(employeeDataContainer);
