@@ -101,8 +101,7 @@ namespace Application.Web.Controllers
             string selectedReportee = Request.Form["selectMenu"].ToString();
             string idFromSelectedReportee = Regex.Match(selectedReportee, @"\d+").Value;
 
-
-            int reporteeId = int.Parse(idFromSelectedReportee);
+            int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
 
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
 
