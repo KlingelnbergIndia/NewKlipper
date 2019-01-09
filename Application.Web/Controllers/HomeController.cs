@@ -58,7 +58,7 @@ namespace Application.Web.Controllers
         }
 
         [AuthenticateTeamLeaderRole]
-        public async Task<IActionResult> Reportees()
+        public IActionResult Reportees()
         {
             
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
