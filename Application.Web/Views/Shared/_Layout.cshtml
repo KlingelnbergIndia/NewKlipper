@@ -1,4 +1,15 @@
 ﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+
+@{
+    var rolesJson = string.IsNullOrEmpty(Context.Session.GetString("EmployeeRoles")) ? "": Context.Session.GetString("EmployeeRoles");
+    string[] EmployeeRolesList = JsonConvert.DeserializeObject<string[]>(rolesJson);
+    string displayReportiesDropdownVisible = "none";
+    if (EmployeeRolesList != null && EmployeeRolesList.Contains("TeamLeader"))
+    {
+        displayReportiesDropdownVisible = "block";
+    }
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,7 +74,7 @@
                         <span class="glyphicon glyphicon-duplicate"></span>&nbsp;Summary
                     </a>
                 </li>
-                <li>
+                <li style="display:@displayReportiesDropdownVisible;">
                     <a href="/Home/Reportees">
                         <span class="glyphicon glyphicon-duplicate"></span>&nbsp;Reportees
                     </a>

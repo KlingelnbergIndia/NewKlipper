@@ -4,8 +4,11 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Application.Web.Models;
+using Application.Web.PageAccessAuthentication;
+using DomainModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using UseCaseBoundary;
 using UseCases;
 
@@ -35,11 +38,20 @@ namespace Application.Web.Controllers
                 HttpContext.Session.SetString("EmployeeName", $"{loggedInUserDetails.FirstName()} {loggedInUserDetails.LastName()}");
                 HttpContext.Session.SetString("Title", loggedInUserDetails.Title());
                 HttpContext.Session.SetInt32("ID", loggedInUserDetails.Id());
+                HttpContext.Session.SetString("EmployeeRoles", setEmployeeRolesJson(loggedInUserDetails.Roles()));
+
                 return RedirectToAction("Index", "Home");
             }
             HttpContext.Session.Clear();
             TempData["errorMessage"] = "Invalid username or password";
             return RedirectToAction("Login");
+        }
+
+        private string setEmployeeRolesJson(List<EmployeeRoles> list)
+        {
+            var dat = list.Select(x => x.ToString()).ToList();
+            var rolesJson = JsonConvert.SerializeObject(dat);
+            return rolesJson;
         }
 
         public IActionResult Logout()

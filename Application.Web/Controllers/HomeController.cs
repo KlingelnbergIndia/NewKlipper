@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Klipper.Web.UI;
 using System.Dynamic;
 using System.Text.RegularExpressions;
+using Application.Web.PageAccessAuthentication;
 
 namespace Application.Web.Controllers
 {
@@ -56,6 +57,7 @@ namespace Application.Web.Controllers
             return View(listOfAttendanceRecord);
         }
 
+        [AuthenticateTeamLeaderRole]
         public async Task<IActionResult> Reportees()
         {
             
