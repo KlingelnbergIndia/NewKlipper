@@ -49,8 +49,8 @@ namespace Application.Web.Controllers
 
         private string setEmployeeRolesJson(List<EmployeeRoles> list)
         {
-            var dat = list.Select(x => x.ToString()).ToList();
-            var rolesJson = JsonConvert.SerializeObject(dat);
+            var emploeeListStrings = list.Select(x => x.ToString()).ToList();
+            var rolesJson = JsonConvert.SerializeObject(emploeeListStrings);
             return rolesJson;
         }
 
