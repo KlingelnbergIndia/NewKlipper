@@ -74,9 +74,6 @@ namespace Application.Web.Controllers
                 reporteeViewModel.reportees.Add(reporteeNameWithId);
             }
 
-            //listOfAttendanceRecord =  await attendanceService.GetAttendanceRecord(reportees[0].ID, 7);
-            //reporteeViewModel.attendaceRecords = ConvertRecordsTimeToIST(listOfAttendanceRecord);
-
             reporteeViewModel.Name = string.Empty;
 
             return View(reporteeViewModel);
@@ -102,16 +99,19 @@ namespace Application.Web.Controllers
             string selectedReportee = Request.Form["selectMenu"].ToString();
             string idFromSelectedReportee = Regex.Match(selectedReportee, @"\d+").Value;
 
-            reporteeViewModel.Name = Request.Form["selectMenu"].ToString();
 
             int reporteeId = int.Parse(idFromSelectedReportee);
 
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
 
             List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
-            listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(reporteeId, 7);
-            reporteeViewModel.attendaceRecords = ConvertRecordsTimeToIST(listOfAttendanceRecord);
-
+            if(reporteeId!=0)
+            {
+                reporteeViewModel.Name = Request.Form["selectMenu"].ToString();
+                listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(reporteeId, 7);
+                reporteeViewModel.attendaceRecords = ConvertRecordsTimeToIST(listOfAttendanceRecord);
+            }
+            
             return View("Reportees", reporteeViewModel);
         }
         
