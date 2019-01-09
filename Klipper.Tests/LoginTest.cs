@@ -52,12 +52,12 @@ namespace Tests
 
     public class LoginTest
     {
-        private IEmployeeRepository _employeeRepository;
+        private IEmployeeRepository employeeDataContainer;
 
         [SetUp]
         public void Setup()
         {
-            _employeeRepository = Substitute.For<IEmployeeRepository>();
+            employeeDataContainer = Substitute.For<IEmployeeRepository>();
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace Tests
         {
 
             // Setup
-            Login login = new Login(_employeeRepository);
+            Login login = new Login(employeeDataContainer);
 
             var dummyEmployee =
                 new EmployeeBuilder()
@@ -73,20 +73,20 @@ namespace Tests
                 .WithPassword("26-12-1995")
                 .Build();
 
-            _employeeRepository.GetEmployee("sidhdesh.vadgaonkar").
+            employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
                 Returns(dummyEmployee);
 
             // Execute the use case
-            var employeeDto = login.LoginUser("sidhdesh.vadgaonkar", "26-12-1995");
+            var employeeDetails = login.LoginUser("sidhdesh.vadgaonkar", "26-12-1995");
 
 
-            Assert.IsNotNull(employeeDto);
+            Assert.IsNotNull(employeeDetails);
         }
 
         [Test]
         public void GivenInvalidUserIdAndCorrectPasswordLoginFails()
         {
-            Login login = new Login(_employeeRepository);
+            Login login = new Login(employeeDataContainer);
 
             var dummyEmployee =
                 new EmployeeBuilder()
@@ -94,18 +94,37 @@ namespace Tests
                 .WithPassword("26-12-1995")
                 .Build();
 
-            _employeeRepository.GetEmployee("sidhdesh.vadgaonkar").
+            employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
                 Returns(dummyEmployee);
 
-            var employeeDto = login.LoginUser("sdhdesh.vadgaonkar", "26-12-1995");
+            var employeeDetails = login.LoginUser("sdhdesh.vadgaonkar", "26-12-1995");
 
-            Assert.IsNull(employeeDto);
+            Assert.IsNull(employeeDetails);
+        }
+
+        [Test]
+        public void GivenValidUserIdAndIncorrectPasswordLoginFails()
+        {
+            Login login = new Login(employeeDataContainer);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .Build();
+
+            employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
+                Returns(dummyEmployee);
+
+            var employeeDetails = login.LoginUser("sidhdesh.vadgaonkar", "2-12-1995");
+
+            Assert.IsNull(employeeDetails);
         }
 
         [Test]
         public void OnSuccessfullLoginEmployeeNameAndTitleAreDisplayed()
         {
-            Login login = new Login(_employeeRepository);
+            Login login = new Login(employeeDataContainer);
 
             var dummyEmployee =
                 new EmployeeBuilder()
@@ -113,22 +132,20 @@ namespace Tests
                 .WithPassword("26-12-1995")
                 .Build();
 
-            _employeeRepository.GetEmployee("sidhdesh.vadgaonkar").
+            employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
                 Returns(dummyEmployee);
 
-            var employeeDto = login.LoginUser("sidhdesh.vadgaonkar", "26-12-1995");
+            var employeeDetails = login.LoginUser("sidhdesh.vadgaonkar", "26-12-1995");
 
-            string employeeName = employeeDto.FirstName() + " " + employeeDto.LastName();
-            string employeeTitle = employeeDto.Title();
-
-            StringAssert.IsMatch(employeeName, "Sidhdesh Vadgaonkar");
-            StringAssert.IsMatch(employeeTitle, "Software Developer");
+            StringAssert.IsMatch(employeeDetails.FirstName(), "Sidhdesh");
+            StringAssert.IsMatch(employeeDetails.LastName(), "Vadgaonkar");
+            StringAssert.IsMatch(employeeDetails.Title(), "Software Developer");
         }
 
         [Test]
         public void EmployeeUserNameIsNotCaseSensitive()
         {
-            Login login = new Login(_employeeRepository);
+            Login login = new Login(employeeDataContainer);
 
             var dummyEmployee =
                 new EmployeeBuilder()
@@ -136,12 +153,12 @@ namespace Tests
                 .WithPassword("26-12-1995")
                 .Build();
 
-            _employeeRepository.GetEmployee("sidhdesh.vadgaonkar").
+            employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
                 Returns(dummyEmployee);
 
-            var employeeDto = login.LoginUser("SiDhDeSh.vaDgAonKar", "26-12-1995");
+            var employeeDetails = login.LoginUser("SiDhDeSh.vaDgAonKar", "26-12-1995");
 
-            Assert.IsNotNull(employeeDto);
+            Assert.IsNotNull(employeeDetails);
         }
 
     }
