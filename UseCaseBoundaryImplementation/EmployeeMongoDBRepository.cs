@@ -22,7 +22,7 @@ namespace UseCaseBoundaryImplementation
         public Employee GetEmployee(string userName)
         {
             var employeeFromAuthDBContext = _authDBContext.Users.AsQueryable()
-                .Where(x => x.UserName.ToLower() == userName.ToLower())
+                .Where(x => x.UserName.ToLower() == userName)
                 .FirstOrDefault();
 
             if (employeeFromAuthDBContext == null)
