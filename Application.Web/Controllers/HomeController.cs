@@ -12,6 +12,7 @@ using UseCaseBoundaryImplementation;
 using Microsoft.AspNetCore.Http;
 using Klipper.Web.UI;
 using System.Dynamic;
+using System.Text.RegularExpressions;
 
 namespace Application.Web.Controllers
 {
@@ -55,10 +56,9 @@ namespace Application.Web.Controllers
             return View(listOfAttendanceRecord);
         }
 
-        public async Task<IActionResult> Reportees(string searchFilter)
+        public async Task<IActionResult> Reportees()
         {
-            dynamic mymodel = new ExpandoObject();
-
+            
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             ReporteeService reporteeService = new ReporteeService(_employeeRepository);
 
@@ -74,15 +74,46 @@ namespace Application.Web.Controllers
                 reporteeViewModel.reportees.Add(reporteeNameWithId);
             }
 
-            mymodel.reportees = reporteeViewModel.reportees;
+            //listOfAttendanceRecord =  await attendanceService.GetAttendanceRecord(reportees[0].ID, 7);
+            //reporteeViewModel.attendaceRecords = ConvertRecordsTimeToIST(listOfAttendanceRecord);
 
-            listOfAttendanceRecord =  await attendanceService.GetAttendanceRecord(reportees[0].ID, 7);
-            mymodel.listOfAttendanceRecord = ConvertRecordsTimeToIST(listOfAttendanceRecord);
+            reporteeViewModel.Name = string.Empty;
 
-            return View(mymodel);
+            return View(reporteeViewModel);
 
         }
 
+        [HttpPost]
+        public async Task<IActionResult> GetSelectedreportee(string searchString)
+        {
+
+            var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
+            ReporteeService reporteeService = new ReporteeService(_employeeRepository);
+
+            var reportees = reporteeService.GetReporteesData(employeeId);
+            ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
+
+            foreach (var reportee in reportees)
+            {
+                string reporteeNameWithId = reportee.FirstName + " " + reportee.LastName + " - " + reportee.ID;
+                reporteeViewModel.reportees.Add(reporteeNameWithId);
+            }
+
+            string selectedReportee = Request.Form["selectMenu"].ToString();
+            string idFromSelectedReportee = Regex.Match(selectedReportee, @"\d+").Value;
+
+            reporteeViewModel.Name = Request.Form["selectMenu"].ToString();
+
+            int reporteeId = int.Parse(idFromSelectedReportee);
+
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
+
+            List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
+            listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(reporteeId, 7);
+            reporteeViewModel.attendaceRecords = ConvertRecordsTimeToIST(listOfAttendanceRecord);
+
+            return View("Reportees", reporteeViewModel);
+        }
         
         private List<AttendanceRecordDTO> ConvertRecordsTimeToIST(List<AttendanceRecordDTO> listOfAttendanceRecord)
         {
