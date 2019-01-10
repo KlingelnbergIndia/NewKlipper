@@ -11,14 +11,25 @@
                 <label for="reporteesId">Select a Reportee</label>
                 @using (Html.BeginForm("GetSelectedreportee", "Home", FormMethod.Post))
                 {
-                    <select id="reporteesId" name="selectMenu" class="form-control">
-                        <option selected value="0" disabled>---Select---</option>
-                        @foreach (var item in Model.reportees)
+                <select id="reporteesId" name="selectMenu" class="form-control">
+                    @if (Model.Name == string.Empty || Model.Name == null)
+                    {
+                        <option selected value="0" disabled>---Select Reportee---</option>
+                    }
+                    else
+                    {
+                        <option selected value=@Model.Name>@Model.Name</option>
+                    }
+                    @foreach (var item in Model.reportees)
+                    {
+                        if(item!=Model.Name)
                         {
-                            <option value=@item>@item</option>
+                        <option value=@item>@item</option>
                         }
-                    </select>
-                    <input type="submit" value="Get Data" class="btn btn-default" />
+                        
+                    }
+                </select>
+                    <input type="submit" value="Get Attendance Record" class="btn btn-default" />
                 }
 
             </div>
@@ -27,7 +38,7 @@
 
         @if (Model.Name != string.Empty && Model.Name != null)
         {
-            <p>Attendance Records of @Model.Name</p>
+            <p>Attendance Record of @Model.Name.Substring(0,Model.Name.LastIndexOf('-'))</p>
 
             <table class="table table-striped table-bordered">
                 <thead>

@@ -70,10 +70,13 @@ namespace Application.Web.Controllers
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
             List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
 
-            foreach (var reportee in reportees)
+            if (reportees != null)
             {
-                string reporteeNameWithId = reportee.FirstName + " " + reportee.LastName + " - " + reportee.ID;
-                reporteeViewModel.reportees.Add(reporteeNameWithId);
+                foreach (var reportee in reportees)
+                {
+                    string reporteeNameWithId = reportee.FirstName + " " + reportee.LastName + " - " + reportee.ID;
+                    reporteeViewModel.reportees.Add(reporteeNameWithId);
+                }
             }
 
             reporteeViewModel.Name = string.Empty;
@@ -83,7 +86,7 @@ namespace Application.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetSelectedreportee(string searchString)
+        public async Task<IActionResult> GetSelectedreportee()
         {
 
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
@@ -99,6 +102,8 @@ namespace Application.Web.Controllers
             }
 
             string selectedReportee = Request.Form["selectMenu"].ToString();
+
+
             string idFromSelectedReportee = Regex.Match(selectedReportee, @"\d+").Value;
 
             int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
