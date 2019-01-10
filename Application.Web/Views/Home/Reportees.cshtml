@@ -6,7 +6,7 @@
 </head>
 <body>
     <div>
-        <div class="panel panel-info form-inline">
+        <div class="panel panel-info form-inline" style="@(Model.reportees.Count==0 ? "visibility:hidden" : "visibility:visible")">
             <div class="panel-heading">
                 <label for="reporteesId">Select a Reportee</label>
                 @using (Html.BeginForm("GetSelectedreportee", "Home", FormMethod.Post))
@@ -31,7 +31,6 @@
                 </select>
                     <input type="submit" value="Get Attendance Record" class="btn btn-default" />
                 }
-
             </div>
         </div>
 
