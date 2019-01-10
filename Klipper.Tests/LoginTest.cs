@@ -41,10 +41,25 @@ namespace Tests
             this.id = id;
             return this;
         }
-        public Employee Build()
+        public EmployeeBuilder WithRoles(List<EmployeeRoles> roles)
         {
-            return new Employee(id, userName, password, "Sidhdesh",
-                "Vadgaonkar", "Software Developer", employeeRoles, reportees);
+            this.employeeRoles = roles;
+            return this;
+        }
+
+        public EmployeeBuilder WithReportees(List<int> employeereportees)
+        {
+            this.reportees = employeereportees;
+            return this;
+        }
+
+        public Employee BuildEmployee(string firstName="Sidhdesh", string lastName="Vadgaonkar", 
+                                      string title="Software Developer",
+                                      List<EmployeeRoles> roles=null,
+                                      List<int> reportees=null)
+        {
+            return new Employee(id, userName, password, firstName,
+                                lastName, title, roles, reportees);
         }
 
     }
@@ -71,7 +86,7 @@ namespace Tests
                 new EmployeeBuilder()
                 .WithUserName("Sidhdesh.Vadgaonkar")
                 .WithPassword("26-12-1995")
-                .Build();
+                .BuildEmployee();
 
             employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
                 Returns(dummyEmployee);
@@ -92,7 +107,7 @@ namespace Tests
                 new EmployeeBuilder()
                 .WithUserName("Sidhdesh.Vadgaonkar")
                 .WithPassword("26-12-1995")
-                .Build();
+                .BuildEmployee();
 
             employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
                 Returns(dummyEmployee);
@@ -111,7 +126,7 @@ namespace Tests
                 new EmployeeBuilder()
                 .WithUserName("Sidhdesh.Vadgaonkar")
                 .WithPassword("26-12-1995")
-                .Build();
+                .BuildEmployee();
 
             employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
                 Returns(dummyEmployee);
@@ -130,7 +145,7 @@ namespace Tests
                 new EmployeeBuilder()
                 .WithUserName("Sidhdesh.Vadgaonkar")
                 .WithPassword("26-12-1995")
-                .Build();
+                .BuildEmployee();
 
             employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
                 Returns(dummyEmployee);
@@ -151,7 +166,7 @@ namespace Tests
                 new EmployeeBuilder()
                 .WithUserName("Sidhdesh.Vadgaonkar")
                 .WithPassword("26-12-1995")
-                .Build();
+                .BuildEmployee();
 
             employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
                 Returns(dummyEmployee);
