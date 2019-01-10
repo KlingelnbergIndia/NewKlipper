@@ -11,25 +11,31 @@
                 <label for="reporteesId">Select a Reportee</label>
                 @using (Html.BeginForm("GetSelectedreportee", "Home", FormMethod.Post))
                 {
-                <select id="reporteesId" name="selectMenu" class="form-control">
-                    @if (Model.Name == string.Empty || Model.Name == null)
-                    {
-                        <option selected value="0" disabled>---Select Reportee---</option>
-                    }
-                    else
-                    {
-                        <option selected value=@Model.Name>@Model.Name</option>
-                    }
-                    @foreach (var item in Model.reportees)
-                    {
-                        if(item!=Model.Name)
+                    <select id="reporteesId" name="selectMenu" class="form-control">
+                        @if (Model.Name == string.Empty || Model.Name == null)
                         {
-                        <option value=@item>@item</option>
+                            <option selected value="0" disabled>---Select Reportee---</option>
                         }
-                        
-                    }
-                </select>
-                    <input type="submit" value="Get Attendance Record" class="btn btn-default" />
+                        else
+                        {
+                            <option selected value=@Model.Name>@Model.Name</option>
+                        }
+                        @foreach (var item in Model.reportees)
+                        {
+                            if (item != Model.Name)
+                            {
+                                <option value=@item>@item</option>
+                            }
+
+                        }
+                    </select>
+                        <label for="from">From</label>
+                        <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
+                               value="@(Model.fromDate==string.Empty ? "dd-mm-yyyy" : Model.fromDate)">
+                        <label for="to">to</label>
+                        <input type="date" id="toDate" name="toDate" class="form-control input-sm" onkeydown="return false"
+                               value="@(Model.toDate==string.Empty ? "dd-mm-yyyy" : Model.toDate)">
+                        <input type="submit" value="Get Attendance Record" class="btn btn-default" />
                 }
             </div>
         </div>
@@ -37,7 +43,13 @@
 
         @if (Model.Name != string.Empty && Model.Name != null)
         {
-            <p>Attendance Record of @Model.Name.Substring(0,Model.Name.LastIndexOf('-'))</p>
+            @if (Model.attendaceRecords.Count == 0)
+            {
+                <p class="text-warning">Attendance Records of @Model.Name for specified period are not available</p> 
+            }
+            else
+            {
+            <p>Attendance Record of @Model.Name.Substring(0, Model.Name.LastIndexOf('-'))</p>
 
             <table class="table table-striped table-bordered">
                 <thead>
@@ -90,6 +102,7 @@
                     }
                 </tbody>
             </table>
+            }
         }
     </div>
 
