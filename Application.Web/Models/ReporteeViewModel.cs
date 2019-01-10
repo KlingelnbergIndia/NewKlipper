@@ -14,5 +14,9 @@ namespace Application.Web.Models
 
         public string Name;
 
+        public string fromDate;
+
+        public string toDate;
+
     }
 }
