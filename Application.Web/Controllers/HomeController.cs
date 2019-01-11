@@ -59,8 +59,7 @@ namespace Application.Web.Controllers
 
         [AuthenticateTeamLeaderRole]
         public IActionResult Reportees()
-        {
-            
+        {           
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             ReporteeService reporteeService = new ReporteeService(_employeeRepository);
 
@@ -70,7 +69,7 @@ namespace Application.Web.Controllers
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
             List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
 
-            if (reportees != null)
+            if (reportees.Count != 0)
             {
                 foreach (var reportee in reportees)
                 {
@@ -82,23 +81,24 @@ namespace Application.Web.Controllers
             reporteeViewModel.Name = string.Empty;
 
             return View(reporteeViewModel);
-
         }
 
         [HttpPost]
         public async Task<IActionResult> GetSelectedreportee()
         {
-
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             ReporteeService reporteeService = new ReporteeService(_employeeRepository);
 
             var reportees = reporteeService.GetReporteesData(employeeId);
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
 
-            foreach (var reportee in reportees)
+            if (reportees.Count != 0)
             {
-                string reporteeNameWithId = reportee.FirstName + " " + reportee.LastName + " - " + reportee.ID;
-                reporteeViewModel.reportees.Add(reporteeNameWithId);
+                foreach (var reportee in reportees)
+                {
+                    string reporteeNameWithId = reportee.FirstName + " " + reportee.LastName + " - " + reportee.ID;
+                    reporteeViewModel.reportees.Add(reporteeNameWithId);
+                }
             }
 
             string selectedReportee = Request.Form["selectMenu"].ToString();
