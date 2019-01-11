@@ -43,13 +43,8 @@ namespace UseCases
                         reporteeDtobjs.Add(reporteeDto);
                     }
                 }
-
-                return reporteeDtobjs;
             }
-            else
-            {
-                return null;
-            }
+            return reporteeDtobjs;
         }
     }
 }
