@@ -20,7 +20,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public void GivenValidRoleGetReportees()
+        public void GivenEmployeeWithValidRoleGetReportees()
         {
             ReporteeService reporteeService = new ReporteeService(employeeDataContainer);
 
