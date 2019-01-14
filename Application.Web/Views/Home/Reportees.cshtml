@@ -45,7 +45,8 @@
         {
             @if (Model.attendaceRecords.Count == 0)
             {
-                <p class="text-warning">Attendance Records of @Model.Name for specified period are not available</p>
+        <p class="text-warning">Attendance Records of @Model.Name.Substring(0, Model.Name.LastIndexOf('-')) 
+        for specified period are not available</p>
             }
             else
             {
