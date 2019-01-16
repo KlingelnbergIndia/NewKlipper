@@ -33,28 +33,34 @@ namespace Application.Web.Controllers
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
-            List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
+
+            EmployeeViewModel employeeViewModel = new EmployeeViewModel();
 
             if (searchFilter == SearchFilter.AccessEventsByDateRange.ToString())
             {
-                var fromDate = DateTime.Parse(HttpContext.Request.Form["fromDate"].ToString());
-                var toDate = DateTime.Parse(HttpContext.Request.Form["toDate"].ToString());
+                string fromDate = HttpContext.Request.Form["fromDate"].ToString();
+                string toDate = HttpContext.Request.Form["toDate"].ToString();
 
-                listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
+                employeeViewModel.fromDate = DateTime.Parse(fromDate);
+                employeeViewModel.toDate= DateTime.Parse(toDate);
+
+                employeeViewModel.employeeAttendaceRecords = 
+                    await attendanceService.GetAccessEventsForDateRange(employeeId, employeeViewModel.fromDate, employeeViewModel.toDate);
 
                 ViewData["resultMessage"] = String.Format(
-                    "Attendance from {0} to {1}. Total days:{2}", 
-                    fromDate.ToShortDateString(), 
-                    toDate.ToShortDateString(),
-                    listOfAttendanceRecord.Count());
+                    "Attendance from {0} to {1}. Total days:{2}",
+                    employeeViewModel.fromDate.ToShortDateString(),
+                    employeeViewModel.toDate.ToShortDateString(),
+                    employeeViewModel.employeeAttendaceRecords.Count());
             }
             else
             {
-                listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(employeeId, 7);
+                employeeViewModel.employeeAttendaceRecords = 
+                    await attendanceService.GetAttendanceRecord(employeeId, 7);
             }
 
-            listOfAttendanceRecord = ConvertRecordsTimeToIST(listOfAttendanceRecord);
-            return View(listOfAttendanceRecord);
+            employeeViewModel.employeeAttendaceRecords = ConvertRecordsTimeToIST(employeeViewModel.employeeAttendaceRecords);
+            return View(employeeViewModel);
         }
 
         [AuthenticateTeamLeaderRole]

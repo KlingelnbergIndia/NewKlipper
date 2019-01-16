@@ -1,4 +1,4 @@
-﻿@model IEnumerable<UseCaseBoundary.Model.AttendanceRecordDTO>
+﻿@model EmployeeViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -12,15 +12,17 @@
     <form class="panel panel-info form-inline" method="post" action="?searchFilter=AccessEventsByDateRange">
         <div class="panel-heading">
             <label for="from">From</label>
-            <input type="date" id="fromDate" name="fromDate" class="form-control input-sm" value="2018-10-10">
+            <input type="date" id="fromDate" name="fromDate" class="form-control input-sm" 
+                   value=@(Model.fromDate == DateTime.MinValue ? "dd-mm-yyyy": Model.fromDate.ToString("yyyy-MM-dd")) required>
             <label for="to">to</label>
-            <input type="date" id="toDate" name="toDate" class="form-control input-sm" value="2019-01-01" onkeydown="return false">
+            <input type="date" id="toDate" name="toDate" class="form-control input-sm" 
+                   value= "@(Model.toDate == DateTime.MinValue ? "dd-mm-yyyy": Model.toDate.ToString("yyyy-MM-dd"))" onkeydown="return false" required>
             <button type="submit" class="btn btn-default btn-sm">Show</button>
             <i>&nbsp; @ViewData["resultMessage"]</i>
 
         </div>
     </form>
-    @if ((Model as List<UseCaseBoundary.Model.AttendanceRecordDTO>).Count == 0)
+    @if(Model.employeeAttendaceRecords.Count == 0)
     {
         <p>Attendace Records for specified period are not available</p>
     }
@@ -33,13 +35,13 @@
                 <th>Day</th>
                 <th>Time In</th>
                 <th>Time Out</th>
-                <th>Late By</th>
+                <th>DeficitTime</th>
                 <th>OverTime</th>
                 <th>Total Working Hours</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.employeeAttendaceRecords)
             {
 
                 string lateByClass = "alert alert-danger";
