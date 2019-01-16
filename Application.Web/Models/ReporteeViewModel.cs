@@ -10,7 +10,7 @@ namespace Application.Web.Models
     {
         public List<string> reportees = new List<string>();
 
-        public List<AttendanceRecordDTO> attendaceRecords = new List<AttendanceRecordDTO>();
+        public List<AttendanceRecordDTO> reporteesAttendaceRecords = new List<AttendanceRecordDTO>();
 
         public string Name;
 

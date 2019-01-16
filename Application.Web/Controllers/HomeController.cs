@@ -125,7 +125,7 @@ namespace Application.Web.Controllers
                     listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(reporteeId, 7);
                 }
                 
-                reporteeViewModel.attendaceRecords = ConvertRecordsTimeToIST(listOfAttendanceRecord);
+                reporteeViewModel.reporteesAttendaceRecords = ConvertRecordsTimeToIST(listOfAttendanceRecord);
             }
             
             return View("Reportees", reporteeViewModel);
