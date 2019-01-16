@@ -109,8 +109,11 @@ namespace Application.Web.Controllers
 
             string selectedReportee = Request.Form["selectMenu"].ToString();
 
-            reporteeViewModel.fromDate = Request.Form["fromDate"].ToString();
-            reporteeViewModel.toDate = Request.Form["toDate"].ToString();
+            string fromDate = Request.Form["fromDate"].ToString();
+            string toDate = Request.Form["toDate"].ToString();
+
+            reporteeViewModel.fromDate = DateTime.Parse(fromDate);
+            reporteeViewModel.toDate = DateTime.Parse(toDate);
             string idFromSelectedReportee = Regex.Match(selectedReportee, @"\d+").Value;
 
             int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
@@ -121,10 +124,10 @@ namespace Application.Web.Controllers
             if(reporteeId!=0)
             {
                 reporteeViewModel.Name = Request.Form["selectMenu"].ToString();
-                if(!string.IsNullOrEmpty(reporteeViewModel.fromDate) && !string.IsNullOrEmpty(reporteeViewModel.toDate))
+                if(!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
                 {
                     listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId, 
-                        DateTime.Parse(reporteeViewModel.fromDate), DateTime.Parse(reporteeViewModel.toDate));
+                        reporteeViewModel.fromDate, reporteeViewModel.toDate);
                 }
                 else
                 {
