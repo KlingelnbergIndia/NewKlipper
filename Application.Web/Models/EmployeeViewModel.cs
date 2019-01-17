@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UseCaseBoundary.DTO;
 using UseCaseBoundary.Model;
 
 namespace Application.Web.Models
 {
     public class EmployeeViewModel
     {
-        public List<AttendanceRecordDTO> employeeAttendaceRecords = new List<AttendanceRecordDTO>();
+        public AttendanceRecordsDTO employeeAttendaceRecords = new AttendanceRecordsDTO();
 
         public DateTime fromDate;
 

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using UseCaseBoundary.Model;
 
-namespace UseCaseBoundary.Model
+namespace UseCaseBoundary.DTO
 {
-    public class AttendanceRecordDTO
+    public class PerDayAttendanceRecordDTO
     {
         public Time WorkingHours;
         public DateTime Date;
