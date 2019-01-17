@@ -20,8 +20,7 @@ namespace UseCases
         public async Task<AttendanceRecordsDTO> GetAttendanceRecord(int employeeId, int noOfDays)
         {
             AccessEvents accessEvents = _accessEventsRepository.GetAccessEvents(employeeId);
-            AttendanceRecordsDTO attendanceRecords = new AttendanceRecordsDTO();
-            List<PerDayAttendanceRecordDTO>  listOfAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
+            List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
 
             var workRecordByDate = accessEvents.WorkRecord(noOfDays);
             foreach (var perDayWorkRecord in workRecordByDate)
@@ -44,11 +43,12 @@ namespace UseCases
 
             return await Task.Run(() =>
             {
-                attendanceRecords.ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO;
-                attendanceRecords.TotalWorkingHours = CalculateTotalWorkingHours(listOfAttendanceRecordDTO);
-                attendanceRecords.TotalDeficitHours = CalculateTotalDeficitHours(listOfAttendanceRecordDTO);
-
-                return attendanceRecords;
+                return new AttendanceRecordsDTO()
+                {
+                    ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO,
+                    TotalWorkingHours = CalculateTotalWorkingHours(listOfAttendanceRecordDTO),
+                    TotalDeficitHours = CalculateTotalDeficitHours(listOfAttendanceRecordDTO)
+                };
             });
         }
 
