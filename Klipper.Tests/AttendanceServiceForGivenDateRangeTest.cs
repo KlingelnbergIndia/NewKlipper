@@ -31,7 +31,8 @@ namespace Klipper.Tests
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
                 .Returns(dummyAccessevents);
 
-            var accessEvents = attendanceService.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
+            var accessEvents = attendanceService
+                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
                 .GetAwaiter()
                 .GetResult();
 
@@ -46,7 +47,10 @@ namespace Klipper.Tests
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2019-10-01"), DateTime.Parse("2019-10-30"))
                 .Returns(dummyAccessevents);
 
-            var accessEvents = attendanceService.GetAccessEventsForDateRange(48, DateTime.Parse("2019-10-01"), DateTime.Parse("2019-10-30")).Result;
+            var accessEvents = attendanceService
+                .GetAccessEventsForDateRange(48, DateTime.Parse("2019-10-01"), DateTime.Parse("2019-10-30"))
+                .GetAwaiter()
+                .GetResult();
 
             Assert.That(accessEvents[0].Date, Is.EqualTo(DateTime.Parse("2018/10/12").Date));
             Assert.That(accessEvents[0].TimeIn.Hour, Is.EqualTo(2));
