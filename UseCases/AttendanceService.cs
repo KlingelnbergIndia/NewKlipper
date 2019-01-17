@@ -23,7 +23,7 @@ namespace UseCases
             AttendanceRecordsDTO attendanceRecords = new AttendanceRecordsDTO();
 
             var workRecordByDate = accessEvents.WorkRecord(noOfDays);
-            attendanceRecords.ListOfAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
+            List<PerDayAttendanceRecordDTO>  listOfAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
             foreach (var perDayWorkRecord in workRecordByDate)
             {
                 var timeIn = perDayWorkRecord.GetTimeIn();
@@ -46,9 +46,15 @@ namespace UseCases
 
             return await Task.Run(() =>
             {
+                attendanceRecords.ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO;
+                attendanceRecords.TotalWorkingHours = CalculateTotalWorkingHours(listOfAttendanceRecordDTO);
+                attendanceRecords.TotalDeficitHours = CalculateTotalDeficitHours(listOfAttendanceRecordDTO);
+
                 return attendanceRecords;
             });
         }
+
+
 
         public async Task<AttendanceRecordsDTO> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
         {
@@ -79,7 +85,7 @@ namespace UseCases
             return await Task.Run(() =>
             {
                 listOfAttendanceRecord.ListOfAttendanceRecordDTO = listOfAttendanceRecord.ListOfAttendanceRecordDTO
-                    .OrderByDescending(x=>x.Date)
+                    .OrderByDescending(x => x.Date)
                     .ToList();
                 return listOfAttendanceRecord;
             });
@@ -116,6 +122,25 @@ namespace UseCases
             TimeSpan TotalWorkingHours = TimeSpan.Parse("9:00:00");
             var extraHour = workingHours - TotalWorkingHours;
             return new Time(extraHour.Hours, extraHour.Minutes);
+        }
+
+        private Time CalculateTotalDeficitHours(List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO)
+        {
+            int totalRequiredHours = listOfAttendanceRecordDTO.Count * 9;
+            int totalWorkedHours = CalculateTotalWorkingHours(listOfAttendanceRecordDTO).Hour;
+            int totalDefiateHours = totalRequiredHours - totalWorkedHours;
+
+            return new Time(totalDefiateHours, 00);
+        }
+
+        private Time CalculateTotalWorkingHours(List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO)
+        {
+            var sumOfTotalWorkingHours = listOfAttendanceRecordDTO
+                .Select(x => new TimeSpan(x.WorkingHours.Hour, x.WorkingHours.Minute, 00))
+                .Aggregate((t1, t2) => t1 + t2);
+            int totalWorkingHours = (int)Math.Round(sumOfTotalWorkingHours.TotalHours);
+
+            return new Time(totalWorkingHours, 00);
         }
     }
 }
