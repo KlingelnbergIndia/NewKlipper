@@ -17,21 +17,30 @@ namespace DomainModel
         public TimeSpan CalculateWorkingHours()
         {
             var accessEventsOfMainEntry = _accessEvents.Where(accessEvent => accessEvent.FromMainDoor()).ToList();
-            var minTime = accessEventsOfMainEntry.Select(x => x.EventTime.TimeOfDay).Min();
-            var maxTime = accessEventsOfMainEntry.Select(x => x.EventTime.TimeOfDay).Max();
+
+            var minTime = CalculateAbsoluteOutTimeAndInTime(
+                accessEventsOfMainEntry.Select(x => x.EventTime.TimeOfDay).Min(), Time.TimeIn);
+            var maxTime = CalculateAbsoluteOutTimeAndInTime(
+                accessEventsOfMainEntry.Select(x => x.EventTime.TimeOfDay).Max(), Time.TimeOut);
+
             TimeSpan workingHours = (maxTime - minTime);
             return workingHours;
         }
 
         public TimeSpan GetTimeIn()
         {
-            return _accessEvents.Select(x => x.EventTime.TimeOfDay).Min();
+            return CalculateAbsoluteOutTimeAndInTime(
+                _accessEvents.Select(x => x.EventTime.TimeOfDay).Min(), Time.TimeIn);
         }
 
         public TimeSpan GetTimeOut()
         {
-            var minTime = _accessEvents.Select(x => x.EventTime.TimeOfDay).Min();
-            var maxTime = _accessEvents.Select(x => x.EventTime.TimeOfDay).Max();
+            var minTime = CalculateAbsoluteOutTimeAndInTime(
+                _accessEvents.Select(x => x.EventTime.TimeOfDay).Min(), Time.TimeIn);
+
+            var maxTime = CalculateAbsoluteOutTimeAndInTime(
+                _accessEvents.Select(x => x.EventTime.TimeOfDay).Max(), Time.TimeOut);
+
             if (minTime == maxTime)
             {
                 return TimeSpan.Zero;
@@ -40,6 +49,22 @@ namespace DomainModel
             {
                 return maxTime;
             }
+        }
+
+        private TimeSpan CalculateAbsoluteOutTimeAndInTime(TimeSpan timeSpan, Time time)
+        {
+            if (time == Time.TimeOut && timeSpan.Seconds > 0)
+            {
+                return new TimeSpan(timeSpan.Hours, timeSpan.Minutes + 1, 00);
+            }
+
+            return new TimeSpan(timeSpan.Hours, timeSpan.Minutes, 00);
+        }
+
+        private enum Time
+        {
+            TimeIn,
+            TimeOut
         }
     }
 }
