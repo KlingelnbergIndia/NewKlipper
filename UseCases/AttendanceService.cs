@@ -39,7 +39,9 @@ namespace UseCases
                     OverTime = GetOverTime(workingHours),
                     LateBy = GetLateByTime(workingHours)
                 };
-                attendanceRecords.PerDayAttendanceRecordDTO.Add(attendanceRecord);
+                attendanceRecords
+                    .PerDayAttendanceRecordDTO
+                    .Add(attendanceRecord);
             }
             return await Task.Run(() =>
             {
@@ -47,37 +49,40 @@ namespace UseCases
             });
         }
 
-        //public async Task<List<AttendanceRecordsDTO>> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
-        //{
-        //    var accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
-        //    var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
+        public async Task<AttendanceRecordsDTO> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
+        {
+            var accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
+            var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
 
-        //    List<AttendanceRecordsDTO> listOfAttendanceRecord = new List<AttendanceRecordsDTO>();
-        //    foreach (var perDayAccessEvents in datewiseAccessEvents)
-        //    {
-        //        var timeIn = perDayAccessEvents.GetTimeIn();
-        //        var timeOut = perDayAccessEvents.GetTimeOut();
-        //        var workingHours = perDayAccessEvents.CalculateWorkingHours();
+            AttendanceRecordsDTO listOfAttendanceRecord = new AttendanceRecordsDTO();
+            foreach (var perDayAccessEvents in datewiseAccessEvents)
+            {
+                var timeIn = perDayAccessEvents.GetTimeIn();
+                var timeOut = perDayAccessEvents.GetTimeOut();
+                var workingHours = perDayAccessEvents.CalculateWorkingHours();
 
-        //        AttendanceRecordsDTO attendanceRecord = new AttendanceRecordsDTO()
-        //        {
-        //            Date = perDayAccessEvents.Date,
-        //            TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
-        //            TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
-        //            WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
-        //            OverTime = GetOverTime(workingHours),
-        //            LateBy = GetLateByTime(workingHours)
-        //        };
-        //        listOfAttendanceRecord.Add(attendanceRecord);
-        //    }
+                PerDayAttendanceRecordDTO attendanceRecord = new PerDayAttendanceRecordDTO()
+                {
+                    Date = perDayAccessEvents.Date,
+                    TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
+                    TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
+                    WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
+                    OverTime = GetOverTime(workingHours),
+                    LateBy = GetLateByTime(workingHours)
+                };
+                listOfAttendanceRecord
+                    .PerDayAttendanceRecordDTO
+                    .Add(attendanceRecord);
+            }
 
-        //    return await Task.Run(() =>
-        //    {
-        //        return listOfAttendanceRecord
-        //            .OrderByDescending(x => x.Date)
-        //            .ToList();
-        //    });
-        //}
+            return await Task.Run(() =>
+            {
+                listOfAttendanceRecord.PerDayAttendanceRecordDTO = listOfAttendanceRecord.PerDayAttendanceRecordDTO
+                    .OrderByDescending(x=>x.Date)
+                    .ToList();
+                return listOfAttendanceRecord;
+            });
+        }
 
         private Time GetOverTime(TimeSpan workingHours)
         {

@@ -45,8 +45,8 @@ namespace Application.Web.Controllers
                 employeeViewModel.fromDate = DateTime.Parse(fromDate);
                 employeeViewModel.toDate= DateTime.Parse(toDate);
 
-                //employeeViewModel.employeeAttendaceRecords = 
-                //    await attendanceService.GetAccessEventsForDateRange(employeeId, employeeViewModel.fromDate, employeeViewModel.toDate);
+                employeeViewModel.employeeAttendaceRecords = 
+                    await attendanceService.GetAccessEventsForDateRange(employeeId, employeeViewModel.fromDate, employeeViewModel.toDate);
 
                 ViewData["resultMessage"] = String.Format(
                     "Attendance from {0} to {1}. Total days:{2}",
@@ -129,8 +129,8 @@ namespace Application.Web.Controllers
                 reporteeViewModel.Name = Request.Form["selectMenu"].ToString();
                 if(!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
                 {
-                    //listOfAttendanceRecord.PerDayAttendanceRecordDTO = await attendanceService.GetAccessEventsForDateRange(reporteeId, 
-                    //    reporteeViewModel.fromDate, reporteeViewModel.toDate);
+                    listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId, 
+                        reporteeViewModel.fromDate, reporteeViewModel.toDate);
                 }
                 else
                 {
