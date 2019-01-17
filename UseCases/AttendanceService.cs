@@ -59,7 +59,7 @@ namespace UseCases
             var accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
 
-            AttendanceRecordsDTO listOfAttendanceRecord = new AttendanceRecordsDTO();
+            List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
             foreach (var perDayAccessEvents in datewiseAccessEvents)
             {
                 var timeIn = perDayAccessEvents.GetTimeIn();
@@ -75,17 +75,19 @@ namespace UseCases
                     OverTime = GetOverTime(workingHours),
                     LateBy = GetLateByTime(workingHours)
                 };
-                listOfAttendanceRecord
-                    .ListOfAttendanceRecordDTO
-                    .Add(attendanceRecord);
+                listOfAttendanceRecordDTO.Add(attendanceRecord);
             }
 
             return await Task.Run(() =>
             {
-                listOfAttendanceRecord.ListOfAttendanceRecordDTO = listOfAttendanceRecord.ListOfAttendanceRecordDTO
-                    .OrderByDescending(x => x.Date)
-                    .ToList();
-                return listOfAttendanceRecord;
+                return new AttendanceRecordsDTO()
+                {
+                    ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO
+                        .OrderByDescending(x => x.Date)
+                        .ToList(),
+                    TotalWorkingHours = CalculateTotalWorkingHours(listOfAttendanceRecordDTO),
+                    TotalDeficitHours = CalculateTotalDeficitHours(listOfAttendanceRecordDTO)
+                };
             });
         }
 
