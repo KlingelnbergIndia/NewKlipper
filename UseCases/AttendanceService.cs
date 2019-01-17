@@ -126,6 +126,11 @@ namespace UseCases
 
         private Time CalculateTotalDeficitHours(List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO)
         {
+            if (listOfAttendanceRecordDTO.Count == 0)
+            {
+                return new Time(00, 00);
+            }
+
             int totalRequiredHours = listOfAttendanceRecordDTO.Count * 9;
             int totalWorkedHours = CalculateTotalWorkingHours(listOfAttendanceRecordDTO).Hour;
             int totalDefiateHours = totalRequiredHours - totalWorkedHours;
@@ -135,6 +140,11 @@ namespace UseCases
 
         private Time CalculateTotalWorkingHours(List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO)
         {
+            if (listOfAttendanceRecordDTO.Count == 0)
+            {
+                return new Time(00, 00);
+            }
+
             var sumOfTotalWorkingHours = listOfAttendanceRecordDTO
                 .Select(x => new TimeSpan(x.WorkingHours.Hour, x.WorkingHours.Minute, 00))
                 .Aggregate((t1, t2) => t1 + t2);
