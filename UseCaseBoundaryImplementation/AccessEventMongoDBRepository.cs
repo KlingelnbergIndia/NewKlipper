@@ -56,7 +56,6 @@ namespace UseCaseBoundaryImplementation
             var accessEvents = _context.AccessEvents.AsQueryable()
                 .Where(x => x.EmployeeID == employeeId && x.EventTime <= toDateWithMaxTimeOfTheDay && x.EventTime >= fromDate)
                 .ToList();
-            var s = JsonConvert.SerializeObject(accessEvents);
 
             var listOfDomainModelAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
             return new AccessEvents(listOfDomainModelAccessEvent);
