@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace DomainModel
 {
@@ -7,6 +8,12 @@ namespace DomainModel
         Ädmin,
         TeamLeader,
         Employee
+    }
+
+    public enum ValidRole
+    {
+        Ädmin,
+        TeamLeader
     }
 
     public class Employee
@@ -76,6 +83,12 @@ namespace DomainModel
             userName = userName.ToLower();
             _userName = _userName.ToLower();
             return _userName.Equals(userName) && _password.Equals(password);
+        }
+
+        public static bool CanContainReportees(List<EmployeeRoles> roles)
+        {
+            return roles.Any(x => x.ToString() == ValidRole.TeamLeader.ToString() ||
+                           x.ToString() == ValidRole.TeamLeader.ToString());
         }
     }
 }

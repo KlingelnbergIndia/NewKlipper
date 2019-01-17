@@ -18,7 +18,7 @@ using Application.Web.PageAccessAuthentication;
 namespace Application.Web.Controllers
 {
     [AuthenticateSession]
-    public class HomeController : Controller
+    public class HomeController : Controller// : ApplicationController
     {
         private IAccessEventsRepository _accessEventRepository;
         private IEmployeeRepository _employeeRepository;
@@ -27,6 +27,7 @@ namespace Application.Web.Controllers
         {
             _accessEventRepository = accessEventRepository;
             _employeeRepository = employeeRepository;
+            LoginViewModel loginViewModel = new LoginViewModel();
         }
 
         public async Task<IActionResult> Index(string searchFilter)
