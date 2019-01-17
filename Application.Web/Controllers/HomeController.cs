@@ -52,7 +52,7 @@ namespace Application.Web.Controllers
                     "Attendance from {0} to {1}. Total days:{2}",
                     employeeViewModel.fromDate.ToShortDateString(),
                     employeeViewModel.toDate.ToShortDateString(),
-                    employeeViewModel.employeeAttendaceRecords.PerDayAttendanceRecordDTO.Count());
+                    employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO.Count());
             }
             else
             {
@@ -62,7 +62,7 @@ namespace Application.Web.Controllers
 
             employeeViewModel
                 .employeeAttendaceRecords
-                .PerDayAttendanceRecordDTO = ConvertRecordsTimeToIST(employeeViewModel.employeeAttendaceRecords.PerDayAttendanceRecordDTO);
+                .ListOfAttendanceRecordDTO = ConvertRecordsTimeToIST(employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO);
             return View(employeeViewModel);
         }
 
@@ -139,7 +139,7 @@ namespace Application.Web.Controllers
                 
                 reporteeViewModel
                     .reporteesAttendaceRecords
-                    .PerDayAttendanceRecordDTO = ConvertRecordsTimeToIST(listOfAttendanceRecord.PerDayAttendanceRecordDTO);
+                    .ListOfAttendanceRecordDTO = ConvertRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
             }
             
             return View("Reportees", reporteeViewModel);

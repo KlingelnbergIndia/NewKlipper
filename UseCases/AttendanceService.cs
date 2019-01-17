@@ -23,7 +23,7 @@ namespace UseCases
             AttendanceRecordsDTO attendanceRecords = new AttendanceRecordsDTO();
 
             var workRecordByDate = accessEvents.WorkRecord(noOfDays);
-            attendanceRecords.PerDayAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
+            attendanceRecords.ListOfAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
             foreach (var perDayWorkRecord in workRecordByDate)
             {
                 var timeIn = perDayWorkRecord.GetTimeIn();
@@ -40,9 +40,10 @@ namespace UseCases
                     LateBy = GetLateByTime(workingHours)
                 };
                 attendanceRecords
-                    .PerDayAttendanceRecordDTO
+                    .ListOfAttendanceRecordDTO
                     .Add(attendanceRecord);
             }
+
             return await Task.Run(() =>
             {
                 return attendanceRecords;
@@ -71,13 +72,13 @@ namespace UseCases
                     LateBy = GetLateByTime(workingHours)
                 };
                 listOfAttendanceRecord
-                    .PerDayAttendanceRecordDTO
+                    .ListOfAttendanceRecordDTO
                     .Add(attendanceRecord);
             }
 
             return await Task.Run(() =>
             {
-                listOfAttendanceRecord.PerDayAttendanceRecordDTO = listOfAttendanceRecord.PerDayAttendanceRecordDTO
+                listOfAttendanceRecord.ListOfAttendanceRecordDTO = listOfAttendanceRecord.ListOfAttendanceRecordDTO
                     .OrderByDescending(x=>x.Date)
                     .ToList();
                 return listOfAttendanceRecord;

@@ -22,7 +22,7 @@
 
         </div>
     </form>
-    @if(Model.employeeAttendaceRecords.PerDayAttendanceRecordDTO.Count == 0)
+    @if(Model.employeeAttendaceRecords.ListOfAttendanceRecordDTO.Count == 0)
     {
         <p>Attendace Records for specified period are not available</p>
     }
@@ -41,7 +41,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.employeeAttendaceRecords.PerDayAttendanceRecordDTO)
+            @foreach (var item in Model.employeeAttendaceRecords.ListOfAttendanceRecordDTO)
             {
 
                 string lateByClass = "alert alert-danger";
