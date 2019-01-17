@@ -62,7 +62,7 @@ namespace Klipper.Tests
 
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
-            Assert.That(listOfAttendanceRecordForSpecifiedDays.Count, Is.EqualTo(7));
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO.Count, Is.EqualTo(7));
         }
 
         [Test]
@@ -77,9 +77,9 @@ namespace Klipper.Tests
 
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
-            Assert.That(listOfAttendanceRecordForSpecifiedDays[4].LateBy.Hour, Is.EqualTo(0));
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[4].LateBy.Hour, Is.EqualTo(0));
 
-            Assert.That(listOfAttendanceRecordForSpecifiedDays[4].LateBy.Minute, Is.EqualTo(22));
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[4].LateBy.Minute, Is.EqualTo(22));
         }
 
 
@@ -95,9 +95,9 @@ namespace Klipper.Tests
 
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
-            Assert.That(listOfAttendanceRecordForSpecifiedDays[1].OverTime.Hour, Is.EqualTo(2));
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[1].OverTime.Hour, Is.EqualTo(2));
 
-            Assert.That(listOfAttendanceRecordForSpecifiedDays[1].OverTime.Minute, Is.EqualTo(1));
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[1].OverTime.Minute, Is.EqualTo(1));
         }
 
         [Test]
@@ -112,9 +112,9 @@ namespace Klipper.Tests
 
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
-            Assert.That(listOfAttendanceRecordForSpecifiedDays[4].WorkingHours.Hour, Is.EqualTo(8));
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[4].WorkingHours.Hour, Is.EqualTo(8));
 
-            Assert.That(listOfAttendanceRecordForSpecifiedDays[4].WorkingHours.Minute, Is.EqualTo(37));
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[4].WorkingHours.Minute, Is.EqualTo(37));
         }
 
 

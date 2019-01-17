@@ -43,7 +43,7 @@
 
         @if (Model.Name != string.Empty && Model.Name != null)
         {
-            @if (Model.reporteesAttendaceRecords.PerDayAttendanceRecordDTO.Count == 0)
+            @if (Model.reporteesAttendaceRecords.ListOfAttendanceRecordDTO.Count == 0)
             {
         <p class="text-warning">Attendance Records of @Model.Name.Substring(0, Model.Name.LastIndexOf('-')) 
         for specified period are not available</p>
@@ -65,7 +65,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.reporteesAttendaceRecords.PerDayAttendanceRecordDTO)
+                        @foreach (var item in Model.reporteesAttendaceRecords.ListOfAttendanceRecordDTO)
                         {
                             string lateByClass = "alert alert-danger";
                             string overTimeClass = "alert alert-success";
