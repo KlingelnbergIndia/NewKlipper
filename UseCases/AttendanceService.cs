@@ -21,9 +21,9 @@ namespace UseCases
         {
             AccessEvents accessEvents = _accessEventsRepository.GetAccessEvents(employeeId);
             AttendanceRecordsDTO attendanceRecords = new AttendanceRecordsDTO();
+            List<PerDayAttendanceRecordDTO>  listOfAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
 
             var workRecordByDate = accessEvents.WorkRecord(noOfDays);
-            List<PerDayAttendanceRecordDTO>  listOfAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
             foreach (var perDayWorkRecord in workRecordByDate)
             {
                 var timeIn = perDayWorkRecord.GetTimeIn();
@@ -39,9 +39,7 @@ namespace UseCases
                     OverTime = GetOverTime(workingHours),
                     LateBy = GetLateByTime(workingHours)
                 };
-                attendanceRecords
-                    .ListOfAttendanceRecordDTO
-                    .Add(attendanceRecord);
+                listOfAttendanceRecordDTO.Add(attendanceRecord);
             }
 
             return await Task.Run(() =>
