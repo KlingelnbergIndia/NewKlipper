@@ -102,7 +102,6 @@ namespace UseCases
                 return new Time(0, 0);
             }
         }
-
         private Time GetExtraHours(TimeSpan workingHours)
         {
             TimeSpan TotalWorkingHours = TimeSpan.Parse("9:00:00");
