@@ -14,6 +14,7 @@ using Klipper.Web.UI;
 using System.Dynamic;
 using System.Text.RegularExpressions;
 using Application.Web.PageAccessAuthentication;
+using UseCaseBoundary.DTO;
 
 namespace Application.Web.Controllers
 {
@@ -44,14 +45,14 @@ namespace Application.Web.Controllers
                 employeeViewModel.fromDate = DateTime.Parse(fromDate);
                 employeeViewModel.toDate= DateTime.Parse(toDate);
 
-                employeeViewModel.employeeAttendaceRecords = 
-                    await attendanceService.GetAccessEventsForDateRange(employeeId, employeeViewModel.fromDate, employeeViewModel.toDate);
+                //employeeViewModel.employeeAttendaceRecords = 
+                //    await attendanceService.GetAccessEventsForDateRange(employeeId, employeeViewModel.fromDate, employeeViewModel.toDate);
 
                 ViewData["resultMessage"] = String.Format(
                     "Attendance from {0} to {1}. Total days:{2}",
                     employeeViewModel.fromDate.ToShortDateString(),
                     employeeViewModel.toDate.ToShortDateString(),
-                    employeeViewModel.employeeAttendaceRecords.Count());
+                    employeeViewModel.employeeAttendaceRecords.PerDayAttendanceRecordDTO.Count());
             }
             else
             {
@@ -59,7 +60,9 @@ namespace Application.Web.Controllers
                     await attendanceService.GetAttendanceRecord(employeeId, 7);
             }
 
-            employeeViewModel.employeeAttendaceRecords = ConvertRecordsTimeToIST(employeeViewModel.employeeAttendaceRecords);
+            employeeViewModel
+                .employeeAttendaceRecords
+                .PerDayAttendanceRecordDTO = ConvertRecordsTimeToIST(employeeViewModel.employeeAttendaceRecords.PerDayAttendanceRecordDTO);
             return View(employeeViewModel);
         }
 
@@ -73,7 +76,7 @@ namespace Application.Web.Controllers
 
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
-            List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
+            List<AttendanceRecordsDTO> listOfAttendanceRecord = new List<AttendanceRecordsDTO>();
 
             if (reportees.Count != 0)
             {
@@ -120,27 +123,29 @@ namespace Application.Web.Controllers
 
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
 
-            List<AttendanceRecordDTO> listOfAttendanceRecord = new List<AttendanceRecordDTO>();
-            if(reporteeId!=0)
+            AttendanceRecordsDTO listOfAttendanceRecord = new AttendanceRecordsDTO();
+            if (reporteeId!=0)
             {
                 reporteeViewModel.Name = Request.Form["selectMenu"].ToString();
                 if(!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
                 {
-                    listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId, 
-                        reporteeViewModel.fromDate, reporteeViewModel.toDate);
+                    //listOfAttendanceRecord.PerDayAttendanceRecordDTO = await attendanceService.GetAccessEventsForDateRange(reporteeId, 
+                    //    reporteeViewModel.fromDate, reporteeViewModel.toDate);
                 }
                 else
                 {
                     listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(reporteeId, 7);
                 }
                 
-                reporteeViewModel.reporteesAttendaceRecords = ConvertRecordsTimeToIST(listOfAttendanceRecord);
+                reporteeViewModel
+                    .reporteesAttendaceRecords
+                    .PerDayAttendanceRecordDTO = ConvertRecordsTimeToIST(listOfAttendanceRecord.PerDayAttendanceRecordDTO);
             }
             
             return View("Reportees", reporteeViewModel);
         }
         
-        private List<AttendanceRecordDTO> ConvertRecordsTimeToIST(List<AttendanceRecordDTO> listOfAttendanceRecord)
+        private List<PerDayAttendanceRecordDTO> ConvertRecordsTimeToIST(List<PerDayAttendanceRecordDTO> listOfAttendanceRecord)
         {
             foreach (var attendanceRecord in listOfAttendanceRecord)
             {
