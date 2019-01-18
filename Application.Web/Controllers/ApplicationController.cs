@@ -27,8 +27,8 @@ namespace Application.Web.Controllers
 
         public ApplicationController(LayoutViewModel layoutViewModel)
         {
-            this._layoutViewModel = layoutViewModel;
-            this.ViewData["LayoutViewModel"] = this._layoutViewModel;
+            //this._layoutViewModel = layoutViewModel;
+            //this.ViewData["LayoutViewModel"] = this._layoutViewModel;
         }
 
     }

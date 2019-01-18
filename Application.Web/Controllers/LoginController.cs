@@ -59,10 +59,10 @@ namespace Application.Web.Controllers
         {
             if (Employee.CanContainReportees(roles))
             {
-                ModelState.Clear();
-                layoutViewModel.VisibilityReporteesTab = Visibility.block.ToString();
+                //ModelState.Clear();
+                //layoutViewModel.VisibilityReporteesTab = Visibility.block.ToString();
                 //ViewData["VisibilityReporteesTab"] = $"Visibility.block.ToString()";
-                (ViewData.Values.First() as LayoutViewModel).VisibilityReporteesTab = "block";
+                //(ViewData.Values.First() as LayoutViewModel).VisibilityReporteesTab = "block";
             }
         }
 
