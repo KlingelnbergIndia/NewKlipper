@@ -1,10 +1,19 @@
 ﻿@using Microsoft.AspNetCore.Http
 @using Newtonsoft.Json;
-@model Application.Web.Models.LayoutViewModel
+@*@model Application.Web.Models.LayoutViewModel*@
 
 @{
-	var viewModel = (LayoutViewModel)ViewBag.LayoutViewModel;
+	var rolesJson = string.IsNullOrEmpty(Context.Session.GetString("EmployeeRoles")) ? "": Context.Session.GetString("EmployeeRoles");
+	string[] EmployeeRolesList = JsonConvert.DeserializeObject<string[]>(rolesJson);
+	string displayReportiesDropdownVisible = "none";
+	if (EmployeeRolesList != null && EmployeeRolesList.Contains("TeamLeader"))
+	{
+		displayReportiesDropdownVisible = "block";
+	}
 }
+@*@{
+	var viewModel = (LayoutViewModel)ViewBag.LayoutViewModel;
+}*@
 <!DOCTYPE html>
 <html>
 <head>
@@ -69,14 +78,12 @@
 						<span class="glyphicon glyphicon-duplicate"></span>&nbsp;Summary
 					</a>
 				</li>
-				@if (viewModel != null)
-				{
-					<li style="display:@viewModel.VisibilityReporteesTab">
+
+					<li style="display:@displayReportiesDropdownVisible">
 						<a href="/Home/Reportees">
 							<span class="glyphicon glyphicon-duplicate"></span>&nbsp;Reportees
 						</a>
 					</li>
-				}
 				<li>
 					<a asp-area="" asp-controller="Login" class="" asp-action="Logout">
 						<span class="glyphicon glyphicon-off"></span>&nbsp; Logout

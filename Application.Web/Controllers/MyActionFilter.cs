@@ -12,9 +12,9 @@ namespace Application.Web.Controllers
 
             if (myController != null)
             {
-               myController.layoutViewModel = new LayoutViewModel();
+               //myController.layoutViewModel = new LayoutViewModel();
 
-                myController.ViewBag.LayoutViewModel = myController.layoutViewModel;
+               // myController.ViewBag.LayoutViewModel = myController.layoutViewModel;
             }
         }
 
