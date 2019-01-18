@@ -1,6 +1,7 @@
 ﻿@model EmployeeViewModel
 @{
     ViewData["Title"] = "Home Page";
+    var TotalDeficitOrExtraHours = @Model.employeeAttendaceRecords.TotalDeficitOrExtraHours;
 }
 
 <style>
@@ -84,11 +85,39 @@
             <tbody>
                 <tr>
                     <td>Total Working Hours</td>
-                    <td>@Model.employeeAttendaceRecords.TotalWorkingHours.Hour </td>
+                    <td>
+                        @Model.employeeAttendaceRecords.TotalWorkingHours.Hour.ToString("D2") :
+                        @Model.employeeAttendaceRecords.TotalWorkingHours.Minute.ToString("D2")
+                    </td>
                 </tr>
                 <tr>
                     <td>Total Deficit Hours</td>
-                    <td>@Model.employeeAttendaceRecords.TotalDeficitHours.Hour </td>
+                    @if (@TotalDeficitOrExtraHours.Hour >= 0 || @TotalDeficitOrExtraHours.Minute >= 0)
+                    {
+                    <td>
+                        @Math.Abs(TotalDeficitOrExtraHours.Hour).ToString("D2") :
+                        @Math.Abs(TotalDeficitOrExtraHours.Minute).ToString("D2")
+                    </td>
+                    }
+                    else
+                    {
+                        <td>00:00</td>
+                    }
+
+                </tr>
+                <tr>
+                    <td>Extra Hours</td>
+                    @if (@TotalDeficitOrExtraHours.Hour < 0 || @TotalDeficitOrExtraHours.Minute < 0)
+                    {
+                    <td>
+                        @Math.Abs(TotalDeficitOrExtraHours.Hour).ToString("D2") :
+                        @Math.Abs(TotalDeficitOrExtraHours.Minute).ToString("D2")
+                    </td>
+                    }
+                    else
+                    {
+                        <td>00:00</td>
+                    }
                 </tr>
             </tbody>
         </table>
