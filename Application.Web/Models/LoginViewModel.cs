@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Web.Models
 {
-    public class LoginViewModel
+    public class LoginViewModel : LayoutViewModel
     {
         [Required(ErrorMessage = "User name field is required.")]
         [MinLength(5)]
