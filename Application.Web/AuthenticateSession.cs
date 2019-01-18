@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Web.Controllers;
-using Application.Web.Models;
 
 namespace Klipper.Web.UI
 {
@@ -17,7 +15,6 @@ namespace Klipper.Web.UI
             string user = filterContext.HttpContext.Session.GetString("EmployeeName");
             if (user == null)
                 filterContext.Result = new RedirectResult("/");
-
         }
     }
 }

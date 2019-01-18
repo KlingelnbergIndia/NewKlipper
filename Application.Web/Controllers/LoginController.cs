@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -9,27 +8,22 @@ using Application.Web.PageAccessAuthentication;
 using DomainModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using UseCaseBoundary;
 using UseCases;
-using Application.Web.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Application.Web.Controllers
 {
-    public class LoginController : Controller// : ApplicationController
+    public class LoginController : Controller
     {
         private IEmployeeRepository _employeeRepository;
         public LoginController(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
-
         public IActionResult Login()
         {
-            return View();            
+            return View();
         }
 
         public IActionResult Authenticate([FromForm] LoginViewModel login)
@@ -38,8 +32,6 @@ namespace Application.Web.Controllers
             var loggedInUserDetails = userLogin.LoginUser(
                 login.UserName, 
                 ToSha256(login.Password));
-
-            DisplayOfReporteeTab(loggedInUserDetails.Roles());
 
             if (loggedInUserDetails != null)
             {
@@ -53,17 +45,6 @@ namespace Application.Web.Controllers
             HttpContext.Session.Clear();
             TempData["errorMessage"] = "Invalid username or password";
             return RedirectToAction("Login");
-        }
-
-        private void DisplayOfReporteeTab(List<EmployeeRoles> roles)
-        {
-            if (Employee.CanContainReportees(roles))
-            {
-                ModelState.Clear();
-                layoutViewModel.VisibilityReporteesTab = Visibility.block.ToString();
-                //ViewData["VisibilityReporteesTab"] = $"Visibility.block.ToString()";
-                (ViewData.Values.First() as LayoutViewModel).VisibilityReporteesTab = "block";
-            }
         }
 
         private string setEmployeeRolesJson(List<EmployeeRoles> list)
