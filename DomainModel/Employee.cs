@@ -18,17 +18,17 @@ namespace DomainModel
 
     public enum Departments
     {
-        Default,
-        Software,
-        Design,
-        Service,
-        Admin,
-        Finance,
-        TechCentre,
-        AfterSales,
-        Projects,
-        Sales,
-        CompetenceCentre
+        Default = 1,
+        Software = 24,
+        Design = 25,
+        Service = 26,
+        Admin = 27,
+        Finance = 28,
+        TechCentre = 29,
+        AfterSales = 30,
+        Projects = 31,
+        Sales = 32,
+        CompetenceCentre = 33
     }
 
     public class Employee
@@ -44,7 +44,7 @@ namespace DomainModel
         private Departments _department;
 
 
-        public Employee(int id, string userName, string password, string firstName, string lastName,string title, List<EmployeeRoles> roles, List<int> reportees, Departments department)
+        public Employee(int id, string userName, string password, string firstName, string lastName, string title, List<EmployeeRoles> roles, List<int> reportees, Departments department)
         {
             _id = id;
             _userName = userName;
@@ -94,6 +94,11 @@ namespace DomainModel
         public List<int> Reportees()
         {
             return _reportees;
+        }
+
+        public Departments Department()
+        {
+            return _department;
         }
 
         public bool Authenticate(string userName, string password)

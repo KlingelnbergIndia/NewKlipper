@@ -12,14 +12,17 @@ namespace UseCases
     public class AttendanceService
     {
         private IAccessEventsRepository _accessEventsRepository;
-        public AttendanceService(IAccessEventsRepository accessEventsRepository)
+        private IEmployeeRepository _employeeRepository;
+        public AttendanceService(IAccessEventsRepository accessEventsRepository, IEmployeeRepository employeeRepository)
         {
             _accessEventsRepository = accessEventsRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public async Task<AttendanceRecordsDTO> GetAttendanceRecord(int employeeId, int noOfDays)
         {
             AccessEvents accessEvents = _accessEventsRepository.GetAccessEvents(employeeId);
+            Employee employeeData = _employeeRepository.GetEmployee(employeeId);
             List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
 
             var workRecordByDate = accessEvents.WorkRecord(noOfDays);
@@ -35,8 +38,8 @@ namespace UseCases
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
-                    OverTime = GetOverTime(workingHours),
-                    LateBy = GetLateByTime(workingHours)
+                    OverTime = GetOverTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department())),
+                    LateBy = GetLateByTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department()))
                 };
                 listOfAttendanceRecordDTO.Add(attendanceRecord);
             }
@@ -47,7 +50,7 @@ namespace UseCases
                 {
                     ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO,
                     TotalWorkingHours = CalculateTotalWorkingHours(listOfAttendanceRecordDTO),
-                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(listOfAttendanceRecordDTO),
+                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(listOfAttendanceRecordDTO,GetNoOfHoursToBeWorked(employeeData.Department())),
                 };
             });
         }
@@ -58,6 +61,7 @@ namespace UseCases
         {
             var accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
+            Employee employeeData = _employeeRepository.GetEmployee(employeeId);
 
             List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
             foreach (var perDayAccessEvents in datewiseAccessEvents)
@@ -72,8 +76,8 @@ namespace UseCases
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
-                    OverTime = GetOverTime(workingHours),
-                    LateBy = GetLateByTime(workingHours)
+                    OverTime = GetOverTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department())),
+                    LateBy = GetLateByTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department()))
                 };
                 listOfAttendanceRecordDTO.Add(attendanceRecord);
             }
@@ -86,15 +90,14 @@ namespace UseCases
                         .OrderByDescending(x => x.Date)
                         .ToList(),
                     TotalWorkingHours = CalculateTotalWorkingHours(listOfAttendanceRecordDTO),
-                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(listOfAttendanceRecordDTO),
+                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(listOfAttendanceRecordDTO, GetNoOfHoursToBeWorked(employeeData.Department())),
                 };
             });
         }
 
-
-        private Time GetOverTime(TimeSpan workingHours)
+        private Time GetOverTime(TimeSpan workingHours, double noOfHoursToBeWorked)
         {
-            var extraHour = GetExtraHours(workingHours);
+            var extraHour = GetExtraHours(workingHours, noOfHoursToBeWorked);
             if (extraHour.Hour > 0 || extraHour.Minute > 0)
             {
                 return extraHour;
@@ -104,9 +107,9 @@ namespace UseCases
                 return new Time(0, 0);
             }
         }
-        private Time GetLateByTime(TimeSpan workingHours)
+        private Time GetLateByTime(TimeSpan workingHours, double noOfHoursToBeWorked)
         {
-            var extraHour = GetExtraHours(workingHours);
+            var extraHour = GetExtraHours(workingHours, noOfHoursToBeWorked);
             if (extraHour.Hour < 0 || extraHour.Minute < 0)
             {
                 int latebyHours = Math.Abs(extraHour.Hour);
@@ -118,21 +121,21 @@ namespace UseCases
                 return new Time(0, 0);
             }
         }
-        private Time GetExtraHours(TimeSpan workingHours)
+        private Time GetExtraHours(TimeSpan workingHours, double noOfHoursToBeWorked)
         {
-            TimeSpan TotalWorkingHours = TimeSpan.Parse("9:00:00");
+            TimeSpan TotalWorkingHours = TimeSpan.FromHours(noOfHoursToBeWorked);
             var extraHour = workingHours - TotalWorkingHours;
             return new Time(extraHour.Hours, extraHour.Minutes);
         }
 
-        private Time CalculateDeficiateOrExtraTime(List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO)
+        private Time CalculateDeficiateOrExtraTime(List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO, double noOfHoursToBeWorked)
         {
             if (listOfAttendanceRecordDTO.Count == 0)
             {
                 return new Time(00, 00);
             }
 
-            double totalRequiredHoursToBeWorked = listOfAttendanceRecordDTO.Count * 9;
+            double totalRequiredHoursToBeWorked = listOfAttendanceRecordDTO.Count * noOfHoursToBeWorked;
             Time totalWorkedTime = CalculateTotalWorkingHours(listOfAttendanceRecordDTO);
             var totalWorkedSpan = new TimeSpan(totalWorkedTime.Hour, totalWorkedTime.Minute, 00);
 
@@ -162,5 +165,9 @@ namespace UseCases
                 (int)sumOfTotalWorkingHours.Minutes);
         }
 
+        private double GetNoOfHoursToBeWorked(Departments department)
+        {
+            return department == Departments.Design ? 10.0 : 9.0;
+        }
     }
 }

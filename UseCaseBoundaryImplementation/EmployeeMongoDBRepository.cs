@@ -42,9 +42,10 @@ namespace UseCaseBoundaryImplementation
             string lastName = employeeFromEmployeeDBContext.LastName;
             string title = employeeFromEmployeeDBContext.Title;
             reportees = employeeFromEmployeeDBContext.Reportees;
+            Departments department = (Departments)employeeFromEmployeeDBContext.DepartmentId;
 
             List<EmployeeRoles> _roles = ConvertStringRolesToEnumRoles(employeeFromEmployeeDBContext.Roles);
-            Employee domainEmployee = new Employee(_id, _userName, _password, firstName, lastName, title, _roles, reportees);
+            Employee domainEmployee = new Employee(_id, _userName, _password, firstName, lastName, title, _roles, reportees, department);
 
             return domainEmployee;
         }
@@ -72,9 +73,10 @@ namespace UseCaseBoundaryImplementation
             string lastName = employeeFromEmployeeDBContext.LastName;
             string title = employeeFromEmployeeDBContext.Title;
             reportees = employeeFromEmployeeDBContext.Reportees;
+            Departments department = (Departments)employeeFromEmployeeDBContext.DepartmentId;
 
             List<EmployeeRoles> _roles = ConvertStringRolesToEnumRoles(employeeFromEmployeeDBContext.Roles);
-            Employee domainEmployee = new Employee(_id, _userName, _password, firstName, lastName, title, _roles,reportees);
+            Employee domainEmployee = new Employee(_id, _userName, _password, firstName, lastName, title, _roles,reportees, department);
 
             return domainEmployee;
 

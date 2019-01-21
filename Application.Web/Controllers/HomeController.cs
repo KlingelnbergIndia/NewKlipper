@@ -34,7 +34,7 @@ namespace Application.Web.Controllers
         public async Task<IActionResult> Index(string searchFilter)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository);
 
             EmployeeViewModel employeeViewModel = new EmployeeViewModel();
 
@@ -76,7 +76,7 @@ namespace Application.Web.Controllers
             var reportees =  reporteeService.GetReporteesData(employeeId);
 
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository);
             List<AttendanceRecordsDTO> listOfAttendanceRecord = new List<AttendanceRecordsDTO>();
 
             if (reportees.Count != 0)
@@ -122,7 +122,7 @@ namespace Application.Web.Controllers
 
             int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
 
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository);
             AttendanceRecordsDTO listOfAttendanceRecord = new AttendanceRecordsDTO();
 
             if (reporteeId!=0)
