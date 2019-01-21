@@ -19,7 +19,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Application.Web.Controllers
 {
-    public class LoginController : Controller// : ApplicationController
+    public class LoginController : Controller
     {
         private IEmployeeRepository _employeeRepository;
         public LoginController(IEmployeeRepository employeeRepository)
@@ -39,7 +39,7 @@ namespace Application.Web.Controllers
                 login.UserName, 
                 ToSha256(login.Password));
 
-            DisplayOfReporteeTab(loggedInUserDetails.Roles());
+            DisplayOfReporteeTab(loggedInUserDetails?.Roles());
 
             if (loggedInUserDetails != null)
             {
@@ -57,13 +57,9 @@ namespace Application.Web.Controllers
 
         private void DisplayOfReporteeTab(List<EmployeeRoles> roles)
         {
-            if (Employee.CanContainReportees(roles))
-            {
-                //ModelState.Clear();
-                //layoutViewModel.VisibilityReporteesTab = Visibility.block.ToString();
-                //ViewData["VisibilityReporteesTab"] = $"Visibility.block.ToString()";
-                //(ViewData.Values.First() as LayoutViewModel).VisibilityReporteesTab = "block";
-            }
+            string VisibilityOfReporteesTab;
+            VisibilityOfReporteesTab = Employee.CanContainReportees(roles) ? "block" : "none";
+            HttpContext.Session.SetString("VisibilityOfReporteesTab", VisibilityOfReporteesTab);
         }
 
         private string setEmployeeRolesJson(List<EmployeeRoles> list)

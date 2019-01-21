@@ -19,7 +19,7 @@ using UseCaseBoundary.DTO;
 namespace Application.Web.Controllers
 {
     [AuthenticateSession]
-    public class HomeController : Controller// : ApplicationController
+    public class HomeController : Controller
     {
         private IAccessEventsRepository _accessEventRepository;
         private IEmployeeRepository _employeeRepository;
@@ -64,6 +64,9 @@ namespace Application.Web.Controllers
             employeeViewModel
                 .employeeAttendaceRecords
                 .ListOfAttendanceRecordDTO = ConvertRecordsTimeToIST(employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO);
+
+            ViewData["VisibilityReporteesTab"] = HttpContext.Session.GetString("VisibilityOfReporteesTab");
+
             return View(employeeViewModel);
         }
 
