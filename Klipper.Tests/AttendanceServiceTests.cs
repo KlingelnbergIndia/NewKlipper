@@ -66,7 +66,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public async Task GivenSetOfAccessEventsCalculatesAccurateLateByTimeForSpecificDay()
+        public async Task GivenSetOfAccessEventsCalculatesAccurateDeficitTimeForSpecificDay()
         {
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer);
@@ -154,6 +154,23 @@ namespace Klipper.Tests
             Assert.That(listOfAttendanceRecordForSpecifiedDays.TotalDeficitOrExtraHours.Minute, Is.EqualTo(2));
 
         }
+
+        //[Test]
+        //public async Task GivenSevenDaysAttendanceRecordCalculatesAccurateTotalOverTime()
+        //{
+        //    AttendanceService attendanceService =
+        //        new AttendanceService(accessEventsContainer);
+
+        //    var dummyAccessevents = new AccessEventsBuilder().Build();
+
+        //    accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
+
+        //    var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 15);
+
+        //    Assert.That(listOfAttendanceRecordForSpecifiedDays.TotalDeficitOrExtraHours.Hour, Is.EqualTo(17));
+
+        //    Assert.That(listOfAttendanceRecordForSpecifiedDays.TotalDeficitOrExtraHours.Minute, Is.EqualTo(2));
+        //}
 
 
     }
