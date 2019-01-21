@@ -66,7 +66,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public async Task GivenSetOfAccessEventsCalculatesAccurateLateByTime()
+        public async Task GivenSetOfAccessEventsCalculatesAccurateDeficitTimeForSpecificDay()
         {
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer);
@@ -84,7 +84,7 @@ namespace Klipper.Tests
 
 
         [Test]
-        public async Task GivenSetOfAccessEventsCalculatesAccurateOvertime()
+        public async Task GivenSetOfAccessEventsCalculatesAccurateOvertimeForSpecificDay()
         {
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer);
@@ -101,7 +101,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public async Task GivenSetOfAccessEventsCalcualtesAccurateWorkingHours()
+        public async Task GivenSetOfAccessEventsCalcualtesAccurateWorkingHoursForSpecificDay()
         {
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer);
@@ -116,6 +116,61 @@ namespace Klipper.Tests
 
             Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[4].WorkingHours.Minute, Is.EqualTo(39));
         }
+
+        [Test]
+        public async Task GivenSevenDaysAttendanceRecordCalculatesAccurateTotalWorkingTime()
+        {
+
+            AttendanceService attendanceService =
+                new AttendanceService(accessEventsContainer);
+
+            var dummyAccessevents = new AccessEventsBuilder().Build();
+
+            accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
+
+            var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
+
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.TotalWorkingHours.Hour, Is.EqualTo(45));
+
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.TotalWorkingHours.Minute, Is.EqualTo(58));
+
+        }
+
+        [Test]
+        public async Task GivenSevenDaysAttendanceRecordCalculatesAccurateTotalDeficitTime()
+        {
+
+            AttendanceService attendanceService =
+                new AttendanceService(accessEventsContainer);
+
+            var dummyAccessevents = new AccessEventsBuilder().Build();
+
+            accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
+
+            var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
+
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.TotalDeficitOrExtraHours.Hour, Is.EqualTo(17));
+
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.TotalDeficitOrExtraHours.Minute, Is.EqualTo(2));
+
+        }
+
+        //[Test]
+        //public async Task GivenSevenDaysAttendanceRecordCalculatesAccurateTotalOverTime()
+        //{
+        //    AttendanceService attendanceService =
+        //        new AttendanceService(accessEventsContainer);
+
+        //    var dummyAccessevents = new AccessEventsBuilder().Build();
+
+        //    accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
+
+        //    var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 15);
+
+        //    Assert.That(listOfAttendanceRecordForSpecifiedDays.TotalDeficitOrExtraHours.Hour, Is.EqualTo(17));
+
+        //    Assert.That(listOfAttendanceRecordForSpecifiedDays.TotalDeficitOrExtraHours.Minute, Is.EqualTo(2));
+        //}
 
 
     }

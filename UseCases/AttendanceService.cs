@@ -47,7 +47,7 @@ namespace UseCases
                 {
                     ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO,
                     TotalWorkingHours = CalculateTotalWorkingHours(listOfAttendanceRecordDTO),
-                    TotalDeficitHours = CalculateTotalDeficitHours(listOfAttendanceRecordDTO)
+                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(listOfAttendanceRecordDTO),
                 };
             });
         }
@@ -86,10 +86,11 @@ namespace UseCases
                         .OrderByDescending(x => x.Date)
                         .ToList(),
                     TotalWorkingHours = CalculateTotalWorkingHours(listOfAttendanceRecordDTO),
-                    TotalDeficitHours = CalculateTotalDeficitHours(listOfAttendanceRecordDTO)
+                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(listOfAttendanceRecordDTO),
                 };
             });
         }
+
 
         private Time GetOverTime(TimeSpan workingHours)
         {
@@ -124,18 +125,25 @@ namespace UseCases
             return new Time(extraHour.Hours, extraHour.Minutes);
         }
 
-        private Time CalculateTotalDeficitHours(List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO)
+        private Time CalculateDeficiateOrExtraTime(List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO)
         {
             if (listOfAttendanceRecordDTO.Count == 0)
             {
                 return new Time(00, 00);
             }
 
-            int totalRequiredHours = listOfAttendanceRecordDTO.Count * 9;
-            int totalWorkedHours = CalculateTotalWorkingHours(listOfAttendanceRecordDTO).Hour;
-            int totalDefiateHours = totalRequiredHours - totalWorkedHours;
+            double totalRequiredHoursToBeWorked = listOfAttendanceRecordDTO.Count * 9;
+            Time totalWorkedTime = CalculateTotalWorkingHours(listOfAttendanceRecordDTO);
+            var totalWorkedSpan = new TimeSpan(totalWorkedTime.Hour, totalWorkedTime.Minute, 00);
 
-            return new Time(totalDefiateHours, 00);
+            double totalDefiateOrOverTimeHrs = totalRequiredHoursToBeWorked - totalWorkedSpan.TotalHours;
+
+            var extraTime = TimeSpan.FromHours(totalDefiateOrOverTimeHrs);
+
+            return new Time(
+                (int)extraTime.TotalHours,
+                (int)extraTime.Minutes);
+
         }
 
         private Time CalculateTotalWorkingHours(List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO)
@@ -148,9 +156,11 @@ namespace UseCases
             var sumOfTotalWorkingHours = listOfAttendanceRecordDTO
                 .Select(x => new TimeSpan(x.WorkingHours.Hour, x.WorkingHours.Minute, 00))
                 .Aggregate((t1, t2) => t1 + t2);
-            int totalWorkingHours = (int)Math.Round(sumOfTotalWorkingHours.TotalHours);
 
-            return new Time(totalWorkingHours, 00);
+            return new Time(
+                (int)sumOfTotalWorkingHours.TotalHours,
+                (int)sumOfTotalWorkingHours.Minutes);
         }
+
     }
 }
