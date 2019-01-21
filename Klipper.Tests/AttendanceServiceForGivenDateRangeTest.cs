@@ -16,17 +16,20 @@ namespace Klipper.Tests
     class AttendanceServiceForGivenDateRangeTest
     {
         private IAccessEventsRepository accessEventsData;
+        private IEmployeeRepository employeeData;
+        
 
         [SetUp]
         public void setup()
         {
             accessEventsData = Substitute.For<IAccessEventsRepository>();
+            employeeData = Substitute.For<IEmployeeRepository>();
         }
 
         [Test]
         public void GivenDateRangeAndEmployeeIdShouldDisplayCorrectNumberOfRecords()
         {
-            AttendanceService attendanceService = new AttendanceService(accessEventsData);
+            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData);
             var dummyAccessevents = new AccessEventsBuilder().Build();
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
                 .Returns(dummyAccessevents);
@@ -42,7 +45,7 @@ namespace Klipper.Tests
         [Test]
         public void RetrivedAccessEventsHasAccurateData()
         {
-            AttendanceService attendanceService = new AttendanceService(accessEventsData);
+            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData);
             var dummyAccessevents = new AccessEventsBuilder().Build();
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2019-10-01"), DateTime.Parse("2019-10-30"))
                 .Returns(dummyAccessevents);

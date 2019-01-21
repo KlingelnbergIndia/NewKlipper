@@ -43,18 +43,20 @@ namespace Klipper.Tests
     public class AttendanceServiceTest
     {
         private IAccessEventsRepository accessEventsContainer;
+        private IEmployeeRepository employeeData;
 
         [SetUp]
         public void Setup()
         {
             accessEventsContainer = Substitute.For<IAccessEventsRepository>();
+            employeeData = Substitute.For<IEmployeeRepository>();
         }
 
         [Test]
         public async Task GivenSevenDaysThenSevenRecordsAreDisplayed()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer);
+                new AttendanceService(accessEventsContainer, employeeData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
@@ -69,7 +71,7 @@ namespace Klipper.Tests
         public async Task GivenSetOfAccessEventsCalculatesAccurateDeficitTimeForSpecificDay()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer);
+                new AttendanceService(accessEventsContainer, employeeData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
@@ -87,7 +89,7 @@ namespace Klipper.Tests
         public async Task GivenSetOfAccessEventsCalculatesAccurateOvertimeForSpecificDay()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer);
+                new AttendanceService(accessEventsContainer, employeeData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
@@ -104,7 +106,7 @@ namespace Klipper.Tests
         public async Task GivenSetOfAccessEventsCalcualtesAccurateWorkingHoursForSpecificDay()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer);
+                new AttendanceService(accessEventsContainer, employeeData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
@@ -122,7 +124,7 @@ namespace Klipper.Tests
         {
 
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer);
+                new AttendanceService(accessEventsContainer, employeeData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
@@ -141,7 +143,7 @@ namespace Klipper.Tests
         {
 
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer);
+                new AttendanceService(accessEventsContainer, employeeData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
