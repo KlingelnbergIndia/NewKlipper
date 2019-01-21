@@ -34,7 +34,7 @@ namespace Application.Web.Controllers
         public async Task<IActionResult> Index(string searchFilter)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
 
             EmployeeViewModel employeeViewModel = new EmployeeViewModel();
 
@@ -61,9 +61,11 @@ namespace Application.Web.Controllers
                     await attendanceService.GetAttendanceRecord(employeeId, 7);
             }
 
+            employeeViewModel.EmployeeId = employeeId;
+
             employeeViewModel
                 .employeeAttendaceRecords
-                .ListOfAttendanceRecordDTO = ConvertRecordsTimeToIST(employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO);
+                .ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO);
             return View(employeeViewModel);
         }
 
@@ -76,7 +78,7 @@ namespace Application.Web.Controllers
             var reportees =  reporteeService.GetReporteesData(employeeId);
 
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
             List<AttendanceRecordsDTO> listOfAttendanceRecord = new List<AttendanceRecordsDTO>();
 
             if (reportees.Count != 0)
@@ -122,7 +124,7 @@ namespace Application.Web.Controllers
 
             int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
 
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
             AttendanceRecordsDTO listOfAttendanceRecord = new AttendanceRecordsDTO();
 
             if (reporteeId!=0)
@@ -137,28 +139,37 @@ namespace Application.Web.Controllers
                 {
                     listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(reporteeId, 7);
                 }
+                reporteeViewModel.EmployeeId = reporteeId;
 
                 reporteeViewModel
                     .reporteesAttendaceRecords = listOfAttendanceRecord;
 
                 reporteeViewModel
                     .reporteesAttendaceRecords
-                    .ListOfAttendanceRecordDTO = ConvertRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
-                
+                    .ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
             }
             
             return View("Reportees", reporteeViewModel);
         }
-        
-        private List<PerDayAttendanceRecordDTO> ConvertRecordsTimeToIST(List<PerDayAttendanceRecordDTO> listOfAttendanceRecord)
+
+        [HttpGet]
+        public async Task<IActionResult> AccessPointDetail(DateTime date, int employeeId)
+        {
+            AccessPointService accessPointService = new AccessPointService(_accessEventRepository);
+            List<AccessPointRecord> listofaccesspointdetail = await accessPointService.GetAccessPointDetails(employeeId, date);
+            listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST(date,listofaccesspointdetail);
+            return View(listofaccesspointdetail);
+        }
+
+        private List<PerDayAttendanceRecordDTO> ConvertAttendanceRecordsTimeToIST(List<PerDayAttendanceRecordDTO> listOfAttendanceRecord)
         {
             foreach (var attendanceRecord in listOfAttendanceRecord)
             {
-                if (attendanceRecord.TimeIn.Hour != 0 && attendanceRecord.TimeIn.Minute != 0)
+                if (attendanceRecord.TimeIn.Hour != 0 || attendanceRecord.TimeIn.Minute != 0)
                 {
                     attendanceRecord.TimeIn = ConvertTimeZone(attendanceRecord.Date, attendanceRecord.TimeIn);
                 }
-                if (attendanceRecord.TimeOut.Hour != 0 && attendanceRecord.TimeIn.Minute != 0)
+                if (attendanceRecord.TimeOut.Hour != 0 || attendanceRecord.TimeOut.Minute != 0)
                 {
                     attendanceRecord.TimeOut = ConvertTimeZone(attendanceRecord.Date, attendanceRecord.TimeOut);
                 }
@@ -166,8 +177,23 @@ namespace Application.Web.Controllers
 
             return listOfAttendanceRecord;
         }
+        private List<AccessPointRecord> ConvertAccessPointRecordsTimeToIST(DateTime date,List<AccessPointRecord> listOfAccessPointRecord)
+        {
+            foreach (var accessPointRecord in listOfAccessPointRecord)
+            {
+                if (accessPointRecord.TimeIn.Hour != 0 || accessPointRecord.TimeIn.Minute != 0)
+                {
+                    accessPointRecord.TimeIn = ConvertTimeZone(date, accessPointRecord.TimeIn);
+                }
+                if (accessPointRecord.TimeOut.Hour != 0 || accessPointRecord.TimeOut.Minute != 0)
+                {
+                    accessPointRecord.TimeOut = ConvertTimeZone(date, accessPointRecord.TimeOut);
+                }
+            }
 
-
+            return listOfAccessPointRecord;
+        }
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
