@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 using Application.Web.Models;
-using Application.Web.PageAccessAuthentication;
 using DomainModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using UseCaseBoundary;
 using UseCases;
-using Application.Web.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Application.Web.Controllers
 {

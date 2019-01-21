@@ -62,7 +62,6 @@ namespace Klipper.Tests
             Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].OverTime.Hour, Is.EqualTo(0));
             Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].OverTime.Minute, Is.EqualTo(0));
             
-            
             Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].TimeOut.Hour, Is.EqualTo(0));
             Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].TimeOut.Minute, Is.EqualTo(0));
         }

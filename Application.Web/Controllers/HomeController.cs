@@ -126,8 +126,8 @@ namespace Application.Web.Controllers
             int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
 
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository);
-
             AttendanceRecordsDTO listOfAttendanceRecord = new AttendanceRecordsDTO();
+
             if (reporteeId!=0)
             {
                 reporteeViewModel.Name = Request.Form["selectMenu"].ToString();
@@ -140,10 +140,14 @@ namespace Application.Web.Controllers
                 {
                     listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(reporteeId, 7);
                 }
-                
+
+                reporteeViewModel
+                    .reporteesAttendaceRecords = listOfAttendanceRecord;
+
                 reporteeViewModel
                     .reporteesAttendaceRecords
                     .ListOfAttendanceRecordDTO = ConvertRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
+                
             }
             
             return View("Reportees", reporteeViewModel);
