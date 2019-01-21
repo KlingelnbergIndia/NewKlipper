@@ -92,7 +92,7 @@
                 </tr>
                 <tr>
                     <td>Total Deficit Hours</td>
-                    @if (@TotalDeficitOrExtraHours.Hour >= 0 || @TotalDeficitOrExtraHours.Minute >= 0)
+                    @if (@TotalDeficitOrExtraHours.Hour >= 0 && @TotalDeficitOrExtraHours.Minute >= 0)
                     {
                     <td>
                         @Math.Abs(TotalDeficitOrExtraHours.Hour).ToString("D2") :
