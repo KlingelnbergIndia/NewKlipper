@@ -11,6 +11,7 @@ using System.IO;
 using System.Threading.Tasks;
 using UseCaseBoundary.Model;
 using System.Reflection;
+using Tests;
 
 namespace Klipper.Tests
 {
@@ -62,6 +63,14 @@ namespace Klipper.Tests
 
             accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
 
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
+
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
+
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
             Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO.Count, Is.EqualTo(7));
@@ -76,6 +85,14 @@ namespace Klipper.Tests
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
             accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
+
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
 
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
@@ -95,6 +112,14 @@ namespace Klipper.Tests
 
             accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
 
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
+
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
+
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
             Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[1].OverTime.Hour, Is.EqualTo(2));
@@ -111,6 +136,14 @@ namespace Klipper.Tests
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
             accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
+
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
 
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
@@ -130,6 +163,14 @@ namespace Klipper.Tests
 
             accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
 
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
+
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
+
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
             Assert.That(listOfAttendanceRecordForSpecifiedDays.TotalWorkingHours.Hour, Is.EqualTo(45));
@@ -148,6 +189,14 @@ namespace Klipper.Tests
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
             accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
+
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
 
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
