@@ -76,8 +76,8 @@ namespace Klipper.Tests
             Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].TimeIn.Hour, Is.EqualTo(2));
             Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].TimeIn.Minute, Is.EqualTo(58));
 
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].LateBy.Hour, Is.EqualTo(8));
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].LateBy.Minute, Is.EqualTo(59));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].LateBy.Hour, Is.EqualTo(9));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].LateBy.Minute, Is.EqualTo(0));
             
             Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].OverTime.Hour, Is.EqualTo(0));
             Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].OverTime.Minute, Is.EqualTo(0));
