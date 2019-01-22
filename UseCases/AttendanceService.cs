@@ -22,10 +22,31 @@ namespace UseCases
         public async Task<AttendanceRecordsDTO> GetAttendanceRecord(int employeeId, int noOfDays)
         {
             AccessEvents accessEvents = _accessEventsRepository.GetAccessEvents(employeeId);
-            Employee employeeData = _employeeRepository.GetEmployee(employeeId);
-            List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
-
             var workRecordByDate = accessEvents.WorkRecord(noOfDays);
+            AttendanceRecordsDTO listOfAttendanceRecord = await CreateAttendanceRecordAsync(workRecordByDate, employeeId);
+
+            return await Task.Run(() =>
+            {
+                return listOfAttendanceRecord;
+            });
+        }
+
+        public async Task<AttendanceRecordsDTO> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
+        {
+            AccessEvents accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
+            var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
+            AttendanceRecordsDTO listOfAttendanceRecord = await CreateAttendanceRecordAsync(datewiseAccessEvents, employeeId);
+
+            return await Task.Run(() =>
+            {
+                return listOfAttendanceRecord;
+            });
+        }
+        private async Task<AttendanceRecordsDTO> CreateAttendanceRecordAsync(IList<PerDayWorkRecord> workRecordByDate, int employeeId)
+        {
+            AttendanceRecordsDTO listOfAttendanceRecordDTO = new AttendanceRecordsDTO();
+            Employee employeeData = _employeeRepository.GetEmployee(employeeId);
+
             foreach (var perDayWorkRecord in workRecordByDate)
             {
                 var timeIn = perDayWorkRecord.GetTimeIn();
@@ -41,59 +62,21 @@ namespace UseCases
                     OverTime = GetOverTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department())),
                     LateBy = GetLateByTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department()))
                 };
-                listOfAttendanceRecordDTO.Add(attendanceRecord);
+                listOfAttendanceRecordDTO.ListOfAttendanceRecordDTO.Add(attendanceRecord);
             }
 
             return await Task.Run(() =>
             {
+                var perDayAttendanceRecords = listOfAttendanceRecordDTO.ListOfAttendanceRecordDTO;
                 return new AttendanceRecordsDTO()
                 {
-                    ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO,
-                    TotalWorkingHours = CalculateTotalWorkingHours(listOfAttendanceRecordDTO),
-                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(listOfAttendanceRecordDTO,GetNoOfHoursToBeWorked(employeeData.Department())),
+                    ListOfAttendanceRecordDTO = perDayAttendanceRecords,
+                    TotalWorkingHours = CalculateTotalWorkingHours(perDayAttendanceRecords),
+                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(perDayAttendanceRecords,GetNoOfHoursToBeWorked(employeeData.Department())),
                 };
             });
         }
 
-
-
-        public async Task<AttendanceRecordsDTO> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
-        {
-            var accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
-            var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
-            Employee employeeData = _employeeRepository.GetEmployee(employeeId);
-
-            List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
-            foreach (var perDayAccessEvents in datewiseAccessEvents)
-            {
-                var timeIn = perDayAccessEvents.GetTimeIn();
-                var timeOut = perDayAccessEvents.GetTimeOut();
-                var workingHours = perDayAccessEvents.CalculateWorkingHours();
-
-                PerDayAttendanceRecordDTO attendanceRecord = new PerDayAttendanceRecordDTO()
-                {
-                    Date = perDayAccessEvents.Date,
-                    TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
-                    TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
-                    WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
-                    OverTime = GetOverTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department())),
-                    LateBy = GetLateByTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department()))
-                };
-                listOfAttendanceRecordDTO.Add(attendanceRecord);
-            }
-
-            return await Task.Run(() =>
-            {
-                return new AttendanceRecordsDTO()
-                {
-                    ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO
-                        .OrderByDescending(x => x.Date)
-                        .ToList(),
-                    TotalWorkingHours = CalculateTotalWorkingHours(listOfAttendanceRecordDTO),
-                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(listOfAttendanceRecordDTO, GetNoOfHoursToBeWorked(employeeData.Department())),
-                };
-            });
-        }
 
         private Time GetOverTime(TimeSpan workingHours, double noOfHoursToBeWorked)
         {
