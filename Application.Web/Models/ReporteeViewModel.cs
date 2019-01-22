@@ -18,5 +18,6 @@ namespace Application.Web.Models
 
         public DateTime toDate;
 
+        public int EmployeeId;
     }
 }

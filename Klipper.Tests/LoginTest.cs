@@ -59,7 +59,7 @@ namespace Tests
                                       List<int> reportees=null)
         {
             return new Employee(id, userName, password, firstName,
-                                lastName, title, roles, reportees);
+                                lastName, title, roles, reportees,Departments.Default);
         }
 
     }

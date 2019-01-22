@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Tests;
 using UseCaseBoundary;
 using UseCaseBoundary.Model;
 using UseCases;
@@ -16,36 +17,55 @@ namespace Klipper.Tests
     class AttendanceServiceForGivenDateRangeTest
     {
         private IAccessEventsRepository accessEventsData;
+        private IEmployeeRepository employeeData;
+        
 
         [SetUp]
         public void setup()
         {
             accessEventsData = Substitute.For<IAccessEventsRepository>();
+            employeeData = Substitute.For<IEmployeeRepository>();
         }
 
         [Test]
         public void GivenDateRangeAndEmployeeIdShouldDisplayCorrectNumberOfRecords()
         {
-            AttendanceService attendanceService = new AttendanceService(accessEventsData);
+            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData);
             var dummyAccessevents = new AccessEventsBuilder().Build();
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
                 .Returns(dummyAccessevents);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
+
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
 
             var accessEvents = attendanceService
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
                 .GetAwaiter()
                 .GetResult();
 
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO.Count, Is.EqualTo(9));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO.Count, Is.EqualTo(10));
         }
 
         [Test]
         public void RetrivedAccessEventsHasAccurateData()
         {
-            AttendanceService attendanceService = new AttendanceService(accessEventsData);
+            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData);
             var dummyAccessevents = new AccessEventsBuilder().Build();
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2019-10-01"), DateTime.Parse("2019-10-30"))
                 .Returns(dummyAccessevents);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
+
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
 
             var accessEvents = attendanceService
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2019-10-01"), DateTime.Parse("2019-10-30"))
@@ -62,8 +82,8 @@ namespace Klipper.Tests
             Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].OverTime.Hour, Is.EqualTo(0));
             Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].OverTime.Minute, Is.EqualTo(0));
             
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].TimeOut.Hour, Is.EqualTo(0));
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].TimeOut.Minute, Is.EqualTo(0));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].TimeOut.Hour, Is.EqualTo(2));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].TimeOut.Minute, Is.EqualTo(59));
         }
 
     }

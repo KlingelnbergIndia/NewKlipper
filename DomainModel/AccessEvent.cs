@@ -22,6 +22,14 @@ namespace DomainModel
         {
             return AccessPointID == 16;
         }
+        public bool FromRecreationDoor()
+        {
+            return AccessPointID == 19;
+        }
+        public bool FromGymnasiumDoor()
+        {
+            return AccessPointID == 18;
+        }
 
         private string AccessPointName { get; set; }
 
