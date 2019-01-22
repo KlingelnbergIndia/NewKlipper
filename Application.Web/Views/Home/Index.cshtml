@@ -62,13 +62,13 @@
                     {
                         <td>@item.TimeOut.Hour.ToString("D2"):@item.TimeOut.Minute.ToString("D2")</td>
                     }
-                    @if (item.DeficitHour.Hour == 0 && item.DeficitHour.Minute == 0)
+                    @if (item.LateBy.Hour == 0 && item.LateBy.Minute == 0)
                     {
                         <td>-</td>
                     }
                     else
                     {
-                        <td class="@lateByClass">@item.DeficitHour.Hour.ToString("D2"):@item.DeficitHour.Minute.ToString("D2")</td>
+                        <td class="@lateByClass">@item.LateBy.Hour.ToString("D2"):@item.LateBy.Minute.ToString("D2")</td>
                     }
                     @if (item.OverTime.Hour == 0 && item.OverTime.Minute == 0)
                     {

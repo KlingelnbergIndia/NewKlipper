@@ -63,7 +63,12 @@ namespace UseCaseBoundaryImplementation
 
         public PerDayWorkRecord GetAccessEventsForADay(int employeeId, DateTime date)
         {
-            throw new NotImplementedException();
+            DateTime dateWithMaxTimeOfTheDay = date.Date + DateTime.MaxValue.TimeOfDay;
+            var accessEvents = _context.AccessEvents.AsQueryable()
+                .Where(x => x.EmployeeID == employeeId && x.EventTime <= dateWithMaxTimeOfTheDay && x.EventTime >= date)
+                .ToList();
+            var listOfAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
+            return new PerDayWorkRecord(date, listOfAccessEvent);
         }
     }
 }
