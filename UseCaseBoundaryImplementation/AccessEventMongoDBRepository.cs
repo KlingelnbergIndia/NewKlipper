@@ -60,5 +60,10 @@ namespace UseCaseBoundaryImplementation
             var listOfDomainModelAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
             return new AccessEvents(listOfDomainModelAccessEvent);
         }
+
+        public PerDayWorkRecord GetAccessEventsForADay(int employeeId, DateTime date)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
