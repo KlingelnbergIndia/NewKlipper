@@ -6,7 +6,7 @@ using UseCaseBoundary.Model;
 
 namespace Application.Web.Models
 {
-    public class ReporteeViewModel : LayoutViewModel
+    public class ReporteeViewModel
     {
         public List<string> reportees = new List<string>();
 
