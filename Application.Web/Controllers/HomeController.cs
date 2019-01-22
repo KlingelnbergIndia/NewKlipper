@@ -65,7 +65,7 @@ namespace Application.Web.Controllers
 
             employeeViewModel
                 .employeeAttendaceRecords
-                .ListOfAttendanceRecordDTO = ConvertRecordsTimeToIST(employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO);
+                .ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO);
 
             ViewData["VisibilityReporteesTab"] = HttpContext.Session.GetString("VisibilityOfReporteesTab");
 

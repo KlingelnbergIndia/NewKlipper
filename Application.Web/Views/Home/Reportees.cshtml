@@ -143,47 +143,6 @@
                 </table>
             }
 
-            <table class="table table-striped table-bordered" style=" background-color: #f1f1c1">
-                <tbody>
-                    <tr>
-                        <td>Total Working Hours</td>
-                        <td>
-                            @Model.reporteesAttendaceRecords.TotalWorkingHours.Hour.ToString("D2") :
-                            @Model.reporteesAttendaceRecords.TotalWorkingHours.Minute.ToString("D2")
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Total Deficit Hours</td>
-                        @if (@TotalDeficitOrExtraHours.Hour >= 0 || @TotalDeficitOrExtraHours.Minute >= 0)
-                        {
-                            <td>
-                                @Math.Abs(TotalDeficitOrExtraHours.Hour).ToString("D2") :
-                                @Math.Abs(TotalDeficitOrExtraHours.Minute).ToString("D2")
-                            </td>
-                        }
-                        else
-                        {
-                            <td>00:00</td>
-                        }
-
-                    </tr>
-                    <tr>
-                        <td>Extra Hours</td>
-                        @if (@TotalDeficitOrExtraHours.Hour < 0 || @TotalDeficitOrExtraHours.Minute < 0)
-                        {
-                            <td>
-                                @Math.Abs(TotalDeficitOrExtraHours.Hour).ToString("D2") :
-                                @Math.Abs(TotalDeficitOrExtraHours.Minute).ToString("D2")
-                            </td>
-                        }
-                        else
-                        {
-                            <td>00:00</td>
-                        }
-                    </tr>
-                </tbody>
-            </table>
-
 		}
 	</div>
 
