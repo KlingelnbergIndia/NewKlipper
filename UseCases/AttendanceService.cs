@@ -25,10 +25,43 @@ namespace UseCases
             var workRecordByDate = accessEvents.WorkRecord(noOfDays);
             AttendanceRecordsDTO listOfAttendanceRecord = await CreateAttendanceRecordAsync(workRecordByDate, employeeId);
 
+            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord);
+
             return await Task.Run(() =>
             {
                 return listOfAttendanceRecord;
             });
+        }
+
+        private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord)
+        {
+            listOfAttendanceRecord.ListOfAttendanceRecordDTO.Add(new PerDayAttendanceRecordDTO()
+            {
+                Date = DateTime.Now.AddDays(1),
+                LateBy = new Time(0, 0),
+                OverTime = new Time(0, 0),
+                TimeIn = new Time(0, 0),
+                TimeOut = new Time(0, 0),
+                WorkingHours = new Time(0, 0),
+            });
+
+            return listOfAttendanceRecord;
+
+        }
+
+
+        private IList<PerDayWorkRecord> IncludeHolidays(IList<PerDayWorkRecord> workRecordByDate)
+        {
+            var ls = workRecordByDate;
+            var tm = DateTime.Now.AddDays(1);
+            IList<AccessEvent> accessEvents = new List<AccessEvent>() { new AccessEvent(16, "", 66, tm) };
+            var d = new PerDayWorkRecord(DateTime.Now.AddDays(1), accessEvents)
+            {
+
+            };
+
+            ls.Add(d);
+            return ls;
         }
 
         public async Task<AttendanceRecordsDTO> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
@@ -72,7 +105,7 @@ namespace UseCases
                 {
                     ListOfAttendanceRecordDTO = perDayAttendanceRecords,
                     TotalWorkingHours = CalculateTotalWorkingHours(perDayAttendanceRecords),
-                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(perDayAttendanceRecords,GetNoOfHoursToBeWorked(employeeData.Department())),
+                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(perDayAttendanceRecords, GetNoOfHoursToBeWorked(employeeData.Department())),
                 };
             });
         }

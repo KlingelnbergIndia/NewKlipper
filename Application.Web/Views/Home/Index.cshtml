@@ -4,8 +4,7 @@
     var TotalDeficitOrExtraHours = @Model.employeeAttendaceRecords.TotalDeficitOrExtraHours;
     var EmployeeID = @Model.EmployeeId;
 }
-@*<script src="/js/moment.min.js"></script>
-    <script type="text/javascript" src="scriptName.js"></script>*@
+
 <style>
     th, td {
         text-align: center
@@ -13,21 +12,21 @@
 </style>
 <div class="row">
 	<form class="panel panel-info form-inline" method="post" action="?searchFilter=AccessEventsByDateRange">
-		<div class="panel-heading col-md-12">
-			<div class="col-md-6" style="margin-top: 0.5%">
+		<div class="panel-heading col-md-12 col-sm-12 col-xs-12">
+			<div class="col-md-8 col-sm-8 col-xs-8" style="margin-top: 0.5%">
 				<label for="from">From</label>
 				<input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
 				       value=@(Model.fromDate == DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd")) required>
 				<label for="to">to</label>
 				<input type="date" id="toDate" name="toDate" class="form-control input-sm"
 				       value="@(Model.toDate == DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" onkeydown="return false" required>
-				<button type="submit" class="btn btn-default btn-sm">Show</button>
+				<button type="submit" class="btn btn-info btn-sm">Show</button>
 			</div>
 			
-			<div class="col-md-6">
+			<div class="col-md-4 col-sm-4 col-xs-4">
 				<div align="right">
-					<label style="margin-left: 49%; font-weight: normal">Total Working Hours</label>
-					<span style="margin-left: 2%; font-weight: bold">
+					<label style="font-weight: normal">Total Working Hours</label>
+					<span style="font-weight: bold">
 						@Model.employeeAttendaceRecords.TotalWorkingHours.Hour.ToString("D2") :
 						@Model.employeeAttendaceRecords.TotalWorkingHours.Minute.ToString("D2")
 					</span>
@@ -35,16 +34,16 @@
 				<div align="right">
 					@if (@TotalDeficitOrExtraHours.Hour >= 0 && @TotalDeficitOrExtraHours.Minute >= 0)
 					{
-						<label style="margin-left: 1%; font-weight: normal">Total Deficit Time</label>
-						<span style="margin-left: 2%; font-weight: bold; color: #b84442">
+						<label style="font-weight: normal">Total Deficit Time</label>
+						<span style="font-weight: bold; color: #b84442">
 							@Math.Abs(TotalDeficitOrExtraHours.Hour).ToString("D2") :
 							@Math.Abs(TotalDeficitOrExtraHours.Minute).ToString("D2")
 						</span>
 					}
 					else
 					{
-						<label style="margin-left: 49%; font-weight: normal;">Total Over Time</label>
-						<span  style="margin-left: 2%; font-weight: bold;color: #697668">
+						<label style="font-weight: normal;">Total Over Time</label>
+						<span  style="font-weight: bold;color: #697668">
 							@Math.Abs(TotalDeficitOrExtraHours.Hour).ToString("D2") :
 							@Math.Abs(TotalDeficitOrExtraHours.Minute).ToString("D2")
 						</span>
@@ -82,38 +81,55 @@
 					string lateByClass = "alert alert-danger";
 					string overTimeClass = "alert alert-success";
 
-					<tr>
-						<td style="vertical-align: text-top;">@item.Date.ToString("dd MMMM yyyy")</td>
-						<td>@item.Date.ToString("dddd")</td>
-						<td>@item.TimeIn.Hour.ToString("D2") : @item.TimeIn.Minute.ToString("D2")</td>
-						@if (item.TimeOut.Hour == 0 && item.TimeOut.Minute == 0)
-						{
-							<td>-</td>
-						}
-						else
-						{
-							<td>@item.TimeOut.Hour.ToString("D2"):@item.TimeOut.Minute.ToString("D2")</td>
-						}
-						@if (item.LateBy.Hour == 0 && item.LateBy.Minute == 0)
-						{
-							<td>-</td>
-						}
-						else
-						{
-							<td class="@lateByClass">@item.LateBy.Hour.ToString("D2"):@item.LateBy.Minute.ToString("D2")</td>
-						}
-						@if (item.OverTime.Hour == 0 && item.OverTime.Minute == 0)
-						{
-							<td>-</td>
-						}
-						else
-						{
-							<td class="@overTimeClass">@item.OverTime.Hour.ToString("D2"):@item.OverTime.Minute.ToString("D2")</td>
-						}
-						<td>
-							<u class="open-Dialog" data-toggle="modal" onclick="getDailyData('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID)" style="cursor:pointer">@item.WorkingHours.Hour.ToString("D2"):@item.WorkingHours.Minute.ToString("D2")</u>
-						</td>
-					</tr>
+                <tr>
+                    <td style="vertical-align: text-top;">@item.Date.ToString("dd MMMM yyyy")</td>
+                    <td>@item.Date.ToString("dddd")</td>
+
+                    @if (item.TimeIn.Hour == 0 && item.TimeIn.Minute == 0)
+                    {
+                        <td>-</td>
+                    }
+                    else
+                    {
+                        <td>@item.TimeIn.Hour.ToString("D2") : @item.TimeIn.Minute.ToString("D2")</td>
+                    }
+
+                    @if (item.TimeOut.Hour == 0 && item.TimeOut.Minute == 0)
+                    {
+                        <td>-</td>
+                    }
+                    else
+                    {
+                        <td>@item.TimeOut.Hour.ToString("D2"):@item.TimeOut.Minute.ToString("D2")</td>
+                    }
+                    @if (item.LateBy.Hour == 0 && item.LateBy.Minute == 0)
+                    {
+                        <td>-</td>
+                    }
+                    else
+                    {
+                        <td class="@lateByClass">@item.LateBy.Hour.ToString("D2"):@item.LateBy.Minute.ToString("D2")</td>
+                    }
+                    @if (item.OverTime.Hour == 0 && item.OverTime.Minute == 0)
+                    {
+                        <td>-</td>
+                    }
+                    else
+                    {
+                        <td class="@overTimeClass">@item.OverTime.Hour.ToString("D2"):@item.OverTime.Minute.ToString("D2")</td>
+                    }
+                    @if (item.TimeIn.Hour == 0 && item.TimeIn.Minute == 0 && item.TimeOut.Hour == 0 && item.TimeOut.Minute == 0)
+                    {
+                        <td>-</td>
+                    }
+                    else
+                    {
+                        <td>
+                            <u class="open-Dialog" data-toggle="modal" onclick="getDailyData('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID)" style="cursor:pointer">@item.WorkingHours.Hour.ToString("D2"):@item.WorkingHours.Minute.ToString("D2")</u>
+                        </td>
+                    }
+                    
+                </tr>
 				}
 			</tbody>
 		</table>

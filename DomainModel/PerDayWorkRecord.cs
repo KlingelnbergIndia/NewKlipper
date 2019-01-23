@@ -42,6 +42,11 @@ namespace DomainModel
         public TimeSpan CalculateWorkingHours()
         {
             var accessEventsOfMainEntry = GetMainEntryPointAccessEvents();
+            if (accessEventsOfMainEntry.Count == 0)
+            {
+                return TimeSpan.Zero;
+            }
+
             var minTime = CalculateAbsoluteOutTimeAndInTime(accessEventsOfMainEntry.Select(x => x.EventTime.TimeOfDay).Min(), AbsoluteTime.TimeIn);
             var maxTime = CalculateAbsoluteOutTimeAndInTime(accessEventsOfMainEntry.Select(x => x.EventTime.TimeOfDay).Max(), AbsoluteTime.TimeOut);
 
