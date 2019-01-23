@@ -52,7 +52,7 @@ namespace UseCases
 
             List<AccessPointRecord> RecreationAccessPointRecord = GetAccessPointRecord(RecreationPointAccessEvents, "Recreation");
             List<AccessPointRecord> GymnasiumAccessPointRecord = GetAccessPointRecord(GymnasiumPointAccessEvents, "Gymnasium");
-            List<AccessPointRecord> MainEntryPointAccessPointRecord = GetAccessPointRecord(MainEntryPointAccessEvents, "MainEntry");
+            List<AccessPointRecord> MainEntryPointAccessPointRecord = GetAccessPointRecord(MainEntryPointAccessEvents, "Main Entry");
 
             List<AccessPointRecord> listOfAccessPointRecord = RecreationAccessPointRecord
                 .Concat(GymnasiumAccessPointRecord)
