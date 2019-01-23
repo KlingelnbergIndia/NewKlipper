@@ -40,13 +40,13 @@ namespace DomainModel
             var listOfAccessEvent = _accessEvents;
             for (int i = 0; i < listOfAccessEvent.Count; i += 2)
             {
-                var timeIn = listOfAccessEvent[i].EventTime.TimeOfDay;
+                var timeIn = CalculateAbsoluteOutTimeAndInTime(listOfAccessEvent[i].EventTime.TimeOfDay, AbsoluteTime.TimeIn);
                 timeIn = new TimeSpan(timeIn.Hours, timeIn.Minutes, 00);
 
                 var timeOut = TimeSpan.Zero;
                 if (i != listOfAccessEvent.Count - 1)
                 {
-                    timeOut = listOfAccessEvent[i + 1].EventTime.TimeOfDay;
+                    timeOut = CalculateAbsoluteOutTimeAndInTime(listOfAccessEvent[i + 1].EventTime.TimeOfDay, AbsoluteTime.TimeOut); ;
                     timeOut = new TimeSpan(timeOut.Hours, timeOut.Minutes, 00);
                 }
                 if ((listOfAccessEvent.Count % 2) == 0)
@@ -63,14 +63,28 @@ namespace DomainModel
             var listOfAccessEvent = _accessEvents;
             for (int i = 1; i < listOfAccessEvent.Count - 1; i += 2)
             {
-                var timeOut = listOfAccessEvent[i].EventTime.TimeOfDay;
+                var timeOut = CalculateAbsoluteOutTimeAndInTime(listOfAccessEvent[i].EventTime.TimeOfDay, AbsoluteTime.TimeOut);
                 timeOut = new TimeSpan(timeOut.Hours, timeOut.Minutes, 00);
 
-                var timeIn = listOfAccessEvent[i + 1].EventTime.TimeOfDay;
+                var timeIn = CalculateAbsoluteOutTimeAndInTime(listOfAccessEvent[i + 1].EventTime.TimeOfDay, AbsoluteTime.TimeIn);
                 timeIn = new TimeSpan(timeIn.Hours, timeIn.Minutes, 00);
                 totalTime += timeIn - timeOut;
             }
             return totalTime;
+        }
+        private enum AbsoluteTime
+        {
+            TimeIn,
+            TimeOut
+        }
+        private TimeSpan CalculateAbsoluteOutTimeAndInTime(TimeSpan timeSpan, AbsoluteTime time)
+        {
+            if (time == AbsoluteTime.TimeOut && timeSpan.Seconds > 0)
+            {
+                return new TimeSpan(timeSpan.Hours, timeSpan.Minutes + 1, 00);
+            }
+
+            return new TimeSpan(timeSpan.Hours, timeSpan.Minutes, 00);
         }
     }
 
