@@ -4,16 +4,15 @@
 }
 <link href="~/css/loginPage.css" rel="stylesheet" />
 
-<div class="sidenav">
+<div class="sidenav hidden-xs">
     <div class="login-main-text" style="margin-left: auto;margin-right: auto; display:block;">
         <img src="~/images/KLLogo.png" class="img-responsive" />
         <h5>Klingelnberg Attendance portal &copy;@DateTime.Now.Year</h5>
     </div>
 </div>
 <div class="main" style="margin-top:-100PX;">
-    <div class="col-md-6 col-sm-12">
+    <div class="col-md-6 col-sm-12 col-xs-12">
         <div class="login-form">
-
 
             <form method="post" asp-action="Authenticate">
                 <div asp-validation-summary="ModelOnly" class="text-danger">
