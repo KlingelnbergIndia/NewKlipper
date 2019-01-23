@@ -22,7 +22,7 @@ namespace Application.Web.Controllers
 
         public IActionResult Login()
         {
-            return View(new Application.Web.Models.LoginViewModel() { UserName="d sfsd",Password="dfsdf44444"});            
+            return View();            
         }
 
         public IActionResult Authenticate([FromForm] LoginViewModel login)
