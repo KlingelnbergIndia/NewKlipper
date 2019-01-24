@@ -35,11 +35,15 @@
                         <div class="form-group">
                             <label for="fromDate">From</label>
                             <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
+                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
                                    value="@(Model.fromDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd"))" required>
                         </div>
                         <div class="form-group">
                             <label for="toDate">to</label>
-                            <input type="date" id="toDate" name="toDate" class="form-control input-sm" onkeydown="return false"
+                            <input type="date" id="toDate" name="toDate" class="form-control input-sm"
+                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
                                    value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
                         </div>
                         <input type="submit" value="Get Attendance Record" class="btn btn-info btn-sm" />
@@ -215,7 +219,7 @@
                     success: function (response) {
                         $("#popupData").html(response);
                         $("#popupDate").html(dateToYMD(convertStringToDateObject));
-                        $('#modal').modal({ 'show': true,'backdrop':true});
+                        $('#modal').modal({ 'show': true, 'backdrop': true });
                     }
                 });
             }
