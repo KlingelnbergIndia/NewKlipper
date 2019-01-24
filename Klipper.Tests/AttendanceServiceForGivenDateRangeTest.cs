@@ -48,7 +48,7 @@ namespace Klipper.Tests
                 .GetAwaiter()
                 .GetResult();
 
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO.Count, Is.EqualTo(10));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO.Count, Is.EqualTo(33));
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace Klipper.Tests
         {
             AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData);
             var dummyAccessevents = new AccessEventsBuilder().Build();
-            accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2019-10-01"), DateTime.Parse("2019-10-30"))
+            accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
                 .Returns(dummyAccessevents);
 
             var dummyEmployee =
@@ -68,22 +68,22 @@ namespace Klipper.Tests
             employeeData.GetEmployee(48).Returns(dummyEmployee);
 
             var accessEvents = attendanceService
-                .GetAccessEventsForDateRange(48, DateTime.Parse("2019-10-01"), DateTime.Parse("2019-10-30"))
+                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
                 .GetAwaiter()
                 .GetResult();
 
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].Date, Is.EqualTo(DateTime.Parse("2018/10/12").Date));
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].TimeIn.Hour, Is.EqualTo(2));
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].TimeIn.Minute, Is.EqualTo(58));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO[21].Date, Is.EqualTo(DateTime.Parse("2018/10/09").Date));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO[21].TimeIn.Hour, Is.EqualTo(2));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO[21].TimeIn.Minute, Is.EqualTo(10));
 
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].LateBy.Hour, Is.EqualTo(9));
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].LateBy.Minute, Is.EqualTo(0));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO[21].LateBy.Hour, Is.EqualTo(0));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO[21].LateBy.Minute, Is.EqualTo(0));
             
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].OverTime.Hour, Is.EqualTo(0));
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].OverTime.Minute, Is.EqualTo(0));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO[21].OverTime.Hour, Is.EqualTo(2));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO[21].OverTime.Minute, Is.EqualTo(3));
             
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].TimeOut.Hour, Is.EqualTo(2));
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO[0].TimeOut.Minute, Is.EqualTo(59));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO[21].TimeOut.Hour, Is.EqualTo(13));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO[21].TimeOut.Minute, Is.EqualTo(13));
         }
 
     }

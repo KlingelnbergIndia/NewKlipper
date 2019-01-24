@@ -5,20 +5,17 @@
     var EmployeeID = @Model.EmployeeId;
 }
 
-<style>
-    th, td {
-        text-align: center
-    }
-</style>
 <div class="row">
     <form class="panel panel-info form-inline" method="post" action="?searchFilter=AccessEventsByDateRange">
         <div class="panel-heading col-md-12 col-sm-12 col-xs-12">
             <div class="col-md-8 col-sm-8 col-xs-8" style="margin-top: 0.5%">
                 <label for="from">From</label>
                 <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
+                       max="@DateTime.Today.ToString("yyyy-MM-dd")"
                        value=@(Model.fromDate == DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd")) required>
                 <label for="to">to</label>
                 <input type="date" id="toDate" name="toDate" class="form-control input-sm"
+                       max="@DateTime.Today.ToString("yyyy-MM-dd")"
                        value="@(Model.toDate == DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" onkeydown="return false" required>
                 <button type="submit" class="btn btn-info btn-sm">Show</button>
             </div>
@@ -80,14 +77,15 @@
 
                     string lateByClass = "alert alert-danger";
                     string overTimeClass = "alert alert-success";
-                    string nonWorkingDayBGColor = "";
+
+                    string nonWorkingDayTextColor = "";
 
                     @if (item.TimeIn.Hour == 0 && item.TimeIn.Minute == 0 && item.TimeOut.Hour == 0 && item.TimeOut.Minute == 0)
                     {
-                        nonWorkingDayBGColor = "";
+                        nonWorkingDayTextColor = "rgba(0,0,0,0.5)";
                     }
 
-                    <tr class="@nonWorkingDayBGColor">
+                    <tr style="color:@nonWorkingDayTextColor">
                         <td style="vertical-align: text-top;">@item.Date.ToString("dd MMMM yyyy")</td>
                         <td>@item.Date.ToString("dddd")</td>
 
@@ -108,6 +106,7 @@
                         {
                             <td>@item.TimeOut.Hour.ToString("D2"):@item.TimeOut.Minute.ToString("D2")</td>
                         }
+
                         @if (item.LateBy.Hour == 0 && item.LateBy.Minute == 0)
                         {
                             <td>-</td>
@@ -116,6 +115,7 @@
                         {
                             <td class="@lateByClass">@item.LateBy.Hour.ToString("D2"):@item.LateBy.Minute.ToString("D2")</td>
                         }
+
                         @if (item.OverTime.Hour == 0 && item.OverTime.Minute == 0)
                         {
                             <td>-</td>
@@ -124,9 +124,10 @@
                         {
                             <td class="@overTimeClass">@item.OverTime.Hour.ToString("D2"):@item.OverTime.Minute.ToString("D2")</td>
                         }
+
                         @if (item.TimeIn.Hour == 0 && item.TimeIn.Minute == 0 && item.TimeOut.Hour == 0 && item.TimeOut.Minute == 0)
                         {
-                            <td>-</td>
+                            <td>Holiday/Leave</td>
                         }
                         else
                         {
@@ -136,12 +137,10 @@
                                 </u>
                             </td>
                         }
-
                     </tr>
                 }
             </tbody>
         </table>
-
     }
 </div>
 
@@ -202,6 +201,12 @@
     </script>
 }
 
+
+<style>
+    th, td {
+        text-align: center
+    }
+</style>
 
 
 
