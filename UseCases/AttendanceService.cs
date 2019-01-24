@@ -25,7 +25,10 @@ namespace UseCases
             var workRecordByDate = accessEvents.WorkRecord(noOfDays);
             AttendanceRecordsDTO listOfAttendanceRecord = await CreateAttendanceRecordAsync(workRecordByDate, employeeId);
 
-            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord);
+            var fromDate = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Min();
+            var toDate = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Max();
+
+            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord, fromDate, toDate);
 
             return await Task.Run(() =>
             {
@@ -35,12 +38,9 @@ namespace UseCases
 
         private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord)
         {
-            var minDate = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Min();
-            var maxDate = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Max();
             var availableDates = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Distinct().ToList();
-
             var listOfAttendanceRecordDTO = listOfAttendanceRecord.ListOfAttendanceRecordDTO;
-            for (var i = minDate; i <= maxDate; i = i.AddDays(1))
+            for (var i = fromDate; i <= toDate; i = i.AddDays(1))
             {
                 if (!availableDates.Any(x => x.Date.Date == i.Date.Date))
                 {
@@ -55,7 +55,7 @@ namespace UseCases
                     });
                 }
             }
-            listOfAttendanceRecord.ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO.OrderByDescending(x=>x.Date).ToList();
+            listOfAttendanceRecord.ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO.OrderByDescending(x => x.Date).ToList();
 
             return listOfAttendanceRecord;
         }
