@@ -23,11 +23,9 @@ namespace DomainModel
 
         public TimeSpan GetTimeOut()
         {
-            var minTime = CalculateAbsoluteOutTimeAndInTime(
-                _accessEvents.Select(x => x.EventTime.TimeOfDay).Min(), AbsoluteTime.TimeIn);
+            var minTime = _accessEvents.Select(x => x.EventTime.TimeOfDay).Min();
 
-            var maxTime = CalculateAbsoluteOutTimeAndInTime(
-                _accessEvents.Select(x => x.EventTime.TimeOfDay).Max(), AbsoluteTime.TimeOut);
+            var maxTime = _accessEvents.Select(x => x.EventTime.TimeOfDay).Max();
 
             if (minTime == maxTime)
             {
@@ -35,7 +33,7 @@ namespace DomainModel
             }
             else
             {
-                return maxTime;
+                return CalculateAbsoluteOutTimeAndInTime(maxTime,AbsoluteTime.TimeOut);
             }
         }
 

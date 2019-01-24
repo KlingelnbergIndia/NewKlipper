@@ -158,8 +158,8 @@ namespace Application.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> AccessPointDetail(DateTime date, int employeeId)
         {
-            AccessPointService accessPointService = new AccessPointService(_accessEventRepository);
-            List<AccessPointRecord> listofaccesspointdetail = await accessPointService.GetAccessPointDetails(employeeId, date);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository);
+            List<AccessPointRecord> listofaccesspointdetail = await attendanceService.GetAccessPointDetails(employeeId, date);
             listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST(date,listofaccesspointdetail);
             return View(listofaccesspointdetail);
         }
