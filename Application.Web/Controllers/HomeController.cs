@@ -99,6 +99,7 @@ namespace Application.Web.Controllers
         }
 
         [HttpPost]
+        [AuthenticateTeamLeaderRole]
         public async Task<IActionResult> GetSelectedreportee()
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
