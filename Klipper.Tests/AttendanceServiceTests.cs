@@ -73,7 +73,7 @@ namespace Klipper.Tests
 
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
-            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO.Count, Is.EqualTo(7));
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO.Count, Is.EqualTo(12));
         }
 
         [Test]
@@ -122,9 +122,9 @@ namespace Klipper.Tests
 
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
-            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[1].OverTime.Hour, Is.EqualTo(2));
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[3].OverTime.Hour, Is.EqualTo(2));
 
-            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[1].OverTime.Minute, Is.EqualTo(3));
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[3].OverTime.Minute, Is.EqualTo(3));
         }
 
         [Test]
@@ -147,9 +147,9 @@ namespace Klipper.Tests
 
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
-            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[1].WorkingHours.Hour, Is.EqualTo(11));
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[3].WorkingHours.Hour, Is.EqualTo(11));
 
-            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[1].WorkingHours.Minute, Is.EqualTo(3));
+            Assert.That(listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[3].WorkingHours.Minute, Is.EqualTo(3));
         }
 
         [Test]
@@ -206,22 +206,29 @@ namespace Klipper.Tests
 
         }
 
-        //[Test]
-        //public async Task GivenSevenDaysAttendanceRecordCalculatesAccurateTotalOverTime()
-        //{
-        //    AttendanceService attendanceService =
-        //        new AttendanceService(accessEventsContainer);
+        [Test]
+        public async Task HolidayDateShouldBeIncludedInAttendanceRecords()
+        {
+            AttendanceService attendanceService =
+                new AttendanceService(accessEventsContainer, employeeData);
 
-        //    var dummyAccessevents = new AccessEventsBuilder().Build();
+            var dummyAccessevents = new AccessEventsBuilder().Build();
+            accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
 
-        //    accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
 
-        //    var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 15);
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
+            var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
-        //    Assert.That(listOfAttendanceRecordForSpecifiedDays.TotalDeficitOrExtraHours.Hour, Is.EqualTo(17));
+            Assert.That(
+                listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[1].Date, 
+                Is.EqualTo(new DateTime(2018,10,11).Date));
 
-        //    Assert.That(listOfAttendanceRecordForSpecifiedDays.TotalDeficitOrExtraHours.Minute, Is.EqualTo(2));
-        //}
+        }
 
 
     }

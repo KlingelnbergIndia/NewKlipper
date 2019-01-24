@@ -35,33 +35,29 @@ namespace UseCases
 
         private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord)
         {
-            listOfAttendanceRecord.ListOfAttendanceRecordDTO.Add(new PerDayAttendanceRecordDTO()
+            var minDate = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Min();
+            var maxDate = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Max();
+            var availableDates = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Distinct().ToList();
+
+            var listOfAttendanceRecordDTO = listOfAttendanceRecord.ListOfAttendanceRecordDTO;
+            for (var i = minDate; i <= maxDate; i = i.AddDays(1))
             {
-                Date = DateTime.Now.AddDays(1),
-                LateBy = new Time(0, 0),
-                OverTime = new Time(0, 0),
-                TimeIn = new Time(0, 0),
-                TimeOut = new Time(0, 0),
-                WorkingHours = new Time(0, 0),
-            });
+                if (!availableDates.Any(x => x.Date.Date == i.Date.Date))
+                {
+                    listOfAttendanceRecordDTO.Add(new PerDayAttendanceRecordDTO()
+                    {
+                        Date = i,
+                        LateBy = new Time(0, 0),
+                        OverTime = new Time(0, 0),
+                        TimeIn = new Time(0, 0),
+                        TimeOut = new Time(0, 0),
+                        WorkingHours = new Time(0, 0),
+                    });
+                }
+            }
+            listOfAttendanceRecord.ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO.OrderByDescending(x=>x.Date).ToList();
 
             return listOfAttendanceRecord;
-
-        }
-
-
-        private IList<PerDayWorkRecord> IncludeHolidays(IList<PerDayWorkRecord> workRecordByDate)
-        {
-            var ls = workRecordByDate;
-            var tm = DateTime.Now.AddDays(1);
-            IList<AccessEvent> accessEvents = new List<AccessEvent>() { new AccessEvent(16, "", 66, tm) };
-            var d = new PerDayWorkRecord(DateTime.Now.AddDays(1), accessEvents)
-            {
-
-            };
-
-            ls.Add(d);
-            return ls;
         }
 
         public async Task<AttendanceRecordsDTO> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
