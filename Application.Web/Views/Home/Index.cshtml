@@ -11,12 +11,14 @@
             <div class="col-md-8 col-sm-8 col-xs-8" style="margin-top: 0.5%">
                 <label for="from">From</label>
                 <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
+                       min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
                        max="@DateTime.Today.ToString("yyyy-MM-dd")"
                        value=@(Model.fromDate == DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd")) required>
                 <label for="to">to</label>
                 <input type="date" id="toDate" name="toDate" class="form-control input-sm"
+                       min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
                        max="@DateTime.Today.ToString("yyyy-MM-dd")"
-                       value="@(Model.toDate == DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" onkeydown="return false" required>
+                       value="@(Model.toDate == DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
                 <button type="submit" class="btn btn-info btn-sm">Show</button>
             </div>
 
