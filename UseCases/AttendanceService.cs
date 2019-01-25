@@ -36,29 +36,7 @@ namespace UseCases
             });
         }
 
-        private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord)
-        {
-            var availableDates = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Distinct().ToList();
-            var listOfAttendanceRecordDTO = listOfAttendanceRecord.ListOfAttendanceRecordDTO;
-            for (var i = fromDate; i <= toDate; i = i.AddDays(1))
-            {
-                if (!availableDates.Any(x => x.Date.Date == i.Date.Date))
-                {
-                    listOfAttendanceRecordDTO.Add(new PerDayAttendanceRecordDTO()
-                    {
-                        Date = i,
-                        LateBy = new Time(0, 0),
-                        OverTime = new Time(0, 0),
-                        TimeIn = new Time(0, 0),
-                        TimeOut = new Time(0, 0),
-                        WorkingHours = new Time(0, 0),
-                    });
-                }
-            }
-            listOfAttendanceRecord.ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO.OrderByDescending(x => x.Date).ToList();
-
-            return listOfAttendanceRecord;
-        }
+       
 
         public async Task<AttendanceRecordsDTO> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
         {
