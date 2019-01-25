@@ -31,10 +31,8 @@ namespace DomainModel
             {
                 return TimeSpan.Zero;
             }
-            else
-            {
                 return CalculateAbsoluteOutTimeAndInTime(maxTime,AbsoluteTime.TimeOut);
-            }
+            
         }
 
         public TimeSpan CalculateWorkingHours()
