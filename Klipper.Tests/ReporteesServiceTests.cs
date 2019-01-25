@@ -33,13 +33,13 @@ namespace Klipper.Tests
                     roles, reportees);
         }
 
-        public ReporteeDTO ConvertEmployeeToReporteeDTO(Employee employee)
+        public ReporteeDTO ConvertEmployeeToReporteeData(Employee employee)
         {
-            ReporteeDTO reporteeDTO = new ReporteeDTO();
-            reporteeDTO.ID = employee.Id();
-            reporteeDTO.FirstName = employee.FirstName();
-            reporteeDTO.LastName = employee.LastName();
-            return reporteeDTO;
+            ReporteeDTO reporteeData = new ReporteeDTO();
+            reporteeData.ID = employee.Id();
+            reporteeData.FirstName = employee.FirstName();
+            reporteeData.LastName = employee.LastName();
+            return reporteeData;
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace Klipper.Tests
                 EmployeeRoles.Employee
             };
 
-            List<int> dummyreportees = new List<int>(){ 40, 46};
+            List<int> dummyreportees = new List<int>() { 40, 46 };
 
             var dummyEmployee = CreateEmployee(29, "Kiran.Kharade", "01-06-1975", "Kiran", "Kharade",
                 "Chief Developer and Team Lead", employeeRoles, dummyreportees);
@@ -88,14 +88,14 @@ namespace Klipper.Tests
             employeeDataContainer.GetEmployee(46).Returns(dummyReportee46);
 
             //-------------------------------------------------------------
-            var actualreporteesDTO = reporteeService.GetReporteesData(29);
+            var actualreporteesData = reporteeService.GetReporteesData(29);
 
-            var dummyreporteesDTO = new List<UseCaseBoundary.DTO.ReporteeDTO>();
+            var dummyreporteesData = new List<UseCaseBoundary.DTO.ReporteeDTO>();
 
-            dummyreporteesDTO.Add(ConvertEmployeeToReporteeDTO(dummyReportee40));
-            dummyreporteesDTO.Add(ConvertEmployeeToReporteeDTO(dummyReportee46));
+            dummyreporteesData.Add(ConvertEmployeeToReporteeData(dummyReportee40));
+            dummyreporteesData.Add(ConvertEmployeeToReporteeData(dummyReportee46));
 
-            Assert.AreEqual(dummyreporteesDTO.ToArray(), actualreporteesDTO.ToArray());
+            Assert.AreEqual(dummyreporteesData.ToArray(), actualreporteesData.ToArray());
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace Klipper.Tests
                 EmployeeRoles.Employee
             };
 
-            List<int> dummyreportees = new List<int>() {};
+            List<int> dummyreportees = new List<int>() { };
 
             var dummyEmployee = CreateEmployee(29, "Kiran.Kharade", "01-06-1975", "Kiran", "Kharade",
                 "Chief Developer and Team Lead", employeeRoles, dummyreportees);
@@ -119,11 +119,11 @@ namespace Klipper.Tests
                 Returns(dummyEmployee);
 
             //-------------------------------------------------------------
-            var actualreporteesDTO = reporteeService.GetReporteesData(29);
+            var actualreporteesData = reporteeService.GetReporteesData(29);
 
-            var dummyreporteesDTO = new List<UseCaseBoundary.DTO.ReporteeDTO>();
+            var dummyreporteesData = new List<UseCaseBoundary.DTO.ReporteeDTO>();
 
-            Assert.That(dummyreporteesDTO, Is.EquivalentTo(actualreporteesDTO));
+            Assert.That(dummyreporteesData, Is.EquivalentTo(actualreporteesData));
 
         }
 
