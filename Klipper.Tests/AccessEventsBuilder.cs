@@ -35,5 +35,15 @@ namespace Klipper.Tests
                                 .Where(x=>x.EventTime >= fromDate && x.EventTime <= toDate).ToList();
             return new AccessEvents(dummyAccessEvent);
         }
+
+        public PerDayWorkRecord BuildForADay(DateTime date)
+        {
+            var fromDate = date.Date + DateTime.MinValue.TimeOfDay;
+            var toDate = date.Date + DateTime.MaxValue.TimeOfDay;
+            var jsonData = File.ReadAllText(accessEventsFilePath);
+            dummyAccessEvent = JsonConvert.DeserializeObject<List<AccessEvent>>(jsonData)
+                                .Where(x => x.EventTime >= fromDate && x.EventTime <= toDate).ToList();
+            return new PerDayWorkRecord(date.Date, dummyAccessEvent);
+        }
     }
 }
