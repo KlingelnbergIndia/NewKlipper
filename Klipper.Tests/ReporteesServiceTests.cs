@@ -28,19 +28,6 @@ namespace Klipper.Tests
             };
         }
 
-        private Employee CreateEmployee(int id, string userName, string password, string firstName,
-                                       string lastName, string title, List<EmployeeRoles> roles,
-                                       List<int> reportees)
-        {
-
-            return new EmployeeBuilder()
-                .WithID(id)
-                .WithUserName(userName)
-                .WithPassword(password)
-                .BuildEmployee(firstName, lastName, title,
-                    roles, reportees);
-        }
-
         private ReporteeDTO ConvertEmployeeToReporteeData(Employee employee)
         {
             ReporteeDTO reporteeData = new ReporteeDTO();
