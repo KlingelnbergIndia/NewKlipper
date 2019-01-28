@@ -15,8 +15,20 @@ namespace Klipper.Web.UI
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             string user = filterContext.HttpContext.Session.GetString("EmployeeName");
+            bool isAjaxRequest = filterContext.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
             if (user == null)
-                filterContext.Result = new RedirectResult("/");
+            {
+                if (isAjaxRequest)
+                {
+                    filterContext.HttpContext.Response.Clear();
+                    filterContext.HttpContext.Response.StatusCode = 401;
+                }
+                else
+                {
+                    filterContext.Result = new RedirectResult("/");
+                }
+            }
 
         }
     }
