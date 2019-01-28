@@ -63,6 +63,11 @@ namespace Tests
                                 lastName, title, roles, this.reportees,Departments.Default);
         }
 
+        internal EmployeeBuilder WithRole(EmployeeRoles employee)
+        {
+            this.employeeRoles.Add(employee);
+            return this;
+        }
     }
 
 
