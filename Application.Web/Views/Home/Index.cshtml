@@ -146,68 +146,8 @@
     }
 </div>
 
-<div class="modal fade" id="modal" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <input type="hidden" name="showDate" id="showDate" value="" />
-                <h4 class="modal-title" id="popupDate"></h4>
-            </div>
-            <div class="modal-body" id="popupData">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 @section Scripts {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            getDailyData = function (date, employeeId) {
-                var convertStringToDateObject = new Date(date);
-
-                $.ajax({
-                    type: "GET",
-                    url: "AccessPointDetail/",
-                    data: {
-                        date: dateToYMD(convertStringToDateObject),
-                        employeeId: employeeId
-                    },
-                    dataType: "html",
-                    success: function (response) {
-                        $("#popupData").html(response);
-                        $("#popupDate").html(dateToYMD(convertStringToDateObject));
-                        $('#modal').modal('show');
-                    }
-                });
-            }
-        });
-
-        $(document).ajaxError(function (e, xhr, settings) {
-            if (xhr.status == 401) {
-                alert("Your Session time expired. Please login again.");
-                window.location = "/";
-            }
-        });
-
-        function dateToYMD(date) {
-            try {
-                var strArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                var d = date.getDate();
-                var m = strArray[date.getMonth()];
-                var y = date.getFullYear();
-                return '' + (d <= 9 ? '0' + d : d) + ' ' + m + ' ' + y;
-            } catch (e) {
-                alert('Invalid date');
-                return null;
-            }
-        }
-
-    </script>
+    @{await Html.RenderPartialAsync("~/Views/Home/AccessEventsPopup.html");}
 }
 
 
