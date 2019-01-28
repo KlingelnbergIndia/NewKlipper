@@ -25,24 +25,36 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public async Task WithRespectiveTimeInAndTimeOutGetTotalTimeSpendAsync()
+        public async Task WithRespectiveTimeInAndTimeOutGetTotalTimeSpend()
         {
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData);
 
-            var dummyAccessevents = new AccessEventsBuilder().Build();
+            var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-10-05"));
 
-            accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
+            accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
 
-            var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48,DateTime.Parse("08-10-2018").Date);
-            var timeIn = listOfAccessEventsRecord[1].TimeIn;
-            TimeSpan inTime = new TimeSpan(timeIn.Hour, timeIn.Minute,00);
-            var timeOut = listOfAccessEventsRecord[1].TimeOut;
-            TimeSpan outTime = new TimeSpan(timeOut.Hour, timeOut.Minute, 00);
-            TimeSpan spendTime = outTime - inTime;
-            var timeSpend = new Time(spendTime.Hours, spendTime.Minutes);
-            Assert.That(listOfAccessEventsRecord[1].TimeSpend, Is.EqualTo(timeSpend));
+            var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-10-05"));
+           
+            Assert.That(listOfAccessEventsRecord[0].TimeSpend.Hour, Is.EqualTo(8));
+            Assert.That(listOfAccessEventsRecord[0].TimeSpend.Minute, Is.EqualTo(35));
         }
+
+        //[Test]
+        //public async Task WithRespectiveTimeInAndTimeOutGetTotalTimeSpend()
+        //{
+        //    AttendanceService attendanceService =
+        //        new AttendanceService(accessEventsContainer, employeeData);
+
+        //    var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-10-05"));
+
+        //    accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
+
+        //    var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-10-05"));
+
+        //    Assert.That(listOfAccessEventsRecord[0].TimeSpend.Hour, Is.EqualTo(8));
+        //    Assert.That(listOfAccessEventsRecord[0].TimeSpend.Minute, Is.EqualTo(35));
+        //}
 
     }
 }
