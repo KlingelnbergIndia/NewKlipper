@@ -15,32 +15,6 @@ using Tests;
 
 namespace Klipper.Tests
 {
-
-    public class AccessEventsBuilder
-    {
-        private string accessEventsFilePath;
-
-        public AccessEventsBuilder()
-        {
-            string currentDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
-
-            accessEventsFilePath = currentDirectory.Remove(currentDirectory.Length - 3) + "AccessEventsDummyData.json";
-        }
-
-        public AccessEvents Build()
-        {
-            List<AccessEvent> dummyAccessEvent = new List<AccessEvent>();
-
-            var jsonData = File.ReadAllText(accessEventsFilePath);
-
-            dummyAccessEvent = JsonConvert.DeserializeObject<List<AccessEvent>>(jsonData);
-
-            AccessEvents dummyAccessEvents = new AccessEvents(dummyAccessEvent);
-
-            return dummyAccessEvents;
-        }
-    }
-
     public class AttendanceServiceTest
     {
         private IAccessEventsRepository accessEventsContainer;
@@ -220,7 +194,6 @@ namespace Klipper.Tests
                 .WithUserName("Sidhdesh.Vadgaonkar")
                 .WithPassword("26-12-1995")
                 .BuildEmployee();
-
             employeeData.GetEmployee(48).Returns(dummyEmployee);
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 

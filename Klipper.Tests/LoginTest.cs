@@ -4,6 +4,7 @@ using UseCaseBoundary;
 using UseCases;
 using DomainModel;
 using System.Collections.Generic;
+using System;
 
 namespace Tests
 {
@@ -59,9 +60,14 @@ namespace Tests
                                       List<int> reportees=null)
         {
             return new Employee(id, userName, password, firstName,
-                                lastName, title, roles, reportees,Departments.Default);
+                                lastName, title, roles, this.reportees,Departments.Default);
         }
 
+        internal EmployeeBuilder WithRole(EmployeeRoles employee)
+        {
+            this.employeeRoles.Add(employee);
+            return this;
+        }
     }
 
 
