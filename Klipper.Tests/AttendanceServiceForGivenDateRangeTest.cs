@@ -126,7 +126,33 @@ namespace Klipper.Tests
 
             Assert.That(actualData.Hour, Is.EqualTo(0));
             Assert.That(actualData.Minute, Is.EqualTo(25));
+        }
 
+        [Test]
+        public void CalculateTotalExtraTimeForGivenDateRange()
+        {
+            // Setup
+            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData);
+            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-09"), DateTime.Parse("2018-10-09"));
+            accessEventsData
+                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-09"), DateTime.Parse("2018-10-09"))
+                .Returns(dummyAccessevents);
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
+
+            // Execute usecase
+            var actualData = attendanceService
+                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-09"), DateTime.Parse("2018-10-09"))
+                .GetAwaiter()
+                .GetResult()
+                .TotalDeficitOrExtraHours;
+
+            Assert.That(actualData.Hour, Is.EqualTo(-2));
+            Assert.That(actualData.Minute, Is.EqualTo(-3));
         }
 
     }
