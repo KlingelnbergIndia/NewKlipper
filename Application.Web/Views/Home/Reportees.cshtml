@@ -226,6 +226,13 @@
 
         });
 
+        $(document).ajaxError(function (e, xhr, settings) {
+            if (xhr.status == 401) {
+                alert("Your Session time expired. Please login again.");
+                window.location = "/";
+            }
+        });
+
         function dateToYMD(date) {
             try {
                 var strArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
