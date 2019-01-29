@@ -125,7 +125,7 @@ namespace Klipper.Tests
                 .TotalDeficitOrExtraHours;
 
             Assert.That(actualData.Hour, Is.EqualTo(0));
-            Assert.That(actualData.Minute, Is.EqualTo(25));
+            Assert.That(actualData.Minute, Is.EqualTo(-25));
         }
 
         [Test]
@@ -151,8 +151,8 @@ namespace Klipper.Tests
                 .GetResult()
                 .TotalDeficitOrExtraHours;
 
-            Assert.That(actualData.Hour, Is.EqualTo(-2));
-            Assert.That(actualData.Minute, Is.EqualTo(-3));
+            Assert.That(actualData.Hour, Is.EqualTo(2));
+            Assert.That(actualData.Minute, Is.EqualTo(3));
         }
 
     }

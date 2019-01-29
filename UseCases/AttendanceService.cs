@@ -43,7 +43,7 @@ namespace UseCases
             AccessEvents accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
             AttendanceRecordsDTO listOfAttendanceRecord = await CreateAttendanceRecordAsync(datewiseAccessEvents, employeeId);
-            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord, fromDate,toDate);
+            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord, fromDate, toDate);
 
             return await Task.Run(() =>
             {
@@ -104,7 +104,7 @@ namespace UseCases
             }
             return listOfaccessPointRecords;
         }
-       
+
 
         private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord, DateTime fromDate, DateTime toDate)
         {
@@ -210,7 +210,7 @@ namespace UseCases
             Time totalWorkedTime = CalculateTotalWorkingHours(listOfAttendanceRecordDTO);
             var totalWorkedSpan = new TimeSpan(totalWorkedTime.Hour, totalWorkedTime.Minute, 00);
 
-            double totalDefiateOrOverTimeHrs = totalRequiredHoursToBeWorked - totalWorkedSpan.TotalHours;
+            double totalDefiateOrOverTimeHrs = totalWorkedSpan.TotalHours - totalRequiredHoursToBeWorked;
 
             var extraTime = TimeSpan.FromHours(totalDefiateOrOverTimeHrs);
 

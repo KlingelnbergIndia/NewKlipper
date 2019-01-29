@@ -61,7 +61,7 @@
                         </span>
                     </div>
                     <div align="right">
-                        @if (TotalDeficitOrExtraHours.Hour >= 0 || TotalDeficitOrExtraHours.Minute >= 0)
+                        @if (TotalDeficitOrExtraHours.Hour < 0 || TotalDeficitOrExtraHours.Minute < 0)
                         {
                             <label style="margin-left: 1%; font-weight: normal">Total Deficit Time</label>
                             <span style="margin-left: 2%; font-weight: bold; color: #b84442">
