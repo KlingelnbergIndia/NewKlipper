@@ -25,13 +25,11 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public async Task WithRespectiveDateGetNumberOfRecords()
+        public async Task GivenDateGetCountOfAccessEventRecords()
         {
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData);
-
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-10-01"));
-
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-01")).Returns(dummyAccessevents);
 
             var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-10-01"));
@@ -44,9 +42,7 @@ namespace Klipper.Tests
         {
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData);
-
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-10-05"));
-
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
 
             var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-10-05"));
@@ -58,11 +54,8 @@ namespace Klipper.Tests
         [Test]
         public async Task WithRespectiveTimeInAndTimeOutOfRecreationEntryGetTotalTimeSpend()
         {
-            AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData);
-
+            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeData);
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-10-08"));
-
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-08")).Returns(dummyAccessevents);
 
             var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-10-08"));
@@ -145,7 +138,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public async Task WithMainEntryPointAndOddNoOfAccessEventGetTimeInAndTimeOutSetTimeSpendZero()
+        public async Task WithMainEntryPointAndOddNoOfAccessEventsGetTimeInAndTimeOutSetTimeSpendZero()
         {
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData);
@@ -172,7 +165,7 @@ namespace Klipper.Tests
             }
 
         [Test]
-        public async Task WithRecreationEntryPointAndOddNoOfAccessEventGetTimeInAndTimeOutSetTimeSpendZero()
+        public async Task WithRecreationEntryPointAndOddNoOfAccessEventsGetTimeInAndTimeOutSetTimeSpendZero()
         {
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData);
@@ -199,7 +192,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public async Task WithGymEntryPointAndOddNoOfAccessEventGetTimeInAndTimeOutSetTimeSpendZero()
+        public async Task WithGymEntryPointAndOddNoOfAccessEventsGetTimeInAndTimeOutSetTimeSpendZero()
         {
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData);
@@ -212,15 +205,16 @@ namespace Klipper.Tests
 
             Assert.That(listOfAccessEventsRecord[2].TimeIn.Hour, Is.EqualTo(12));
             Assert.That(listOfAccessEventsRecord[2].TimeIn.Minute, Is.EqualTo(52));
-            Assert.That(listOfAccessEventsRecord[2].TimeOut.Hour, Is.EqualTo(12));
-            Assert.That(listOfAccessEventsRecord[2].TimeOut.Minute, Is.EqualTo(56));
-            Assert.That(listOfAccessEventsRecord[2].TimeSpend.Hour, Is.EqualTo(0));
-            Assert.That(listOfAccessEventsRecord[2].TimeSpend.Minute, Is.EqualTo(0));
-
             Assert.That(listOfAccessEventsRecord[3].TimeIn.Hour, Is.EqualTo(13));
             Assert.That(listOfAccessEventsRecord[3].TimeIn.Minute, Is.EqualTo(10));
+
+            Assert.That(listOfAccessEventsRecord[2].TimeOut.Hour, Is.EqualTo(12));
+            Assert.That(listOfAccessEventsRecord[2].TimeOut.Minute, Is.EqualTo(56));
             Assert.That(listOfAccessEventsRecord[3].TimeOut.Hour, Is.EqualTo(0));
             Assert.That(listOfAccessEventsRecord[3].TimeOut.Minute, Is.EqualTo(0));
+
+            Assert.That(listOfAccessEventsRecord[2].TimeSpend.Hour, Is.EqualTo(0));
+            Assert.That(listOfAccessEventsRecord[2].TimeSpend.Minute, Is.EqualTo(0));
             Assert.That(listOfAccessEventsRecord[3].TimeSpend.Hour, Is.EqualTo(0));
             Assert.That(listOfAccessEventsRecord[3].TimeSpend.Minute, Is.EqualTo(0));
         }

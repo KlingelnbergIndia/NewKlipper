@@ -24,7 +24,6 @@ namespace DomainModel
         public TimeSpan GetTimeOut()
         {
             var minTime = _accessEvents.Select(x => x.EventTime.TimeOfDay).Min();
-
             var maxTime = _accessEvents.Select(x => x.EventTime.TimeOfDay).Max();
 
             if (minTime == maxTime)
