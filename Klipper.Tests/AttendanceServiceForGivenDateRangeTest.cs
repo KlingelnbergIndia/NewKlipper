@@ -35,7 +35,7 @@ namespace Klipper.Tests
         {
             //Setup
             AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData);
-            var dummyAccessevents = new AccessEventsBuilder().Build();
+            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"));
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
                 .Returns(dummyAccessevents);
             var dummyEmployee =
@@ -51,7 +51,7 @@ namespace Klipper.Tests
                 .GetAwaiter()
                 .GetResult();
 
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO.Count, Is.EqualTo(33));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO.Count, Is.EqualTo(30));
         }
 
         [Test]

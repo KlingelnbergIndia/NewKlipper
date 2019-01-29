@@ -147,8 +147,8 @@ namespace UseCases
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
-                    OverTime = GetOverTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department())),
-                    LateBy = GetLateByTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department()))
+                    OverTime = GetOverTime(workingHours, employeeData.GetNoOfHoursToBeWorked()),
+                    LateBy = GetLateByTime(workingHours, employeeData.GetNoOfHoursToBeWorked())
                 };
                 listOfAttendanceRecordDTO.ListOfAttendanceRecordDTO.Add(attendanceRecord);
             }
@@ -160,7 +160,7 @@ namespace UseCases
                 {
                     ListOfAttendanceRecordDTO = perDayAttendanceRecords,
                     TotalWorkingHours = CalculateTotalWorkingHours(perDayAttendanceRecords),
-                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(perDayAttendanceRecords, GetNoOfHoursToBeWorked(employeeData.Department())),
+                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(perDayAttendanceRecords, employeeData.GetNoOfHoursToBeWorked()),
                 };
             });
         }
@@ -236,10 +236,6 @@ namespace UseCases
                 (int)sumOfTotalWorkingHours.Minutes);
         }
 
-        private double GetNoOfHoursToBeWorked(Departments department)
-        {
-            return department == Departments.Design ? 10.0 : 9.0;
-        }
         private enum AbsoluteTime
         {
             TimeIn,
