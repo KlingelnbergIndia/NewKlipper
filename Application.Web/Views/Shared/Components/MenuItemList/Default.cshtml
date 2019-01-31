@@ -1,0 +1,30 @@
+﻿@{
+    var menuList = (List<Application.Web.ViewComponents.MenuLinksViewModel>)ViewBag.MenuList;
+}
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+        <li class="sidebar-brand">
+            <a href="#">
+                <span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.EmployeeName
+                <div style="margin-top:-35px;color:darkkhaki;font-size:.7em;float:left;margin-left:18px;">@ViewBag.EmployeeTitle</div>
+            </a>
+        </li>
+
+        <li>&nbsp;</li>
+
+        @if (menuList != null)
+        {
+
+            @foreach (var item in menuList)
+            {
+                <li>
+                    <a asp-area="" asp-controller=@item.Controller  asp-action=@item.Action>
+                        <span class="@item.Glyphicon"></span>&nbsp; @item.Label
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+</div>
+<!-- /#sidebar-wrapper -->
