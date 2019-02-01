@@ -19,8 +19,6 @@ namespace DomainModel
         CompetenceCentre = 33
     }
 
-    public enum WorkingDays { Monday, Tueday, Wedday, Thuday, Friday, Satday }
-
     public class Department
     {
         private Departments _department;
@@ -45,9 +43,7 @@ namespace DomainModel
             int weekOfMonth = ((date.Day + (int)WeekDay) / 7) + 1;
 
             if (WeekDay == DayOfWeek.Sunday)
-            {
                 return false;
-            }
 
             if (_department == Departments.Software && WeekDay == DayOfWeek.Saturday)
                 return false;

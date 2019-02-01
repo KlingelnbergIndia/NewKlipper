@@ -141,7 +141,7 @@ namespace UseCases
                 var timeOut = perDayWorkRecord.GetTimeOut();
                 var workingHours = perDayWorkRecord.CalculateWorkingHours();
 
-                var data = department.IsValidWorkingDay(perDayWorkRecord.Date);
+                var isValidWorkingDay = department.IsValidWorkingDay(perDayWorkRecord.Date);
 
                 PerDayAttendanceRecordDTO attendanceRecord = new PerDayAttendanceRecordDTO()
                 {

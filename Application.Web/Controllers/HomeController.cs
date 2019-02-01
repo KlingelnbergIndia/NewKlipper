@@ -30,7 +30,6 @@ namespace Application.Web.Controllers
             _accessEventRepository = accessEventRepository;
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
-            //LoginViewModel loginViewModel = new LoginViewModel();
         }
 
         public async Task<IActionResult> Index(string searchFilter)

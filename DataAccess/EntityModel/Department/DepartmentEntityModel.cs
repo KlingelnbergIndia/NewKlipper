@@ -20,7 +20,5 @@ namespace DataAccess.EntityModel.Department
         public List<int> Employees { get; set; } = new List<int>();
         public List<int> SubDepartments { get; set; } = new List<int>();
         public int DepartmentHeadEmployeeId { get; set; } = -1;
-
-        public List<WorkingDays> WorkingDays { get; set; } = new List<WorkingDays>();
     }
 }
