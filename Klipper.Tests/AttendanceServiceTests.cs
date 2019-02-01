@@ -203,6 +203,54 @@ namespace Klipper.Tests
 
         }
 
+        [Test]
+        public async Task GivenOddNOoFGymEntryAccessEventsSetWorkingHoursZero()
+        {
+            AttendanceService attendanceService =
+                new AttendanceService(accessEventsContainer, employeeData);
 
+            var dummyAccessevents = new AccessEventsBuilder().Build();
+            accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
+            var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
+
+            Assert.That(
+                listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[4].WorkingHours.Hour,
+                Is.EqualTo(0));
+            Assert.That(
+               listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[4].WorkingHours.Minute,
+               Is.EqualTo(0));
+        }
+
+        [Test]
+        public async Task GivenOddNOoFMainEntryAccessEventsSetWorkingHoursZero()
+        {
+            AttendanceService attendanceService =
+                new AttendanceService(accessEventsContainer, employeeData);
+
+            var dummyAccessevents = new AccessEventsBuilder().Build();
+            accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
+            var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
+
+            Assert.That(
+                listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[11].WorkingHours.Hour,
+                Is.EqualTo(0));
+            Assert.That(
+               listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[11].WorkingHours.Minute,
+               Is.EqualTo(0));
+        }
     }
 }
