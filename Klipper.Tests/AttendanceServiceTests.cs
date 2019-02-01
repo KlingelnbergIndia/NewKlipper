@@ -19,19 +19,21 @@ namespace Klipper.Tests
     {
         private IAccessEventsRepository accessEventsContainer;
         private IEmployeeRepository employeeData;
+        private IDepartmentRepository departmentData;
 
         [SetUp]
         public void Setup()
         {
             accessEventsContainer = Substitute.For<IAccessEventsRepository>();
             employeeData = Substitute.For<IEmployeeRepository>();
+            departmentData = Substitute.For<IDepartmentRepository>();
         }
 
         [Test]
         public async Task GivenSevenDaysThenSevenRecordsAreDisplayed()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
@@ -54,7 +56,7 @@ namespace Klipper.Tests
         public async Task GivenSetOfAccessEventsCalculatesAccurateDeficitTimeForSpecificDay()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
@@ -80,7 +82,7 @@ namespace Klipper.Tests
         public async Task GivenSetOfAccessEventsCalculatesAccurateOvertimeForSpecificDay()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
@@ -105,7 +107,7 @@ namespace Klipper.Tests
         public async Task GivenSetOfAccessEventsCalcualtesAccurateWorkingHoursForSpecificDay()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
@@ -131,7 +133,7 @@ namespace Klipper.Tests
         {
 
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
@@ -158,7 +160,7 @@ namespace Klipper.Tests
         {
 
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
 
@@ -184,7 +186,7 @@ namespace Klipper.Tests
         public async Task HolidayDateShouldBeIncludedInAttendanceRecords()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
             accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
@@ -198,8 +200,8 @@ namespace Klipper.Tests
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
             Assert.That(
-                listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[1].Date, 
-                Is.EqualTo(new DateTime(2018,10,11).Date));
+                listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[1].Date,
+                Is.EqualTo(new DateTime(2018, 10, 11).Date));
 
         }
 

@@ -141,14 +141,16 @@ namespace UseCases
                 var timeOut = perDayWorkRecord.GetTimeOut();
                 var workingHours = perDayWorkRecord.CalculateWorkingHours();
 
+                var data = department.IsValidWorkingDay(perDayWorkRecord.Date);
+
                 PerDayAttendanceRecordDTO attendanceRecord = new PerDayAttendanceRecordDTO()
                 {
                     Date = perDayWorkRecord.Date,
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
-                    OverTime = GetOverTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department())),
-                    LateBy = GetLateByTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department()))
+                    OverTime = GetOverTime(workingHours, department.GetNoOfHoursToBeWorked()),
+                    LateBy = GetLateByTime(workingHours, department.GetNoOfHoursToBeWorked())
                 };
                 listOfAttendanceRecordDTO.ListOfAttendanceRecordDTO.Add(attendanceRecord);
             }
@@ -160,7 +162,7 @@ namespace UseCases
                 {
                     ListOfAttendanceRecordDTO = perDayAttendanceRecords,
                     TotalWorkingHours = CalculateTotalWorkingHours(perDayAttendanceRecords),
-                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(perDayAttendanceRecords, GetNoOfHoursToBeWorked(employeeData.Department())),
+                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(perDayAttendanceRecords, department.GetNoOfHoursToBeWorked()),
                 };
             });
         }
@@ -235,10 +237,6 @@ namespace UseCases
                 (int)sumOfTotalWorkingHours.Minutes);
         }
 
-        private double GetNoOfHoursToBeWorked(Departments department)
-        {
-            return department == Departments.Design ? 10.0 : 9.0;
-        }
         private enum AbsoluteTime
         {
             TimeIn,

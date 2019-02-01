@@ -19,6 +19,8 @@ namespace DomainModel
         CompetenceCentre = 33
     }
 
+    public enum WorkingDays { Monday, Tueday, Wedday, Thuday, Friday, Satday }
+
     public class Department
     {
         private Departments _department;
@@ -30,6 +32,30 @@ namespace DomainModel
         public double GetNoOfHoursToBeWorked()
         {
             return _department == Departments.Design ? 10.0 : 9.0;
+        }
+
+        public Departments GetDepartment()
+        {
+            return _department;
+        }
+
+        public bool IsValidWorkingDay(DateTime date)
+        {
+            DayOfWeek WeekDay = date.DayOfWeek;
+            int weekOfMonth = ((date.Day + (int)WeekDay) / 7) + 1;
+
+            if (WeekDay == DayOfWeek.Sunday)
+            {
+                return false;
+            }
+
+            if (_department == Departments.Software && WeekDay == DayOfWeek.Saturday)
+                return false;
+
+            if (_department != Departments.Software && (weekOfMonth == 2 || weekOfMonth == 4))
+                return false;
+
+            return true;
         }
     }
 }
