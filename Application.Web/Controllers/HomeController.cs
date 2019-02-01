@@ -143,10 +143,7 @@ namespace Application.Web.Controllers
                     listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId, 
                         reporteeViewModel.fromDate, reporteeViewModel.toDate);
                 }
-                else
-                {
-                   
-                }
+                
                 reporteeViewModel.EmployeeId = reporteeId;
 
                 reporteeViewModel
