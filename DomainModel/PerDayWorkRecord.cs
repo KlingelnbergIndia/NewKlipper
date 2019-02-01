@@ -25,10 +25,12 @@ namespace DomainModel
 
         public TimeSpan GetTimeOut()
         {
-            var AccessEventsServerRoom = _accessEvents.Where(x =>x.FromServerRoom());
-            var AccessEventsUSBRoom = _accessEvents.Where(x => x.FromUSBDeviceDoor());
-            var AccessEventForTimeOut = _accessEvents.Except(AccessEventsServerRoom).ToList();
-            AccessEventForTimeOut= AccessEventForTimeOut.Except(AccessEventsUSBRoom).ToList();
+            var AccessEventsOFServerRoom = _accessEvents.Where(x =>x.FromServerRoom());
+            var AccessEventsOfUSBRoom = _accessEvents.Where(x => x.FromUSBDeviceDoor());
+            var AccessEventForTimeOut = _accessEvents.Except(AccessEventsOFServerRoom).ToList();
+
+            AccessEventForTimeOut= AccessEventForTimeOut.Except(AccessEventsOfUSBRoom).ToList();
+
             var minTime = AccessEventForTimeOut.Select(x => x.EventTime.TimeOfDay).Min();
             var maxTime = AccessEventForTimeOut.Select(x => x.EventTime.TimeOfDay).Max();
 
