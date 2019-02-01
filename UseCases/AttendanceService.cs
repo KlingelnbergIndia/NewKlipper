@@ -30,7 +30,7 @@ namespace UseCases
             var fromDate = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Min();
             var toDate = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Max();
 
-            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord, fromDate, toDate);
+            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord, fromDate, toDate, employeeId);
 
             return await Task.Run(() =>
             {
@@ -43,7 +43,7 @@ namespace UseCases
             AccessEvents accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
             AttendanceRecordsDTO listOfAttendanceRecord = await CreateAttendanceRecordAsync(datewiseAccessEvents, employeeId);
-            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord, fromDate, toDate);
+            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord, fromDate, toDate, employeeId);
 
             return await Task.Run(() =>
             {
@@ -105,23 +105,31 @@ namespace UseCases
             return listOfaccessPointRecords;
         }
 
-        private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord, DateTime fromDate, DateTime toDate)
+        private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord, DateTime fromDate, DateTime toDate,int employeeId)
         {
             var availableDates = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Distinct().ToList();
             var listOfAttendanceRecordDTO = listOfAttendanceRecord.ListOfAttendanceRecordDTO;
+            
+            Employee employeeData = _employeeRepository.GetEmployee(employeeId);
+            Department department = _departmentRepository.GetDepartment(employeeData.Department());
+
             for (var i = fromDate; i <= toDate; i = i.AddDays(1))
             {
                 if (!availableDates.Any(x => x.Date.Date == i.Date.Date))
                 {
-                    listOfAttendanceRecordDTO.Add(new PerDayAttendanceRecordDTO()
+                    if (department.IsValidWorkingDay(i.Date.Date) == true)
                     {
-                        Date = i,
-                        LateBy = new Time(0, 0),
-                        OverTime = new Time(0, 0),
-                        TimeIn = new Time(0, 0),
-                        TimeOut = new Time(0, 0),
-                        WorkingHours = new Time(0, 0),
-                    });
+                        listOfAttendanceRecordDTO.Add(new PerDayAttendanceRecordDTO()
+                        {
+                            Date = i,
+                            LateBy = new Time(0, 0),
+                            OverTime = new Time(0, 0),
+                            TimeIn = new Time(0, 0),
+                            TimeOut = new Time(0, 0),
+                            WorkingHours = new Time(0, 0),
+                            DayStatus =DayStatus.Leave
+                        });
+                    }
                 }
             }
             listOfAttendanceRecord.ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO.OrderByDescending(x => x.Date).ToList();
