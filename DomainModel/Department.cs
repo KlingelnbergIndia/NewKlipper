@@ -45,10 +45,10 @@ namespace DomainModel
             if (WeekDay == DayOfWeek.Sunday)
                 return false;
 
-            if (_department == Departments.Software && WeekDay == DayOfWeek.Saturday)
+            if ((_department == Departments.Software || _department == Departments.Design) && WeekDay == DayOfWeek.Saturday)
                 return false;
 
-            if (_department != Departments.Software && (weekOfMonth == 2 || weekOfMonth == 4))
+            if (weekOfMonth == 2 || weekOfMonth == 4)
                 return false;
 
             return true;
