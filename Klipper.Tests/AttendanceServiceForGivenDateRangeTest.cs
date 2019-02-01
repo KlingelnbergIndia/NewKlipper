@@ -21,20 +21,24 @@ namespace Klipper.Tests
     {
         private IAccessEventsRepository accessEventsData;
         private IEmployeeRepository employeeData;
-        
+        private IDepartmentRepository departmentData;
+
 
         [SetUp]
         public void setup()
         {
             accessEventsData = Substitute.For<IAccessEventsRepository>();
             employeeData = Substitute.For<IEmployeeRepository>();
+            departmentData = Substitute.For<IDepartmentRepository>();
+            var department = new Department(Departments.Default);
+            departmentData.GetDepartment(Departments.Default).Returns(department);
         }
 
         [Test]
         public void GivenDateRangeAndEmployeeIdShouldDisplayCorrectNumberOfRecords()
         {
             //Setup
-            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData);
+            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData);
             var dummyAccessevents = new AccessEventsBuilder().Build();
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
                 .Returns(dummyAccessevents);
@@ -58,7 +62,7 @@ namespace Klipper.Tests
         public void RetrivedAccessEventsHasAccurateData()
         {
             //Setup
-            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData);
+            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData);
             var dummyAccessevents = new AccessEventsBuilder().Build();
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
                 .Returns(dummyAccessevents);
@@ -105,7 +109,7 @@ namespace Klipper.Tests
         public void CalculateTotalDeficitTimeForGivenDateRange()
         {
             // Setup
-            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData);
+            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsData
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-10"))
@@ -132,7 +136,7 @@ namespace Klipper.Tests
         public void CalculateTotalExtraTimeForGivenDateRange()
         {
             // Setup
-            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData);
+            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-09"), DateTime.Parse("2018-10-09"));
             accessEventsData
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-09"), DateTime.Parse("2018-10-09"))

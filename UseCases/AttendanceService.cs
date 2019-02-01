@@ -13,10 +13,12 @@ namespace UseCases
     {
         private IAccessEventsRepository _accessEventsRepository;
         private IEmployeeRepository _employeeRepository;
-        public AttendanceService(IAccessEventsRepository accessEventsRepository, IEmployeeRepository employeeRepository)
+        private IDepartmentRepository _departmentRepository;
+        public AttendanceService(IAccessEventsRepository accessEventsRepository, IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
         {
             _accessEventsRepository = accessEventsRepository;
             _employeeRepository = employeeRepository;
+            _departmentRepository = departmentRepository;
         }
 
         public async Task<AttendanceRecordsDTO> GetAttendanceRecord(int employeeId, int noOfDays)
@@ -103,7 +105,6 @@ namespace UseCases
             return listOfaccessPointRecords;
         }
 
-
         private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord, DateTime fromDate, DateTime toDate)
         {
             var availableDates = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Distinct().ToList();
@@ -132,6 +133,7 @@ namespace UseCases
         {
             AttendanceRecordsDTO listOfAttendanceRecordDTO = new AttendanceRecordsDTO();
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
+            Department department = _departmentRepository.GetDepartment(employeeData.Department());
 
             foreach (var perDayWorkRecord in workRecordByDate)
             {
@@ -139,14 +141,17 @@ namespace UseCases
                 var timeOut = perDayWorkRecord.GetTimeOut();
                 var workingHours = perDayWorkRecord.CalculateWorkingHours();
 
+                var isValidWorkingDay = department.IsValidWorkingDay(perDayWorkRecord.Date);
+
                 PerDayAttendanceRecordDTO attendanceRecord = new PerDayAttendanceRecordDTO()
                 {
                     Date = perDayWorkRecord.Date,
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
-                    OverTime = GetOverTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department())),
-                    LateBy = GetLateByTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department()))
+                    OverTime = GetOverTime(workingHours, department.GetNoOfHoursToBeWorked()),
+                    LateBy = GetLateByTime(workingHours, department.GetNoOfHoursToBeWorked()),
+                    DayStatus = isValidWorkingDay ? DayStatus.WorkingDay : DayStatus.NonWorkingDay
                 };
                 listOfAttendanceRecordDTO.ListOfAttendanceRecordDTO.Add(attendanceRecord);
             }
@@ -158,11 +163,10 @@ namespace UseCases
                 {
                     ListOfAttendanceRecordDTO = perDayAttendanceRecords,
                     TotalWorkingHours = CalculateTotalWorkingHours(perDayAttendanceRecords),
-                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(perDayAttendanceRecords, GetNoOfHoursToBeWorked(employeeData.Department())),
+                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(perDayAttendanceRecords, department.GetNoOfHoursToBeWorked()),
                 };
             });
         }
-
 
         private Time GetOverTime(TimeSpan workingHours, double noOfHoursToBeWorked)
         {
@@ -234,10 +238,6 @@ namespace UseCases
                 (int)sumOfTotalWorkingHours.Minutes);
         }
 
-        private double GetNoOfHoursToBeWorked(Departments department)
-        {
-            return department == Departments.Design ? 10.0 : 9.0;
-        }
         private enum AbsoluteTime
         {
             TimeIn,

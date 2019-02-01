@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RepositoryImplementation;
 using UseCaseBoundary;
 using UseCaseBoundaryImplementation;
 
@@ -41,6 +42,7 @@ namespace Application.Web
 
             services.AddTransient<IEmployeeRepository, EmployeeMongoDBRepository>();
             services.AddTransient<IAccessEventsRepository, AccessEventMongoDBRepository>();
+            services.AddTransient<IDepartmentRepository, DepartmentMongoDBRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
