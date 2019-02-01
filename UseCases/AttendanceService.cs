@@ -13,10 +13,12 @@ namespace UseCases
     {
         private IAccessEventsRepository _accessEventsRepository;
         private IEmployeeRepository _employeeRepository;
-        public AttendanceService(IAccessEventsRepository accessEventsRepository, IEmployeeRepository employeeRepository)
+        private IDepartmentRepository _departmentRepository;
+        public AttendanceService(IAccessEventsRepository accessEventsRepository, IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
         {
             _accessEventsRepository = accessEventsRepository;
             _employeeRepository = employeeRepository;
+            _departmentRepository = departmentRepository;
         }
 
         public async Task<AttendanceRecordsDTO> GetAttendanceRecord(int employeeId, int noOfDays)
@@ -103,7 +105,6 @@ namespace UseCases
             return listOfaccessPointRecords;
         }
 
-
         private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord, DateTime fromDate, DateTime toDate)
         {
             var availableDates = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Distinct().ToList();
@@ -132,6 +133,7 @@ namespace UseCases
         {
             AttendanceRecordsDTO listOfAttendanceRecordDTO = new AttendanceRecordsDTO();
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
+            Department department = _departmentRepository.GetDepartment(employeeData.Department());
 
             foreach (var perDayWorkRecord in workRecordByDate)
             {
@@ -162,7 +164,6 @@ namespace UseCases
                 };
             });
         }
-
 
         private Time GetOverTime(TimeSpan workingHours, double noOfHoursToBeWorked)
         {
