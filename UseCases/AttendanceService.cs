@@ -140,17 +140,28 @@ namespace UseCases
                 var timeIn = perDayWorkRecord.GetTimeIn();
                 var timeOut = perDayWorkRecord.GetTimeOut();
                 var workingHours = perDayWorkRecord.CalculateWorkingHours();
-
+                var overTime = new Time(0,0);
+                var lateBy = new Time(0,0);
                 var isValidWorkingDay = department.IsValidWorkingDay(perDayWorkRecord.Date);
 
+                if (isValidWorkingDay == true)
+                {
+                    overTime = GetOverTime(workingHours, department.GetNoOfHoursToBeWorked());
+                    lateBy = GetLateByTime(workingHours, department.GetNoOfHoursToBeWorked());
+                }
+                else
+                {
+                    overTime = new Time(workingHours.Hours, workingHours.Minutes);
+                }
+               
                 PerDayAttendanceRecordDTO attendanceRecord = new PerDayAttendanceRecordDTO()
                 {
                     Date = perDayWorkRecord.Date,
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
-                    OverTime = GetOverTime(workingHours, department.GetNoOfHoursToBeWorked()),
-                    LateBy = GetLateByTime(workingHours, department.GetNoOfHoursToBeWorked()),
+                    OverTime = overTime,
+                    LateBy = lateBy,
                     DayStatus = isValidWorkingDay ? DayStatus.WorkingDay : DayStatus.NonWorkingDay
                 };
                 listOfAttendanceRecordDTO.ListOfAttendanceRecordDTO.Add(attendanceRecord);
