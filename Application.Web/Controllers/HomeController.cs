@@ -25,7 +25,7 @@ namespace Application.Web.Controllers
         private IEmployeeRepository _employeeRepository;
         private IDepartmentRepository _departmentRepository;
 
-        public HomeController(IAccessEventsRepository accessEventRepository,IEmployeeRepository employeeRepository)
+        public HomeController(IAccessEventsRepository accessEventRepository,IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
         {
             _accessEventRepository = accessEventRepository;
             _employeeRepository = employeeRepository;

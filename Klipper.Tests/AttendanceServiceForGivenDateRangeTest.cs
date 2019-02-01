@@ -39,7 +39,7 @@ namespace Klipper.Tests
         {
             //Setup
             AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData);
-            var dummyAccessevents = new AccessEventsBuilder().Build();
+            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"));
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
                 .Returns(dummyAccessevents);
             var dummyEmployee =
@@ -63,8 +63,8 @@ namespace Klipper.Tests
         {
             //Setup
             AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData);
-            var dummyAccessevents = new AccessEventsBuilder().Build();
-            accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
+            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"));
+            accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
                 .Returns(dummyAccessevents);
             var dummyEmployee =
                 new EmployeeBuilder()
