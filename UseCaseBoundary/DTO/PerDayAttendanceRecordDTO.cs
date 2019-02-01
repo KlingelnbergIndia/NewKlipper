@@ -13,5 +13,14 @@ namespace UseCaseBoundary.DTO
         public Time TimeOut;
         public Time LateBy;
         public Time OverTime;
+        public DayStatus DayStatus;
+    }
+
+    public enum DayStatus
+    {
+        WorkingDay,
+        NonWorkingDay,
+        Holiday,
+        Leave
     }
 }
