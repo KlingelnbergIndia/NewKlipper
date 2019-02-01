@@ -39,7 +39,7 @@ namespace Klipper.Tests
         {
             //Setup
             AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData);
-            var dummyAccessevents = new AccessEventsBuilder().Build();
+            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"));
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
                 .Returns(dummyAccessevents);
             var dummyEmployee =
@@ -55,7 +55,7 @@ namespace Klipper.Tests
                 .GetAwaiter()
                 .GetResult();
 
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO.Count, Is.EqualTo(33));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO.Count, Is.EqualTo(30));
         }
 
         [Test]
@@ -63,8 +63,8 @@ namespace Klipper.Tests
         {
             //Setup
             AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData);
-            var dummyAccessevents = new AccessEventsBuilder().Build();
-            accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
+            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"));
+            accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
                 .Returns(dummyAccessevents);
             var dummyEmployee =
                 new EmployeeBuilder()
@@ -85,7 +85,7 @@ namespace Klipper.Tests
 
             // Execute usecase
             var accessEvents = attendanceService
-                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
+                .GetAccessEventsForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
                 .GetAwaiter()
                 .GetResult();
             var actualData = accessEvents.ListOfAttendanceRecordDTO.Where(x => x.Date == DateTime.Parse("2018/10/09")).Single();
@@ -112,7 +112,7 @@ namespace Klipper.Tests
             AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsData
-                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-10"))
+                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
                 .Returns(dummyAccessevents);
             var dummyEmployee =
                 new EmployeeBuilder()
@@ -123,7 +123,7 @@ namespace Klipper.Tests
 
             // Execute usecase
             var actualData = attendanceService
-                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-10"))
+                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
                 .GetAwaiter()
                 .GetResult()
                 .TotalDeficitOrExtraHours;

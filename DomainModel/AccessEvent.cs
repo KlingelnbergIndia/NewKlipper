@@ -30,7 +30,14 @@ namespace DomainModel
         {
             return AccessPointID == 18;
         }
-
+        public bool FromServerRoom()
+        {
+            return AccessPointID == 17;
+        }
+        public bool FromUSBDeviceDoor()
+        {
+            return AccessPointID == 15;
+        }
         private string AccessPointName { get; set; }
 
         private int EmployeeID { get; set; }

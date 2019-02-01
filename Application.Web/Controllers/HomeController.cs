@@ -45,9 +45,9 @@ namespace Application.Web.Controllers
                 string toDate = HttpContext.Request.Form["toDate"].ToString();
 
                 employeeViewModel.fromDate = DateTime.Parse(fromDate);
-                employeeViewModel.toDate= DateTime.Parse(toDate);
+                employeeViewModel.toDate = DateTime.Parse(toDate);
 
-                employeeViewModel.employeeAttendaceRecords = 
+                employeeViewModel.employeeAttendaceRecords =
                     await attendanceService.GetAccessEventsForDateRange(employeeId, employeeViewModel.fromDate, employeeViewModel.toDate);
 
                 ViewData["resultMessage"] = String.Format(
@@ -77,11 +77,11 @@ namespace Application.Web.Controllers
 
         [AuthenticateTeamLeaderRole]
         public IActionResult Reportees()
-        {           
+        {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             ReporteeService reporteeService = new ReporteeService(_employeeRepository);
 
-            var reportees =  reporteeService.GetReporteesData(employeeId);
+            var reportees = reporteeService.GetReporteesData(employeeId);
 
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository, _departmentRepository);
@@ -104,6 +104,7 @@ namespace Application.Web.Controllers
         }
 
         [HttpPost]
+        [AuthenticateTeamLeaderRole]
         public async Task<IActionResult> GetSelectedreportee()
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
@@ -135,15 +136,18 @@ namespace Application.Web.Controllers
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository, _departmentRepository);
             AttendanceRecordsDTO listOfAttendanceRecord = new AttendanceRecordsDTO();
 
-            if (reporteeId!=0)
+            if (reporteeId != 0)
             {
                 reporteeViewModel.Name = Request.Form["selectMenu"].ToString();
-                if(!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+                if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
                 {
-                    listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId, 
+                    listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId,
                         reporteeViewModel.fromDate, reporteeViewModel.toDate);
                 }
-                
+                else
+                {
+                    listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(reporteeId, 7);
+                }
                 reporteeViewModel.EmployeeId = reporteeId;
 
                 reporteeViewModel
@@ -153,7 +157,7 @@ namespace Application.Web.Controllers
                     .reporteesAttendaceRecords
                     .ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
             }
-            
+
             return View("Reportees", reporteeViewModel);
         }
 
@@ -162,7 +166,7 @@ namespace Application.Web.Controllers
         {
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository, _departmentRepository);
             List<AccessPointRecord> listofaccesspointdetail = await attendanceService.GetAccessPointDetails(employeeId, date);
-            listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST(date,listofaccesspointdetail);
+            listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST(date, listofaccesspointdetail);
             return View(listofaccesspointdetail);
         }
 
@@ -182,7 +186,7 @@ namespace Application.Web.Controllers
 
             return listOfAttendanceRecord;
         }
-        private List<AccessPointRecord> ConvertAccessPointRecordsTimeToIST(DateTime date,List<AccessPointRecord> listOfAccessPointRecord)
+        private List<AccessPointRecord> ConvertAccessPointRecordsTimeToIST(DateTime date, List<AccessPointRecord> listOfAccessPointRecord)
         {
             foreach (var accessPointRecord in listOfAccessPointRecord)
             {
@@ -198,7 +202,7 @@ namespace Application.Web.Controllers
 
             return listOfAccessPointRecord;
         }
-        
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -215,6 +219,5 @@ namespace Application.Web.Controllers
             Time convertedTime = new Time(TimeZone_IST.Hour, TimeZone_IST.Minute);
             return convertedTime;
         }
-
     }
 }

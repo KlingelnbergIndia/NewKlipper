@@ -58,9 +58,9 @@ namespace UseCases
             var GymnasiumPointAccessEvents = perDayWorkRecord.GetGymnasiumPointAccessEvents();
             var MainEntryPointAccessEvents = perDayWorkRecord.GetMainEntryPointAccessEvents();
 
-            List<AccessPointRecord> RecreationAccessPointRecord = GetAccessPointRecord(RecreationPointAccessEvents, "Recreation");
-            List<AccessPointRecord> GymnasiumAccessPointRecord = GetAccessPointRecord(GymnasiumPointAccessEvents, "Gymnasium");
-            List<AccessPointRecord> MainEntryPointAccessPointRecord = GetAccessPointRecord(MainEntryPointAccessEvents, "Main Entry");
+            List<AccessPointRecord> RecreationAccessPointRecord = GetAccessPointRecord(RecreationPointAccessEvents, AccessPoint.Recreation);
+            List<AccessPointRecord> GymnasiumAccessPointRecord = GetAccessPointRecord(GymnasiumPointAccessEvents, AccessPoint.Gymnasium);
+            List<AccessPointRecord> MainEntryPointAccessPointRecord = GetAccessPointRecord(MainEntryPointAccessEvents, AccessPoint.MainEntry);
 
             List<AccessPointRecord> listOfAccessPointRecord = RecreationAccessPointRecord
                 .Concat(GymnasiumAccessPointRecord)
@@ -77,7 +77,7 @@ namespace UseCases
             });
         }
 
-        private List<AccessPointRecord> GetAccessPointRecord(List<AccessEvent> listOfAccessEvent, string AccessPoint)
+        private List<AccessPointRecord> GetAccessPointRecord(List<AccessEvent> listOfAccessEvent,AccessPoint accessPoint)
         {
             List<AccessPointRecord> listOfaccessPointRecords = new List<AccessPointRecord>();
             for (int i = 0; i < listOfAccessEvent.Count; i += 2)
@@ -98,7 +98,7 @@ namespace UseCases
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     TimeSpend = new Time(timeSpend.Hours, timeSpend.Minutes),
-                    AccessPoint = AccessPoint
+                    AccessPoint = accessPoint
                 };
                 listOfaccessPointRecords.Add(accessPointRecord);
             }
