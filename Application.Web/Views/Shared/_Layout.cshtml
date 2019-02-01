@@ -31,48 +31,18 @@
 	</nav>
 
 
-	<div id="wrapper">
+    <div id="wrapper">
+        @await Component.InvokeAsync("MenuItemList")
+        
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
 
-		<!-- Sidebar -->
-		<div id="sidebar-wrapper">
-			<ul class="sidebar-nav">
-				@*<img src="~/images/KLLogo.png" alt="logo"></img>*@
-				<li class="sidebar-brand">
-					<a href="#">
-						<span class="glyphicon glyphicon-user"></span>&nbsp; @Context.Session.GetString("EmployeeName")
-						<div style="margin-top:-35px;color:darkkhaki;font-size:.7em;float:left;margin-left:18px;">@Context.Session.GetString("Title")</div>
-					</a>
-				</li>
-
-				<li>&nbsp;</li>
-				<li>
-					<a href="/Home/Index">
-						<span class="glyphicon glyphicon-duplicate"></span>&nbsp;Summary
-					</a>
-				</li>
-
-					<li style="display:@ViewData["VisibilityReporteesTab"]">
-						<a href="/Home/Reportees">
-							<span class="glyphicon glyphicon-user"></span>&nbsp;Reportees
-						</a>
-					</li>
-				<li>
-					<a asp-area="" asp-controller="Login" class="" asp-action="Logout">
-						<span class="glyphicon glyphicon-off"></span>&nbsp; Logout
-					</a>
-				</li>
-			</ul>
-		</div>
-		<!-- /#sidebar-wrapper -->
-		<!-- Page Content -->
-		<div id="page-content-wrapper">
-			<div class="container-fluid">
-				@RenderBody()
-			</div>
-		</div>
-		<!-- /#page-content-wrapper -->
-
-	</div>
+    </div>
 
 	<partial name="_CookieConsentPartial" />
 
