@@ -60,14 +60,19 @@ namespace DomainModel
         public TimeSpan CalculateOutsidePremisesTime()
         {
             TimeSpan totalTime = TimeSpan.Zero;
-            var listOfAccessEvent = _accessEvents;
-            for (int i = 1; i < listOfAccessEvent.Count - 1; i += 2)
+            var listOfMainEntryAccessEvent = _accessEvents.Where(x=>x.FromMainDoor()).ToList();
+
+            listOfMainEntryAccessEvent = listOfMainEntryAccessEvent.Skip(1).ToList();
+            listOfMainEntryAccessEvent.RemoveAt(listOfMainEntryAccessEvent.Count - 1);
+
+            for (int i = 0; i < listOfMainEntryAccessEvent.Count; i += 2)
             {
-                var timeOut = CalculateAbsoluteOutTimeAndInTime(listOfAccessEvent[i].EventTime.TimeOfDay, AbsoluteTime.TimeOut);
+                var timeOut = CalculateAbsoluteOutTimeAndInTime(listOfMainEntryAccessEvent[i].EventTime.TimeOfDay, AbsoluteTime.TimeOut);
                 timeOut = new TimeSpan(timeOut.Hours, timeOut.Minutes, 00);
 
-                var timeIn = CalculateAbsoluteOutTimeAndInTime(listOfAccessEvent[i + 1].EventTime.TimeOfDay, AbsoluteTime.TimeIn);
+                var timeIn = CalculateAbsoluteOutTimeAndInTime(listOfMainEntryAccessEvent[i + 1].EventTime.TimeOfDay, AbsoluteTime.TimeIn);
                 timeIn = new TimeSpan(timeIn.Hours, timeIn.Minutes, 00);
+
                 totalTime += timeIn - timeOut;
             }
             return totalTime;
