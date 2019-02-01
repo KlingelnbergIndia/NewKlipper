@@ -59,8 +59,8 @@ namespace Klipper.Tests
         {
             //Setup
             AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData);
-            var dummyAccessevents = new AccessEventsBuilder().Build();
-            accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
+            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"));
+            accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
                 .Returns(dummyAccessevents);
             var dummyEmployee =
                 new EmployeeBuilder()
@@ -81,7 +81,7 @@ namespace Klipper.Tests
 
             // Execute usecase
             var accessEvents = attendanceService
-                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
+                .GetAccessEventsForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
                 .GetAwaiter()
                 .GetResult();
             var actualData = accessEvents.ListOfAttendanceRecordDTO.Where(x => x.Date == DateTime.Parse("2018/10/09")).Single();
