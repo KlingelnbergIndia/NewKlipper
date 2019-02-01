@@ -27,6 +27,8 @@ namespace Klipper.Tests
             accessEventsContainer = Substitute.For<IAccessEventsRepository>();
             employeeData = Substitute.For<IEmployeeRepository>();
             departmentData = Substitute.For<IDepartmentRepository>();
+            var department = new Department(Departments.Default);
+            departmentData.GetDepartment(Departments.Default).Returns(department);
         }
 
         [Test]
@@ -209,7 +211,7 @@ namespace Klipper.Tests
         public async Task GivenOddNOoFGymEntryAccessEventsSetWorkingHoursZero()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
             accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
@@ -234,7 +236,7 @@ namespace Klipper.Tests
         public async Task GivenOddNOoFMainEntryAccessEventsSetWorkingHoursZero()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData);
 
             var dummyAccessevents = new AccessEventsBuilder().Build();
             accessEventsContainer.GetAccessEvents(48).Returns(dummyAccessevents);
@@ -245,6 +247,7 @@ namespace Klipper.Tests
                 .WithPassword("26-12-1995")
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
+
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.GetAttendanceRecord(48, 7);
 
             Assert.That(
