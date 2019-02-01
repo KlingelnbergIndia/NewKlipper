@@ -57,8 +57,10 @@ namespace Application.Web.Controllers
             }
             else
             {
+                var toDate = DateTime.Now.Date;
+                var fromDate = toDate.AddDays(DayOfWeek.Monday - toDate.DayOfWeek);
                 employeeViewModel.employeeAttendaceRecords = 
-                    await attendanceService.GetAttendanceRecord(employeeId, 7);
+                    await attendanceService.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             }
 
             employeeViewModel.EmployeeId = employeeId;
@@ -94,6 +96,8 @@ namespace Application.Web.Controllers
             }
 
             reporteeViewModel.Name = string.Empty;
+            reporteeViewModel.toDate = DateTime.Now.Date;
+            reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
 
             return View(reporteeViewModel);
         }
@@ -140,7 +144,7 @@ namespace Application.Web.Controllers
                 }
                 else
                 {
-                    listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(reporteeId, 7);
+                   
                 }
                 reporteeViewModel.EmployeeId = reporteeId;
 
