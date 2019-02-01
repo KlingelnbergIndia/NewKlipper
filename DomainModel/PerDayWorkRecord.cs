@@ -18,23 +18,28 @@ namespace DomainModel
         public TimeSpan GetTimeIn()
         {
             return CalculateAbsoluteOutTimeAndInTime(
-                _accessEvents.Select(x => x.EventTime.TimeOfDay).Min(), AbsoluteTime.TimeIn);
+                _accessEvents
+                .Where(x => x.FromMainDoor())
+                .Select(x => x.EventTime.TimeOfDay).Min(), AbsoluteTime.TimeIn);
         }
 
         public TimeSpan GetTimeOut()
         {
-            var minTime = _accessEvents.Select(x => x.EventTime.TimeOfDay).Min();
+            var AccessEventsOFServerRoom = _accessEvents.Where(x =>x.FromServerRoom());
+            var AccessEventsOfUSBRoom = _accessEvents.Where(x => x.FromUSBDeviceDoor());
+            var AccessEventForTimeOut = _accessEvents.Except(AccessEventsOFServerRoom).ToList();
 
-            var maxTime = _accessEvents.Select(x => x.EventTime.TimeOfDay).Max();
+            AccessEventForTimeOut= AccessEventForTimeOut.Except(AccessEventsOfUSBRoom).ToList();
+
+            var minTime = AccessEventForTimeOut.Select(x => x.EventTime.TimeOfDay).Min();
+            var maxTime = AccessEventForTimeOut.Select(x => x.EventTime.TimeOfDay).Max();
 
             if (minTime == maxTime)
             {
                 return TimeSpan.Zero;
             }
-            else
-            {
                 return CalculateAbsoluteOutTimeAndInTime(maxTime,AbsoluteTime.TimeOut);
-            }
+            
         }
 
         public TimeSpan CalculateWorkingHours()

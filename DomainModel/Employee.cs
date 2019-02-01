@@ -86,6 +86,11 @@ namespace DomainModel
             return _department;
         }
 
+        public double GetNoOfHoursToBeWorked()
+        {
+            return _department == Departments.Design ? 10.0 : 9.0;
+        }
+
         public bool Authenticate(string userName, string password)
         {
             userName = userName.ToLower();
