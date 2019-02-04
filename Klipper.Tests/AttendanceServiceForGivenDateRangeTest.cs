@@ -120,6 +120,7 @@ namespace Klipper.Tests
                 .WithPassword("26-12-1995")
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
+            departmentData.GetDepartment(Departments.Software).Returns(new Department(Departments.Software));
 
             // Execute usecase
             var actualData = attendanceService

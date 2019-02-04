@@ -16,6 +16,7 @@ namespace Tests
         private int id;
         private List<EmployeeRoles> employeeRoles = new List<EmployeeRoles>();
         private List<int> reportees = new List<int>();
+        private Departments Department;
 
         public EmployeeBuilder()
         {
@@ -54,13 +55,19 @@ namespace Tests
             return this;
         }
 
+        public EmployeeBuilder WithDepartment(Departments department)
+        {
+            this.Department = department;
+            return this;
+        }
+
         public Employee BuildEmployee(string firstName="Sidhdesh", string lastName="Vadgaonkar", 
                                       string title="Software Developer",
                                       List<EmployeeRoles> roles=null,
                                       List<int> reportees=null)
         {
             return new Employee(id, userName, password, firstName,
-                                lastName, title, roles, this.reportees,Departments.Default);
+                                lastName, title, roles, this.reportees,Departments.Software);
         }
 
         internal EmployeeBuilder WithRole(EmployeeRoles employee)
