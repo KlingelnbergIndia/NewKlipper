@@ -60,6 +60,10 @@ namespace Application.Web.Controllers
             {
                 var toDate = DateTime.Now.Date;
                 var fromDate = toDate.AddDays(DayOfWeek.Monday - toDate.DayOfWeek);
+
+                employeeViewModel.toDate = toDate;
+                employeeViewModel.fromDate = fromDate;
+
                 employeeViewModel.employeeAttendaceRecords = 
                     await attendanceService.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             }
