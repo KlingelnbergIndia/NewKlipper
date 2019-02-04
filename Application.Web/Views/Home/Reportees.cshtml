@@ -111,17 +111,20 @@
                 <tbody>
                     @foreach (var item in Model.reporteesAttendaceRecords.ListOfAttendanceRecordDTO)
                     {
+
                         string lateByClass = "alert alert-danger";
                         string overTimeClass = "alert alert-success";
 
-                        string nonWorkingDayTextColor = "";
+                        string nonWorkingDayClass = "";
+                        string dayStatus = "";
 
-                        @if (item.TimeIn.Hour == 0 && item.TimeIn.Minute == 0 && item.TimeOut.Hour == 0 && item.TimeOut.Minute == 0)
+                        @if (item.DayStatus.ToString() == "NonWorkingDay")
                         {
-                            nonWorkingDayTextColor = "rgba(0,0,0,0.5)";
+                            nonWorkingDayClass = "warning";
+                            dayStatus = "Non working day";
                         }
 
-                        <tr style="color:@nonWorkingDayTextColor">
+                        <tr class="@nonWorkingDayClass popoverClass" data-content="@dayStatus" data-placement="bottom">
                             <td style="vertical-align: text-top;">@item.Date.ToString("dd MMMM yyyy")</td>
                             <td>@item.Date.ToString("dddd")</td>
 

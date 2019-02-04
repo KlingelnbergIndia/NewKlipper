@@ -227,7 +227,7 @@ namespace UseCases
                 return new Time(00, 00);
             }
 
-            double totalRequiredHoursToBeWorked = listOfAttendanceRecordDTO.Count * noOfHoursToBeWorked;
+            double totalRequiredHoursToBeWorked = listOfAttendanceRecordDTO.Count(x => x.DayStatus == DayStatus.WorkingDay) * noOfHoursToBeWorked;
             Time totalWorkedTime = CalculateTotalWorkingHours(listOfAttendanceRecordDTO);
             var totalWorkedSpan = new TimeSpan(totalWorkedTime.Hour, totalWorkedTime.Minute, 00);
 
