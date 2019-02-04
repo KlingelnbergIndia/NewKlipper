@@ -27,8 +27,8 @@ namespace Klipper.Tests
             accessEventsContainer = Substitute.For<IAccessEventsRepository>();
             employeeData = Substitute.For<IEmployeeRepository>();
             departmentData = Substitute.For<IDepartmentRepository>();
-            var department = new Department(Departments.Default);
-            departmentData.GetDepartment(Departments.Default).Returns(department);
+            var department = new Department(Departments.Software);
+            departmentData.GetDepartment(Departments.Software).Returns(department);
         }
 
         [Test]

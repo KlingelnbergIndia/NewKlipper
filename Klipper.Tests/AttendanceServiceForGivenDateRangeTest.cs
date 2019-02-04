@@ -30,8 +30,8 @@ namespace Klipper.Tests
             accessEventsData = Substitute.For<IAccessEventsRepository>();
             employeeData = Substitute.For<IEmployeeRepository>();
             departmentData = Substitute.For<IDepartmentRepository>();
-            var department = new Department(Departments.Default);
-            departmentData.GetDepartment(Departments.Default).Returns(department);
+            var department = new Department(Departments.Software);
+            departmentData.GetDepartment(Departments.Software).Returns(department);
         }
 
         [Test]
@@ -39,8 +39,8 @@ namespace Klipper.Tests
         {
             //Setup
             AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData);
-            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"));
-            accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
+            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-08"));
+            accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-08"))
                 .Returns(dummyAccessevents);
             var dummyEmployee =
                 new EmployeeBuilder()
@@ -51,11 +51,11 @@ namespace Klipper.Tests
 
             // Execute usecase
             var accessEvents = attendanceService
-                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-30"))
+                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-08"))
                 .GetAwaiter()
                 .GetResult();
 
-            Assert.That(accessEvents.ListOfAttendanceRecordDTO.Count, Is.EqualTo(30));
+            Assert.That(accessEvents.ListOfAttendanceRecordDTO.Count, Is.EqualTo(6));
         }
 
         [Test]
@@ -120,8 +120,7 @@ namespace Klipper.Tests
                 .WithPassword("26-12-1995")
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
-            departmentData.GetDepartment(Departments.Software).Returns(new Department(Departments.Software));
-
+            
             // Execute usecase
             var actualData = attendanceService
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
