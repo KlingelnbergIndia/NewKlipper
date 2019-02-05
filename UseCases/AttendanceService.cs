@@ -21,18 +21,6 @@ namespace UseCases
             _departmentRepository = departmentRepository;
         }
 
-        public async Task<AttendanceRecordsDTO> GetAttendanceRecord(int employeeId, int noOfDays)
-        {
-            AccessEvents accessEvents = _accessEventsRepository.GetAccessEvents(employeeId);
-            var workRecordByDate = accessEvents.WorkRecord(noOfDays);
-            AttendanceRecordsDTO listOfAttendanceRecord = await CreateAttendanceRecordAsync(workRecordByDate, employeeId);
-
-            return await Task.Run(() =>
-            {
-                return listOfAttendanceRecord;
-            });
-        }
-
         public async Task<AttendanceRecordsDTO> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
         {
             AccessEvents accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);

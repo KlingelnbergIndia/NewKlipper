@@ -148,10 +148,6 @@ namespace Application.Web.Controllers
                     listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId,
                         reporteeViewModel.fromDate, reporteeViewModel.toDate);
                 }
-                else
-                {
-                    listOfAttendanceRecord = await attendanceService.GetAttendanceRecord(reporteeId, 7);
-                }
                 reporteeViewModel.EmployeeId = reporteeId;
 
                 reporteeViewModel
