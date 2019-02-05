@@ -27,11 +27,6 @@ namespace UseCases
             var workRecordByDate = accessEvents.WorkRecord(noOfDays);
             AttendanceRecordsDTO listOfAttendanceRecord = await CreateAttendanceRecordAsync(workRecordByDate, employeeId);
 
-            var fromDate = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Min();
-            var toDate = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Max();
-
-            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord, fromDate, toDate, employeeId);
-
             return await Task.Run(() =>
             {
                 return listOfAttendanceRecord;

@@ -28,7 +28,7 @@ namespace Klipper.Tests
 
         public AccessEvents BuildBetweenDate(DateTime fromDate, DateTime toDate)
         {
-            fromDate = toDate.Date + DateTime.MinValue.TimeOfDay;
+            fromDate = fromDate.Date + DateTime.MinValue.TimeOfDay;
             toDate = toDate.Date + DateTime.MaxValue.TimeOfDay;
             var jsonData = File.ReadAllText(accessEventsFilePath);
             dummyAccessEvent = JsonConvert.DeserializeObject<List<AccessEvent>>(jsonData)
