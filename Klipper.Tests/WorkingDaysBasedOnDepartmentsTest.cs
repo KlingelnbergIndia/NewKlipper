@@ -180,6 +180,31 @@ namespace Klipper.Tests
 
 
         [Test]
+        public void GivenWorked1stSaturdayIsWorkingDayForServiceDepartment()
+        {
+            //SETUP
+            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer);
+
+            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
+            accessEventsContainer.GetAccessEventsForDateRange(77, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Returns(dummyAccessevents);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithID(666)
+                .WithDepartment(Departments.Service)
+                .BuildEmployee();
+            employeeContainer.GetEmployee(77).Returns(dummyEmployee);
+
+            //EXECUTE TEST CASES
+            var dactualData = attendanceService.GetAccessEventsForDateRange(77, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Result;
+            var dactualDataForADay = dactualData.ListOfAttendanceRecordDTO.FirstOrDefault();
+
+            //ASSERT
+            Assert.AreEqual(dactualDataForADay.DayStatus, DayStatus.WorkingDay);
+        }
+
+
+        [Test]
         public void GivenWorked2ndSaturdayIsNonWorkingDayForServiceDepartment()
         {
             //SETUP
