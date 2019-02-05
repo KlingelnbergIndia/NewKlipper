@@ -159,5 +159,58 @@ namespace Klipper.Tests
             Assert.That(actualData.Minute, Is.EqualTo(3));
         }
 
+        [Test]
+        public async Task GivenOddNOoFGymEntryAccessEventsSetWorkingHoursZero()
+        {
+            AttendanceService attendanceService =
+                new AttendanceService(accessEventsData, employeeData, departmentData);
+
+            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-30"), DateTime.Parse("2018-10-30"));
+            accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-30"), DateTime.Parse("2018-10-30")).Returns(dummyAccessevents);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
+            var listOfAttendanceRecordForSpecifiedDays = await attendanceService.
+                GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-30"), DateTime.Parse("2018-10-30"));
+
+            Assert.That(
+                listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[0].WorkingHours.Hour,
+                Is.EqualTo(0));
+            Assert.That(
+               listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[0].WorkingHours.Minute,
+               Is.EqualTo(0));
+        }
+
+        [Test]
+        public async Task GivenOddNOoFMainEntryAccessEventsSetWorkingHoursZero()
+        {
+            AttendanceService attendanceService =
+                new AttendanceService(accessEventsData, employeeData, departmentData);
+
+            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-01"));
+            accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-01")).Returns(dummyAccessevents);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                .WithUserName("Sidhdesh.Vadgaonkar")
+                .WithPassword("26-12-1995")
+                .BuildEmployee();
+            employeeData.GetEmployee(48).Returns(dummyEmployee);
+
+            var listOfAttendanceRecordForSpecifiedDays = await attendanceService.
+                GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-01"));
+
+
+            Assert.That(
+                listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[0].WorkingHours.Hour,
+                Is.EqualTo(0));
+            Assert.That(
+               listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[0].WorkingHours.Minute,
+               Is.EqualTo(0));
+        }
     }
 }
