@@ -61,12 +61,13 @@ namespace Klipper.Tests
                new EmployeeBuilder()
                .WithUserName("Sidhdesh.Vadgaonkar")
                .WithPassword("26-12-1995")
+               .WithDepartment(Departments.Design)
                .WithID(48)
                .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
 
-            var department = new Department(Departments.Software);
-            departmentData.GetDepartment(Departments.Software).Returns(department);
+            var department = new Department(Departments.Design);
+            departmentData.GetDepartment(Departments.Design).Returns(department);
 
             AttendanceService attendanceService =
                     new AttendanceService(accessEventsContainer, employeeData, departmentData);
