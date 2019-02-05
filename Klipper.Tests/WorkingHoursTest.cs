@@ -65,7 +65,7 @@ namespace Klipper.Tests
                .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
 
-            var department = new Department(Departments.Design);
+            var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
             AttendanceService attendanceService =

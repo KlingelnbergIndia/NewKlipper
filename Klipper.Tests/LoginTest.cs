@@ -16,7 +16,7 @@ namespace Tests
         private int id;
         private List<EmployeeRoles> employeeRoles = new List<EmployeeRoles>();
         private List<int> reportees = new List<int>();
-        private Departments Department;
+        private Departments Department = Departments.Software;
 
         public EmployeeBuilder()
         {
@@ -67,7 +67,7 @@ namespace Tests
                                       List<int> reportees=null)
         {
             return new Employee(id, userName, password, firstName,
-                                lastName, title, roles, this.reportees,Departments.Software);
+                                lastName, title, roles, this.reportees, Department);
         }
 
         internal EmployeeBuilder WithRole(EmployeeRoles employee)

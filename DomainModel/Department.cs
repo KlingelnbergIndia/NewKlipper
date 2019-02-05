@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace DomainModel
@@ -40,7 +41,7 @@ namespace DomainModel
         public bool IsValidWorkingDay(DateTime date)
         {
             DayOfWeek WeekDay = date.DayOfWeek;
-            int weekOfMonth = ((date.Day + (int)WeekDay) / 7) + 1;
+            int weekOfMonth = GetWeekNumberOfMonth(date);
 
             if (WeekDay == DayOfWeek.Sunday)
                 return false;
@@ -48,10 +49,21 @@ namespace DomainModel
             if ((_department == Departments.Software || _department == Departments.Design) && WeekDay == DayOfWeek.Saturday)
                 return false;
 
-            if (!(_department == Departments.Software || _department == Departments.Design) && weekOfMonth == 2 || weekOfMonth == 4)
+            if (!(_department == Departments.Software || _department == Departments.Design) &&
+                (weekOfMonth == 2 || weekOfMonth == 4) && WeekDay == DayOfWeek.Saturday)
                 return false;
 
             return true;
+        }
+
+        private static int GetWeekNumberOfMonth(DateTime date)
+        {
+            DateTime beginningOfMonth = new DateTime(date.Year, date.Month, 1);
+
+            while (date.Date.AddDays(1).DayOfWeek != CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)
+                date = date.AddDays(1);
+
+            return (int)Math.Truncate((double)date.Subtract(beginningOfMonth).TotalDays / 7f) + 1;
         }
     }
 }
