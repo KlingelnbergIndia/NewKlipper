@@ -48,7 +48,7 @@ namespace DomainModel
             if ((_department == Departments.Software || _department == Departments.Design) && WeekDay == DayOfWeek.Saturday)
                 return false;
 
-            if (!(_department == Departments.Software || _department == Departments.Design) && weekOfMonth == 2 || weekOfMonth == 4)
+            if ((!(_department == Departments.Software || _department == Departments.Design)) && (weekOfMonth == 2 || weekOfMonth == 4))
                 return false;
 
             return true;
