@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RepositoryImplementation;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UseCaseBoundary.DTO;
@@ -7,9 +8,9 @@ namespace UseCases
 {
     public class RegularizationService
     {
-        private IRegularizationRepository _regularizatioRepository;
+        private AttendanceRegularizationMongoDBRepository _regularizatioRepository;
 
-        public RegularizationService(IRegularizationRepository regularizatioRepository)
+        public RegularizationService(AttendanceRegularizationMongoDBRepository regularizatioRepository)
         {
             _regularizatioRepository = regularizatioRepository;
         }
