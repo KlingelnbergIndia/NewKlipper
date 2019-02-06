@@ -23,18 +23,19 @@ namespace Application.Web.Controllers
     {
         private IAccessEventsRepository _accessEventRepository;
         private IEmployeeRepository _employeeRepository;
+        private IDepartmentRepository _departmentRepository;
 
-        public HomeController(IAccessEventsRepository accessEventRepository, IEmployeeRepository employeeRepository)
+        public HomeController(IAccessEventsRepository accessEventRepository,IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
         {
             _accessEventRepository = accessEventRepository;
             _employeeRepository = employeeRepository;
-            LoginViewModel loginViewModel = new LoginViewModel();
+            _departmentRepository = departmentRepository;
         }
 
         public async Task<IActionResult> Index(string searchFilter)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository, _departmentRepository);
 
             EmployeeViewModel employeeViewModel = new EmployeeViewModel();
 
@@ -57,8 +58,14 @@ namespace Application.Web.Controllers
             }
             else
             {
-                employeeViewModel.employeeAttendaceRecords =
-                    await attendanceService.GetAccessEventsForDateRange(employeeId, DateTime.Today.AddDays(-6).Date, DateTime.Today.Date);
+                var toDate = DateTime.Now.Date;
+                var fromDate = toDate.AddDays(DayOfWeek.Monday - toDate.DayOfWeek);
+
+                employeeViewModel.toDate = toDate;
+                employeeViewModel.fromDate = fromDate;
+
+                employeeViewModel.employeeAttendaceRecords = 
+                    await attendanceService.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             }
 
             employeeViewModel.EmployeeId = employeeId;
@@ -81,7 +88,7 @@ namespace Application.Web.Controllers
             var reportees = reporteeService.GetReporteesData(employeeId);
 
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository, _departmentRepository);
             List<AttendanceRecordsDTO> listOfAttendanceRecord = new List<AttendanceRecordsDTO>();
 
             if (reportees.Count != 0)
@@ -94,6 +101,8 @@ namespace Application.Web.Controllers
             }
 
             reporteeViewModel.Name = string.Empty;
+            reporteeViewModel.toDate = DateTime.Now.Date;
+            reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
 
             return View(reporteeViewModel);
         }
@@ -128,7 +137,7 @@ namespace Application.Web.Controllers
 
             int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
 
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository, _departmentRepository);
             AttendanceRecordsDTO listOfAttendanceRecord = new AttendanceRecordsDTO();
 
             if (reporteeId != 0)
@@ -138,10 +147,6 @@ namespace Application.Web.Controllers
                 {
                     listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId,
                         reporteeViewModel.fromDate, reporteeViewModel.toDate);
-                }
-                else
-                {
-                    listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(employeeId, DateTime.Today.AddDays(-6).Date, DateTime.Today.Date);
                 }
                 reporteeViewModel.EmployeeId = reporteeId;
 
@@ -159,7 +164,7 @@ namespace Application.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> AccessPointDetail(DateTime date, int employeeId)
         {
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository, _departmentRepository);
             List<AccessPointRecord> listofaccesspointdetail = await attendanceService.GetAccessPointDetails(employeeId, date);
             listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST(date, listofaccesspointdetail);
             return View(listofaccesspointdetail);
