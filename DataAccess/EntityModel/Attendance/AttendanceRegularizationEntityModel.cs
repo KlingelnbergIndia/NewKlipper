@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UseCaseBoundary.Model;
 
 namespace DataAccess.EntityModel.Attendance
 {
@@ -18,6 +19,7 @@ namespace DataAccess.EntityModel.Attendance
         public DateTime RegularizedDate { get; set; }
         [BsonDateTimeOptions]
         public string Remark { get; set; }
+        public Time RegularizedHours { get; set; }
         public DateTime LogTime { get; set; } = DateTime.Now;
     }
 }

@@ -7,7 +7,6 @@ namespace UseCaseBoundary
 {
     public interface IAttendanceRegularizationRepository
     {
-        RegularizationDTO SaveRegularizationData(RegularizationDTO regularizationData);
         bool SaveRegularizationRecord(RegularizationDTO reguraliozationDTO);
         List<RegularizationDTO> GetRegularizedRecords(int employeeId);
     }

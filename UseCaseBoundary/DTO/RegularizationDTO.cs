@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UseCaseBoundary.Model;
 
 namespace UseCaseBoundary.DTO
 {
@@ -9,6 +10,6 @@ namespace UseCaseBoundary.DTO
         public int EmployeeID { get; set; }
         public DateTime RegularizedDate { get; set; }
         public string Remark { get; set; }
-        public int ReguralizedHours { get; set; }
+        public Time ReguralizedHours { get; set; }
     }
 }
