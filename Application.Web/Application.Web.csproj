@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Home\AccessEventsPopup.cshtml" />
+    <Content Remove="Views\Home\_AccessEventsPopup1.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Home\AccessEventsPopup.cshtml" />
+    <None Include="Views\Shared\_AccessEventsPopup.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
