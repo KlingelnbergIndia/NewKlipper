@@ -4,7 +4,7 @@ using System.Text;
 
 namespace UseCaseBoundary.DTO
 {
-    public class ReguralizationDTO
+    public class RegularizationData
     {
         public int EmployeeID { get; set; }
         public DateTime RegularizedDate { get; set; }

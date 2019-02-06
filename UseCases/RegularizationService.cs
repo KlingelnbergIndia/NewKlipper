@@ -2,27 +2,28 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UseCaseBoundary;
 using UseCaseBoundary.DTO;
 
 namespace UseCases
 {
     public class RegularizationService
     {
-        private AttendanceRegularizationMongoDBRepository _regularizatioRepository;
+        private IAttendanceRegularizationRepository _regularizatioRepository;
 
-        public RegularizationService(AttendanceRegularizationMongoDBRepository regularizatioRepository)
+        public RegularizationService(IAttendanceRegularizationRepository regularizatioRepository)
         {
             _regularizatioRepository = regularizatioRepository;
         }
 
-        public void SaveReguralizationData(ReguralizationDTO reguraliozationDTO)
+        public void AddRegularization(RegularizationDTO reguraliozationDTO)
         {
-            _regularizatioRepository.SaveReguralizationData(reguraliozationDTO);
+            _regularizatioRepository.SaveRegularizationRecord(reguraliozationDTO);
         }
 
-        public ReguralizationDTO GetReguralizationData(int employeeId,DateTime date)
+        public List<RegularizationDTO> GetRegularization(int employeeId)
         {
-            var regularizedData =_regularizatioRepository.GetReguralizationData(int employeeId, DateTime date);
+            var regularizedData =_regularizatioRepository.GetRegularizedRecords(employeeId);
             return regularizedData;
         }
 
