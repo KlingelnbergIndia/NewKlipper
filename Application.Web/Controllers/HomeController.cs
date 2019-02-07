@@ -170,6 +170,13 @@ namespace Application.Web.Controllers
             return View(listofaccesspointdetail);
         }
 
+        [HttpPost]
+        public IActionResult SaveRegularizeHours(DateTime date, int employeeId, DateTime timeToBeRegularize, string remark)
+        {
+
+            return null;
+        }
+
         private List<PerDayAttendanceRecordDTO> ConvertAttendanceRecordsTimeToIST(List<PerDayAttendanceRecordDTO> listOfAttendanceRecord)
         {
             foreach (var attendanceRecord in listOfAttendanceRecord)
