@@ -69,12 +69,12 @@ namespace UseCases
             _attendanceRegularizationRepository.SaveRegularizationRecord(reguraliozationDTO);
         }
 
-        public List<Regularization> GetRegularization(int employeeId)
+        public List<Regularization> GetRegularizationEntry(int employeeId)
         {
             var regularizedData = _attendanceRegularizationRepository.GetRegularizedRecords(employeeId);
             return regularizedData;
         }
-        public Regularization GetRegularizationByDate(int employeeId, DateTime date)
+        public Regularization GetRegularizationEntryByDate(int employeeId, DateTime date)
         {
             var listOfRegularizedData = _attendanceRegularizationRepository.GetRegularizedRecords(employeeId).ToList();
             var regularizedDataOfADay = listOfRegularizedData.Where(x => x._regularizedDate == date).FirstOrDefault();
@@ -155,10 +155,14 @@ namespace UseCases
                 var overTime = new Time(0, 0);
                 var lateBy = new Time(0, 0);
                 var isValidWorkingDay = department.IsValidWorkingDay(perDayWorkRecord.Date);
-                var reguralizedEntry = GetRegularizationByDate(employeeId, perDayWorkRecord.Date);
+                var reguralizedEntry = GetRegularizationEntryByDate(employeeId, perDayWorkRecord.Date);
+                string remark = null;
+                bool flag = false;
                 if (reguralizedEntry != null)
                 {
                     workingHours = reguralizedEntry.GetRegularizedHours();
+                    remark = reguralizedEntry.GetRemark();
+                    flag = true;
                 }
 
                 if (isValidWorkingDay == true)
@@ -179,7 +183,9 @@ namespace UseCases
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
                     OverTime = overTime,
                     LateBy = lateBy,
-                    DayStatus = isValidWorkingDay ? DayStatus.WorkingDay : DayStatus.NonWorkingDay
+                    DayStatus = isValidWorkingDay ? DayStatus.WorkingDay : DayStatus.NonWorkingDay,
+                    Remark = remark,
+                    Flag=flag
                 };
                 listOfAttendanceRecordDTO.ListOfAttendanceRecordDTO.Add(attendanceRecord);
             }

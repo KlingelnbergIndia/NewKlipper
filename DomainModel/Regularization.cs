@@ -24,5 +24,9 @@ namespace DomainModel
             return _reguralizedHours;
         }
 
+        public string GetRemark()
+        {
+            return _remark;
+        }
     }
 }
