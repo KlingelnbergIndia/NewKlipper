@@ -16,6 +16,7 @@ namespace UseCaseBoundary.DTO
         public DayStatus DayStatus;
         public string Remark;
         public bool IsHoursRegularized;
+        public Time RegularizedHours;
     }
 
     public enum DayStatus

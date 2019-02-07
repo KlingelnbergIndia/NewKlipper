@@ -143,11 +143,11 @@ namespace UseCases
                         var reguralizedEntry = GetRegularizationEntryByDate(employeeId, i.Date.Date);
                         string remark = null;
                         bool flag = false;
-                        var workingHours = TimeSpan.Zero;
                         var dayStatus = DayStatus.Leave;
+                        var regularizedHours = TimeSpan.Zero;
                         if(reguralizedEntry != null)
                         {
-                            workingHours = reguralizedEntry.GetRegularizedHours();
+                            regularizedHours = reguralizedEntry.GetRegularizedHours();
                             remark = reguralizedEntry.GetRemark();
                             flag = true;
                             dayStatus = DayStatus.WorkingDay;
@@ -160,7 +160,8 @@ namespace UseCases
                             OverTime = new Time(0, 0),
                             TimeIn = new Time(0, 0),
                             TimeOut = new Time(0, 0),
-                            WorkingHours = new Time(workingHours.Hours, workingHours.Minutes) ,
+                            WorkingHours = new Time(0, 0),
+                            RegularizedHours = new Time(regularizedHours.Hours, regularizedHours.Minutes),
                             DayStatus = dayStatus,
                             Remark = remark,
                             IsHoursRegularized = flag
@@ -184,15 +185,17 @@ namespace UseCases
                 var timeIn = perDayWorkRecord.GetTimeIn();
                 var timeOut = perDayWorkRecord.GetTimeOut();
                 var workingHours = perDayWorkRecord.CalculateWorkingHours();
+                var regularizedHours = TimeSpan.Zero;
                 var overTime = new Time(0, 0);
                 var lateBy = new Time(0, 0);
                 var isValidWorkingDay = department.IsValidWorkingDay(perDayWorkRecord.Date);
                 var reguralizedEntry = GetRegularizationEntryByDate(employeeId, perDayWorkRecord.Date);
                 string remark = null;
                 bool flag = false;
+                
                 if (reguralizedEntry != null)
                 {
-                    workingHours = reguralizedEntry.GetRegularizedHours();
+                    regularizedHours = reguralizedEntry.GetRegularizedHours();
                     remark = reguralizedEntry.GetRemark();
                     flag = true;
                 }
@@ -213,6 +216,7 @@ namespace UseCases
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
+                    RegularizedHours =  new Time(regularizedHours.Hours, regularizedHours.Minutes),
                     OverTime = overTime,
                     LateBy = lateBy,
                     DayStatus = isValidWorkingDay ? DayStatus.WorkingDay : DayStatus.NonWorkingDay,
@@ -289,10 +293,22 @@ namespace UseCases
                 return new Time(00, 00);
             }
 
-            var sumOfTotalWorkingHours = listOfAttendanceRecordDTO
-                .Select(x => new TimeSpan(x.WorkingHours.Hour, x.WorkingHours.Minute, 00))
-                .Aggregate((t1, t2) => t1 + t2);
+            var sumOfTotalWorkingHours = TimeSpan.Zero;
 
+            foreach (var AttendanceRecordDTO in listOfAttendanceRecordDTO)
+            {
+                if (AttendanceRecordDTO.IsHoursRegularized==true)
+                {
+                    var regularizedHours = AttendanceRecordDTO.RegularizedHours;
+                    sumOfTotalWorkingHours += new TimeSpan(regularizedHours.Hour, regularizedHours.Minute, 00);
+                }
+                else
+                {
+                    var workingHours = AttendanceRecordDTO.WorkingHours;
+                    sumOfTotalWorkingHours += new TimeSpan(workingHours.Hour, workingHours.Minute, 00);
+                }
+            }
+           
             return new Time(
                 (int)sumOfTotalWorkingHours.TotalHours,
                 (int)sumOfTotalWorkingHours.Minutes);
