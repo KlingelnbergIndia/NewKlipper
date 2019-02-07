@@ -156,7 +156,7 @@ namespace Application.Web.Controllers
                 }
                 reporteeViewModel.EmployeeId = reporteeId;
 
-                reporteeViewModel
+                reporteeViewModel                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
                     .reporteesAttendaceRecords = listOfAttendanceRecord;
 
                 reporteeViewModel

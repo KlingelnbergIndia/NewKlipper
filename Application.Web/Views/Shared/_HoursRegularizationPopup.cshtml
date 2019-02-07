@@ -31,11 +31,13 @@
         var _employeeId;
 
         regularizeHours = function (date, employeeId) {
-            _convertStringToDateObject = new Date(date);
-            _employeeId = employeeId;
+            if (confirm("Regularize hours ?")) {
+                _convertStringToDateObject = new Date(date);
+                _employeeId = employeeId;
 
-            $("#popupDateSpan").html(dateToYMD(_convertStringToDateObject));
-            $('#HoursRegularizationModal').modal({ 'show': true, 'backdrop': true });
+                $("#popupDateSpan").html(dateToYMD(_convertStringToDateObject));
+                $('#HoursRegularizationModal').modal({ 'show': true, 'backdrop': true });
+            }
         }
 
         saveData = function () {
