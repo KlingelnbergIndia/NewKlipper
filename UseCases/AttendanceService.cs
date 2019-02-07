@@ -64,9 +64,10 @@ namespace UseCases
             });
         }
 
-        public void AddRegularization(RegularizationDTO reguraliozationDTO)
+        public bool AddRegularization(RegularizationDTO reguraliozationDTO)
         {
             _attendanceRegularizationRepository.SaveRegularizationRecord(reguraliozationDTO);
+            return true;
         }
 
         public List<Regularization> GetRegularizationEntry(int employeeId)

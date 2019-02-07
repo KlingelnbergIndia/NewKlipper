@@ -180,6 +180,17 @@ namespace Application.Web.Controllers
         [HttpPost]
         public IActionResult SaveRegularizeHours(DateTime date, int employeeId, DateTime timeToBeRegularize, string remark)
         {
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
+                _departmentRepository, _attendanceRegularizationRepository);
+            var redularizationData = new RegularizationDTO() {
+                EmployeeID = employeeId,
+                RegularizedDate = date,
+                ReguralizedHours = new Time(timeToBeRegularize.Hour, timeToBeRegularize.Minute),
+                Remark = remark,
+            };
+            var response = attendanceService.AddRegularization(redularizationData);
+            if (response)
+                return Ok(Json("Record regularized !"));
 
             return null;
         }
