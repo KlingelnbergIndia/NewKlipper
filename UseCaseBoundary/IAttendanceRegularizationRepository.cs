@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DomainModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UseCaseBoundary.DTO;
@@ -8,6 +9,6 @@ namespace UseCaseBoundary
     public interface IAttendanceRegularizationRepository
     {
         bool SaveRegularizationRecord(RegularizationDTO reguraliozationDTO);
-        List<RegularizationDTO> GetRegularizedRecords(int employeeId);
+        List<Regularization> GetRegularizedRecords(int employeeId);
     }
 }

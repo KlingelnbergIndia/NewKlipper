@@ -14,11 +14,15 @@ namespace UseCases
         private IAccessEventsRepository _accessEventsRepository;
         private IEmployeeRepository _employeeRepository;
         private IDepartmentRepository _departmentRepository;
-        public AttendanceService(IAccessEventsRepository accessEventsRepository, IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
+        private IAttendanceRegularizationRepository _attendanceRegularizationRepository;
+
+        public AttendanceService(IAccessEventsRepository accessEventsRepository, IEmployeeRepository employeeRepository, 
+            IDepartmentRepository departmentRepository,IAttendanceRegularizationRepository attendanceRegularizationRepository)
         {
             _accessEventsRepository = accessEventsRepository;
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
+            _attendanceRegularizationRepository = attendanceRegularizationRepository;
         }
 
         public async Task<AttendanceRecordsDTO> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
@@ -58,6 +62,23 @@ namespace UseCases
             {
                 return listOfAccessPointRecord;
             });
+        }
+
+        public void AddRegularization(RegularizationDTO reguraliozationDTO)
+        {
+            _attendanceRegularizationRepository.SaveRegularizationRecord(reguraliozationDTO);
+        }
+
+        public List<Regularization> GetRegularization(int employeeId)
+        {
+            var regularizedData = _attendanceRegularizationRepository.GetRegularizedRecords(employeeId);
+            return regularizedData;
+        }
+        public Regularization GetRegularizationByDate(int employeeId, DateTime date)
+        {
+            var listOfRegularizedData = _attendanceRegularizationRepository.GetRegularizedRecords(employeeId).ToList();
+            var regularizedDataOfADay = listOfRegularizedData.Where(x => x._regularizedDate == date).FirstOrDefault();
+            return regularizedDataOfADay;
         }
 
         private List<AccessPointRecord> GetAccessPointRecord(List<AccessEvent> listOfAccessEvent,AccessPoint accessPoint)
@@ -131,9 +152,14 @@ namespace UseCases
                 var timeIn = perDayWorkRecord.GetTimeIn();
                 var timeOut = perDayWorkRecord.GetTimeOut();
                 var workingHours = perDayWorkRecord.CalculateWorkingHours();
-                var overTime = new Time(0,0);
-                var lateBy = new Time(0,0);
+                var overTime = new Time(0, 0);
+                var lateBy = new Time(0, 0);
                 var isValidWorkingDay = department.IsValidWorkingDay(perDayWorkRecord.Date);
+                var reguralizedEntry = GetRegularizationByDate(employeeId, perDayWorkRecord.Date);
+                if (reguralizedEntry != null)
+                {
+                    workingHours = reguralizedEntry.GetRegularizedHours();
+                }
 
                 if (isValidWorkingDay == true)
                 {
@@ -144,7 +170,7 @@ namespace UseCases
                 {
                     overTime = new Time(workingHours.Hours, workingHours.Minutes);
                 }
-               
+
                 PerDayAttendanceRecordDTO attendanceRecord = new PerDayAttendanceRecordDTO()
                 {
                     Date = perDayWorkRecord.Date,
