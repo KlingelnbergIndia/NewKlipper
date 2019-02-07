@@ -78,7 +78,7 @@ namespace UseCases
         public Regularization GetRegularizationEntryByDate(int employeeId, DateTime date)
         {
             var listOfRegularizedData = _attendanceRegularizationRepository.GetRegularizedRecords(employeeId).ToList();
-            var regularizedDataOfADay = listOfRegularizedData.Where(x => x._regularizedDate == date).FirstOrDefault();
+            var regularizedDataOfADay = listOfRegularizedData.Where(x => x._regularizedDate.Date == date.Date).FirstOrDefault();
             return regularizedDataOfADay;
         }
 
