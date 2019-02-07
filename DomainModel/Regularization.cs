@@ -7,7 +7,7 @@ namespace DomainModel
     public class Regularization
     {
         private int _employeeID { get; set; }
-        public DateTime _regularizedDate { get; set; }
+        private DateTime _regularizedDate { get; set; }
         private TimeSpan _reguralizedHours { get; set; }
         private string _remark { get; set; }
 
@@ -27,6 +27,11 @@ namespace DomainModel
         public string GetRemark()
         {
             return _remark;
+        }
+
+        public DateTime RegularizedDate()
+        {
+            return _regularizedDate;
         }
     }
 }

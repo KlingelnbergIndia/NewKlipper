@@ -16,8 +16,11 @@ namespace UseCases
         private IDepartmentRepository _departmentRepository;
         private IAttendanceRegularizationRepository _attendanceRegularizationRepository;
 
-        public AttendanceService(IAccessEventsRepository accessEventsRepository, IEmployeeRepository employeeRepository,
-            IDepartmentRepository departmentRepository, IAttendanceRegularizationRepository attendanceRegularizationRepository)
+        public AttendanceService(
+            IAccessEventsRepository accessEventsRepository, 
+            IEmployeeRepository employeeRepository,
+            IDepartmentRepository departmentRepository, 
+            IAttendanceRegularizationRepository attendanceRegularizationRepository)
         {
             _accessEventsRepository = accessEventsRepository;
             _employeeRepository = employeeRepository;
@@ -83,7 +86,7 @@ namespace UseCases
         public Regularization GetRegularizationEntryByDate(int employeeId, DateTime date)
         {
             var listOfRegularizedData = _attendanceRegularizationRepository.GetRegularizedRecords(employeeId).ToList();
-            var regularizedDataOfADay = listOfRegularizedData.Where(x => x._regularizedDate.Date == date.Date).FirstOrDefault();
+            var regularizedDataOfADay = listOfRegularizedData.Where(x => x.RegularizedDate().Date == date.Date).FirstOrDefault();
             return regularizedDataOfADay;
         }
 
