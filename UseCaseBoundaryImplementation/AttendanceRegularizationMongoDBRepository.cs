@@ -22,11 +22,12 @@ namespace RepositoryImplementation
 
         public List<Regularization> GetRegularizedRecords(int employeeId)
         {
+            var data = new List<Regularization>();
             var allRecords = _regularizationDBContext.AttendanceRegularization
                 .AsQueryable()
                 .Where(x => x.EmployeeID == employeeId)
                 .ToList();
-            var data = new List<Regularization>();
+
             foreach (var record in allRecords)
             {
                 data.Add(new Regularization(
@@ -36,7 +37,6 @@ namespace RepositoryImplementation
                     record.Remark
                     ));
             }
-
 
             return data;
         }
