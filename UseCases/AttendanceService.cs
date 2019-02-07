@@ -173,7 +173,7 @@ namespace UseCases
             return listOfAttendanceRecordDTO;
         }
 
-        private async Task<List<PerDayAttendanceRecordDTO>> CreatePerDayAttendanceRecordAsync(List<PerDayWorkRecord> workRecordByDate, int employeeId)
+        private async Task<List<PerDayAttendanceRecordDTO>> CreatePerDayAttendanceRecordAsync(IList<PerDayWorkRecord> workRecordByDate, int employeeId)
         {
             List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
