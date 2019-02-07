@@ -186,7 +186,7 @@ namespace UseCases
                     LateBy = lateBy,
                     DayStatus = isValidWorkingDay ? DayStatus.WorkingDay : DayStatus.NonWorkingDay,
                     Remark = remark,
-                    Flag=flag
+                    IsHoursRegularized = flag
                 };
                 listOfAttendanceRecordDTO.ListOfAttendanceRecordDTO.Add(attendanceRecord);
             }
