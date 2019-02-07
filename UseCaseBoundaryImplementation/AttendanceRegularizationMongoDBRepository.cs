@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using DataAccess.EntityModel.Attendance;
+using DomainModel;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -19,29 +20,25 @@ namespace RepositoryImplementation
             _regularizationDBContext = AttendanceRegularizationDBContext.Instance;
         }
 
-        public List<RegularizationDTO> GetRegularizedRecords(int employeeId)
+        public List<Regularization> GetRegularizedRecords(int employeeId)
         {
             var allRecords = _regularizationDBContext.AttendanceRegularization
                 .AsQueryable()
                 .Where(x => x.EmployeeID == employeeId)
-                .Select(x => new RegularizationDTO() {
-                    EmployeeID = x.EmployeeID,
-                    RegularizedDate = x.RegularizedDate,
-                    ReguralizedHours = x.RegularizedHours,
-                    Remark = x.Remark
-                })
+                .Select(x => new Regularization(x.EmployeeID, x.RegularizedDate, x.RegularizedHours, x.Remark))
                 .ToList();
             return allRecords;
         }
 
         public bool SaveRegularizationRecord(RegularizationDTO reguraliozationDTO)
         {
+
             AttendanceRegularizationEntityModel data = new AttendanceRegularizationEntityModel()
             {
                 EmployeeID = reguraliozationDTO.EmployeeID,
                 RegularizedDate = reguraliozationDTO.RegularizedDate,
                 Remark = reguraliozationDTO.Remark,
-                RegularizedHours = reguraliozationDTO.ReguralizedHours
+                RegularizedHours = new TimeSpan(reguraliozationDTO.ReguralizedHours.Hour, reguraliozationDTO.ReguralizedHours.Minute,00)
             };
             _regularizationDBContext.AttendanceRegularization
                 .InsertOneAsync(data)

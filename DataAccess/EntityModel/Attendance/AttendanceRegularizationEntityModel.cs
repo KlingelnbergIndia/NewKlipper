@@ -19,7 +19,7 @@ namespace DataAccess.EntityModel.Attendance
         public DateTime RegularizedDate { get; set; }
         [BsonDateTimeOptions]
         public string Remark { get; set; }
-        public Time RegularizedHours { get; set; }
+        public TimeSpan RegularizedHours { get; set; }
         public DateTime LogTime { get; set; } = DateTime.Now;
     }
 }
