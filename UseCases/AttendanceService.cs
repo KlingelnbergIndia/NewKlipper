@@ -129,6 +129,17 @@ namespace UseCases
                 {
                     if (department.IsValidWorkingDay(i.Date.Date) == true)
                     {
+                        var reguralizedEntry = GetRegularizationEntryByDate(employeeId, i.Date.Date);
+                        string remark = null;
+                        bool flag = false;
+                        var workingHours = TimeSpan.Zero;
+                        if (reguralizedEntry != null)
+                        {
+                            workingHours = reguralizedEntry.GetRegularizedHours();
+                            remark = reguralizedEntry.GetRemark();
+                            flag = true;
+                        }
+
                         listOfAttendanceRecordDTO.Add(new PerDayAttendanceRecordDTO()
                         {
                             Date = i,
@@ -136,8 +147,10 @@ namespace UseCases
                             OverTime = new Time(0, 0),
                             TimeIn = new Time(0, 0),
                             TimeOut = new Time(0, 0),
-                            WorkingHours = new Time(0, 0),
-                            DayStatus = DayStatus.Leave
+                            WorkingHours = new Time(workingHours.Hours, workingHours.Minutes) ,
+                            DayStatus =DayStatus.Leave,
+                            Remark = remark,
+                            IsHoursRegularized = flag
                         });
                     }
                 }
