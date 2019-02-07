@@ -4,10 +4,17 @@ using System.Text;
 
 namespace UseCaseBoundary.DTO
 {
+    public enum LeaveType
+    {
+        EarnedLeave,
+        CasualLeave,
+        SickLeave
+    }
     public class LeaveDTO
     {
-        DateTime fromDate;
-        DateTime toDate;
-        Enum
+        public DateTime fromDate;
+        public DateTime toDate;
+        public LeaveType leave;
+        public string remark;
     }
 }

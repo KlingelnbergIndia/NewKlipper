@@ -1,4 +1,35 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model UseCaseBoundary.DTO.LeaveDTO
+
+<div class="main" style="margin-top:-100PX;">
+    <h1>Apply Leave</h1>
+    <div class="col-md-6 col-sm-12 col-xs-12">
+        <div class="register-form">
+
+            <div class="row">
+                <div class="col-md-4">
+                    <form asp-action="Index">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label>From Date</label>
+                            <input type="text" asp-for="@Model." class="form-control" placeholder="User Name">
+                            <span asp-validation-for="@Model." class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Passwor</label>
+                            <input type="password" asp-for="@Model.Password" class="form-control" placeholder="Password">
+                            <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Apply" class="btn btn-default" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            
+            
+
+         
+
