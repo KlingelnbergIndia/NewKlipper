@@ -178,7 +178,8 @@ namespace Application.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveRegularizeHours(DateTime date, int employeeId, DateTime timeToBeRegularize, string remark)
+        [AuthenticateTeamLeaderRole]
+        public IActionResult SaveRegularizedHours(DateTime date, int employeeId, DateTime timeToBeRegularize, string remark)
         {
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
                 _departmentRepository, _attendanceRegularizationRepository);
