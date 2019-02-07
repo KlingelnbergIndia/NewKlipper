@@ -106,6 +106,7 @@
                         <th>Deficit Time</th>
                         <th>Over Time</th>
                         <th>Working Hours</th>
+                        <th>Remark(if regularized)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -181,6 +182,7 @@
                                     <span data-toggle="tooltip" class="glyphicon glyphicon-time pull-right" onclick=regularizeHours('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID) title="Regularize hrs"></span>
                                 </td>
                             }
+                            <td>@item.Remark</td>
                         </tr>
                     }
                 </tbody>
