@@ -24,18 +24,22 @@ namespace Application.Web.Controllers
         private IAccessEventsRepository _accessEventRepository;
         private IEmployeeRepository _employeeRepository;
         private IDepartmentRepository _departmentRepository;
+        private IAttendanceRegularizationRepository _attendanceRegularizationRepository;
 
-        public HomeController(IAccessEventsRepository accessEventRepository,IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
+        public HomeController(IAccessEventsRepository accessEventRepository,IEmployeeRepository employeeRepository, 
+            IDepartmentRepository departmentRepository,IAttendanceRegularizationRepository attendanceRegularizationRepository)
         {
             _accessEventRepository = accessEventRepository;
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
+            _attendanceRegularizationRepository = attendanceRegularizationRepository;
         }
 
         public async Task<IActionResult> Index(string searchFilter)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository, _departmentRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
+                _departmentRepository, _attendanceRegularizationRepository);
 
             EmployeeViewModel employeeViewModel = new EmployeeViewModel();
 
@@ -88,7 +92,8 @@ namespace Application.Web.Controllers
             var reportees = reporteeService.GetReporteesData(employeeId);
 
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository, _departmentRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
+                _departmentRepository, _attendanceRegularizationRepository);
             List<AttendanceRecordsDTO> listOfAttendanceRecord = new List<AttendanceRecordsDTO>();
 
             if (reportees.Count != 0)
@@ -137,7 +142,8 @@ namespace Application.Web.Controllers
 
             int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
 
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository, _departmentRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
+                _departmentRepository, _attendanceRegularizationRepository);
             AttendanceRecordsDTO listOfAttendanceRecord = new AttendanceRecordsDTO();
 
             if (reporteeId != 0)
@@ -164,7 +170,8 @@ namespace Application.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> AccessPointDetail(DateTime date, int employeeId)
         {
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository, _departmentRepository);
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository, 
+                _departmentRepository, _attendanceRegularizationRepository);
             List<AccessPointRecord> listofaccesspointdetail = await attendanceService.GetAccessPointDetails(employeeId, date);
             listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST(date, listofaccesspointdetail);
             return View(listofaccesspointdetail);
