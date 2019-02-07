@@ -16,8 +16,8 @@ namespace UseCases
         private IDepartmentRepository _departmentRepository;
         private IAttendanceRegularizationRepository _attendanceRegularizationRepository;
 
-        public AttendanceService(IAccessEventsRepository accessEventsRepository, IEmployeeRepository employeeRepository, 
-            IDepartmentRepository departmentRepository,IAttendanceRegularizationRepository attendanceRegularizationRepository)
+        public AttendanceService(IAccessEventsRepository accessEventsRepository, IEmployeeRepository employeeRepository,
+            IDepartmentRepository departmentRepository, IAttendanceRegularizationRepository attendanceRegularizationRepository)
         {
             _accessEventsRepository = accessEventsRepository;
             _employeeRepository = employeeRepository;
@@ -66,8 +66,13 @@ namespace UseCases
 
         public bool AddRegularization(RegularizationDTO reguraliozationDTO)
         {
-            _attendanceRegularizationRepository.SaveRegularizationRecord(reguraliozationDTO);
-            return true;
+            if (GetRegularizationEntry(reguraliozationDTO.EmployeeID).Any())
+            {
+                return 
+                    _attendanceRegularizationRepository.OverrideRegularizationRecord(reguraliozationDTO);
+            }
+            return
+                _attendanceRegularizationRepository.SaveRegularizationRecord(reguraliozationDTO);
         }
 
         public List<Regularization> GetRegularizationEntry(int employeeId)
@@ -82,7 +87,7 @@ namespace UseCases
             return regularizedDataOfADay;
         }
 
-        private List<AccessPointRecord> GetAccessPointRecord(List<AccessEvent> listOfAccessEvent,AccessPoint accessPoint)
+        private List<AccessPointRecord> GetAccessPointRecord(List<AccessEvent> listOfAccessEvent, AccessPoint accessPoint)
         {
             List<AccessPointRecord> listOfaccessPointRecords = new List<AccessPointRecord>();
             for (int i = 0; i < listOfAccessEvent.Count; i += 2)
@@ -110,11 +115,11 @@ namespace UseCases
             return listOfaccessPointRecords;
         }
 
-        private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord, DateTime fromDate, DateTime toDate,int employeeId)
+        private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord, DateTime fromDate, DateTime toDate, int employeeId)
         {
             var availableDates = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Distinct().ToList();
             var listOfAttendanceRecordDTO = listOfAttendanceRecord.ListOfAttendanceRecordDTO;
-            
+
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
             Department department = _departmentRepository.GetDepartment(employeeData.Department());
 
@@ -132,7 +137,7 @@ namespace UseCases
                             TimeIn = new Time(0, 0),
                             TimeOut = new Time(0, 0),
                             WorkingHours = new Time(0, 0),
-                            DayStatus =DayStatus.Leave
+                            DayStatus = DayStatus.Leave
                         });
                     }
                 }

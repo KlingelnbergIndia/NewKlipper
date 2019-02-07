@@ -106,7 +106,7 @@
                         <th>Deficit Time</th>
                         <th>Over Time</th>
                         <th>Working Hours</th>
-                        <th>Remark(if regularized)</th>
+                        <th>Remark</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -196,3 +196,12 @@
     @{await Html.RenderPartialAsync("_AccessEventsPopup");}
     @{await Html.RenderPartialAsync("_HoursRegularizationPopup");}
 }
+
+<style>
+    .table td {
+        text-align: center;
+    }
+    .table th {
+        text-align: center;
+    }
+</style>

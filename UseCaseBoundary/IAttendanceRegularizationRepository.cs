@@ -10,5 +10,6 @@ namespace UseCaseBoundary
     {
         bool SaveRegularizationRecord(RegularizationDTO reguraliozationDTO);
         List<Regularization> GetRegularizedRecords(int employeeId);
+        bool OverrideRegularizationRecord(RegularizationDTO reguraliozationDTO);
     }
 }

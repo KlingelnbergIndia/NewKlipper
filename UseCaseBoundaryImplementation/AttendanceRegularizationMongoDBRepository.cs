@@ -58,5 +58,28 @@ namespace RepositoryImplementation
             return true;
         }
 
+        public bool OverrideRegularizationRecord(RegularizationDTO reguraliozationDTO)
+        {
+            AttendanceRegularizationEntityModel data = new AttendanceRegularizationEntityModel()
+            {
+                EmployeeID = reguraliozationDTO.EmployeeID,
+                RegularizedDate = reguraliozationDTO.RegularizedDate,
+                Remark = reguraliozationDTO.Remark,
+                RegularizedHours = new TimeSpan(reguraliozationDTO.ReguralizedHours.Hour, reguraliozationDTO.ReguralizedHours.Minute, 00)
+            };
+
+            _regularizationDBContext.AttendanceRegularization
+                .DeleteOneAsync(x=>x.EmployeeID == reguraliozationDTO.EmployeeID && x.RegularizedDate == reguraliozationDTO.RegularizedDate)
+                .GetAwaiter()
+                .GetResult(); ;
+
+            _regularizationDBContext.AttendanceRegularization
+                .InsertOneAsync(data)
+                .GetAwaiter()
+                .GetResult();
+
+            return true;
+        }
+
     }
 }

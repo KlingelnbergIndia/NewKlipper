@@ -15,7 +15,7 @@ namespace DataAccess.EntityModel.Attendance
         [JsonConverter(typeof(ObjectIdConverter))]
         public ObjectId _objectId { get; set; }
         public int EmployeeID { get; set; }
-        [BsonDateTimeOptions]
+        [BsonDateTimeOptions(Kind =DateTimeKind.Local)]
         public DateTime RegularizedDate { get; set; }
         public string Remark { get; set; }
         public TimeSpan RegularizedHours { get; set; }
