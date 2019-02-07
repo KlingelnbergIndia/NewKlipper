@@ -13,27 +13,12 @@ namespace UseCases
     {
         private IAccessEventsRepository _accessEventsRepository;
         private IEmployeeRepository _employeeRepository;
-        public AttendanceService(IAccessEventsRepository accessEventsRepository, IEmployeeRepository employeeRepository)
+        private IDepartmentRepository _departmentRepository;
+        public AttendanceService(IAccessEventsRepository accessEventsRepository, IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
         {
             _accessEventsRepository = accessEventsRepository;
             _employeeRepository = employeeRepository;
-        }
-
-        public async Task<AttendanceRecordsDTO> GetAttendanceRecord(int employeeId, int noOfDays)
-        {
-            AccessEvents accessEvents = _accessEventsRepository.GetAccessEvents(employeeId);
-            var workRecordByDate = accessEvents.WorkRecord(noOfDays);
-            AttendanceRecordsDTO listOfAttendanceRecord = await CreateAttendanceRecordAsync(workRecordByDate, employeeId);
-
-            var fromDate = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Min();
-            var toDate = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Max();
-
-            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord, fromDate, toDate);
-
-            return await Task.Run(() =>
-            {
-                return listOfAttendanceRecord;
-            });
+            _departmentRepository = departmentRepository;
         }
 
         public async Task<AttendanceRecordsDTO> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
@@ -41,7 +26,7 @@ namespace UseCases
             AccessEvents accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
             AttendanceRecordsDTO listOfAttendanceRecord = await CreateAttendanceRecordAsync(datewiseAccessEvents, employeeId);
-            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord, fromDate, toDate);
+            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord, fromDate, toDate, employeeId);
 
             return await Task.Run(() =>
             {
@@ -56,9 +41,9 @@ namespace UseCases
             var GymnasiumPointAccessEvents = perDayWorkRecord.GetGymnasiumPointAccessEvents();
             var MainEntryPointAccessEvents = perDayWorkRecord.GetMainEntryPointAccessEvents();
 
-            List<AccessPointRecord> RecreationAccessPointRecord = GetAccessPointRecord(RecreationPointAccessEvents, "Recreation");
-            List<AccessPointRecord> GymnasiumAccessPointRecord = GetAccessPointRecord(GymnasiumPointAccessEvents, "Gymnasium");
-            List<AccessPointRecord> MainEntryPointAccessPointRecord = GetAccessPointRecord(MainEntryPointAccessEvents, "Main Entry");
+            List<AccessPointRecord> RecreationAccessPointRecord = GetAccessPointRecord(RecreationPointAccessEvents, AccessPoint.Recreation);
+            List<AccessPointRecord> GymnasiumAccessPointRecord = GetAccessPointRecord(GymnasiumPointAccessEvents, AccessPoint.Gymnasium);
+            List<AccessPointRecord> MainEntryPointAccessPointRecord = GetAccessPointRecord(MainEntryPointAccessEvents, AccessPoint.MainEntry);
 
             List<AccessPointRecord> listOfAccessPointRecord = RecreationAccessPointRecord
                 .Concat(GymnasiumAccessPointRecord)
@@ -75,7 +60,7 @@ namespace UseCases
             });
         }
 
-        private List<AccessPointRecord> GetAccessPointRecord(List<AccessEvent> listOfAccessEvent, string AccessPoint)
+        private List<AccessPointRecord> GetAccessPointRecord(List<AccessEvent> listOfAccessEvent,AccessPoint accessPoint)
         {
             List<AccessPointRecord> listOfaccessPointRecords = new List<AccessPointRecord>();
             for (int i = 0; i < listOfAccessEvent.Count; i += 2)
@@ -96,31 +81,38 @@ namespace UseCases
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     TimeSpend = new Time(timeSpend.Hours, timeSpend.Minutes),
-                    AccessPoint = AccessPoint
+                    AccessPoint = accessPoint
                 };
                 listOfaccessPointRecords.Add(accessPointRecord);
             }
             return listOfaccessPointRecords;
         }
 
-
-        private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord, DateTime fromDate, DateTime toDate)
+        private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord, DateTime fromDate, DateTime toDate,int employeeId)
         {
             var availableDates = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Distinct().ToList();
             var listOfAttendanceRecordDTO = listOfAttendanceRecord.ListOfAttendanceRecordDTO;
+            
+            Employee employeeData = _employeeRepository.GetEmployee(employeeId);
+            Department department = _departmentRepository.GetDepartment(employeeData.Department());
+
             for (var i = fromDate; i <= toDate; i = i.AddDays(1))
             {
                 if (!availableDates.Any(x => x.Date.Date == i.Date.Date))
                 {
-                    listOfAttendanceRecordDTO.Add(new PerDayAttendanceRecordDTO()
+                    if (department.IsValidWorkingDay(i.Date.Date) == true)
                     {
-                        Date = i,
-                        LateBy = new Time(0, 0),
-                        OverTime = new Time(0, 0),
-                        TimeIn = new Time(0, 0),
-                        TimeOut = new Time(0, 0),
-                        WorkingHours = new Time(0, 0),
-                    });
+                        listOfAttendanceRecordDTO.Add(new PerDayAttendanceRecordDTO()
+                        {
+                            Date = i,
+                            LateBy = new Time(0, 0),
+                            OverTime = new Time(0, 0),
+                            TimeIn = new Time(0, 0),
+                            TimeOut = new Time(0, 0),
+                            WorkingHours = new Time(0, 0),
+                            DayStatus =DayStatus.Leave
+                        });
+                    }
                 }
             }
             listOfAttendanceRecord.ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO.OrderByDescending(x => x.Date).ToList();
@@ -132,21 +124,36 @@ namespace UseCases
         {
             AttendanceRecordsDTO listOfAttendanceRecordDTO = new AttendanceRecordsDTO();
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
+            Department department = _departmentRepository.GetDepartment(employeeData.Department());
 
             foreach (var perDayWorkRecord in workRecordByDate)
             {
                 var timeIn = perDayWorkRecord.GetTimeIn();
                 var timeOut = perDayWorkRecord.GetTimeOut();
                 var workingHours = perDayWorkRecord.CalculateWorkingHours();
+                var overTime = new Time(0,0);
+                var lateBy = new Time(0,0);
+                var isValidWorkingDay = department.IsValidWorkingDay(perDayWorkRecord.Date);
 
+                if (isValidWorkingDay == true)
+                {
+                    overTime = GetOverTime(workingHours, department.GetNoOfHoursToBeWorked());
+                    lateBy = GetLateByTime(workingHours, department.GetNoOfHoursToBeWorked());
+                }
+                else
+                {
+                    overTime = new Time(workingHours.Hours, workingHours.Minutes);
+                }
+               
                 PerDayAttendanceRecordDTO attendanceRecord = new PerDayAttendanceRecordDTO()
                 {
                     Date = perDayWorkRecord.Date,
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
                     WorkingHours = new Time(workingHours.Hours, workingHours.Minutes),
-                    OverTime = GetOverTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department())),
-                    LateBy = GetLateByTime(workingHours, GetNoOfHoursToBeWorked(employeeData.Department()))
+                    OverTime = overTime,
+                    LateBy = lateBy,
+                    DayStatus = isValidWorkingDay ? DayStatus.WorkingDay : DayStatus.NonWorkingDay
                 };
                 listOfAttendanceRecordDTO.ListOfAttendanceRecordDTO.Add(attendanceRecord);
             }
@@ -158,11 +165,10 @@ namespace UseCases
                 {
                     ListOfAttendanceRecordDTO = perDayAttendanceRecords,
                     TotalWorkingHours = CalculateTotalWorkingHours(perDayAttendanceRecords),
-                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(perDayAttendanceRecords, GetNoOfHoursToBeWorked(employeeData.Department())),
+                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(perDayAttendanceRecords, department.GetNoOfHoursToBeWorked()),
                 };
             });
         }
-
 
         private Time GetOverTime(TimeSpan workingHours, double noOfHoursToBeWorked)
         {
@@ -204,7 +210,7 @@ namespace UseCases
                 return new Time(00, 00);
             }
 
-            double totalRequiredHoursToBeWorked = listOfAttendanceRecordDTO.Count * noOfHoursToBeWorked;
+            double totalRequiredHoursToBeWorked = listOfAttendanceRecordDTO.Count(x => x.DayStatus == DayStatus.WorkingDay) * noOfHoursToBeWorked;
             Time totalWorkedTime = CalculateTotalWorkingHours(listOfAttendanceRecordDTO);
             var totalWorkedSpan = new TimeSpan(totalWorkedTime.Hour, totalWorkedTime.Minute, 00);
 
@@ -234,10 +240,6 @@ namespace UseCases
                 (int)sumOfTotalWorkingHours.Minutes);
         }
 
-        private double GetNoOfHoursToBeWorked(Departments department)
-        {
-            return department == Departments.Design ? 10.0 : 9.0;
-        }
         private enum AbsoluteTime
         {
             TimeIn,

@@ -647,5 +647,198 @@
     "EmployeeFirstName": "Sidhdesh",
     "EmployeeLastName": "Vadgaonkar",
     "EventTime": "2018-09-27T08:29:29.000Z"
+  },
+
+  /*51*/
+  {
+    "_id": "5be2d6ab973d123ef016dabb",
+    "ID": 181810525,
+    "AccessPointID": 18,
+    "AccessPointName": "Gym",
+    "AccessPointIPAddress": "192.168.1.203",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-28T12:52:12.000Z"
+  },
+
+  /*52*/
+  {
+    "_id": "5be2d6ab973d123ef016dabb",
+    "ID": 181810525,
+    "AccessPointID": 18,
+    "AccessPointName": "Gym",
+    "AccessPointIPAddress": "192.168.1.203",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-28T12:58:12.000Z"
+  },
+
+  /*53*/
+  {
+    "_id": "5be2d6ab973d123ef016dabb",
+    "ID": 181810525,
+    "AccessPointID": 18,
+    "AccessPointName": "Gym",
+    "AccessPointIPAddress": "192.168.1.203",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-29T12:58:12.000Z"
+  },
+
+  /*54*/
+  {
+    "_id": "5be2d6ab973d123ef016dabb",
+    "ID": 181810525,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.203",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-29T12:58:12.000Z"
+  },
+
+  /*55*/
+  {
+    "_id": "5be2d6ab973d123ef016dabb",
+    "ID": 181810525,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.203",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-29T12:58:12.000Z"
+  },
+
+  /* 56 */
+  {
+    "_id": "5be2d52d973d123ef016d9fc",
+    "ID": 191810285,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-30T07:56:54.000Z"
+  },
+
+  /* 57 */
+  {
+    "_id": "5be2d535973d123ef016da00",
+    "ID": 191810289,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-30T08:31:13.000Z"
+  },
+
+  /* 58 */
+  {
+    "_id": "5be2d53b973d123ef016da03",
+    "ID": 191810292,
+    "AccessPointID": 19,
+    "AccessPointName": "Recreation",
+    "AccessPointIPAddress": "192.168.1.204",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-30T11:21:03.000Z"
+  },
+
+  /* 59 */
+  {
+    "_id": "5be2d6ab973d123ef016dabb",
+    "ID": 181810525,
+    "AccessPointID": 18,
+    "AccessPointName": "Gym",
+    "AccessPointIPAddress": "192.168.1.203",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-30T12:52:12.000Z"
+  },
+
+  /* 60*/
+  {
+    "_id": "5be2d6ab973d123ef016dabb",
+    "ID": 181810525,
+    "AccessPointID": 18,
+    "AccessPointName": "Gym",
+    "AccessPointIPAddress": "192.168.1.203",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-30T12:55:12.000Z"
+  },
+
+  /* 61 */
+  {
+    "_id": "5be2d6ab973d123ef016dabb",
+    "ID": 181810525,
+    "AccessPointID": 18,
+    "AccessPointName": "Gym",
+    "AccessPointIPAddress": "192.168.1.203",
+    "EmployeeID": 48,
+    "EmployeeFirstName": "Sidhdesh",
+    "EmployeeLastName": "Vadgaonkar",
+    "EventTime": "2018-09-30T13:10:12.000Z"
+  },
+
+  /* added by sanket */
+  {
+    "_id": "5be2dcd7973d123ef016dd98",
+    "ID": 181810525,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 666,
+    "EmployeeFirstName": "Sanket",
+    "EmployeeLastName": "Naik",
+    "EventTime": "2019-02-02T12:10:51.000Z"
+  },
+
+  {
+    "_id": "5be2dcd7973d123ef016dd99",
+    "ID": 181810525,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 666,
+    "EmployeeFirstName": "Sanket",
+    "EmployeeLastName": "Naik",
+    "EventTime": "2019-02-02T16:10:51.000Z"
+  },
+  /* added by sanket */
+  {
+    "_id": "5be2dcd7973d123ef016dd98",
+    "ID": 181810525,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 77,
+    "EmployeeFirstName": "Sanket",
+    "EmployeeLastName": "Naik",
+    "EventTime": "2019-02-09T12:10:51.000Z"
+  },
+
+  {
+    "_id": "5be2dcd7973d123ef016dd99",
+    "ID": 181810525,
+    "AccessPointID": 16,
+    "AccessPointName": "Main Entry",
+    "AccessPointIPAddress": "192.168.1.201",
+    "EmployeeID": 77,
+    "EmployeeFirstName": "Sanket",
+    "EmployeeLastName": "Naik",
+    "EventTime": "2019-02-09T16:10:51.000Z"
   }
 ]
+

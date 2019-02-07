@@ -16,21 +16,6 @@ namespace DomainModel
         TeamLeader
     }
 
-    public enum Departments
-    {
-        Default = 1,
-        Software = 24,
-        Design = 25,
-        Service = 26,
-        Admin = 27,
-        Finance = 28,
-        TechCentre = 29,
-        AfterSales = 30,
-        Projects = 31,
-        Sales = 32,
-        CompetenceCentre = 33
-    }
-
     public class Employee
     {
         private int _id;
@@ -99,6 +84,11 @@ namespace DomainModel
         public Departments Department()
         {
             return _department;
+        }
+
+        public double GetNoOfHoursToBeWorked()
+        {
+            return _department == Departments.Design ? 10.0 : 9.0;
         }
 
         public bool Authenticate(string userName, string password)

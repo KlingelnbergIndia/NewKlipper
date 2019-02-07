@@ -18,28 +18,34 @@ namespace DomainModel
         public TimeSpan GetTimeIn()
         {
             return CalculateAbsoluteOutTimeAndInTime(
-                _accessEvents.Select(x => x.EventTime.TimeOfDay).Min(), AbsoluteTime.TimeIn);
+                _accessEvents
+                .Where(x => x.FromMainDoor())
+                .Select(x => x.EventTime.TimeOfDay).Min(), AbsoluteTime.TimeIn);
         }
 
         public TimeSpan GetTimeOut()
         {
-            var minTime = _accessEvents.Select(x => x.EventTime.TimeOfDay).Min();
+            var AccessEventsOFServerRoom = _accessEvents.Where(x =>x.FromServerRoom());
+            var AccessEventsOfUSBRoom = _accessEvents.Where(x => x.FromUSBDeviceDoor());
+            var AccessEventForTimeOut = _accessEvents.Except(AccessEventsOFServerRoom).ToList();
 
-            var maxTime = _accessEvents.Select(x => x.EventTime.TimeOfDay).Max();
+            AccessEventForTimeOut= AccessEventForTimeOut.Except(AccessEventsOfUSBRoom).ToList();
+
+            var minTime = AccessEventForTimeOut.Select(x => x.EventTime.TimeOfDay).Min();
+            var maxTime = AccessEventForTimeOut.Select(x => x.EventTime.TimeOfDay).Max();
 
             if (minTime == maxTime)
             {
                 return TimeSpan.Zero;
             }
-            else
-            {
                 return CalculateAbsoluteOutTimeAndInTime(maxTime,AbsoluteTime.TimeOut);
-            }
+            
         }
 
         public TimeSpan CalculateWorkingHours()
         {
             var accessEventsOfMainEntry = GetMainEntryPointAccessEvents();
+            var accessEventsOfGymEntry = GetGymnasiumPointAccessEvents();
             if (accessEventsOfMainEntry.Count == 0)
             {
                 return TimeSpan.Zero;
@@ -51,12 +57,12 @@ namespace DomainModel
             var timeIn = new TimeSpan(minTime.Hours, minTime.Minutes,00);
             var timeOut = new TimeSpan(maxTime.Hours, maxTime.Minutes, 00);
 
-            var GymnasiumPointAccessEvents = new AccessEvents(GetGymnasiumPointAccessEvents());
+            var GymnasiumPointAccessEvents = new AccessEvents(accessEventsOfGymEntry);
             var MainEntryPointAccessEvents = new AccessEvents(accessEventsOfMainEntry);
 
             TimeSpan totalWorkingHours = TimeSpan.Zero;
 
-            if (accessEventsOfMainEntry.Count % 2 == 0)
+            if (accessEventsOfMainEntry.Count % 2 == 0 && accessEventsOfGymEntry.Count % 2 ==0)
             {
                 if (timeOut != TimeSpan.Zero)
                 {
