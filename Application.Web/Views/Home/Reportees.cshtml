@@ -8,12 +8,12 @@
 <div>
     <div class="panel-info" style="@(Model.reportees.Count==0 ? "visibility:hidden" : "visibility:visible")">
         <div class="panel panel-heading col-md-12 col-sm-12">
-            <div class="col-md-8 col-sm-8">
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                 @using (Html.BeginForm("GetSelectedreportee", "Home", FormMethod.Post))
                 {
                     <div class="form-inline" style="margin-top: 0.5%">
                         <div class="form-group">
-                            <label for="reporteesId">Select a Reportee</label>
+                            <label for="reporteesId">Reportee</label>
                             <select id="reporteesId" name="selectMenu" class="form-control input-sm">
                                 @if (Model.Name == string.Empty || Model.Name == null)
                                 {
@@ -46,11 +46,11 @@
                                    max="@DateTime.Today.ToString("yyyy-MM-dd")"
                                    value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
                         </div>
-                        <input type="submit" value="Get Attendance Record" class="btn btn-info btn-sm" />
+                        <input type="submit" value="Show" class="btn btn-info btn-sm pull" />
                     </div>
                 }
             </div>
-            <div class="col-md-4 col-sm-4">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 @if (Model.reporteesAttendaceRecords.TotalWorkingHours != null)
                 {
                     <div align="right">
@@ -63,7 +63,7 @@
                     <div align="right">
                         @if (TotalDeficitOrExtraHours.Hour < 0 || TotalDeficitOrExtraHours.Minute < 0)
                         {
-                            <label style="margin-left: 1%; font-weight: normal">Total Deficit Time</label>
+                            <label style="font-weight: normal">Total Deficit Time</label>
                             <span style="margin-left: 2%; font-weight: bold; color: #b84442">
                                 @Math.Abs(TotalDeficitOrExtraHours.Hour).ToString("D2") :
                                 @Math.Abs(TotalDeficitOrExtraHours.Minute).ToString("D2")
@@ -71,7 +71,7 @@
                         }
                         else
                         {
-                            <label style="margin-left: 49%; font-weight: normal;">Total Over Time</label>
+                            <label style="font-weight: normal;">Total Over Time</label>
                             <span style="margin-left: 2%; font-weight: bold;color: #697668">
                                 @Math.Abs(TotalDeficitOrExtraHours.Hour).ToString("D2") :
                                 @Math.Abs(TotalDeficitOrExtraHours.Minute).ToString("D2")
@@ -201,7 +201,12 @@
     .table td {
         text-align: center;
     }
+    
     .table th {
         text-align: center;
+    }
+
+    .panel-heading {
+        padding: 10px 0px;
     }
 </style>
