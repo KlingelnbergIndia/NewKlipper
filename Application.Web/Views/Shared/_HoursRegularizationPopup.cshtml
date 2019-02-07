@@ -7,14 +7,18 @@
                 <h4 class="modal-title" id="popupDateSpan"></h4>
             </div>
             <div id="ModalBody" style="margin:10px;">
-                <div class="form-group">
-                    <label class="control-label" for="time">Hours:</label>
-                    <input type="time" class="form-control" id="time" value="09:00" style="width:110px;" placeholder="Enter time" name="time">
+                <label class="control-label" for="time">Hours:</label>
+                <div class="input-group clockpicker" data-autoclose="true">
+                    <input type="text" class="form-control" id="time" value="09:00" readonly>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="pwd">Remark:</label>
                     <textarea class="form-control" rows="5" id="remark"></textarea>
                 </div>
+
             </div>
             <div class="modal-footer">
                 <div class="form-group">
@@ -24,7 +28,8 @@
         </div>
     </div>
 </div>
-
+<link href="~/js/clock-picker/bootstrap-clockpicker.css" rel="stylesheet" />
+<script src="~/js/clock-picker/bootstrap-clockpicker.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         var _convertStringToDateObject;
@@ -56,6 +61,11 @@
                 }
             });
         }
+
+        $('.clockpicker').clockpicker({
+            placement: 'bottom',
+            donetext: 'Done'
+        });
 
     });
 
