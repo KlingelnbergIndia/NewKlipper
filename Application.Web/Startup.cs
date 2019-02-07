@@ -43,6 +43,7 @@ namespace Application.Web
             services.AddTransient<IEmployeeRepository, EmployeeMongoDBRepository>();
             services.AddTransient<IAccessEventsRepository, AccessEventMongoDBRepository>();
             services.AddTransient<IDepartmentRepository, DepartmentMongoDBRepository>();
+            services.AddTransient<IAttendanceRegularizationRepository, AttendanceRegularizationMongoDBRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

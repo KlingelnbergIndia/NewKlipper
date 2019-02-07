@@ -17,7 +17,6 @@ namespace DataAccess.EntityModel.Attendance
         public int EmployeeID { get; set; }
         [BsonDateTimeOptions]
         public DateTime RegularizedDate { get; set; }
-        [BsonDateTimeOptions]
         public string Remark { get; set; }
         public TimeSpan RegularizedHours { get; set; }
         public DateTime LogTime { get; set; } = DateTime.Now;

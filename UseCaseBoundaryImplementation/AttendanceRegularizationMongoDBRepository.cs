@@ -25,9 +25,20 @@ namespace RepositoryImplementation
             var allRecords = _regularizationDBContext.AttendanceRegularization
                 .AsQueryable()
                 .Where(x => x.EmployeeID == employeeId)
-                .Select(x => new Regularization(x.EmployeeID, x.RegularizedDate, x.RegularizedHours, x.Remark))
                 .ToList();
-            return allRecords;
+            var data = new List<Regularization>();
+            foreach (var record in allRecords)
+            {
+                data.Add(new Regularization(
+                    record.EmployeeID,
+                    record.RegularizedDate,
+                    record.RegularizedHours,
+                    record.Remark
+                    ));
+            }
+
+
+            return data;
         }
 
         public bool SaveRegularizationRecord(RegularizationDTO reguraliozationDTO)
