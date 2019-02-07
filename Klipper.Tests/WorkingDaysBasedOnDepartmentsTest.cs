@@ -34,6 +34,7 @@ namespace Klipper.Tests
                 new Department(Departments.Design));
             departmentContainer.GetDepartment(Departments.Service).Returns(
                 new Department(Departments.Service));
+            regularizationData.GetRegularizedRecords(666).Returns(new List<Regularization>());
         }
 
         [Test]
@@ -197,6 +198,7 @@ namespace Klipper.Tests
                 .WithDepartment(Departments.Service)
                 .BuildEmployee();
             employeeContainer.GetEmployee(77).Returns(dummyEmployee);
+            regularizationData.GetRegularizedRecords(77).Returns(new List<Regularization>());
 
             //EXECUTE TEST CASES
             var dactualData = attendanceService.GetAccessEventsForDateRange(77, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Result;
@@ -222,7 +224,7 @@ namespace Klipper.Tests
                 .WithDepartment(Departments.Service)
                 .BuildEmployee();
             employeeContainer.GetEmployee(77).Returns(dummyEmployee);
-
+            regularizationData.GetRegularizedRecords(77).Returns(new List<Regularization>());
             //EXECUTE TEST CASES
             var dactualData = attendanceService.GetAccessEventsForDateRange(77, DateTime.Parse("2019/02/09"), DateTime.Parse("2019/02/09")).Result;
             var dactualDataForADay = dactualData.ListOfAttendanceRecordDTO.FirstOrDefault();

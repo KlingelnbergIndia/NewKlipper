@@ -26,6 +26,7 @@ namespace Klipper.Tests
             employeeData = Substitute.For<IEmployeeRepository>();
             departmentData = Substitute.For<IDepartmentRepository>();
             regularizationData = Substitute.For<IAttendanceRegularizationRepository>();
+            regularizationData.GetRegularizedRecords(48).Returns(new List<Regularization>());
         }
 
         [Test]

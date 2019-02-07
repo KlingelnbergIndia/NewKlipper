@@ -34,6 +34,7 @@ namespace Klipper.Tests
             regularizationData = Substitute.For<IAttendanceRegularizationRepository>();
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
+            regularizationData.GetRegularizedRecords(48).Returns(new List<Regularization>());
         }
 
         [Test]
@@ -122,7 +123,7 @@ namespace Klipper.Tests
                 .WithPassword("26-12-1995")
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
-            
+
             // Execute usecase
             var actualData = attendanceService
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
