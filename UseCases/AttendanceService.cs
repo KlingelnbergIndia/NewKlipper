@@ -29,12 +29,20 @@ namespace UseCases
         {
             AccessEvents accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
-            AttendanceRecordsDTO listOfAttendanceRecord = await CreateAttendanceRecordAsync(datewiseAccessEvents, employeeId);
-            listOfAttendanceRecord = IncludeHolidays(listOfAttendanceRecord, fromDate, toDate, employeeId);
+            List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecord = await CreatePerDayAttendanceRecordAsync(datewiseAccessEvents, employeeId);
+            listOfPerDayAttendanceRecord = IncludeHolidays(listOfPerDayAttendanceRecord, fromDate, toDate, employeeId);
+
+            Employee employeeData = _employeeRepository.GetEmployee(employeeId);
+            Department department = _departmentRepository.GetDepartment(employeeData.Department());
 
             return await Task.Run(() =>
             {
-                return listOfAttendanceRecord;
+                return new AttendanceRecordsDTO()
+                {
+                    ListOfAttendanceRecordDTO = listOfPerDayAttendanceRecord,
+                    TotalWorkingHours = CalculateTotalWorkingHours(listOfPerDayAttendanceRecord),
+                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(listOfPerDayAttendanceRecord, department.GetNoOfHoursToBeWorked()),
+                };
             });
         }
         public async Task<List<AccessPointRecord>> GetAccessPointDetails(int employeeId, DateTime date)
@@ -115,10 +123,10 @@ namespace UseCases
             return listOfaccessPointRecords;
         }
 
-        private AttendanceRecordsDTO IncludeHolidays(AttendanceRecordsDTO listOfAttendanceRecord, DateTime fromDate, DateTime toDate, int employeeId)
+        private List<PerDayAttendanceRecordDTO> IncludeHolidays(List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecordDTOs, DateTime fromDate, DateTime toDate, int employeeId)
         {
-            var availableDates = listOfAttendanceRecord.ListOfAttendanceRecordDTO.Select(x => x.Date).Distinct().ToList();
-            var listOfAttendanceRecordDTO = listOfAttendanceRecord.ListOfAttendanceRecordDTO;
+            var availableDates = listOfPerDayAttendanceRecordDTOs.Select(x => x.Date).Distinct().ToList();
+            var listOfAttendanceRecordDTO = listOfPerDayAttendanceRecordDTOs;
 
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
             Department department = _departmentRepository.GetDepartment(employeeData.Department());
@@ -133,11 +141,13 @@ namespace UseCases
                         string remark = null;
                         bool flag = false;
                         var workingHours = TimeSpan.Zero;
-                        if (reguralizedEntry != null)
+                        var dayStatus = DayStatus.Leave;
+                        if(reguralizedEntry != null)
                         {
                             workingHours = reguralizedEntry.GetRegularizedHours();
                             remark = reguralizedEntry.GetRemark();
                             flag = true;
+                            dayStatus = DayStatus.WorkingDay;
                         }
 
                         listOfAttendanceRecordDTO.Add(new PerDayAttendanceRecordDTO()
@@ -148,21 +158,21 @@ namespace UseCases
                             TimeIn = new Time(0, 0),
                             TimeOut = new Time(0, 0),
                             WorkingHours = new Time(workingHours.Hours, workingHours.Minutes) ,
-                            DayStatus =DayStatus.Leave,
+                            DayStatus = dayStatus,
                             Remark = remark,
                             IsHoursRegularized = flag
                         });
                     }
                 }
             }
-            listOfAttendanceRecord.ListOfAttendanceRecordDTO = listOfAttendanceRecordDTO.OrderByDescending(x => x.Date).ToList();
+            listOfAttendanceRecordDTO = listOfAttendanceRecordDTO.OrderByDescending(x => x.Date).ToList();
 
-            return listOfAttendanceRecord;
+            return listOfAttendanceRecordDTO;
         }
 
-        private async Task<AttendanceRecordsDTO> CreateAttendanceRecordAsync(IList<PerDayWorkRecord> workRecordByDate, int employeeId)
+        private async Task<List<PerDayAttendanceRecordDTO>> CreatePerDayAttendanceRecordAsync(IList<PerDayWorkRecord> workRecordByDate, int employeeId)
         {
-            AttendanceRecordsDTO listOfAttendanceRecordDTO = new AttendanceRecordsDTO();
+            List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
             Department department = _departmentRepository.GetDepartment(employeeData.Department());
 
@@ -206,18 +216,18 @@ namespace UseCases
                     Remark = remark,
                     IsHoursRegularized = flag
                 };
-                listOfAttendanceRecordDTO.ListOfAttendanceRecordDTO.Add(attendanceRecord);
+                listOfPerDayAttendanceRecordDTO.Add(attendanceRecord);
             }
 
             return await Task.Run(() =>
             {
-                var perDayAttendanceRecords = listOfAttendanceRecordDTO.ListOfAttendanceRecordDTO;
-                return new AttendanceRecordsDTO()
-                {
-                    ListOfAttendanceRecordDTO = perDayAttendanceRecords,
-                    TotalWorkingHours = CalculateTotalWorkingHours(perDayAttendanceRecords),
-                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(perDayAttendanceRecords, department.GetNoOfHoursToBeWorked()),
-                };
+                return listOfPerDayAttendanceRecordDTO;
+                //return new AttendanceRecordsDTO()
+                //{
+                //    ListOfAttendanceRecordDTO = listOfPerDayAttendanceRecords,
+                //    TotalWorkingHours = CalculateTotalWorkingHours(listOfPerDayAttendanceRecords),
+                //    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime(listOfPerDayAttendanceRecords, department.GetNoOfHoursToBeWorked()),
+                //};
             });
         }
 
