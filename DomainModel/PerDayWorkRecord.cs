@@ -57,8 +57,8 @@ namespace DomainModel
             var timeIn = new TimeSpan(minTime.Hours, minTime.Minutes,00);
             var timeOut = new TimeSpan(maxTime.Hours, maxTime.Minutes, 00);
 
-            var GymnasiumPointAccessEvents = new AccessEvents(accessEventsOfGymEntry);
-            var MainEntryPointAccessEvents = new AccessEvents(accessEventsOfMainEntry);
+            var GymnasiumPointAccessEvents = new WorkLogs(accessEventsOfGymEntry);
+            var MainEntryPointAccessEvents = new WorkLogs(accessEventsOfMainEntry);
 
             TimeSpan totalWorkingHours = TimeSpan.Zero;
 

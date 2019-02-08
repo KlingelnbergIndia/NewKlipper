@@ -19,21 +19,21 @@ namespace Klipper.Tests
             accessEventsFilePath = currentDirectory.Remove(currentDirectory.Length - 3) + "AccessEventsDummyData.json";
         }
 
-        public AccessEvents Build()
+        public WorkLogs Build()
         {
             var jsonData = File.ReadAllText(accessEventsFilePath);
             dummyAccessEvent = JsonConvert.DeserializeObject<List<AccessEvent>>(jsonData);
-            return new AccessEvents(dummyAccessEvent);
+            return new WorkLogs(dummyAccessEvent);
         }
 
-        public AccessEvents BuildBetweenDate(DateTime fromDate, DateTime toDate)
+        public WorkLogs BuildBetweenDate(DateTime fromDate, DateTime toDate)
         {
             fromDate = fromDate.Date + DateTime.MinValue.TimeOfDay;
             toDate = toDate.Date + DateTime.MaxValue.TimeOfDay;
             var jsonData = File.ReadAllText(accessEventsFilePath);
             dummyAccessEvent = JsonConvert.DeserializeObject<List<AccessEvent>>(jsonData)
                                 .Where(x=>x.EventTime >= fromDate && x.EventTime <= toDate).ToList();
-            return new AccessEvents(dummyAccessEvent);
+            return new WorkLogs(dummyAccessEvent);
         }
 
         public PerDayWorkRecord BuildForADay(DateTime date)

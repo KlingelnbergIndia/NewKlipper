@@ -19,7 +19,7 @@ namespace UseCaseBoundaryImplementation
             _context = AttendanceDBContext.Instance;
         }
 
-        public AccessEvents GetAccessEvents(int employeeid)
+        public WorkLogs GetAccessEvents(int employeeid)
         {
             var filter = Builders<AccessEventEntityModel>.Filter.Eq("EmployeeID", employeeid);
             var listOfEntityAccessEvent = _context.AccessEvents
@@ -27,7 +27,7 @@ namespace UseCaseBoundaryImplementation
                 .ToList();
 
             var listOfDomainModelAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(listOfEntityAccessEvent);
-            AccessEvents accessEvents = new AccessEvents(listOfDomainModelAccessEvent);
+            WorkLogs accessEvents = new WorkLogs(listOfDomainModelAccessEvent);
             return accessEvents;
         }
 
@@ -50,7 +50,7 @@ namespace UseCaseBoundaryImplementation
             return listOfDomainModelAccessEvent;
         }
 
-        public AccessEvents GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
+        public WorkLogs GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
         {
             DateTime toDateWithMaxTimeOfTheDay = toDate.Date + DateTime.MaxValue.TimeOfDay;
             var accessEvents = _context.AccessEvents.AsQueryable()
@@ -58,7 +58,7 @@ namespace UseCaseBoundaryImplementation
                 .ToList();
 
             var listOfDomainModelAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
-            return new AccessEvents(listOfDomainModelAccessEvent);
+            return new WorkLogs(listOfDomainModelAccessEvent);
         }
 
         public PerDayWorkRecord GetAccessEventsForADay(int employeeId, DateTime date)
