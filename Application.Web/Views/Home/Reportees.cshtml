@@ -105,7 +105,8 @@
                         <th>Time Out</th>
                         <th>Deficit Time</th>
                         <th>Over Time</th>
-                        <th>Working Hours</th>
+                        <th>Actual Hours</th>
+                        <th>Regularized Hours</th>
                         <th>Remark</th>
                     </tr>
                 </thead>
@@ -165,7 +166,7 @@
                                 <td class="@overTimeClass">@item.OverTime.Hour.ToString("D2"):@item.OverTime.Minute.ToString("D2")</td>
                             }
 
-                            @if (item.TimeIn.Hour == 0 && item.TimeIn.Minute == 0 && item.TimeOut.Hour == 0 && item.TimeOut.Minute == 0 && item.IsHoursRegularized==false)
+                            @if (item.TimeIn.Hour == 0 && item.TimeIn.Minute == 0 && item.TimeOut.Hour == 0 && item.TimeOut.Minute == 0 && item.IsHoursRegularized == false)
                             {
                                 <td>
                                     Missing entry
@@ -182,6 +183,7 @@
                                     <span data-toggle="tooltip" class="glyphicon glyphicon-time pull-right" onclick=regularizeHours('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID) title="Regularize hrs"></span>
                                 </td>
                             }
+                            <td>@item.RegularizedHours.Hour.ToString("D2"):@item.RegularizedHours.Minute.ToString("D2")</td>
                             <td>@item.Remark</td>
                         </tr>
                     }
@@ -201,7 +203,7 @@
     .table td {
         text-align: center;
     }
-    
+
     .table th {
         text-align: center;
     }

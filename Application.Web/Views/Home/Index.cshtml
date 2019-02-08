@@ -70,7 +70,8 @@
                     <th>Time Out</th>
                     <th>Deficit Time</th>
                     <th>Over Time</th>
-                    <th>Working Hours</th>
+                    <th>Actual Hours</th>
+                    <th>Regularized Hours</th>
                     <th>Remark</th>
                 </tr>
             </thead>
@@ -142,6 +143,7 @@
                             </u>
                         </td>
                     }
+                    <td>@item.RegularizedHours.Hour.ToString("D2"):@item.RegularizedHours.Minute.ToString("D2")</td>
                     <td>@item.Remark</td>
                 </tr>
                 }
