@@ -9,7 +9,7 @@ namespace UseCaseBoundary.DTO
     public class LeaveDTO
     {
         public DateTime Date;
-        public LeaveType Leave;
+        public LeaveType TypeOfLeave;
         public string Remark;
         public IEnumerable<SelectListItem> LeaveTypeList;
 
