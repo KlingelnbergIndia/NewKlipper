@@ -107,7 +107,7 @@
                         <th>Over Time</th>
                         <th>Actual Hours</th>
                         <th>Regularized Hours</th>
-                        <th>Remark</th>
+                        <th class="col-md-2">Remark</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -184,7 +184,7 @@
                                 </td>
                             }
                             <td>@item.RegularizedHours.Hour.ToString("D2"):@item.RegularizedHours.Minute.ToString("D2")</td>
-                            <td>@item.Remark</td>
+                            <td class="text-left small">@item.Remark</td>
                         </tr>
                     }
                 </tbody>

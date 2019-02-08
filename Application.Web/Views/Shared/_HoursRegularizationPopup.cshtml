@@ -8,14 +8,14 @@
             </div>
             <div id="ModalBody" style="margin:10px;">
                 <label class="control-label" for="time">Hours:</label>
-                <div class="input-group clockpicker" data-autoclose="true">
+                <div class="input-group clockpicker" data-autoclose="false">
                     <input type="text" class="form-control" id="time" value="09:00" readonly>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-time"></span>
                     </span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="pwd">Remark:</label>
+                    <label class="control-label" for="remark">Remark:</label>
                     <textarea class="form-control" rows="5" id="remark"></textarea>
                 </div>
 
@@ -46,6 +46,11 @@
         }
 
         saveData = function () {
+            var remarkTxt = document.getElementById("remark").value.toString().trim();
+            if (remarkTxt == '' || remarkTxt == null) {
+                alert('Please enter remark');
+                return;
+            }
             $.ajax({
                 type: "POST",
                 url: "SaveRegularizedHours/",
@@ -53,7 +58,7 @@
                     date: dateToYMD(_convertStringToDateObject),
                     employeeId: _employeeId,
                     timeToBeRegularize: document.getElementById("time").value,
-                    remark: document.getElementById("remark").value
+                    remark: remarkTxt
                 },
                 success: function (response) {
                     alert(response.value);
