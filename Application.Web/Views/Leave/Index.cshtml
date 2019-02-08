@@ -1,35 +1,44 @@
 ﻿@model UseCaseBoundary.DTO.LeaveDTO
 
-<div class="main" style="margin-top:-100PX;">
+<div class="main" style="margin-top:-20PX;">
     <h1>Apply Leave</h1>
     <div class="col-md-6 col-sm-12 col-xs-12">
-        <div class="register-form">
-
-            <div class="row">
-                <div class="col-md-4">
-                    <form asp-action="Index">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <label>From Date</label>
-                            <input type="text" asp-for="@Model." class="form-control" placeholder="User Name">
-                            <span asp-validation-for="@Model." class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label>Passwor</label>
-                            <input type="password" asp-for="@Model.Password" class="form-control" placeholder="Password">
-                            <span asp-validation-for="@Model.Password" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="Apply" class="btn btn-default" />
-                        </div>
-                    </form>
+        <div class="table form-horizontal ">
+            <form class="form-inline" form asp-action="Index">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="text" asp-for="@Model.Date" class="form-control" placeholder="User Name">
+                    <span asp-validation-for="@Model.Date" class="text-danger"></span>
                 </div>
-            </div>
+                <div class="form-group">
+
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        Leave Type
+                    </button>
+                    <select id="leaveList" name="leaveList" class="form-control input-sm">
+                        <option selected value="0" disabled>---Select Reportee---</option>
+                        @foreach (var item in @Model.LeaveTypeList)
+                        {
+                            <option value=@item>@item</option>
+                        }
+                    </select>
+
+
+                </div>
+                <div class="form-group">
+                    <label>Remark</label>
+                    <input type="text" asp-for="@Model.Remark" class="form-control" placeholder="Password">
+                    <span asp-validation-for="@Model.Remark" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Apply" class="btn btn-default" />
+                </div>
+            </form>
         </div>
     </div>
 </div>
-            
-            
 
-         
+
+
+
 

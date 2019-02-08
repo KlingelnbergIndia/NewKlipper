@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace UseCaseBoundary.DTO
 {
@@ -10,11 +11,21 @@ namespace UseCaseBoundary.DTO
         CasualLeave,
         SickLeave
     }
+
     public class LeaveDTO
     {
-        public DateTime fromDate;
-        public DateTime toDate;
-        public LeaveType leave;
-        public string remark;
+        public DateTime Date;
+        public LeaveType Leave;
+        public string Remark;
+        public IEnumerable<SelectListItem> LeaveTypeList;
+
+        //public LeaveDTO()
+        //{
+        //    LeaveTypeList = Enum.GetNames(typeof(LeaveType)).Select(name => new SelectListItem()
+        //    {
+        //        Text = name,
+        //        Value = name
+        //    });
+        //}
     }
 }
