@@ -16,6 +16,8 @@ namespace Klipper.Tests
         private IAccessEventsRepository accessEventsContainer;
         private IEmployeeRepository employeeData;
         private IDepartmentRepository departmentData;
+        private IAttendanceRegularizationRepository regularizationData;
+
 
         [SetUp]
         public void Setup()
@@ -23,6 +25,8 @@ namespace Klipper.Tests
             accessEventsContainer = Substitute.For<IAccessEventsRepository>();
             employeeData = Substitute.For<IEmployeeRepository>();
             departmentData = Substitute.For<IDepartmentRepository>();
+            regularizationData = Substitute.For<IAttendanceRegularizationRepository>();
+            regularizationData.GetRegularizedRecords(48).Returns(new List<Regularization>());
         }
 
         [Test]
@@ -41,7 +45,7 @@ namespace Klipper.Tests
         
 
         AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData, departmentData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsContainer.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
 
@@ -70,7 +74,7 @@ namespace Klipper.Tests
             departmentData.GetDepartment(Departments.Design).Returns(department);
 
             AttendanceService attendanceService =
-                    new AttendanceService(accessEventsContainer, employeeData, departmentData);
+                    new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsContainer.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
 

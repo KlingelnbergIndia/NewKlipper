@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace DomainModel
 {
-    public class AccessEvents
+    public class WorkLogs
     {
         private List<AccessEvent> _accessEvents;
 
-        public AccessEvents(List<AccessEvent> events)
+        public WorkLogs(List<AccessEvent> events)
         {
             _accessEvents = events;
         }

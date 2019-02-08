@@ -1,0 +1,108 @@
+﻿<div class="modal fade" id="HoursRegularizationModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <input type="hidden" name="showDate" id="showDate" value="" />
+                <h4 class="modal-title" id="popupDateSpan"></h4>
+            </div>
+            <div id="ModalBody" style="margin:10px;">
+                <label class="control-label" for="time">Hours:</label>
+                <div class="input-group clockpicker" data-autoclose="false">
+                    <input type="text" class="form-control" id="time" value="09:00" readonly>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="remark">Remark:</label>
+                    <textarea class="form-control" rows="5" id="remark"></textarea>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" onclick="saveData()" class="btn btn-info pull-right">Regularize</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link href="~/js/clock-picker/bootstrap-clockpicker.css" rel="stylesheet" />
+<script src="~/js/clock-picker/bootstrap-clockpicker.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var _convertStringToDateObject;
+        var _employeeId;
+
+        regularizeHours = function (date, employeeId) {
+            if (confirm("Regularize hours ?")) {
+                _convertStringToDateObject = new Date(date);
+                _employeeId = employeeId;
+
+                $("#popupDateSpan").html(dateToYMD(_convertStringToDateObject));
+                $('#HoursRegularizationModal').modal({ 'show': true, 'backdrop': true });
+            }
+        }
+
+        saveData = function () {
+            var remarkTxt = document.getElementById("remark").value.toString().trim();
+            if (remarkTxt == '' || remarkTxt == null) {
+                alert('Please enter remark');
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "SaveRegularizedHours/",
+                data: {
+                    date: dateToYMD(_convertStringToDateObject),
+                    employeeId: _employeeId,
+                    timeToBeRegularize: document.getElementById("time").value,
+                    remark: remarkTxt
+                },
+                success: function (response) {
+                    alert(response.value);
+                    window.location.reload();
+                }
+            });
+        }
+
+        $('.clockpicker').clockpicker({
+            placement: 'bottom',
+            donetext: 'Done'
+        });
+
+    });
+
+    $(document).ajaxError(function (e, xhr, settings) {
+        if (xhr.status == 401) {
+            alert("Your Session time expired. Please login again.");
+            window.location = "/";
+        }
+    });
+
+
+    function dateToYMD(date) {
+        try {
+            var strArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var d = date.getDate();
+            var m = strArray[date.getMonth()];
+            var y = date.getFullYear();
+            return '' + (d <= 9 ? '0' + d : d) + ' ' + m + ' ' + y;
+        } catch (e) {
+            alert('Invalid date');
+            return null;
+        }
+    }
+
+    $('.popoverClass').popover({ trigger: "hover" });
+    $('[data-toggle="tooltip"]').tooltip({ placement: "bottom" });
+
+</script>
+
+<style>
+    [data-toggle="tooltip"] {
+        font-size: 15px;
+        cursor: pointer;
+    }
+</style>
