@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UseCaseBoundaryImplementation\RepositoryImplementation.csproj" />
     <ProjectReference Include="..\UseCaseBoundary\UseCaseBoundary.csproj" />
   </ItemGroup>
 

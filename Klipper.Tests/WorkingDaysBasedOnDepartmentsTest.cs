@@ -18,6 +18,7 @@ namespace Klipper.Tests
         private IAccessEventsRepository accessEventsContainer;
         private IEmployeeRepository employeeContainer;
         private IDepartmentRepository departmentContainer;
+        private IAttendanceRegularizationRepository regularizationData;
 
         [SetUp]
         public void setup()
@@ -25,19 +26,22 @@ namespace Klipper.Tests
             accessEventsContainer = Substitute.For<IAccessEventsRepository>();
             employeeContainer = Substitute.For<IEmployeeRepository>();
             departmentContainer = Substitute.For<IDepartmentRepository>();
+            regularizationData = Substitute.For<IAttendanceRegularizationRepository>();
+
             departmentContainer.GetDepartment(Departments.Software).Returns(
                 new Department(Departments.Software));
             departmentContainer.GetDepartment(Departments.Design).Returns(
                 new Department(Departments.Design));
             departmentContainer.GetDepartment(Departments.Service).Returns(
                 new Department(Departments.Service));
+            regularizationData.GetRegularizedRecords(666).Returns(new List<Regularization>());
         }
 
         [Test]
         public void GivenNonworkingDayShouldCalculateAccurateWorkingHours()
         {
             //SETUP
-            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer);
+            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer, regularizationData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
             accessEventsContainer.GetAccessEventsForDateRange(666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Returns(dummyAccessevents);
@@ -73,7 +77,7 @@ namespace Klipper.Tests
         public void GivenNonworkingDayShouldCalculateAccurateOverTime()
         {
             //SETUP
-            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer);
+            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer, regularizationData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
             accessEventsContainer.GetAccessEventsForDateRange(666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Returns(dummyAccessevents);
@@ -109,7 +113,7 @@ namespace Klipper.Tests
         public void GivenNonworkingDayShouldCalculateLateByAsZero()
         {
             //SETUP
-            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer);
+            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer, regularizationData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
             accessEventsContainer.GetAccessEventsForDateRange(666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Returns(dummyAccessevents);
@@ -134,7 +138,7 @@ namespace Klipper.Tests
         public void GivenWorkedDayIsNonWorkingDayForSoftwareDepartment()
         {
             //SETUP
-            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer);
+            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer, regularizationData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
             accessEventsContainer.GetAccessEventsForDateRange(666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Returns(dummyAccessevents);
@@ -158,7 +162,7 @@ namespace Klipper.Tests
         public void GivenWorkedDayIsNonWorkingDayForDesignDepartment()
         {
             //SETUP
-            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer);
+            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer, regularizationData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
             accessEventsContainer.GetAccessEventsForDateRange(666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Returns(dummyAccessevents);
@@ -183,7 +187,7 @@ namespace Klipper.Tests
         public void GivenWorked1stSaturdayIsWorkingDayForServiceDepartment()
         {
             //SETUP
-            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer);
+            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer, regularizationData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
             accessEventsContainer.GetAccessEventsForDateRange(77, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Returns(dummyAccessevents);
@@ -194,6 +198,7 @@ namespace Klipper.Tests
                 .WithDepartment(Departments.Service)
                 .BuildEmployee();
             employeeContainer.GetEmployee(77).Returns(dummyEmployee);
+            regularizationData.GetRegularizedRecords(77).Returns(new List<Regularization>());
 
             //EXECUTE TEST CASES
             var dactualData = attendanceService.GetAccessEventsForDateRange(77, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Result;
@@ -208,7 +213,7 @@ namespace Klipper.Tests
         public void GivenWorked2ndSaturdayIsNonWorkingDayForServiceDepartment()
         {
             //SETUP
-            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer);
+            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeContainer, departmentContainer, regularizationData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2019/02/09"), DateTime.Parse("2019/02/09"));
             accessEventsContainer.GetAccessEventsForDateRange(77, DateTime.Parse("2019/02/09"), DateTime.Parse("2019/02/09")).Returns(dummyAccessevents);
@@ -219,7 +224,7 @@ namespace Klipper.Tests
                 .WithDepartment(Departments.Service)
                 .BuildEmployee();
             employeeContainer.GetEmployee(77).Returns(dummyEmployee);
-
+            regularizationData.GetRegularizedRecords(77).Returns(new List<Regularization>());
             //EXECUTE TEST CASES
             var dactualData = attendanceService.GetAccessEventsForDateRange(77, DateTime.Parse("2019/02/09"), DateTime.Parse("2019/02/09")).Result;
             var dactualDataForADay = dactualData.ListOfAttendanceRecordDTO.FirstOrDefault();
