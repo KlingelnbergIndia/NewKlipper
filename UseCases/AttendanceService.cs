@@ -30,7 +30,7 @@ namespace UseCases
 
         public async Task<AttendanceRecordsDTO> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
         {
-            AccessEvents accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
+            WorkLogs accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
             List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecord = await CreatePerDayAttendanceRecordAsync(datewiseAccessEvents, employeeId);
             listOfPerDayAttendanceRecord = IncludeHolidays(listOfPerDayAttendanceRecord, fromDate, toDate, employeeId);
