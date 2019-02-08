@@ -2,16 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static DomainModel.Leave;
 
 namespace UseCaseBoundary.DTO
 {
-    public enum LeaveType
-    {
-        EarnedLeave,
-        CasualLeave,
-        SickLeave
-    }
-
     public class LeaveDTO
     {
         public DateTime Date;
