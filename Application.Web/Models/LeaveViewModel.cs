@@ -8,11 +8,6 @@ namespace Application.Web.Models
 {
     public class LeaveViewModel
     {
-        List<LeaveType> LeaveTypes = GetAllEnumValues();
-
-        private static List<LeaveType> GetAllEnumValues()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
