@@ -39,7 +39,7 @@ namespace UseCases
             List<Leave> leavesInfo = _leavesRepository.GetAllLeavesInfo(employeeId);
             var leaveDTO = leavesInfo.Select(x=> new LeaveDTO() {
                 Date = x.GetLeaveDate(),
-                TypeOfLeave = x.GetLeaveType(),
+               // TypeOfLeave = x.GetLeaveType(),
                 Remark = x.GetRemark()
             })
             .ToList();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Web.Controllers
@@ -10,7 +11,8 @@ namespace Application.Web.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            var leaveViewModel = new LeaveViewModel();
+            return View(leaveViewModel);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace DomainModel
@@ -13,8 +14,11 @@ namespace DomainModel
 
         public enum LeaveType
         {
+            [Display(Name = "Earned Leave")]
             EarnedLeave,
+            [Display(Name = "Casual Leave")]
             CasualLeave,
+            [Display(Name = "Sick Leave")]
             SickLeave
         }
 
