@@ -40,5 +40,10 @@ namespace DomainModel
         {
             return _remark;
         }
+
+        public int GetEmployeeId()
+        {
+            return _employeeId;
+        }
     }
 }

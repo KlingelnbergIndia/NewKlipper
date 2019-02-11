@@ -1,6 +1,7 @@
 ﻿using DomainModel;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UseCaseBoundary;
 using UseCaseBoundary.DTO;
@@ -33,10 +34,16 @@ namespace UseCases
             return _leavesRepository.AddNewLeave(leaveDto);
         }
 
-        public List<Leave> GetLeaves(int employeeId)
+        public List<LeaveDTO> GetLeaves(int employeeId)
         {
             List<Leave> leavesInfo = _leavesRepository.GetAllLeavesInfo(employeeId);
-            return leavesInfo;
+            var leaveDTO = leavesInfo.Select(x=> new LeaveDTO() {
+                Date = x.GetLeaveDate(),
+                TypeOfLeave = x.GetLeaveType(),
+                Remark = x.GetRemark()
+            })
+            .ToList();
+            return leaveDTO;
         }
     }
 }
