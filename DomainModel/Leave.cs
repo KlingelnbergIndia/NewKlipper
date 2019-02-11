@@ -33,7 +33,7 @@ namespace DomainModel
 
         public DateTime GetLeaveDate()
         {
-            return _leaveDate;
+            return _leaveDate.Date;
         }
 
         public string GetRemark()

@@ -63,7 +63,7 @@ namespace RepositoryImplementation
             return
                 _employeeDBContext.EmployeeLeaves
                 .AsQueryable()
-                .Where(x => x.EmployeeId == employeeId && x.LeaveDate == leaveDate)
+                .Where(x => x.EmployeeId == employeeId && x.LeaveDate == leaveDate.Date)
                 .Any();
         }
 
