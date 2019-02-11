@@ -75,7 +75,10 @@ namespace RepositoryImplementation
                 .Any();
 
             if (isLeaveExist)
-                return false;
+            {
+                _employeeDBContext.EmployeeLeaves
+                .DeleteOneAsync(x => x.EmployeeId == leaveData.GetEmployeeId() && x.LeaveDate == leaveData.GetLeaveDate());
+            }
 
             var leaveEntity = new LeaveEntityModel()
             {
