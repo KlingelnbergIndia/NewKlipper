@@ -1,4 +1,8 @@
-﻿using System;
+﻿
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,9 +11,11 @@ using static DomainModel.Leave;
 
 namespace Application.Web.Models
 {
-    public class LeaveViewModel
+    public class LeaveViewModel : PageModel
     {
         public LeaveDTO leaveDTO;
+        public List<string> reportees = new List<string>();
+
         public IDictionary<int, string> GetAllLeaveTypes()
         {
             var dictionary = new Dictionary<int, string>();
@@ -28,6 +34,17 @@ namespace Application.Web.Models
             }
 
             return dictionary;
+        }
+
+        public bool ShowReporteesPanel()
+        {
+            var user = HttpContext.Session.GetString("EmployeeRoles");
+            var rolesJson = string.IsNullOrEmpty(user) ? "" : user;
+            var EmployeeRolesList = JsonConvert.DeserializeObject<string[]>(rolesJson);
+            if (EmployeeRolesList.Contains("TeamLeader"))
+                return true;
+
+            return false;
         }
 
     }

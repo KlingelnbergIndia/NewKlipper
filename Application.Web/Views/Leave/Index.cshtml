@@ -1,59 +1,87 @@
 ﻿@model Application.Web.Models.LeaveViewModel
 @{
     var leaveTypes = @Model.GetAllLeaveTypes();
+    var isTeamLead = Model.ShowReporteesPanel();
 }
 
-    <div class="main" style="margin-top:-20PX;">
-        <h1>Apply Leave</h1>
-        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <form class="form-group" action="/action_page.php">
-                <div class="form-group">
-                    <label>Date</label>
-                    <input type="text" asp-for="@Model.leaveDTO.Date" class="form-control" placeholder="User Name">
-                    <span asp-validation-for="@Model.leaveDTO.Date" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label>Leave Type</label>
-                    <select id="leaveList" name="leaveList" class="form-control input-sm">
-                        <option selected value="0" disabled>---Select Leave Type---</option>
-                        @foreach (var leave in leaveTypes)
-                        {
-                            <option value="@leave.Key">@leave.Value</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Remark</label>
-                    <textarea asp-for="@Model.leaveDTO.Remark" class="form-control" placeholder="Remark" rows="5"></textarea>
-                    <span asp-validation-for="@Model.leaveDTO.Remark" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Apply" class="btn btn-default" />
-                </div>
-            </form>
-        </div>
-        <div class="col-md-12">
-            <table class="table table-responsive table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th class="col-md-1 col-lg-1 col-xs-1">#No</th>
-                        <th class="col-md-2 col-lg-2 col-xs-2">Leave Date</th>
-                        <th class="col-md-2 col-lg-2 col-xs-2">Leave Type</th>
-                        <th class="col-md-6 col-lg-6 col-xs-6">Remark</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td>date</td>
-                        <td>type</td>
-                        <td>remark</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div class="main" style="margin-top:-20PX;">
+    <h1>Apply Leave</h1>
+    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <form class="form-group" action="/action_page.php">
+            <div class="form-group">
+                <label>Date</label>
+                <input type="text" asp-for="@Model.leaveDTO.Date" class="form-control" placeholder="User Name">
+                <span asp-validation-for="@Model.leaveDTO.Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Leave Type</label>
+                <select id="leaveList" name="leaveList" class="form-control input-sm">
+                    <option selected value="0" disabled>---Select Leave Type---</option>
+                    @foreach (var leave in leaveTypes)
+                    {
+                        <option value="@leave.Key">@leave.Value</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Remark</label>
+                <textarea asp-for="@Model.leaveDTO.Remark" class="form-control" placeholder="Remark" rows="5"></textarea>
+                <span asp-validation-for="@Model.leaveDTO.Remark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Apply" class="btn btn-default" />
+            </div>
+        </form>
     </div>
+    <div class="col-md-12">
+        <table class="table table-responsive table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="col-md-1 col-lg-1 col-xs-1">#No</th>
+                    <th class="col-md-2 col-lg-2 col-xs-2">Leave Date</th>
+                    <th class="col-md-2 col-lg-2 col-xs-2">Leave Type</th>
+                    <th class="col-md-6 col-lg-6 col-xs-6">Remark</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td>date</td>
+                    <td>type</td>
+                    <td>remark</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
+
+<div class="panel-info" style="@(isTeamLead?"visibility:visible": "visibility:hidden")">
+    <div class="panel panel-heading col-md-12 col-sm-12">
+        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+            @using (Html.BeginForm("GetSelectedreportee", "Home", FormMethod.Post))
+            {
+                <div class="form-inline" style="margin-top: 0.5%">
+                    <div class="form-group">
+                        <label for="reporteesId">Reportee</label>
+                        <select id="reporteesId" name="selectMenu" class="form-control input-sm">
+                            @if (@Model.reportees == null)
+                            {
+                                <option selected value="0" disabled>---Select Reportee---</option>
+                            }
+                            else
+                            {
+                                <option selected value=@Model.reportees>@Model.reportees</option>
+                            }
+                           
+                        </select>
+                    </div>
+                  </div>
+            }
+        </div>
+      
+    </div>
+</div>
 
 
 
