@@ -10,6 +10,9 @@ namespace Application.Web.Models
     public class LeaveViewModel
     {
         public LeaveDTO leaveDTO;
+
+        public List<LeaveDTO> GetAppliedLeaves { get; set; }
+
         public IDictionary<int, string> GetAllLeaveTypes()
         {
             var dictionary = new Dictionary<int, string>();
