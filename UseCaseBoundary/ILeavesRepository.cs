@@ -8,7 +8,7 @@ namespace UseCaseBoundary
 {
     public interface ILeavesRepository
     {
-        bool AddNewLeave(Leave leaveDTO);
+        bool AddNewLeave(Leave leaveDTO, DateTime fromDate, DateTime toDate);
         List<Leave> GetAllLeavesInfo(int employeeId);
         bool IsLeaveExist(int employeeId, DateTime leaveDate);
         bool OverrideLeave(Leave leaveDto);

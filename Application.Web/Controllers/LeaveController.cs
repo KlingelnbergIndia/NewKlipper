@@ -34,12 +34,12 @@ namespace Application.Web.Controllers
         private List<LeaveDTO> mockData()
         {
             List<LeaveDTO> lst = new List<LeaveDTO>();
-            lst.Add(new LeaveDTO { Date = DateTime.Now, Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO { Date = DateTime.Now, Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO { Date = DateTime.Now, Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO { Date = DateTime.Now, Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO { Date = DateTime.Now, Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO { Date = DateTime.Now, Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave });
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave });
             return lst;
         }
     }

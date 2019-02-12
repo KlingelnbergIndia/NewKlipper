@@ -16,7 +16,7 @@ namespace UseCaseBoundary.DTO
             SickLeave
         }
 
-        public DateTime Date;
+        public List<DateTime> Date;
         public LeaveType TypeOfLeave;
         public string Remark;
     }
