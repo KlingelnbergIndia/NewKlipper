@@ -9,12 +9,6 @@ namespace UseCaseBoundary.DTO
    
     public class LeaveDTO
     {
-        public enum LeaveType
-        {
-            EarnedLeave,
-            CasualLeave,
-            SickLeave
-        }
 
         public List<DateTime> Date;
         public LeaveType TypeOfLeave;

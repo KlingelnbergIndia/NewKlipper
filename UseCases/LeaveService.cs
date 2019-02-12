@@ -42,8 +42,8 @@ namespace UseCases
             var leaveDTO = leavesInfo.Select(x => new LeaveDTO()
             {
                 Date = x.GetLeaveDate(),
-                // TypeOfLeave = x.GetLeaveType(),
-                Remark = x.GetRemark()
+                TypeOfLeave = x.GetLeaveType(),
+                Remark = x.GetRemark(),
             })
             .ToList();
             return leaveDTO;
