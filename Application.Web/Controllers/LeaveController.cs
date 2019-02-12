@@ -27,11 +27,11 @@ namespace Application.Web.Controllers
             var leaveViewModel = new LeaveViewModel();
             //leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);  
 
-            leaveViewModel.GetAppliedLeaves = mockDate(); //delete it when UI is done
+            leaveViewModel.GetAppliedLeaves = mockData(); //delete it when UI is done
             return View(leaveViewModel);
         }
 
-        private List<LeaveDTO> mockDate()
+        private List<LeaveDTO> mockData()
         {
             List<LeaveDTO> lst = new List<LeaveDTO>();
             lst.Add(new LeaveDTO { Date = DateTime.Now, Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
