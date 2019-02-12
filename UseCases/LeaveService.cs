@@ -44,6 +44,8 @@ namespace UseCases
                 Date = x.GetLeaveDate(),
                 TypeOfLeave = x.GetLeaveType(),
                 Remark = x.GetRemark(),
+                FromDate = x.GetLeaveDate().Min(),
+                ToDate = x.GetLeaveDate().Max(),
             })
             .ToList();
             return leaveDTO;
