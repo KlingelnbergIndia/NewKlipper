@@ -4,8 +4,8 @@
     var isLeaveCountZero = @Model.GetAppliedLeaves.Count == 0;
 }
 
-<div class="main" style="margin-top:-20PX;">
-    <h3>Apply Leave</h3>
+<div class="main" >
+   
     <div class="col-md-12" style="margin-bottom:10px;">
         <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ApplyLeaveModal">+ Apply Leave</button>
     </div>
@@ -22,12 +22,13 @@
             <tbody>
                 @foreach (var leave in @Model.GetAppliedLeaves)
                 {
-                    <tr>
-                        <td></td>
-                        <td>@leave.Date</td>
-                        <td>@leave.TypeOfLeave</td>
-                        <td>@leave.Remark</td>
-                    </tr>
+                <tr>
+                    <td></td>
+                    <td>@leave.FromDate</td>
+                    <td>@leave.ToDate</td>
+                    <td>@leave.TypeOfLeave</td>
+                    <td>@leave.Remark</td>
+                </tr>
                 }
             </tbody>
         </table>

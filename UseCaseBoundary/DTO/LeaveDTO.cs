@@ -16,7 +16,9 @@ namespace UseCaseBoundary.DTO
             SickLeave
         }
 
-        public DateTime Date;
+        public DateTime FromDate;
+        public DateTime ToDate;
+        public int NoOfDays;
         public LeaveType TypeOfLeave;
         public string Remark;
     }
