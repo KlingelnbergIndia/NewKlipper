@@ -8,7 +8,7 @@ namespace DomainModel
     public class Leave
     {
         private readonly int _employeeId;
-        private readonly DateTime _leaveDate;
+        private readonly List<DateTime> _leaveDates;
         private readonly LeaveType _leaveType;
         private readonly string _remark;
 
@@ -22,10 +22,10 @@ namespace DomainModel
             SickLeave
         }
 
-        public Leave(int employeeId, DateTime leaveDate, LeaveType leaveType, string remark)
+        public Leave(int employeeId, List<DateTime> leaveDates, LeaveType leaveType, string remark)
         {
             _employeeId = employeeId;
-            _leaveDate = leaveDate;
+            _leaveDates = leaveDates;
             _leaveType = leaveType;
             _remark = remark;
         }
@@ -35,9 +35,9 @@ namespace DomainModel
             return _leaveType;
         }
 
-        public DateTime GetLeaveDate()
+        public List<DateTime> GetLeaveDate()
         {
-            return _leaveDate.Date;
+            return _leaveDates;
         }
 
         public string GetRemark()

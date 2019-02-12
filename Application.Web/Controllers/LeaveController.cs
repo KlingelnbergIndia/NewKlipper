@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using UseCaseBoundary;
 using UseCaseBoundary.DTO;
 using UseCases;
+using static DomainModel.Leave;
 
 namespace Application.Web.Controllers
 {
@@ -26,6 +27,7 @@ namespace Application.Web.Controllers
 
             var leaveViewModel = new LeaveViewModel();
             //leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);  
+
             leaveViewModel.GetAppliedLeaves = mockData(); //delete it when UI is done
             return View(leaveViewModel);
         }
@@ -44,12 +46,12 @@ namespace Application.Web.Controllers
         private List<LeaveDTO> mockData()
         {
             List<LeaveDTO> lst = new List<LeaveDTO>();
-            lst.Add(new LeaveDTO { FromDate = DateTime.Now, ToDate = DateTime.Now, Remark = "rkjhf kjdh kdjfh kjd", TypeOfLeave = LeaveDTO.LeaveType.CasualLeave });
-            lst.Add(new LeaveDTO { FromDate = DateTime.Now, ToDate = DateTime.Now, Remark = "rkjhf kjdh kdjfh kjd", TypeOfLeave = LeaveDTO.LeaveType.CasualLeave });
-            lst.Add(new LeaveDTO { FromDate = DateTime.Now, ToDate = DateTime.Now, Remark = "rkjhf kjdh kdjfh kjd", TypeOfLeave = LeaveDTO.LeaveType.CasualLeave });
-            lst.Add(new LeaveDTO { FromDate = DateTime.Now, ToDate = DateTime.Now, Remark = "rkjhf kjdh kdjfh kjd", TypeOfLeave = LeaveDTO.LeaveType.CasualLeave });
-            lst.Add(new LeaveDTO { FromDate = DateTime.Now, ToDate = DateTime.Now, Remark = "rkjhf kjdh kdjfh kjd", TypeOfLeave = LeaveDTO.LeaveType.CasualLeave });
-            lst.Add(new LeaveDTO { FromDate = DateTime.Now, ToDate = DateTime.Now, Remark = "rkjhf kjdh kdjfh kjd", TypeOfLeave = LeaveDTO.LeaveType.CasualLeave });
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave });
             return lst;
         }
     }
