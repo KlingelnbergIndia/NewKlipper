@@ -16,6 +16,8 @@ namespace Application.Web.Models
         public LeaveDTO leaveDTO;
 
         public List<LeaveDTO> GetAppliedLeaves { get; set; }
+        public List<ReporteeDTO> ReporteesList { get; set; }
+        public bool IsTeamLead { get; set; }
 
         public IDictionary<int, string> GetAllLeaveTypes()
         {
@@ -37,16 +39,7 @@ namespace Application.Web.Models
             return dictionary;
         }
 
-        public bool ShowReporteesPanel()
-        {
-            var user = HttpContext.Session.GetString("EmployeeRoles");
-            var rolesJson = string.IsNullOrEmpty(user) ? "" : user;
-            var EmployeeRolesList = JsonConvert.DeserializeObject<string[]>(rolesJson);
-            if (EmployeeRolesList.Contains("TeamLeader"))
-                return true;
-
-            return false;
-        }
+        
 
     }
 }

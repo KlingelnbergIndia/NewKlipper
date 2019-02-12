@@ -2,6 +2,7 @@
 @{
     var leaveTypes = @Model.GetAllLeaveTypes();
     var isLeaveCountZero = @Model.GetAppliedLeaves.Count == 0;
+    var isTeamLead = @Model.IsTeamLead;
 }
 
 <div class="main" style="margin-top:-20PX;">
@@ -64,6 +65,31 @@
 </div>
 
 
+<div class="panel-info" style="@(isTeamLead?"visibility:visible": "visibility:hidden")">
+    <div class="panel panel-heading col-md-12 col-sm-12">
+        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+            @using (Html.BeginForm("GetSelectedreportee", "Home", FormMethod.Post))
+            {
+               
+                <div class="form-inline" style="margin-top: 0.5%">
+                    <div class="form-group">
+                        <label for="reporteesId">Reportee</label>
+                        <select id="leaveList" name="leaveList" class="form-control input-sm">
+                            <option selected value="0" disabled>---Select Reportees---</option>
+                            @if (Model.ReporteesList.Count != 0)
+                            {
+                                @foreach (var reportee in @Model.ReporteesList)
+                                {
+                                    <option value="@reportee.ID">@reportee.FirstName </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
 
 
 
