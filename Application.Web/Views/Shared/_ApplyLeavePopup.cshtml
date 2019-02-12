@@ -1,0 +1,95 @@
+﻿@model Application.Web.Models.LeaveViewModel
+@{
+    var leaveTypes = @Model.GetAllLeaveTypes();
+    var isLeaveCountZero = @Model.GetAppliedLeaves.Count == 0;
+}
+
+<div class="modal fade" id="ApplyLeaveModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <input type="hidden" name="showDate" id="showDate" value="" />
+                <h4 class="modal-title" id="popupDateSpan"></h4>
+            </div>
+            <div id="ModalBody" style="margin:10px;">
+                <div class="col-md-12">
+                    <form class="form-group" action="/action_page.php">
+                        <div class="form-group" style="width:200px;">
+                            <label>Date</label>
+                            <input type="date" asp-for="@Model.leaveDTO.Date" class="form-control input-sm" placeholder="User Name">
+                            <span asp-validation-for="@Model.leaveDTO.Date" class="text-danger input-sm"></span>
+                        </div>
+                        <div class="form-group" style="width:200px;">
+                            <label>Leave Type</label>
+                            <select id="leaveList" name="leaveList" class="form-control input-sm">
+                                <option selected value="0" disabled>---Select Leave Type---</option>
+                                @foreach (var leave in leaveTypes)
+                                {
+                                    <option value="@leave.Key">@leave.Value</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Remark</label>
+                            <textarea asp-for="@Model.leaveDTO.Remark" class="form-control input-sm" placeholder="Remark" rows="6"></textarea>
+                            <span asp-validation-for="@Model.leaveDTO.Remark" class="text-danger input-sm"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Apply" class="btn btn-default btn-info pull-right" />
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    @*<button type="button" onclick="saveData()" class="btn btn-info pull-right">sank</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var _convertStringToDateObject;
+        var _employeeId;
+
+        applyLeave = function (date, employeeId) {
+            if (confirm("Regularize hours ?")) {
+                _convertStringToDateObject = new Date(date);
+                _employeeId = employeeId;
+
+                $("#popupDateSpan").html(dateToYMD(_convertStringToDateObject));
+                $('#HoursRegularizationModal').modal({ 'show': true, 'backdrop': true });
+            }
+        }
+
+    });
+
+    $(document).ajaxError(function (e, xhr, settings) {
+        if (xhr.status == 401) {
+            alert("Your Session time expired. Please login again.");
+            window.location = "/";
+        }
+    });
+
+
+    function dateToYMD(date) {
+        try {
+            var strArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var d = date.getDate();
+            var m = strArray[date.getMonth()];
+            var y = date.getFullYear();
+            return '' + (d <= 9 ? '0' + d : d) + ' ' + m + ' ' + y;
+        } catch (e) {
+            alert('Invalid date');
+            return null;
+        }
+    }
+
+    $('.popoverClass').popover({ trigger: "hover" });
+    $('[data-toggle="tooltip"]').tooltip({ placement: "bottom" });
+
+</script>
