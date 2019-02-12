@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using UseCaseBoundary;
 using UseCaseBoundary.DTO;
 using UseCases;
+using static DomainModel.Leave;
 
 namespace Application.Web.Controllers
 {
@@ -34,12 +35,12 @@ namespace Application.Web.Controllers
         private List<LeaveDTO> mockData()
         {
             List<LeaveDTO> lst = new List<LeaveDTO>();
-            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveDTO.LeaveType.CasualLeave });
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave });
             return lst;
         }
     }
