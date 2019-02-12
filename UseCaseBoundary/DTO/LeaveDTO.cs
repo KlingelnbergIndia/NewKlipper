@@ -15,5 +15,6 @@ namespace UseCaseBoundary.DTO
         public DateTime FromDate;
         public DateTime ToDate;
         public string Remark;
+        public int NoOfDays;
     }
 }

@@ -39,7 +39,6 @@ namespace Application.Web.Models
             return dictionary;
         }
 
-        
 
     }
 }
