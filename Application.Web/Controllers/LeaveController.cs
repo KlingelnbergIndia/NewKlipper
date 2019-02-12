@@ -29,6 +29,17 @@ namespace Application.Web.Controllers
             leaveViewModel.GetAppliedLeaves = mockData(); //delete it when UI is done
             return View(leaveViewModel);
         }
+        [HttpPost]
+        public IActionResult ApplyLeave([FromForm] LeaveDTO leaveDTO)
+        {
+            var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
+            var leaveService = new LeaveService(_leavesRepository);
+
+            var leaveViewModel = new LeaveViewModel();
+            //leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);  
+            leaveViewModel.GetAppliedLeaves = mockData(); //delete it when UI is done
+            return View(leaveViewModel);
+        }
 
         private List<LeaveDTO> mockData()
         {

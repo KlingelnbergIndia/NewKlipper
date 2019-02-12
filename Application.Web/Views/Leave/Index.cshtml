@@ -13,8 +13,9 @@
         <table class="table table-responsive table-striped table-bordered">
             <thead>
                 <tr>
-                    <th class="col-md-1 col-lg-1 col-xs-1">#No</th>
-                    <th class="col-md-2 col-lg-2 col-xs-2">Leave Date</th>
+                    <th class="col-md-1 col-lg-1 col-xs-1">From Date</th>
+                    <th class="col-md-2 col-lg-2 col-xs-2">To Date</th>
+                    <th class="col-md-2 col-lg-2 col-xs-2">No Of Days</th>
                     <th class="col-md-2 col-lg-2 col-xs-2">Leave Type</th>
                     <th class="col-md-6 col-lg-6 col-xs-6">Remark</th>
                 </tr>
@@ -23,9 +24,9 @@
                 @foreach (var leave in @Model.GetAppliedLeaves)
                 {
                 <tr>
-                    <td></td>
                     <td>@leave.FromDate</td>
                     <td>@leave.ToDate</td>
+                    <td>@leave.NoOfDays</td>
                     <td>@leave.TypeOfLeave</td>
                     <td>@leave.Remark</td>
                 </tr>
