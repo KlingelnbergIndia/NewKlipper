@@ -14,18 +14,22 @@
             </div>
             <div id="ModalBody" style="margin:10px;">
                 <div class="col-md-12">
-                    <form class="form-group" action="ApplyLeave">
+                    <form method="post" asp-controller="Leave" asp-action="ApplyLeave">
                         <label for="from">From</label>
-                        <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
-                               min="@DateTime.Today.ToString("yyyy-MM-dd")"
-                               max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")"  required>
+                        <input type="date" class="form-control input-sm"
+                               value="@DateTime.Now.ToString("yyyy-MM-dd")"
+                               min="@DateTime.Now.ToString("yyyy-MM-dd")"
+                               asp-for="@Model.FromDate"
+                                style="width:150px;"
+                               required>
                         <label for="to">to</label>
-                        <input type="date" id="toDate" name="toDate" class="form-control input-sm"
-                               min="@DateTime.Today.ToString("yyyy-MM-dd")"
-                               max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")"  required>
+                        <input type="date" class="form-control input-sm"
+                               value="@DateTime.Now.ToString("yyyy-MM-dd")"
+                               min="@DateTime.Now.ToString("yyyy-MM-dd")" style="width:150px;"
+                               asp-for="@Model.ToDate" required>
                         <div class="form-group" style="width:200px;">
                             <label>Leave Type</label>
-                            <select id="leaveList" name="leaveList" class="form-control input-sm">
+                            <select id="leaveList" name="leaveList" class="form-control input-sm" asp-for="@Model.LeaveType" style="width:150px;">
                                 <option selected value="0" disabled>---Select Leave Type---</option>
                                 @foreach (var leave in leaveTypes)
                                 {
@@ -35,11 +39,11 @@
                         </div>
                         <div class="form-group">
                             <label>Remark</label>
-                            <textarea asp-for="@Model.leaveDTO.Remark" class="form-control input-sm" placeholder="Remark" rows="6"></textarea>
-                            <span asp-validation-for="@Model.leaveDTO.Remark" class="text-danger input-sm"></span>
+                            <textarea asp-for="@Model.Remark" class="form-control input-sm" placeholder="Remark" rows="6"></textarea>
+                            <span asp-validation-for="@Model.Remark" class="text-danger input-sm"></span>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Apply" class="btn btn-default btn-info pull-right" />
+                            <input type="submit" value="submit" class="btn btn-default btn-info pull-right" />
                         </div>
                     </form>
                 </div>

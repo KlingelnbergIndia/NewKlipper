@@ -29,9 +29,11 @@ namespace UseCases
                     takenLeaveDates.Add(eachLeaveDay);
                 }
             }
-
-            var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, remark);
-            _leavesRepository.AddNewLeave(takenLeave, fromDate, toDate);
+            if (takenLeaveDates.Any())
+            {
+                var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, remark);
+                _leavesRepository.AddNewLeave(takenLeave, fromDate, toDate);
+            }
 
             return true;
         }

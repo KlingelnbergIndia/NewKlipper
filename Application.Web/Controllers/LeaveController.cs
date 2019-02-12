@@ -26,21 +26,20 @@ namespace Application.Web.Controllers
             var leaveService = new LeaveService(_leavesRepository);
 
             var leaveViewModel = new LeaveViewModel();
-            //leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);  
+            leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);  
 
-            leaveViewModel.GetAppliedLeaves = mockData(); //delete it when UI is done
+            //leaveViewModel.GetAppliedLeaves = mockData(); //delete it when UI is done
             return View(leaveViewModel);
         }
         [HttpPost]
-        public IActionResult ApplyLeave([FromForm] LeaveDTO leaveDTO)
+        public IActionResult ApplyLeave(DateTime FromDate, DateTime ToDate, LeaveType LeaveType, string Remark)
         {
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var leaveService = new LeaveService(_leavesRepository);
 
-            var leaveViewModel = new LeaveViewModel();
-            //leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);  
-            leaveViewModel.GetAppliedLeaves = mockData(); //delete it when UI is done
-            return View(leaveViewModel);
+            var response = leaveService.ApplyLeave(loggedInEmpId, FromDate, ToDate, LeaveType, Remark);
+
+            return RedirectToAction("Index");
         }
 
         private List<LeaveDTO> mockData()

@@ -24,8 +24,8 @@
                 @foreach (var leave in @Model.GetAppliedLeaves)
                 {
                 <tr>
-                    <td>@leave.FromDate</td>
-                    <td>@leave.ToDate</td>
+                    <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
+                    <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
                     <td>@leave.NoOfDays</td>
                     <td>@leave.TypeOfLeave</td>
                     <td>@leave.Remark</td>
@@ -43,7 +43,7 @@
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ApplyLeavePopup");}
+    @{await Html.RenderPartialAsync("_ApplyLeavePopup", @Model);}
 }
 
 

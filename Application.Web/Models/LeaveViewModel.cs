@@ -11,14 +11,17 @@ using static DomainModel.Leave;
 
 namespace Application.Web.Models
 {
-    public class LeaveViewModel : PageModel
+    public class LeaveViewModel
     {
         public LeaveDTO leaveDTO;
 
         public List<LeaveDTO> GetAppliedLeaves { get; set; }
         public List<ReporteeDTO> ReporteesList { get; set; }
         public bool IsTeamLead { get; set; }
-
+        public DateTime FromDate;
+        public DateTime ToDate;
+        public string Remark;
+        public LeaveType LeaveType;
         public IDictionary<int, string> GetAllLeaveTypes()
         {
             var dictionary = new Dictionary<int, string>();
