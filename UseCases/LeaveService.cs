@@ -46,6 +46,7 @@ namespace UseCases
                 Remark = x.GetRemark(),
                 FromDate = x.GetLeaveDate().Min(),
                 ToDate = x.GetLeaveDate().Max(),
+                NoOfDays = x.GetLeaveDate().Count()
             })
             .ToList();
             return leaveDTO;
