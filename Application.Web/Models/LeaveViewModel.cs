@@ -1,4 +1,8 @@
-﻿using System;
+﻿
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,11 +11,13 @@ using static DomainModel.Leave;
 
 namespace Application.Web.Models
 {
-    public class LeaveViewModel
+    public class LeaveViewModel : PageModel
     {
         public LeaveDTO leaveDTO;
 
         public List<LeaveDTO> GetAppliedLeaves { get; set; }
+        public List<ReporteeDTO> ReporteesList { get; set; }
+        public bool IsTeamLead { get; set; }
 
         public IDictionary<int, string> GetAllLeaveTypes()
         {
@@ -32,6 +38,8 @@ namespace Application.Web.Models
 
             return dictionary;
         }
+
+        
 
     }
 }
