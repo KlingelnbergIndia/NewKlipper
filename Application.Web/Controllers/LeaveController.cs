@@ -8,33 +8,19 @@ namespace Application.Web.Controllers
 {
     public class LeaveController : Controller
     {
-        private IEmployeeRepository _employeeRepository;
-
-        public LeaveController(IEmployeeRepository employeeRepository)
+        private readonly ILeavesRepository _leavesRepository;
+        public LeaveController(ILeavesRepository leavesRepository)
         {
-            _employeeRepository = employeeRepository;
-        }
+            _leavesRepository = leavesRepository;
 
+        }
         public IActionResult Index()
         {
+            var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
+            var leaveService = new LeaveService(_leavesRepository);
+
             var leaveViewModel = new LeaveViewModel();
-            var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-
-            ReporteeService reporteeService = new ReporteeService(_employeeRepository);
-
-            var reportees = reporteeService.GetReporteesData(employeeId);
-
-            if (reportees.Count != 0)
-            {
-                foreach (var reportee in reportees)
-                {
-                    string reporteeNameWithId = reportee.FirstName + " " + reportee.LastName + " - " + reportee.ID;
-                    leaveViewModel.reportees.Add(reporteeNameWithId);
-                }
-            }
-
-          
-            //leaveViewModel.ShowReporteesPanel();
+            leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
             return View(leaveViewModel);
         }
 

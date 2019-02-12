@@ -14,7 +14,8 @@ namespace Application.Web.Models
     public class LeaveViewModel : PageModel
     {
         public LeaveDTO leaveDTO;
-        public List<string> reportees = new List<string>();
+
+        public List<LeaveDTO> GetAppliedLeaves { get; set; }
 
         public IDictionary<int, string> GetAllLeaveTypes()
         {

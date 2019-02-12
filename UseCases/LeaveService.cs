@@ -34,7 +34,7 @@ namespace UseCases
             return _leavesRepository.AddNewLeave(leaveDto);
         }
 
-        public List<LeaveDTO> GetLeaves(int employeeId)
+        public List<LeaveDTO> GetAppliedLeaves(int employeeId)
         {
             List<Leave> leavesInfo = _leavesRepository.GetAllLeavesInfo(employeeId);
             var leaveDTO = leavesInfo.Select(x=> new LeaveDTO() {
