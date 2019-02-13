@@ -137,9 +137,12 @@ namespace Application.Web.Controllers
 
             string fromDate = Request.Form["fromDate"].ToString();
             string toDate = Request.Form["toDate"].ToString();
-
-            reporteeViewModel.fromDate = DateTime.Parse(fromDate);
-            reporteeViewModel.toDate = DateTime.Parse(toDate);
+            if(!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+            {
+                reporteeViewModel.fromDate = DateTime.Parse(fromDate);
+                reporteeViewModel.toDate = DateTime.Parse(toDate);
+            }
+           
             string idFromSelectedReportee = Regex.Match(selectedReportee, @"\d+").Value;
 
             int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
