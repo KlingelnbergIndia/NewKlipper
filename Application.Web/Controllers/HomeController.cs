@@ -133,30 +133,32 @@ namespace Application.Web.Controllers
                     reporteeViewModel.reportees.Add(reporteeNameWithId);
                 }
             }
-
-            string selectedReportee = Request.Form["selectMenu"].ToString();
-            string idFromSelectedReportee = Regex.Match(selectedReportee, @"\d+").Value;
-            int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
-
-            if (selectedViewTabs == ViewTabs.attendanceReportMenu.ToString() && reporteeId != 0)
+           
+                string selectedReportee = Request.Form["selectMenu"].ToString();
+                string idFromSelectedReportee = Regex.Match(selectedReportee, @"\d+").Value;
+                int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
+            if (reporteeId != 0)
             {
-                string fromDate = Request.Form["fromDate"].ToString();
-                string toDate = Request.Form["toDate"].ToString();
-
-                if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+                if (selectedViewTabs == ViewTabs.attendanceReportMenu.ToString())
                 {
-                    reporteeViewModel.fromDate = DateTime.Parse(fromDate);
-                    reporteeViewModel.toDate = DateTime.Parse(toDate);
+                    string fromDate = Request.Form["fromDate"].ToString();
+                    string toDate = Request.Form["toDate"].ToString();
 
-                    AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
-                    _departmentRepository, _attendanceRegularizationRepository);
+                    if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+                    {
+                        reporteeViewModel.fromDate = DateTime.Parse(fromDate);
+                        reporteeViewModel.toDate = DateTime.Parse(toDate);
 
-                    AttendanceRecordsDTO listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId,
-                        reporteeViewModel.fromDate, reporteeViewModel.toDate);
-                    reporteeViewModel.AttendaceRecordsOfSelectedReportee = listOfAttendanceRecord;
+                        AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
+                        _departmentRepository, _attendanceRegularizationRepository);
 
-                    reporteeViewModel.AttendaceRecordsOfSelectedReportee.ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
-                    reporteeViewModel.AttendanceFormName = Request.Form["selectMenu"].ToString();
+                        AttendanceRecordsDTO listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId,
+                            reporteeViewModel.fromDate, reporteeViewModel.toDate);
+                        reporteeViewModel.AttendaceRecordsOfSelectedReportee = listOfAttendanceRecord;
+
+                        reporteeViewModel.AttendaceRecordsOfSelectedReportee.ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
+                        reporteeViewModel.AttendanceFormName = Request.Form["selectMenu"].ToString();
+                    }
                 }
                 else
                 {
