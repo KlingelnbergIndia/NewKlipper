@@ -13,10 +13,9 @@ namespace Application.Web.Models
 {
     public class LeaveViewModel
     {
-        public LeaveDTO leaveDTO;
+        public LeaveRecordDTO leaveDTO;
 
-        public List<LeaveDTO> GetAppliedLeaves { get; set; }
-        public List<ReporteeDTO> ReporteesList { get; set; }
+        public List<LeaveRecordDTO> GetAppliedLeaves { get; set; }
         public bool IsTeamLead { get; set; }
         public DateTime FromDate;
         public DateTime ToDate;

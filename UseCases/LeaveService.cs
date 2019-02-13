@@ -38,10 +38,10 @@ namespace UseCases
             return true;
         }
 
-        public List<LeaveDTO> GetAppliedLeaves(int employeeId)
+        public List<LeaveRecordDTO> GetAppliedLeaves(int employeeId)
         {
             List<Leave> leavesInfo = _leavesRepository.GetAllLeavesInfo(employeeId);
-            var leaveDTO = leavesInfo.Select(x => new LeaveDTO()
+            var leaveDTO = leavesInfo.Select(x => new LeaveRecordDTO()
             {
                 Date = x.GetLeaveDate(),
                 TypeOfLeave = x.GetLeaveType(),

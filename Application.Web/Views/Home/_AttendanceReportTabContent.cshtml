@@ -1,6 +1,6 @@
 ﻿@model ReporteeViewModel
 @{
-    var TotalDeficitOrExtraHours = @Model.reporteesAttendaceRecords.TotalDeficitOrExtraHours;
+    var TotalDeficitOrExtraHours = @Model.AttendaceRecordsOfSelectedReportee.TotalDeficitOrExtraHours;
     var EmployeeID = @Model.EmployeeId;
 }
 
@@ -54,13 +54,13 @@
                 }
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                @if (Model.reporteesAttendaceRecords.TotalWorkingHours != null)
+                @if (Model.AttendaceRecordsOfSelectedReportee.TotalWorkingHours != null)
                 {
                     <div align="right">
                         <label style="font-weight: normal">Total Working Hours</label>
                         <span style="font-weight: bold">
-                            @Model.reporteesAttendaceRecords.TotalWorkingHours.Hour.ToString("D2") :
-                            @Model.reporteesAttendaceRecords.TotalWorkingHours.Minute.ToString("D2")
+                            @Model.AttendaceRecordsOfSelectedReportee.TotalWorkingHours.Hour.ToString("D2") :
+                            @Model.AttendaceRecordsOfSelectedReportee.TotalWorkingHours.Minute.ToString("D2")
                         </span>
                     </div>
                     <div align="right">
@@ -88,7 +88,7 @@
 
     @if (Model.Name != string.Empty && Model.Name != null)
     {
-        if (Model.reporteesAttendaceRecords.ListOfAttendanceRecordDTO.Count == 0)
+        if (Model.AttendaceRecordsOfSelectedReportee.ListOfAttendanceRecordDTO.Count == 0)
         {
             <p class="text-warning">
                 Attendance Records of @Model.Name.Substring(0, Model.Name.LastIndexOf('-'))
@@ -114,7 +114,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.reporteesAttendaceRecords.ListOfAttendanceRecordDTO)
+                    @foreach (var item in Model.AttendaceRecordsOfSelectedReportee.ListOfAttendanceRecordDTO)
                     {
 
                         string lateByClass = "alert alert-danger";

@@ -1,5 +1,8 @@
 ﻿@model ReporteeViewModel
 
+@{
+    var isLeaveCountZero = @Model.leaveRecordsOfSelectedReportee.Count == 0;
+}
 <div>
     <div class="panel-info" style="@(Model.reportees.Count==0 ? "visibility:hidden" : "visibility:visible")">
         <div class="panel panel-heading col-md-12 col-sm-12">
@@ -27,62 +30,53 @@
                                 }
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="fromDate">From</label>
-                            <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
-                                     min="@DateTime.Now.ToString("yyyy-MM-dd")"
-                                    max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")"
-                                   value="@(Model.fromDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd"))" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="toDate">to</label>
-                            <input type="date" id="toDate" name="toDate" class="form-control input-sm"
-                                   min="@DateTime.Now.ToString("yyyy-MM-dd")"
-                                    max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")"
-                                   value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
-                        </div>
+
                         <input type="submit" value="Show" class="btn btn-info btn-sm pull" />
                     </div>
                 }
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-              
+
             </div>
         </div>
     </div>
 
-    @if (Model.Name != string.Empty && Model.Name != null)
-    {
-        if (Model.reporteesAttendaceRecords.ListOfAttendanceRecordDTO.Count == 0)
-        {
-            <p class="text-warning">
-                Attendance Records of @Model.Name.Substring(0, Model.Name.LastIndexOf('-'))
-                for specified period are not available
-            </p>
-        }
-        else
-        {
-            <p>Attendance Record of @Model.Name.Substring(0, Model.Name.LastIndexOf('-'))</p>
 
-            <table class="table table-striped table-bordered">
+    <div class="main">
+
+        <div class="col-md-12" style="margin-bottom:10px;">
+            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ApplyLeaveModal">+ Apply Leave</button>
+        </div>
+        <div class="col-md-12" style="@(isLeaveCountZero ? "visibility:hidden" : "visibility:visible")">
+            <table class="table table-responsive table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Day</th>
-                        <th>Time In</th>
-                        <th>Time Out</th>
-                        <th>Deficit Time</th>
-                        <th>Over Time</th>
-                        <th>Actual Hours</th>
-                        <th>Regularized Hours</th>
-                        <th class="col-md-2">Remark</th>
+                        <th class="col-md-2 col-lg-2 col-xs-2">From Date</th>
+                        <th class="col-md-2 col-lg-2 col-xs-2">To Date</th>
+                        <th class="col-md-1 col-lg-1 col-xs-1">No Of Days</th>
+                        <th class="col-md-2 col-lg-2 col-xs-2">Leave Type</th>
+                        <th class="col-md-6 col-lg-6 col-xs-6">Remark</th>
                     </tr>
                 </thead>
                 <tbody>
-                  
+                    @foreach (var leave in @Model.leaveRecordsOfSelectedReportee)
+                    {
+                        <tr>
+                            <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@leave.NoOfDays</td>
+                            <td>@leave.TypeOfLeave</td>
+                            <td>@leave.Remark</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
-        }
+        </div>
+        <div class="col-md-12" style="@(isLeaveCountZero ==false ? "visibility:hidden" : "visibility:visible")">
+            <div class="alert alert-info col-md-3">
+                <strong>Info!</strong> No applied leaves found.
+            </div>
+        </div>
+    </div>
 
-    }
 </div>

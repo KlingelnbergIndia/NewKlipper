@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Application.Web.Models;
+using Application.Web.PageAccessAuthentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UseCaseBoundary;
@@ -42,15 +44,17 @@ namespace Application.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        private List<LeaveDTO> mockData()
+       
+       
+        private List<LeaveRecordDTO> mockData()
         {
-            List<LeaveDTO> lst = new List<LeaveDTO>();
-            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave });
+            List<LeaveRecordDTO> lst = new List<LeaveRecordDTO>();
+            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
+            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave });
             return lst;
         }
     }

@@ -7,9 +7,8 @@ using static DomainModel.Leave;
 namespace UseCaseBoundary.DTO
 {
    
-    public class LeaveDTO
+    public class LeaveRecordDTO
     {
-
         public List<DateTime> Date;
         public LeaveType TypeOfLeave;
         public DateTime FromDate;

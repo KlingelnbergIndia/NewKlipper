@@ -18,14 +18,17 @@
                         <label for="from">From</label>
                         <input type="date" class="form-control input-sm"
                                value="@DateTime.Now.ToString("yyyy-MM-dd")"
-                               min="@DateTime.Now.ToString("yyyy-MM-dd")"
+                                min="@DateTime.Now.ToString("yyyy-MM-dd")"
+                                max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")"
                                asp-for="@Model.FromDate"
                                 style="width:150px;"
                                required>
                         <label for="to">to</label>
                         <input type="date" class="form-control input-sm"
                                value="@DateTime.Now.ToString("yyyy-MM-dd")"
-                               min="@DateTime.Now.ToString("yyyy-MM-dd")" style="width:150px;"
+                               min="@DateTime.Now.ToString("yyyy-MM-dd")"
+                               max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")" 
+                               style="width:150px;"
                                asp-for="@Model.ToDate" required>
                         <div class="form-group" style="width:200px;">
                             <label>Leave Type</label>
