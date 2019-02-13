@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using UseCaseBoundary;
+using UseCaseBoundary.DTO;
 using UseCases;
 
 namespace Application.Web.Controllers
@@ -18,11 +19,13 @@ namespace Application.Web.Controllers
         public LoginController(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
+            
         }
 
         public IActionResult Login()
         {
-            return View();            
+           
+            return View();
         }
 
         public IActionResult Authenticate([FromForm] LoginViewModel login)

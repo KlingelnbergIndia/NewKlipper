@@ -33,6 +33,7 @@ namespace Application.Web.Controllers
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
             _attendanceRegularizationRepository = attendanceRegularizationRepository;
+            
         }
 
         public async Task<IActionResult> Index(string searchFilter)

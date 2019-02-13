@@ -48,6 +48,7 @@ namespace UseCases
                 };
             });
         }
+
         public async Task<List<AccessPointRecord>> GetAccessPointDetails(int employeeId, DateTime date)
         {
             PerDayWorkRecord perDayWorkRecord = _accessEventsRepository.GetAccessEventsForADay(employeeId, date);

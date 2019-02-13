@@ -49,11 +49,21 @@ namespace Application.Web.ViewComponents
 
                 });
             }
+
             menuList.Add(new MenuLinksViewModel
             {
                 IndexPosition = 1,
                 Label = "Summary",
                 Controller = "Home",
+                Action = "Index",
+                Glyphicon = "glyphicon glyphicon-duplicate"
+            });
+
+            menuList.Add(new MenuLinksViewModel
+            {
+                IndexPosition = 1,
+                Label = "Leave",
+                Controller = "Leave",
                 Action = "Index",
                 Glyphicon = "glyphicon glyphicon-duplicate"
             });

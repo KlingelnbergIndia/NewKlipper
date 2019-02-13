@@ -1,0 +1,101 @@
+﻿@model Application.Web.Models.LeaveViewModel
+@{
+    var leaveTypes = @Model.GetAllLeaveTypes();
+    var isLeaveCountZero = @Model.GetAppliedLeaves.Count == 0;
+}
+
+<div class="modal fade" id="ApplyLeaveModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <input type="hidden" name="showDate" id="showDate" value="" />
+                <h3 class="modal-title" id="popupDateSpan"> Apply Leave</h3>
+            </div>
+            <div id="ModalBody" style="margin:10px;">
+                <div class="col-md-12">
+                    <form method="post" asp-controller="Leave" asp-action="ApplyLeave">
+                        <label for="from">From</label>
+                        <input type="date" class="form-control input-sm"
+                               value="@DateTime.Now.ToString("yyyy-MM-dd")"
+                               min="@DateTime.Now.ToString("yyyy-MM-dd")"
+                               asp-for="@Model.FromDate"
+                                style="width:150px;"
+                               required>
+                        <label for="to">to</label>
+                        <input type="date" class="form-control input-sm"
+                               value="@DateTime.Now.ToString("yyyy-MM-dd")"
+                               min="@DateTime.Now.ToString("yyyy-MM-dd")" style="width:150px;"
+                               asp-for="@Model.ToDate" required>
+                        <div class="form-group" style="width:200px;">
+                            <label>Leave Type</label>
+                            <select id="leaveList" name="leaveList" class="form-control input-sm" asp-for="@Model.LeaveType" style="width:150px;">
+                                <option selected value="0" disabled>---Select Leave Type---</option>
+                                @foreach (var leave in leaveTypes)
+                                {
+                                    <option value="@leave.Key">@leave.Value</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Remark</label>
+                            <textarea asp-for="@Model.Remark" class="form-control input-sm" placeholder="Remark" rows="6"></textarea>
+                            <span asp-validation-for="@Model.Remark" class="text-danger input-sm"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="submit" class="btn btn-default btn-info pull-right" />
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var _convertStringToDateObject;
+        var _employeeId;
+
+        applyLeave = function (date, employeeId) {
+            if (confirm("Regularize hours ?")) {
+                _convertStringToDateObject = new Date(date);
+                _employeeId = employeeId;
+
+                $("#popupDateSpan").html(dateToYMD(_convertStringToDateObject));
+                $('#HoursRegularizationModal').modal({ 'show': true, 'backdrop': true });
+            }
+        }
+
+    });
+
+    $(document).ajaxError(function (e, xhr, settings) {
+        if (xhr.status == 401) {
+            alert("Your Session time expired. Please login again.");
+            window.location = "/";
+        }
+    });
+
+
+    function dateToYMD(date) {
+        try {
+            var strArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var d = date.getDate();
+            var m = strArray[date.getMonth()];
+            var y = date.getFullYear();
+            return '' + (d <= 9 ? '0' + d : d) + ' ' + m + ' ' + y;
+        } catch (e) {
+            alert('Invalid date');
+            return null;
+        }
+    }
+
+    $('.popoverClass').popover({ trigger: "hover" });
+    $('[data-toggle="tooltip"]').tooltip({ placement: "bottom" });
+
+</script>

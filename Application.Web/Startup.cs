@@ -44,6 +44,7 @@ namespace Application.Web
             services.AddTransient<IAccessEventsRepository, AccessEventMongoDBRepository>();
             services.AddTransient<IDepartmentRepository, DepartmentMongoDBRepository>();
             services.AddTransient<IAttendanceRegularizationRepository, AttendanceRegularizationMongoDBRepository>();
+            services.AddTransient<ILeavesRepository, LeavesMongoDBRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
