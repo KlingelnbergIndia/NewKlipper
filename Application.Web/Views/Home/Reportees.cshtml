@@ -2,13 +2,12 @@
 
 
 <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#attendanceReportMenu">Attendance report</a></li>
-    <li><a data-toggle="tab" href="#leaveReportMenu">Leave report</a></li>
+    <li class="active"><a data-toggle="tab" href="#attendanceReportMenu"><label>Attendance report</label></a></li>
+    <li><a data-toggle="tab" href="#leaveReportMenu"><label>Leave report</label></a></li>
 </ul>
 
 <div class="tab-content">
     <div id="attendanceReportMenu" class="tab-pane fade in active">
-        <br/>
         @{await Html.RenderPartialAsync("_AttendanceReportTabContent", @Model);}
     </div>
     <div id="leaveReportMenu" class="tab-pane fade">
@@ -35,5 +34,9 @@
 
     .panel-heading {
         padding: 10px 0px;
+    }
+
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+        background-color: #D9EDF7;
     }
 </style>

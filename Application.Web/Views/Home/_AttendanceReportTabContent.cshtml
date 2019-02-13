@@ -10,7 +10,23 @@
             <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                 @using (Html.BeginForm("GetSelectedreportee", "Home", FormMethod.Post))
                 {
-                    <div class="form-inline" style="margin-top: 0.5%">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="fromDate">From</label>
+                            <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
+                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                   value="@(Model.fromDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd"))" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="toDate">to</label>
+                            <input type="date" id="toDate" name="toDate" class="form-control input-sm"
+                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                   value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
+                        </div>
+                    </div>
+                    <div class="form-inline" style="margin-top:5px;">
                         <div class="form-group">
                             <label for="reporteesId">Reportee</label>
                             <select id="reporteesId" name="selectMenu" class="form-control input-sm">
@@ -31,22 +47,10 @@
                                 }
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="fromDate">From</label>
-                            <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
-                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
-                                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
-                                   value="@(Model.fromDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd"))" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="toDate">to</label>
-                            <input type="date" id="toDate" name="toDate" class="form-control input-sm"
-                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
-                                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
-                                   value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
-                        </div>
                         <input type="submit" value="Show" class="btn btn-info btn-sm pull" />
                     </div>
+
+
                 }
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
