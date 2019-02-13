@@ -124,7 +124,7 @@ body {
 }
 
 @media only screen and (min-width: 600px) {
-    #reporteesId {
+    /*#reporteesId {
         width: 120px;
     }
     #fromDate {
@@ -132,7 +132,12 @@ body {
     }
     #toDate {
         width: 120px;
-    }
+    }*/
+}
+
+#reporteesId {
+    width: 200px;
+    margin-right: 20px;
 }
 
 /*@media only screen and (min-width: 800px) {
