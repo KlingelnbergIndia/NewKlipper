@@ -1,27 +1,33 @@
 ﻿@model ReporteeViewModel
+@{
+    var SelectedTab = (string)ViewBag.SelectedTab == null ? "attendanceReportMenu" : (string)ViewBag.SelectedTab;
 
+}
 
 <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#attendanceReportMenu"><label>Attendance report</label></a></li>
-    <li><a data-toggle="tab" href="#leaveReportMenu"><label>Leave report</label></a></li>
+    <li class="tab-pane @(@SelectedTab.Equals("attendanceReportMenu") ? "active" : "notactive")"><a data-toggle="tab" href="#attendanceReportMenu"><label>Attendance report</label></a></li>
+    <li class="tab-pane @(@SelectedTab.Equals("leaveReportMenu") ? "active" : "notactive")"><a data-toggle="tab" href="#leaveReportMenu"><label>Leave report</label></a></li>
 </ul>
 
 <div class="tab-content">
-    <div id="attendanceReportMenu" class="tab-pane fade in active">
+    <div id="attendanceReportMenu" class="tab-pane @(@SelectedTab.Equals("attendanceReportMenu") ? "fade in active" : "")">
         @{await Html.RenderPartialAsync("_AttendanceReportTabContent", @Model);}
     </div>
-    <div id="leaveReportMenu" class="tab-pane fade">
-        <br />
+    <div id="leaveReportMenu" class="tab-pane @(@SelectedTab.Equals("leaveReportMenu") ? "fade in active" : "")">
         @{await Html.RenderPartialAsync("_LeaveReportTabContent", @Model);}
     </div>
 </div>
-
+@*tab-pane fade in*@
+@*@SelectedTab.Equals("attendanceReportMenu")*@
 
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_AccessEventsPopup");}
     @{await Html.RenderPartialAsync("_HoursRegularizationPopup");}
 }
+
+
+
 
 <style>
     .table td {

@@ -15,12 +15,19 @@ namespace Application.Web.Models
 
         public List<LeaveRecordDTO> leaveRecordsOfSelectedReportee = new List<LeaveRecordDTO>();
 
-        public string Name;
-
         public DateTime fromDate;
 
         public DateTime toDate;
 
         public int EmployeeId;
+
+        public string LeaveFormName { get; set; }
+        public string AttendanceFormName { get; set; }
+    }
+
+    enum ViewTabs
+    {
+        attendanceReportMenu,
+        leaveReportMenu
     }
 }
