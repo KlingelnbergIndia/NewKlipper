@@ -20,13 +20,13 @@ namespace RepositoryImplementation
             _employeeDBContext = EmployeeDBContext.Instance;
         }
 
-        public bool AddNewLeave(Leave leaveDetails, DateTime fromDate, DateTime toDate)
+        public bool AddNewLeave(Leave leaveDetails)
         {
             LeaveEntityModel takenLeaves = new LeaveEntityModel()
             {
                 EmployeeId = leaveDetails.GetEmployeeId(),
-                FromDate = fromDate,
-                ToDate = toDate,
+                FromDate = leaveDetails.GetLeaveDate().Min(),
+                ToDate = leaveDetails.GetLeaveDate().Max(),
                 Remark = leaveDetails.GetRemark(),
                 TypeOfLeave = leaveDetails.GetLeaveType(),
                 AppliedLeaveDates = leaveDetails.GetLeaveDate(),

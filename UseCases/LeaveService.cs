@@ -32,7 +32,7 @@ namespace UseCases
             if (takenLeaveDates.Any())
             {
                 var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, remark);
-                _leavesRepository.AddNewLeave(takenLeave, fromDate, toDate);
+                _leavesRepository.AddNewLeave(takenLeave);
             }
 
             return true;
