@@ -13,11 +13,11 @@ namespace RepositoryImplementation
 {
     public class LeavesMongoDBRepository : ILeavesRepository
     {
-        private readonly EmployeeDBContext _employeeDBContext = null;
+        private readonly LeaveManagementDBContext __leaveDBContext = null;
 
         public LeavesMongoDBRepository()
         {
-            _employeeDBContext = EmployeeDBContext.Instance;
+            __leaveDBContext = LeaveManagementDBContext.Instance;
         }
 
         public bool AddNewLeave(Leave leaveDetails)
@@ -32,7 +32,7 @@ namespace RepositoryImplementation
                 AppliedLeaveDates = leaveDetails.GetLeaveDate(),
             };
 
-            _employeeDBContext.EmployeeLeaves
+            __leaveDBContext.AppliedLeaves
                 .InsertOneAsync(takenLeaves)
                 .GetAwaiter()
                 .GetResult();
@@ -43,7 +43,7 @@ namespace RepositoryImplementation
         public List<Leave> GetAllLeavesInfo(int employeeId)
         {
             List<Leave> leaves = new List<Leave>();
-            var empLeaves = _employeeDBContext.EmployeeLeaves
+            var empLeaves = __leaveDBContext.AppliedLeaves
                 .AsQueryable()
                 .Where(x => x.EmployeeId == employeeId)
                 .ToList();
@@ -63,7 +63,7 @@ namespace RepositoryImplementation
         public bool IsLeaveExist(int employeeId, DateTime leaveDate)
         {
             return
-                _employeeDBContext.EmployeeLeaves
+                __leaveDBContext.AppliedLeaves
                 .AsQueryable()
                 .Where(x => x.EmployeeId == employeeId && x.AppliedLeaveDates.Contains(leaveDate.Date))
                 .Any();
@@ -71,14 +71,14 @@ namespace RepositoryImplementation
 
         public bool OverrideLeave(Leave leaveData)
         {
-            var isLeaveExist = _employeeDBContext.EmployeeLeaves
+            var isLeaveExist = __leaveDBContext.AppliedLeaves
                 .AsQueryable()
                 .Where(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates == leaveData.GetLeaveDate())
                 .Any();
 
             if (isLeaveExist)
             {
-                _employeeDBContext.EmployeeLeaves
+                __leaveDBContext.AppliedLeaves
                 .DeleteOneAsync(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates == leaveData.GetLeaveDate());
             }
 
@@ -89,7 +89,7 @@ namespace RepositoryImplementation
                 Remark = leaveData.GetRemark(),
                 EmployeeId = leaveData.GetEmployeeId()
             };
-            _employeeDBContext.EmployeeLeaves
+            __leaveDBContext.AppliedLeaves
                 .InsertOneAsync(leaveEntity)
                 .GetAwaiter()
                 .GetResult();
