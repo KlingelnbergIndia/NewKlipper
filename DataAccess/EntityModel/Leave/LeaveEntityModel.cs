@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using static DomainModel.Leave;
 
-namespace DataAccess.EntityModel.Employment
+namespace DataAccess.EntityModel.Leave
 {
     public class LeaveEntityModel
     {
