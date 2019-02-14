@@ -35,7 +35,7 @@ namespace Application.Web.Controllers
 
             var leaveViewModel = new LeaveViewModel();
             leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
-            
+
             return View(leaveViewModel);
         }
         [HttpPost]
@@ -53,14 +53,12 @@ namespace Application.Web.Controllers
 
             if (response == ServiceResponseDTO.Saved)
                 TempData["responseMessage"] = "Your Leave is submitted !";
-            else
-            {
-                if (response == ServiceResponseDTO.RecordExists)
-                    TempData["responseMessage"] = "Your Leave is already submitted !";
-                else
-                    TempData["responseMessage"] = "Invalid Selected Days !";
-            }
-                return RedirectToAction("Index");
+            else if (response == ServiceResponseDTO.RecordExists)
+                TempData["responseMessage"] = "Your Leave is already submitted !";
+            else if (response == ServiceResponseDTO.InvalidDays)
+                TempData["errorMessage"] = "Invalid Selected Days !";
+
+            return RedirectToAction("Index");
         }
     }
 }
