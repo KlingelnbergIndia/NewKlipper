@@ -1,0 +1,28 @@
+﻿.modal-header {
+    background-color: #313b3e !important;
+    color: white !important;
+}
+
+.btn-info {
+    background-color: #627980 !important;
+    border-color: #627980 !important;
+}
+
+    .btn-info:hover {
+        background-color: #627980 !important;
+        border-color: #627980 !important;
+    }
+
+.btn:active {
+    background-color: #627980 !important;
+    border-color: #627980 !important;
+}
+
+.close {
+    color: #efece5;
+    opacity: 1.2;
+}
+
+textarea {
+    resize: none;
+}

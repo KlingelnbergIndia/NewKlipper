@@ -22,24 +22,25 @@ namespace Application.Web.Controllers
     public class HomeController : Controller
     {
         private IAccessEventsRepository _accessEventRepository;
-        private IEmployeeRepository _employeeRepository;
+        private IEmployeeRepository _leaveRepository;
         private IDepartmentRepository _departmentRepository;
         private IAttendanceRegularizationRepository _attendanceRegularizationRepository;
+        private ILeavesRepository _leavesRepository;
 
-        public HomeController(IAccessEventsRepository accessEventRepository,IEmployeeRepository employeeRepository, 
-            IDepartmentRepository departmentRepository,IAttendanceRegularizationRepository attendanceRegularizationRepository)
+        public HomeController(IAccessEventsRepository accessEventRepository, IEmployeeRepository employeeRepository,
+            IDepartmentRepository departmentRepository, IAttendanceRegularizationRepository attendanceRegularizationRepository, ILeavesRepository leavesRepository)
         {
             _accessEventRepository = accessEventRepository;
-            _employeeRepository = employeeRepository;
+            _leaveRepository = employeeRepository;
             _departmentRepository = departmentRepository;
             _attendanceRegularizationRepository = attendanceRegularizationRepository;
-            
+            _leavesRepository = leavesRepository;
         }
 
         public async Task<IActionResult> Index(string searchFilter)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
                 _departmentRepository, _attendanceRegularizationRepository);
 
             EmployeeViewModel employeeViewModel = new EmployeeViewModel();
@@ -69,7 +70,7 @@ namespace Application.Web.Controllers
                 employeeViewModel.toDate = toDate;
                 employeeViewModel.fromDate = fromDate;
 
-                employeeViewModel.employeeAttendaceRecords = 
+                employeeViewModel.employeeAttendaceRecords =
                     await attendanceService.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             }
 
@@ -85,15 +86,15 @@ namespace Application.Web.Controllers
         }
 
         [AuthenticateTeamLeaderRole]
-        public IActionResult Reportees()
+        public IActionResult Reportees(string selectedViewTabs)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            ReporteeService reporteeService = new ReporteeService(_employeeRepository);
+            ReporteeService reporteeService = new ReporteeService(_leaveRepository);
 
             var reportees = reporteeService.GetReporteesData(employeeId);
 
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
                 _departmentRepository, _attendanceRegularizationRepository);
             List<AttendanceRecordsDTO> listOfAttendanceRecord = new List<AttendanceRecordsDTO>();
 
@@ -101,77 +102,87 @@ namespace Application.Web.Controllers
             {
                 foreach (var reportee in reportees)
                 {
-                    string reporteeNameWithId = reportee.FirstName + " " + reportee.LastName + " - " + reportee.ID;
-                    reporteeViewModel.reportees.Add(reporteeNameWithId);
+                    string reporteeName = reportee.FirstName + " " + reportee.LastName;
+                    int reporteeId = reportee.ID;
+                    reporteeViewModel.reportees.Add(reporteeId, reporteeName);
                 }
             }
 
-            reporteeViewModel.Name = string.Empty;
+            reporteeViewModel.AttendanceFormName = string.Empty;
+            reporteeViewModel.LeaveFormName = string.Empty;
             reporteeViewModel.toDate = DateTime.Now.Date;
             reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
-
+            ViewBag.SelectedTab = selectedViewTabs;
             return View(reporteeViewModel);
         }
 
         [HttpPost]
         [AuthenticateTeamLeaderRole]
-        public async Task<IActionResult> GetSelectedreportee()
+        public async Task<IActionResult> GetSelectedreportee(string selectedViewTabs)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            ReporteeService reporteeService = new ReporteeService(_employeeRepository);
+            ReporteeService reporteeService = new ReporteeService(_leaveRepository);
 
             var reportees = reporteeService.GetReporteesData(employeeId);
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
 
-            if (reportees.Count != 0)
-            {
                 foreach (var reportee in reportees)
                 {
-                    string reporteeNameWithId = reportee.FirstName + " " + reportee.LastName + " - " + reportee.ID;
-                    reporteeViewModel.reportees.Add(reporteeNameWithId);
+                    string reporteeName = reportee.FirstName + " " + reportee.LastName ;
+                     int reporteeId = reportee.ID;
+                    reporteeViewModel.reportees.Add(reporteeId, reporteeName);
                 }
-            }
-
-            string selectedReportee = Request.Form["selectMenu"].ToString();
-
-            string fromDate = Request.Form["fromDate"].ToString();
-            string toDate = Request.Form["toDate"].ToString();
-
-            reporteeViewModel.fromDate = DateTime.Parse(fromDate);
-            reporteeViewModel.toDate = DateTime.Parse(toDate);
-            string idFromSelectedReportee = Regex.Match(selectedReportee, @"\d+").Value;
-
-            int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
-
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository);
-            AttendanceRecordsDTO listOfAttendanceRecord = new AttendanceRecordsDTO();
-
-            if (reporteeId != 0)
+                
+            if (!string.IsNullOrEmpty(Request.Form["selectMenu"]))
             {
-                reporteeViewModel.Name = Request.Form["selectMenu"].ToString();
-                if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+                int selectedReporteeId = int.Parse(Request.Form["selectMenu"]);
+                if (selectedViewTabs == ViewTabs.attendanceReportMenu.ToString())
                 {
-                    listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId,
-                        reporteeViewModel.fromDate, reporteeViewModel.toDate);
+                    string fromDate = Request.Form["fromDate"].ToString();
+                    string toDate = Request.Form["toDate"].ToString();
+
+                    if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+                    {
+                        reporteeViewModel.fromDate = DateTime.Parse(fromDate);
+                        reporteeViewModel.toDate = DateTime.Parse(toDate);
+
+                        AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
+                        _departmentRepository, _attendanceRegularizationRepository);
+
+                        AttendanceRecordsDTO listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(selectedReporteeId,
+                            reporteeViewModel.fromDate, reporteeViewModel.toDate);
+                        reporteeViewModel.AttendaceRecordsOfSelectedReportee = listOfAttendanceRecord;
+
+                        reporteeViewModel.AttendaceRecordsOfSelectedReportee.ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
+                        reporteeViewModel.AttendanceFormName = reporteeViewModel.reportees[selectedReporteeId];
+                    }
                 }
-                reporteeViewModel.EmployeeId = reporteeId;
-
-                reporteeViewModel                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-                    .reporteesAttendaceRecords = listOfAttendanceRecord;
-
-                reporteeViewModel
-                    .reporteesAttendaceRecords
-                    .ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
+                else
+                {
+                    reporteeViewModel.toDate = DateTime.Now.Date;
+                    reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
+                    LeaveService leaveService = new LeaveService(_leavesRepository);
+                    List<LeaveRecordDTO> listOfLeaveRecord = leaveService.GetAppliedLeaves(selectedReporteeId);
+                    reporteeViewModel.leaveRecordsOfSelectedReportee = listOfLeaveRecord;
+                    selectedViewTabs = ViewTabs.leaveReportMenu.ToString();
+                    reporteeViewModel.LeaveFormName = reporteeViewModel.reportees[selectedReporteeId];
+                }
+                reporteeViewModel.EmployeeId = selectedReporteeId;
+            }
+            else
+            {
+                reporteeViewModel.toDate = DateTime.Now.Date;
+                reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
             }
 
+            ViewBag.SelectedTab = selectedViewTabs;
             return View("Reportees", reporteeViewModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> AccessPointDetail(DateTime date, int employeeId)
         {
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository, 
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
                 _departmentRepository, _attendanceRegularizationRepository);
             List<AccessPointRecord> listofaccesspointdetail = await attendanceService.GetAccessPointDetails(employeeId, date);
             listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST(date, listofaccesspointdetail);
@@ -182,9 +193,10 @@ namespace Application.Web.Controllers
         [AuthenticateTeamLeaderRole]
         public IActionResult SaveRegularizedHours(DateTime date, int employeeId, DateTime timeToBeRegularize, string remark)
         {
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
                 _departmentRepository, _attendanceRegularizationRepository);
-            var redularizationData = new RegularizationDTO() {
+            var redularizationData = new RegularizationDTO()
+            {
                 EmployeeID = employeeId,
                 RegularizedDate = date,
                 ReguralizedHours = new Time(timeToBeRegularize.Hour, timeToBeRegularize.Minute),

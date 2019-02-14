@@ -7,18 +7,15 @@
                 <h4 class="modal-title" id="popupDateSpan"></h4>
             </div>
             <div id="ModalBody" style="margin:10px;">
-                <label class="control-label" for="time">Hours:</label>
-                <div class="input-group clockpicker" data-autoclose="false">
-                    <input type="text" class="form-control" id="time" value="09:00" readonly>
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-time"></span>
-                    </span>
+                <div class="form-group" style="margin-top:10px;">
+                    <label class="control-label" for="time">Hours:</label>
+                    <input type="time" id="time" class="form-control" 
+                           min="00:00" max="12:00" value="09:00" style="width:100px;" required/>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="margin-top:10px;">
                     <label class="control-label" for="remark">Remark:</label>
                     <textarea class="form-control" rows="5" id="remark"></textarea>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <div class="form-group">
@@ -36,13 +33,11 @@
         var _employeeId;
 
         regularizeHours = function (date, employeeId) {
-            if (confirm("Regularize hours ?")) {
-                _convertStringToDateObject = new Date(date);
-                _employeeId = employeeId;
+            _convertStringToDateObject = new Date(date);
+            _employeeId = employeeId;
 
-                $("#popupDateSpan").html(dateToYMD(_convertStringToDateObject));
-                $('#HoursRegularizationModal').modal({ 'show': true, 'backdrop': true });
-            }
+            $("#popupDateSpan").html(dateToYMD(_convertStringToDateObject));
+            $('#HoursRegularizationModal').modal({ 'show': true, 'backdrop': true });
         }
 
         saveData = function () {
@@ -69,7 +64,7 @@
 
         $('.clockpicker').clockpicker({
             placement: 'bottom',
-            donetext: 'Done'
+            donetext: 'Done',
         });
 
     });
@@ -106,3 +101,4 @@
         cursor: pointer;
     }
 </style>
+<link href="~/css/_ApplyLeavePagePopup.css" rel="stylesheet" />
