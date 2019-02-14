@@ -24,6 +24,8 @@ namespace Application.Web.Models
 
         public string LeaveFormName { get; set; }
         public string AttendanceFormName { get; set; }
+        public int SelectedEmpIdForAttendanceTab { get; set; }
+        public int SelectedEmpIdForLeaveTab { get; set; }
     }
 
     enum ViewTabs

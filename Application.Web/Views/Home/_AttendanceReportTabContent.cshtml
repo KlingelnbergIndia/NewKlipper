@@ -9,7 +9,7 @@
         <div class="panel panel-heading col-md-12 col-sm-12">
             <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                 @*@using (Html.BeginForm("GetSelectedreportee?tab=attendanceReportMenu", "Home", FormMethod.Post))
-                {*@
+                    {*@
                 <form action="GetSelectedreportee?selectedViewTabs=attendanceReportMenu" method="post">
                     <div class="form-inline">
                         <div class="form-group" style="margin-right:10px;">
@@ -19,16 +19,17 @@
                                 {
                                     <option selected value="0" disabled>---Select Reportee---</option>
                                 }
-                                else
-                                {
-                                    <option selected value=@Model.AttendanceFormName>@Model.AttendanceFormName</option>
-                                }
                                 @foreach (var item in Model.reportees)
                                 {
-                                    if (item.Value != Model.AttendanceFormName)
+                                    if (item.Key == Model.SelectedEmpIdForAttendanceTab)
+                                    {
+                                        <option value=@item.Key selected>@item.Value</option>
+                                    }
+                                    else
                                     {
                                         <option value=@item.Key>@item.Value</option>
                                     }
+
                                 }
                             </select>
                         </div>
@@ -47,10 +48,10 @@
                                    value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Show" class="btn btn-info btn-sm pull" style="margin-left:10px;"/>
+                            <input type="submit" value="Show" class="btn btn-info btn-sm pull" style="margin-left:10px;" />
                         </div>
                     </div>
-                    
+
                 </form>
 
                 @*}*@

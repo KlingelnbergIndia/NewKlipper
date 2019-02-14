@@ -15,13 +15,13 @@
                             {
                                 <option selected value="0" disabled>---Select Reportee---</option>
                             }
-                            else
-                            {
-                                <option selected value=@Model.LeaveFormName>@Model.LeaveFormName</option>
-                            }
                             @foreach (var item in Model.reportees)
                             {
-                                if (item.Value != Model.LeaveFormName)
+                                if (item.Key == Model.SelectedEmpIdForLeaveTab)
+                                {
+                                    <option value=@item.Key selected>@item.Value</option>
+                                }
+                                else
                                 {
                                     <option value=@item.Key>@item.Value</option>
                                 }

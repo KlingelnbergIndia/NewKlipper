@@ -155,6 +155,8 @@ namespace Application.Web.Controllers
 
                         reporteeViewModel.AttendaceRecordsOfSelectedReportee.ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
                         reporteeViewModel.AttendanceFormName = reporteeViewModel.reportees[selectedReporteeId];
+                        reporteeViewModel.SelectedEmpIdForAttendanceTab = selectedReporteeId;
+
                     }
                 }
                 else
@@ -166,6 +168,7 @@ namespace Application.Web.Controllers
                     reporteeViewModel.leaveRecordsOfSelectedReportee = listOfLeaveRecord;
                     selectedViewTabs = ViewTabs.leaveReportMenu.ToString();
                     reporteeViewModel.LeaveFormName = reporteeViewModel.reportees[selectedReporteeId];
+                    reporteeViewModel.SelectedEmpIdForLeaveTab = selectedReporteeId;
                 }
                 reporteeViewModel.EmployeeId = selectedReporteeId;
             }
