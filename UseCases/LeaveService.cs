@@ -20,6 +20,8 @@ namespace UseCases
         public bool ApplyLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
         {
             List<DateTime> takenLeaveDates = new List<DateTime>();
+            LeaveRecordDTO leaveRecord = new LeaveRecordDTO();
+
             var allAppliedLeaves = _leavesRepository.GetAllLeavesInfo(employeeId);
             for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
             {
