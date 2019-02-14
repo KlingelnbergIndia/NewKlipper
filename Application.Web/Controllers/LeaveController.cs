@@ -53,10 +53,14 @@ namespace Application.Web.Controllers
 
             if (response == ServiceResponseDTO.Saved)
                 TempData["responseMessage"] = "Your Leave is submitted !";
-            else if (response == ServiceResponseDTO.RecordExists)
-                TempData["responseMessage"] = "Your Leave is already submitted !";
-            
-            return RedirectToAction("Index");
+            else
+            {
+                if (response == ServiceResponseDTO.RecordExists)
+                    TempData["responseMessage"] = "Your Leave is already submitted !";
+                else
+                    TempData["responseMessage"] = "Invalid Selected Days !";
+            }
+                return RedirectToAction("Index");
         }
     }
 }

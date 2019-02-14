@@ -33,6 +33,9 @@ namespace UseCases
             Department department = _departmentRepository.GetDepartment(employeeData.Department());
 
             var allAppliedLeaves = _leavesRepository.GetAllLeavesInfo(employeeId);
+            int invalidDays = 0;
+            int totalAppliedDays = 0;
+
             for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
             {
                 bool isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date));
@@ -40,6 +43,11 @@ namespace UseCases
                 {
                     takenLeaveDates.Add(eachLeaveDay);
                 }
+                if (!department.IsValidWorkingDay(eachLeaveDay))
+                {
+                    invalidDays++;
+                }
+                totalAppliedDays++;
             }
 
             if (takenLeaveDates.Any())
@@ -48,8 +56,17 @@ namespace UseCases
                 _leavesRepository.AddNewLeave(takenLeave);
                 return ServiceResponseDTO.Saved;
             }
-
-            return ServiceResponseDTO.RecordExists;
+            else
+            {
+                if(invalidDays == totalAppliedDays)
+                {
+                    return ServiceResponseDTO.InvalidDays;
+                }
+                else
+                {
+                    return ServiceResponseDTO.RecordExists;
+                }
+            }
         }
 
         public List<LeaveRecordDTO> GetAppliedLeaves(int employeeId)
