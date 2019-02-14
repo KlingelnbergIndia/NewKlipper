@@ -7,14 +7,23 @@ using static DomainModel.Leave;
 namespace UseCaseBoundary.DTO
 {
    
-    public class LeaveDTO
+    public class LeaveRecordDTO
     {
-
         public List<DateTime> Date;
         public LeaveType TypeOfLeave;
         public DateTime FromDate;
         public DateTime ToDate;
         public string Remark;
         public int NoOfDays;
+        public bool IsRecordSaved;
+        public ServiceResponseDTO ServiceResponse;
+    }
+
+    public enum ServiceResponseDTO
+    {
+        Saved,
+        Updated,
+        Deleted,
+        RecordExists
     }
 }

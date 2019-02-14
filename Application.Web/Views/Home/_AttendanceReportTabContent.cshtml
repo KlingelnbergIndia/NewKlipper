@@ -1,0 +1,202 @@
+﻿@model ReporteeViewModel
+@{
+    var TotalDeficitOrExtraHours = @Model.AttendaceRecordsOfSelectedReportee.TotalDeficitOrExtraHours;
+    var EmployeeID = @Model.EmployeeId;
+}
+
+<div>
+    <div class="panel-info" style="@(Model.reportees.Count==0 ? "visibility:hidden" : "visibility:visible")">
+        <div class="panel panel-heading col-md-12 col-sm-12">
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                @*@using (Html.BeginForm("GetSelectedreportee?tab=attendanceReportMenu", "Home", FormMethod.Post))
+                    {*@
+                <form action="GetSelectedreportee?selectedViewTabs=attendanceReportMenu" method="post">
+                    <div class="form-inline">
+                        <div class="form-group" style="margin-right:10px;">
+                            <label for="reporteesId">Reportee</label>
+                            <select id="reporteesId" name="selectMenu" class="form-control input-sm">
+                                @if (Model.AttendanceFormName == string.Empty || Model.AttendanceFormName == null)
+                                {
+                                    <option selected value="0" disabled>---Select Reportee---</option>
+                                }
+                                @foreach (var item in Model.reportees)
+                                {
+                                    if (item.Key == Model.SelectedEmpIdForAttendanceTab)
+                                    {
+                                        <option value=@item.Key selected>@item.Value</option>
+                                    }
+                                    else
+                                    {
+                                        <option value=@item.Key>@item.Value</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fromDate">From</label>
+                            <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
+                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                   value="@(Model.fromDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd"))" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="toDate" style="margin-left:10px;">To</label>
+                            <input type="date" id="toDate" name="toDate" class="form-control input-sm"
+                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                   value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Show" class="btn btn-info btn-sm pull" style="margin-left:10px;" />
+                        </div>
+                    </div>
+
+                </form>
+
+                @*}*@
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                @if (Model.AttendaceRecordsOfSelectedReportee.TotalWorkingHours != null)
+                {
+                    <div align="right">
+                        <label style="font-weight: normal">Total Working Hours</label>
+                        <span style="font-weight: bold">
+                            @Model.AttendaceRecordsOfSelectedReportee.TotalWorkingHours.Hour.ToString("D2") :
+                            @Model.AttendaceRecordsOfSelectedReportee.TotalWorkingHours.Minute.ToString("D2")
+                        </span>
+                    </div>
+                    <div align="right">
+                        @if (TotalDeficitOrExtraHours.Hour < 0 || TotalDeficitOrExtraHours.Minute < 0)
+                        {
+                            <label style="font-weight: normal">Total Deficit Time</label>
+                            <span style="margin-left: 2%; font-weight: bold; color: #b84442">
+                                @Math.Abs(TotalDeficitOrExtraHours.Hour).ToString("D2") :
+                                @Math.Abs(TotalDeficitOrExtraHours.Minute).ToString("D2")
+                            </span>
+                        }
+                        else
+                        {
+                            <label style="font-weight: normal;">Total Over Time</label>
+                            <span style="margin-left: 2%; font-weight: bold;color: #697668">
+                                @Math.Abs(TotalDeficitOrExtraHours.Hour).ToString("D2") :
+                                @Math.Abs(TotalDeficitOrExtraHours.Minute).ToString("D2")
+                            </span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (Model.AttendanceFormName != string.Empty && Model.AttendanceFormName != null)
+    {
+        if (Model.AttendaceRecordsOfSelectedReportee.ListOfAttendanceRecordDTO.Count == 0)
+        {
+            <p class="text-warning" style="color:#23527C;">
+                Attendance Records of @Model.AttendanceFormName
+                for specified period are not available
+            </p>
+        }
+        else
+        {
+            <p style="color:#23527C;">Attendance Record of @Model.AttendanceFormName</p>
+
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Day</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
+                        <th>Deficit Time</th>
+                        <th>Over Time</th>
+                        <th>Actual Hours</th>
+                        <th>Regularized Hours</th>
+                        <th class="col-md-2">Remark</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.AttendaceRecordsOfSelectedReportee.ListOfAttendanceRecordDTO)
+                    {
+
+                        string lateByClass = "alert alert-danger";
+                        string overTimeClass = "alert alert-success";
+
+                        string nonWorkingDayClass = "";
+                        string dayStatus = "";
+
+                        @if (item.DayStatus.ToString() == "NonWorkingDay")
+                        {
+                            nonWorkingDayClass = "warning";
+                            dayStatus = "Non working day";
+                        }
+
+                        <tr class="@nonWorkingDayClass popoverClass" data-content="@dayStatus" data-placement="bottom">
+                            <td style="vertical-align: text-top;">@item.Date.ToString("dd MMMM yyyy")</td>
+                            <td>@item.Date.ToString("dddd")</td>
+
+                            @if (item.TimeIn.Hour == 0 && item.TimeIn.Minute == 0)
+                            {
+                                <td>-</td>
+                            }
+                            else
+                            {
+                                <td>@item.TimeIn.Hour.ToString("D2") : @item.TimeIn.Minute.ToString("D2")</td>
+                            }
+
+                            @if (item.TimeOut.Hour == 0 && item.TimeOut.Minute == 0)
+                            {
+                                <td>-</td>
+                            }
+                            else
+                            {
+                                <td>@item.TimeOut.Hour.ToString("D2"):@item.TimeOut.Minute.ToString("D2")</td>
+                            }
+
+                            @if (item.LateBy.Hour == 0 && item.LateBy.Minute == 0)
+                            {
+                                <td>-</td>
+                            }
+                            else
+                            {
+                                <td class="@lateByClass">@item.LateBy.Hour.ToString("D2"):@item.LateBy.Minute.ToString("D2")</td>
+                            }
+
+                            @if (item.OverTime.Hour == 0 && item.OverTime.Minute == 0)
+                            {
+                                <td>-</td>
+                            }
+                            else
+                            {
+                                <td class="@overTimeClass">@item.OverTime.Hour.ToString("D2"):@item.OverTime.Minute.ToString("D2")</td>
+                            }
+
+                            @if (item.TimeIn.Hour == 0 && item.TimeIn.Minute == 0 && item.TimeOut.Hour == 0 && item.TimeOut.Minute == 0 && item.IsHoursRegularized == false)
+                            {
+                                <td>
+                                    Missing entry
+                                    <span data-toggle="tooltip" class="glyphicon glyphicon-time pull-right" onclick=regularizeHours('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID) title="Regularize hrs"></span>
+                                </td>
+
+                            }
+                            else
+                            {
+                                <td>
+                                    <u class="open-Dialog" data-toggle="modal" onclick=getDailyData('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID) style="cursor:pointer">
+                                        @item.WorkingHours.Hour.ToString("D2"):@item.WorkingHours.Minute.ToString("D2")
+                                    </u>
+                                    <span data-toggle="tooltip" class="glyphicon glyphicon-time pull-right" onclick=regularizeHours('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID) title="Regularize hrs"></span>
+                                </td>
+                            }
+                            <td>@item.RegularizedHours.Hour.ToString("D2"):@item.RegularizedHours.Minute.ToString("D2")</td>
+                            <td class="text-left small">@item.Remark</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    }
+</div>
+

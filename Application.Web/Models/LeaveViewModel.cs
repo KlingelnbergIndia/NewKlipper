@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using UseCaseBoundary.DTO;
@@ -13,11 +14,12 @@ namespace Application.Web.Models
 {
     public class LeaveViewModel
     {
-        public LeaveDTO leaveDTO;
+        public LeaveRecordDTO leaveDTO;
 
-        public List<LeaveDTO> GetAppliedLeaves { get; set; }
-        public List<ReporteeDTO> ReporteesList { get; set; }
+        public List<LeaveRecordDTO> GetAppliedLeaves { get; set; }
+        public int SumOfLeave => GetAppliedLeaves.Sum(x => x.NoOfDays);
         public bool IsTeamLead { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FromDate;
         public DateTime ToDate;
         public string Remark;
@@ -41,7 +43,6 @@ namespace Application.Web.Models
 
             return dictionary;
         }
-
 
     }
 }

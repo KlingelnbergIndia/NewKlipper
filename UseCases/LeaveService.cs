@@ -12,36 +12,50 @@ namespace UseCases
     public class LeaveService
     {
         private ILeavesRepository _leavesRepository;
-        public LeaveService(ILeavesRepository leavesRepository)
+        private IEmployeeRepository _employeeRepository;
+        private IDepartmentRepository _departmentRepository;
+        public LeaveService(
+            ILeavesRepository leavesRepository,
+            IEmployeeRepository employeeRepository,
+            IDepartmentRepository departmentRepository)
         {
             _leavesRepository = leavesRepository;
+            _employeeRepository = employeeRepository;
+            _departmentRepository = departmentRepository;
         }
 
-        public bool ApplyLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
+        public ServiceResponseDTO ApplyLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
         {
             List<DateTime> takenLeaveDates = new List<DateTime>();
+            LeaveRecordDTO leaveRecord = new LeaveRecordDTO();
+
+            Employee employeeData = _employeeRepository.GetEmployee(employeeId);
+            Department department = _departmentRepository.GetDepartment(employeeData.Department());
+
             var allAppliedLeaves = _leavesRepository.GetAllLeavesInfo(employeeId);
             for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
             {
                 bool isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date));
-                if (!isLeaveExist)
+                if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
                 {
                     takenLeaveDates.Add(eachLeaveDay);
                 }
             }
+
             if (takenLeaveDates.Any())
             {
                 var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, remark);
                 _leavesRepository.AddNewLeave(takenLeave);
+                return ServiceResponseDTO.Saved;
             }
 
-            return true;
+            return ServiceResponseDTO.RecordExists;
         }
 
-        public List<LeaveDTO> GetAppliedLeaves(int employeeId)
+        public List<LeaveRecordDTO> GetAppliedLeaves(int employeeId)
         {
             List<Leave> leavesInfo = _leavesRepository.GetAllLeavesInfo(employeeId);
-            var leaveDTO = leavesInfo.Select(x => new LeaveDTO()
+            var leaveDTO = leavesInfo.Select(x => new LeaveRecordDTO()
             {
                 Date = x.GetLeaveDate(),
                 TypeOfLeave = x.GetLeaveType(),
