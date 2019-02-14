@@ -9,8 +9,11 @@
     <div class="col-md-12" style="margin-bottom:10px;">
         @if (@TempData["responseMessage"] != null)
         {
-            <div class="alert alert-success" id="success-alert">@TempData["responseMessage"] </div>
-            @*<script>alert('@TempData["responseMessage"]');</script>*@
+            <div class="alert alert-success success-alert-animation">@TempData["responseMessage"] </div>
+        }
+        @if (@TempData["errorMessage"] != null)
+        {
+            <div class="alert alert-warning success-alert-animation">@TempData["errorMessage"] </div>
         }
 
         <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ApplyLeaveModal">+ Apply Leave</button>

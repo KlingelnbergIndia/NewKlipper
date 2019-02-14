@@ -14,6 +14,7 @@ namespace Application.Web.Models
         public AttendanceRecordsDTO AttendaceRecordsOfSelectedReportee = new AttendanceRecordsDTO();
 
         public List<LeaveRecordDTO> leaveRecordsOfSelectedReportee = new List<LeaveRecordDTO>();
+        public int SumOfLeaves => leaveRecordsOfSelectedReportee.Sum(x=>x.NoOfDays);
 
         public DateTime fromDate;
 
