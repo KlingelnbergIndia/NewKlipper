@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Application.Web.Models;
 using Application.Web.PageAccessAuthentication;
+using Klipper.Web.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UseCaseBoundary;
@@ -14,6 +15,7 @@ using static DomainModel.Leave;
 
 namespace Application.Web.Controllers
 {
+    [AuthenticateSession]
     public class LeaveController : Controller
     {
         private readonly ILeavesRepository _leavesRepository;
@@ -33,7 +35,7 @@ namespace Application.Web.Controllers
 
             var leaveViewModel = new LeaveViewModel();
             leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
-            
+
             return View(leaveViewModel);
         }
         [HttpPost]
@@ -53,7 +55,9 @@ namespace Application.Web.Controllers
                 TempData["responseMessage"] = "Your Leave is submitted !";
             else if (response == ServiceResponseDTO.RecordExists)
                 TempData["responseMessage"] = "Your Leave is already submitted !";
-            
+            else if (response == ServiceResponseDTO.InvalidDays)
+                TempData["errorMessage"] = "Invalid Selected Days !";
+
             return RedirectToAction("Index");
         }
     }
