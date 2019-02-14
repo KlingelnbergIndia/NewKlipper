@@ -10,7 +10,7 @@
                 <div class="form-inline">
                     <div class="form-group">
                         <label for="reporteesId">Reportee</label>
-                        <select id="reporteesId" name="selectMenu" class="form-control input-sm">
+                        <select id="reporteesId" name="selectMenu" class="form-control input-sm" style="margin-left:10px" >
                             @if (Model.LeaveFormName == string.Empty || Model.LeaveFormName == null)
                             {
                                 <option selected value="0" disabled>---Select Reportee---</option>
@@ -29,7 +29,7 @@
                         </select>
                     </div>
 
-                    <input type="submit" value="Show" class="btn btn-info btn-sm pull" />
+                    <input type="submit" value="Show" class="btn btn-info btn-sm pull" style="width:60px;margin-left:20px" />
                 </div>
             </form>
         </div>

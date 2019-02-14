@@ -125,38 +125,37 @@ namespace Application.Web.Controllers
             var reportees = reporteeService.GetReporteesData(employeeId);
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
 
-            if (reportees.Count != 0)
-            {
                 foreach (var reportee in reportees)
                 {
                     string reporteeNameWithId = reportee.FirstName + " " + reportee.LastName + " - " + reportee.ID;
                     reporteeViewModel.reportees.Add(reporteeNameWithId);
                 }
-            }
-
-            string selectedReportee = Request.Form["selectMenu"].ToString();
-            string idFromSelectedReportee = Regex.Match(selectedReportee, @"\d+").Value;
-            int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
-
-            if (selectedViewTabs == ViewTabs.attendanceReportMenu.ToString() && reporteeId != 0)
+            
+                string selectedReportee = Request.Form["selectMenu"].ToString();
+                string idFromSelectedReportee = Regex.Match(selectedReportee, @"\d+").Value;
+                int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
+            if (reporteeId != 0)
             {
-                string fromDate = Request.Form["fromDate"].ToString();
-                string toDate = Request.Form["toDate"].ToString();
-
-                if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+                if (selectedViewTabs == ViewTabs.attendanceReportMenu.ToString())
                 {
-                    reporteeViewModel.fromDate = DateTime.Parse(fromDate);
-                    reporteeViewModel.toDate = DateTime.Parse(toDate);
+                    string fromDate = Request.Form["fromDate"].ToString();
+                    string toDate = Request.Form["toDate"].ToString();
 
-                    AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
-                    _departmentRepository, _attendanceRegularizationRepository);
+                    if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+                    {
+                        reporteeViewModel.fromDate = DateTime.Parse(fromDate);
+                        reporteeViewModel.toDate = DateTime.Parse(toDate);
 
-                    AttendanceRecordsDTO listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId,
-                        reporteeViewModel.fromDate, reporteeViewModel.toDate);
-                    reporteeViewModel.AttendaceRecordsOfSelectedReportee = listOfAttendanceRecord;
+                        AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
+                        _departmentRepository, _attendanceRegularizationRepository);
 
-                    reporteeViewModel.AttendaceRecordsOfSelectedReportee.ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
-                    reporteeViewModel.AttendanceFormName = Request.Form["selectMenu"].ToString();
+                        AttendanceRecordsDTO listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId,
+                            reporteeViewModel.fromDate, reporteeViewModel.toDate);
+                        reporteeViewModel.AttendaceRecordsOfSelectedReportee = listOfAttendanceRecord;
+
+                        reporteeViewModel.AttendaceRecordsOfSelectedReportee.ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
+                        reporteeViewModel.AttendanceFormName = Request.Form["selectMenu"].ToString();
+                    }
                 }
                 else
                 {
@@ -168,9 +167,12 @@ namespace Application.Web.Controllers
                     selectedViewTabs = ViewTabs.leaveReportMenu.ToString();
                     reporteeViewModel.LeaveFormName = Request.Form["selectMenu"].ToString();
                 }
-
             }
-
+            else
+            {
+                reporteeViewModel.toDate = DateTime.Now.Date;
+                reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
+            }
 
             reporteeViewModel.EmployeeId = reporteeId;
 
