@@ -9,7 +9,7 @@ namespace Application.Web.Models
 {
     public class ReporteeViewModel
     {
-        public List<string> reportees = new List<string>();
+        public Dictionary<int,string> reportees = new Dictionary<int, string>();
 
         public AttendanceRecordsDTO AttendaceRecordsOfSelectedReportee = new AttendanceRecordsDTO();
 

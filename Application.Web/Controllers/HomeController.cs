@@ -102,8 +102,9 @@ namespace Application.Web.Controllers
             {
                 foreach (var reportee in reportees)
                 {
-                    string reporteeNameWithId = reportee.FirstName + " " + reportee.LastName + " - " + reportee.ID;
-                    reporteeViewModel.reportees.Add(reporteeNameWithId);
+                    string reporteeName = reportee.FirstName + " " + reportee.LastName;
+                    int reporteeId = reportee.ID;
+                    reporteeViewModel.reportees.Add(reporteeId, reporteeName);
                 }
             }
 
@@ -127,15 +128,14 @@ namespace Application.Web.Controllers
 
                 foreach (var reportee in reportees)
                 {
-                    string reporteeNameWithId = reportee.FirstName + " " + reportee.LastName + " - " + reportee.ID;
-                    reporteeViewModel.reportees.Add(reporteeNameWithId);
+                    string reporteeName = reportee.FirstName + " " + reportee.LastName ;
+                     int reporteeId = reportee.ID;
+                    reporteeViewModel.reportees.Add(reporteeId, reporteeName);
                 }
-            
-                string selectedReportee = Request.Form["selectMenu"].ToString();
-                string idFromSelectedReportee = Regex.Match(selectedReportee, @"\d+").Value;
-                int reporteeId = int.Parse(string.IsNullOrEmpty(idFromSelectedReportee) ? "0" : idFromSelectedReportee);
-            if (reporteeId != 0)
+                
+            if (Request.Form["selectMenu"].ToString()!= "null")
             {
+                int selectedReporteeId = int.Parse(Request.Form["selectMenu"]);
                 if (selectedViewTabs == ViewTabs.attendanceReportMenu.ToString())
                 {
                     string fromDate = Request.Form["fromDate"].ToString();
@@ -149,12 +149,12 @@ namespace Application.Web.Controllers
                         AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
                         _departmentRepository, _attendanceRegularizationRepository);
 
-                        AttendanceRecordsDTO listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(reporteeId,
+                        AttendanceRecordsDTO listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(selectedReporteeId,
                             reporteeViewModel.fromDate, reporteeViewModel.toDate);
                         reporteeViewModel.AttendaceRecordsOfSelectedReportee = listOfAttendanceRecord;
 
                         reporteeViewModel.AttendaceRecordsOfSelectedReportee.ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
-                        reporteeViewModel.AttendanceFormName = Request.Form["selectMenu"].ToString();
+                        reporteeViewModel.AttendanceFormName = reporteeViewModel.reportees[selectedReporteeId];
                     }
                 }
                 else
@@ -162,19 +162,18 @@ namespace Application.Web.Controllers
                     reporteeViewModel.toDate = DateTime.Now.Date;
                     reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
                     LeaveService leaveService = new LeaveService(_leavesRepository);
-                    List<LeaveRecordDTO> listOfLeaveRecord = leaveService.GetAppliedLeaves(reporteeId);
+                    List<LeaveRecordDTO> listOfLeaveRecord = leaveService.GetAppliedLeaves(selectedReporteeId);
                     reporteeViewModel.leaveRecordsOfSelectedReportee = listOfLeaveRecord;
                     selectedViewTabs = ViewTabs.leaveReportMenu.ToString();
-                    reporteeViewModel.LeaveFormName = Request.Form["selectMenu"].ToString();
+                    reporteeViewModel.LeaveFormName = reporteeViewModel.reportees[selectedReporteeId];
                 }
+                reporteeViewModel.EmployeeId = selectedReporteeId;
             }
             else
             {
                 reporteeViewModel.toDate = DateTime.Now.Date;
                 reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
             }
-
-            reporteeViewModel.EmployeeId = reporteeId;
 
             ViewBag.SelectedTab = selectedViewTabs;
             return View("Reportees", reporteeViewModel);
