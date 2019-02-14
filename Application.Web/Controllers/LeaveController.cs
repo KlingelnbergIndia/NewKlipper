@@ -31,7 +31,7 @@ namespace Application.Web.Controllers
         public IActionResult Index()
         {
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
-            var leaveService = new LeaveService(_leavesRepository, _employeeRepository, _departmentRepository);
+            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository);
 
             var leaveViewModel = new LeaveViewModel();
             leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
@@ -48,7 +48,7 @@ namespace Application.Web.Controllers
             }
 
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
-            var leaveService = new LeaveService(_leavesRepository, _employeeRepository, _departmentRepository);
+            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository);
             var response = leaveService.ApplyLeave(loggedInEmpId, FromDate, ToDate, LeaveType, Remark);
 
             if (response == ServiceResponseDTO.Saved)

@@ -84,5 +84,28 @@ namespace UseCases
             .ToList();
             return leaveDTO;
         }
+
+        public LeaveSummaryDTO GetTotalSummary (int employeeId)
+        {
+            int totalCasualLeaveAvailable = 21;
+            int totalSickLeaveAvailable = 6;
+            int totalCompOffLeaveAvailable = 0;
+
+            var listOfAppliedLeaves = new LeaveLogs(_leavesRepository.GetAllLeavesInfo(employeeId));
+
+            int CasualLeaveTaken = listOfAppliedLeaves.CalculateCasualLeaveTaken();
+            int SickLeaveTaken = listOfAppliedLeaves.CalculateSickLeaveTaken();
+            int CompOffLeaveTaken = listOfAppliedLeaves.CalculateCompOffLeaveTaken();
+
+            return new LeaveSummaryDTO()
+            {
+                TotalCasualLeaveTaken = CasualLeaveTaken,
+                TotalSickLeaveTaken = SickLeaveTaken,
+                TotalCompOffLeaveTaken = CompOffLeaveTaken,
+                BalanceOfCasualLeave = totalCasualLeaveAvailable - CasualLeaveTaken,
+                BalanceOfSickLeave = totalSickLeaveAvailable - SickLeaveTaken,
+                BalanceOfCompOffLeave = totalCompOffLeaveAvailable - CompOffLeaveTaken
+            };
+        }
     }
 }

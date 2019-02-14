@@ -163,7 +163,7 @@ namespace Application.Web.Controllers
                 {
                     reporteeViewModel.toDate = DateTime.Now.Date;
                     reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
-                    LeaveService leaveService = new LeaveService(_leavesRepository, _employeeRepository,_departmentRepository);
+                    UseCases.LeaveService leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository);
                     List<LeaveRecordDTO> listOfLeaveRecord = leaveService.GetAppliedLeaves(selectedReporteeId);
                     reporteeViewModel.leaveRecordsOfSelectedReportee = listOfLeaveRecord;
                     selectedViewTabs = ViewTabs.leaveReportMenu.ToString();
