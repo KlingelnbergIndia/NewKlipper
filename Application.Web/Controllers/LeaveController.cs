@@ -28,34 +28,29 @@ namespace Application.Web.Controllers
             var leaveService = new LeaveService(_leavesRepository);
 
             var leaveViewModel = new LeaveViewModel();
-            leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);  
-
-            //leaveViewModel.GetAppliedLeaves = mockData(); //delete it when UI is done
+            leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
+            
             return View(leaveViewModel);
         }
         [HttpPost]
         public IActionResult ApplyLeave(DateTime FromDate, DateTime ToDate, LeaveType LeaveType, string Remark)
         {
+            if (FromDate > ToDate)
+            {
+                TempData["errorMessage"] = "From-date should not be greater than To-Date !";
+                return RedirectToAction("Index");
+            }
+
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var leaveService = new LeaveService(_leavesRepository);
-
             var response = leaveService.ApplyLeave(loggedInEmpId, FromDate, ToDate, LeaveType, Remark);
 
+            if (response == ServiceResponseDTO.Saved)
+                TempData["responseMessage"] = "Your Leave is submitted !";
+            else if (response == ServiceResponseDTO.RecordExists)
+                TempData["responseMessage"] = "Your Leave is already submitted !";
+            
             return RedirectToAction("Index");
-        }
-
-       
-       
-        private List<LeaveRecordDTO> mockData()
-        {
-            List<LeaveRecordDTO> lst = new List<LeaveRecordDTO>();
-            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave });
-            return lst;
         }
     }
 }

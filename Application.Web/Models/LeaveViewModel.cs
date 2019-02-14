@@ -17,6 +17,7 @@ namespace Application.Web.Models
         public LeaveRecordDTO leaveDTO;
 
         public List<LeaveRecordDTO> GetAppliedLeaves { get; set; }
+        public int SumOfLeave => GetAppliedLeaves.Sum(x => x.NoOfDays);
         public bool IsTeamLead { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FromDate;
@@ -42,7 +43,6 @@ namespace Application.Web.Models
 
             return dictionary;
         }
-
 
     }
 }

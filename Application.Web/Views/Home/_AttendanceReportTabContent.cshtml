@@ -12,28 +12,12 @@
                 {*@
                 <form action="GetSelectedreportee?selectedViewTabs=attendanceReportMenu" method="post">
                     <div class="form-inline">
-                        <div class="form-group">
-                            <label for="fromDate">From</label>
-                            <input type="date" id="fromDate" name="fromDate" class="form-control input-sm " style="margin-left:10px;"
-                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
-                                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
-                                   value="@(Model.fromDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd"))" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="toDate" style="margin-left:20px;">To</label>
-                            <input type="date" id="toDate" name="toDate" class="form-control input-sm" style="margin-left:10px;"
-                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
-                                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
-                                   value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
-                        </div>
-                    </div>
-                    <div class="form-inline" style="margin-top:5px;">
-                        <div class="form-group">
+                        <div class="form-group" style="margin-right:10px;">
                             <label for="reporteesId">Reportee</label>
-                            <select id="reporteesId" name="selectMenu" class="form-control input-sm" style="margin-left:10px;"> 
+                            <select id="reporteesId" name="selectMenu" class="form-control input-sm">
                                 @if (Model.AttendanceFormName == string.Empty || Model.AttendanceFormName == null)
                                 {
-                                    <option selected value="null" disabled>---Select Reportee---</option>
+                                    <option selected value="0" disabled>---Select Reportee---</option>
                                 }
                                 else
                                 {
@@ -41,15 +25,32 @@
                                 }
                                 @foreach (var item in Model.reportees)
                                 {
-                                    if (item.Value != Model.AttendanceFormName)
+                                    if (item != Model.AttendanceFormName)
                                     {
-                                        <option value=@item.Key>@item.Value</option>
+                                        <option value=@item>@item</option>
                                     }
                                 }
                             </select>
                         </div>
-                        <input type="submit" value="Show" class="btn btn-info btn-sm pull" style="width:60px;margin-left:20px" />
+                        <div class="form-group">
+                            <label for="fromDate">From</label>
+                            <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
+                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                   value="@(Model.fromDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd"))" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="toDate" style="margin-left:10px;">To</label>
+                            <input type="date" id="toDate" name="toDate" class="form-control input-sm"
+                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                   value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Show" class="btn btn-info btn-sm pull" style="margin-left:10px;"/>
+                        </div>
                     </div>
+                    
                 </form>
 
                 @*}*@
@@ -91,14 +92,14 @@
     {
         if (Model.AttendaceRecordsOfSelectedReportee.ListOfAttendanceRecordDTO.Count == 0)
         {
-            <p class="text-warning">
-                Attendance Records of @Model.AttendanceFormName
+            <p class="text-warning" style="color:#23527C;">
+                Attendance Records of @Model.AttendanceFormName.Substring(0, Model.AttendanceFormName.LastIndexOf('-'))
                 for specified period are not available
             </p>
         }
         else
         {
-            <p>Attendance Record of @Model.AttendanceFormName</p>
+            <p style="color:#23527C;">Attendance Record of @Model.AttendanceFormName.Substring(0, Model.AttendanceFormName.LastIndexOf('-'))</p>
 
             <table class="table table-striped table-bordered">
                 <thead>
@@ -197,3 +198,4 @@
 
     }
 </div>
+

@@ -136,11 +136,21 @@ body {
 }
 
 #reporteesId {
-    width: 200px;
+    width: 174px;
     margin-right: 20px;
 }
 
-/*@media only screen and (min-width: 800px) {
+@media (min-width: 800px) {
+    .form-inline input {
+        margin: 5px 0;
+    }
+
+    .form-inline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+    /*@media only screen and (min-width: 800px) {
     #reporteesId {
         width: 180px;
     }
