@@ -4,9 +4,15 @@
     var isLeaveCountZero = @Model.GetAppliedLeaves.Count == 0;
 }
 
-<div class="main" >
-   
+<div class="main">
+
     <div class="col-md-12" style="margin-bottom:10px;">
+        @if (@TempData["responseMessage"] != null)
+        {
+            <div class="alert alert-success" id="success-alert">@TempData["responseMessage"] </div>
+            @*<script>alert('@TempData["responseMessage"]');</script>*@
+        }
+
         <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ApplyLeaveModal">+ Apply Leave</button>
     </div>
     <div class="col-md-12" style="@(isLeaveCountZero ? "visibility:hidden" : "visibility:visible")">
@@ -23,13 +29,13 @@
             <tbody>
                 @foreach (var leave in @Model.GetAppliedLeaves)
                 {
-                <tr>
-                    <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
-                    <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
-                    <td>@leave.NoOfDays</td>
-                    <td>@leave.TypeOfLeave</td>
-                    <td>@leave.Remark</td>
-                </tr>
+                    <tr>
+                        <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
+                        <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
+                        <td>@leave.NoOfDays</td>
+                        <td>@leave.TypeOfLeave</td>
+                        <td>@leave.Remark</td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -45,6 +51,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ApplyLeavePopup", @Model);}
 }
+
 
 <style>
     #ApplyLeaveModal > div > div {

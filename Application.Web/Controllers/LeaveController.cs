@@ -41,21 +41,12 @@ namespace Application.Web.Controllers
 
             var response = leaveService.ApplyLeave(loggedInEmpId, FromDate, ToDate, LeaveType, Remark);
 
-            return RedirectToAction("Index");
-        }
+            if (response == ServiceResponseDTO.Saved)
+                TempData["responseMessage"] = "Your Leave is submitted !";
+            else if (response == ServiceResponseDTO.RecordExists)
+                TempData["responseMessage"] = "Your Leave is already submitted !";
 
-       
-       
-        private List<LeaveRecordDTO> mockData()
-        {
-            List<LeaveRecordDTO> lst = new List<LeaveRecordDTO>();
-            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave});
-            lst.Add(new LeaveRecordDTO {  Remark = "rkjhf kjdh kdjfh kjd",TypeOfLeave = LeaveType.CasualLeave });
-            return lst;
+            return RedirectToAction("Index");
         }
     }
 }

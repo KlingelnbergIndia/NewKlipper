@@ -17,7 +17,7 @@ namespace UseCases
             _leavesRepository = leavesRepository;
         }
 
-        public bool ApplyLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
+        public ServiceResponseDTO ApplyLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
         {
             List<DateTime> takenLeaveDates = new List<DateTime>();
             LeaveRecordDTO leaveRecord = new LeaveRecordDTO();
@@ -35,9 +35,10 @@ namespace UseCases
             {
                 var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, remark);
                 _leavesRepository.AddNewLeave(takenLeave);
+                return ServiceResponseDTO.Saved;
             }
 
-            return true;
+            return ServiceResponseDTO.RecordExists;
         }
 
         public List<LeaveRecordDTO> GetAppliedLeaves(int employeeId)
