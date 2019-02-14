@@ -133,7 +133,7 @@ namespace Application.Web.Controllers
                     reporteeViewModel.reportees.Add(reporteeId, reporteeName);
                 }
                 
-            if (Request.Form["selectMenu"].ToString()!= "null")
+            if (!string.IsNullOrEmpty(Request.Form["selectMenu"]))
             {
                 int selectedReporteeId = int.Parse(Request.Form["selectMenu"]);
                 if (selectedViewTabs == ViewTabs.attendanceReportMenu.ToString())
