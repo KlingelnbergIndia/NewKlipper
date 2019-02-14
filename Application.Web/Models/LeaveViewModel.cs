@@ -31,8 +31,8 @@ namespace Application.Web.Models
             var enumerationType = typeof(LeaveType);
             foreach (int value in Enum.GetValues(enumerationType))
             {
-                if (value == (int)LeaveType.EarnedLeave)
-                    dictionary.Add(value, "Earned Leave");
+                if (value == (int)LeaveType.CompOff)
+                    dictionary.Add(value, "Comp-Off");
                 else if (value == (int)LeaveType.CasualLeave)
                     dictionary.Add(value, "Casual Leave");
                 else if (value == (int)LeaveType.SickLeave)
