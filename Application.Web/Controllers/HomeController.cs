@@ -22,7 +22,7 @@ namespace Application.Web.Controllers
     public class HomeController : Controller
     {
         private IAccessEventsRepository _accessEventRepository;
-        private IEmployeeRepository _leaveRepository;
+        private IEmployeeRepository _employeeRepository;
         private IDepartmentRepository _departmentRepository;
         private IAttendanceRegularizationRepository _attendanceRegularizationRepository;
         private ILeavesRepository _leavesRepository;
@@ -31,7 +31,7 @@ namespace Application.Web.Controllers
             IDepartmentRepository departmentRepository, IAttendanceRegularizationRepository attendanceRegularizationRepository, ILeavesRepository leavesRepository)
         {
             _accessEventRepository = accessEventRepository;
-            _leaveRepository = employeeRepository;
+            _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
             _attendanceRegularizationRepository = attendanceRegularizationRepository;
             _leavesRepository = leavesRepository;
@@ -40,7 +40,7 @@ namespace Application.Web.Controllers
         public async Task<IActionResult> Index(string searchFilter)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
                 _departmentRepository, _attendanceRegularizationRepository);
 
             EmployeeViewModel employeeViewModel = new EmployeeViewModel();
@@ -89,12 +89,12 @@ namespace Application.Web.Controllers
         public IActionResult Reportees(string selectedViewTabs)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            ReporteeService reporteeService = new ReporteeService(_leaveRepository);
+            ReporteeService reporteeService = new ReporteeService(_employeeRepository);
 
             var reportees = reporteeService.GetReporteesData(employeeId);
 
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
                 _departmentRepository, _attendanceRegularizationRepository);
             List<AttendanceRecordsDTO> listOfAttendanceRecord = new List<AttendanceRecordsDTO>();
 
@@ -121,7 +121,7 @@ namespace Application.Web.Controllers
         public async Task<IActionResult> GetSelectedreportee(string selectedViewTabs)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            ReporteeService reporteeService = new ReporteeService(_leaveRepository);
+            ReporteeService reporteeService = new ReporteeService(_employeeRepository);
 
             var reportees = reporteeService.GetReporteesData(employeeId);
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
@@ -146,7 +146,7 @@ namespace Application.Web.Controllers
                         reporteeViewModel.fromDate = DateTime.Parse(fromDate);
                         reporteeViewModel.toDate = DateTime.Parse(toDate);
 
-                        AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
+                        AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
                         _departmentRepository, _attendanceRegularizationRepository);
 
                         AttendanceRecordsDTO listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(selectedReporteeId,
@@ -163,7 +163,7 @@ namespace Application.Web.Controllers
                 {
                     reporteeViewModel.toDate = DateTime.Now.Date;
                     reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
-                    LeaveService leaveService = new LeaveService(_leavesRepository);
+                    LeaveService leaveService = new LeaveService(_leavesRepository, _employeeRepository,_departmentRepository);
                     List<LeaveRecordDTO> listOfLeaveRecord = leaveService.GetAppliedLeaves(selectedReporteeId);
                     reporteeViewModel.leaveRecordsOfSelectedReportee = listOfLeaveRecord;
                     selectedViewTabs = ViewTabs.leaveReportMenu.ToString();
@@ -185,7 +185,7 @@ namespace Application.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> AccessPointDetail(DateTime date, int employeeId)
         {
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
                 _departmentRepository, _attendanceRegularizationRepository);
             List<AccessPointRecord> listofaccesspointdetail = await attendanceService.GetAccessPointDetails(employeeId, date);
             listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST(date, listofaccesspointdetail);
@@ -196,7 +196,7 @@ namespace Application.Web.Controllers
         [AuthenticateTeamLeaderRole]
         public IActionResult SaveRegularizedHours(DateTime date, int employeeId, DateTime timeToBeRegularize, string remark)
         {
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _leaveRepository,
+            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
                 _departmentRepository, _attendanceRegularizationRepository);
             var redularizationData = new RegularizationDTO()
             {
