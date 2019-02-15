@@ -7,8 +7,8 @@ namespace DomainModel
     public class CarryForwardLeaves
     {
         public CarryForwardLeaves(int employeeId, DateTime leaveBalanceTillDate,
-           int takenCasualLeaves, int takenSickLeaves, int takenCompoffLeaves,
-           int maxCasualLeaves, int maxSickLeaves, int maxCompoffLeaves)
+           float takenCasualLeaves, float takenSickLeaves, float takenCompoffLeaves,
+           float maxCasualLeaves, float maxSickLeaves, float maxCompoffLeaves)
         {
             _employeeId = employeeId;
             _leaveBalanceTillDate = leaveBalanceTillDate;
@@ -22,34 +22,34 @@ namespace DomainModel
        
         private int _employeeId;
         private DateTime _leaveBalanceTillDate;
-        private int _takenCasualLeaves;
-        private int _takenSickLeaves;
-        private int _takenCompoffLeaves;
-        private int _maxCasualLeaves;
-        private int _maxSickLeaves;
-        private int _maxCompoffLeaves;
+        private float _takenCasualLeaves;
+        private float _takenSickLeaves;
+        private float _takenCompoffLeaves;
+        private float _maxCasualLeaves;
+        private float _maxSickLeaves;
+        private float _maxCompoffLeaves;
 
-        public int TakenCasualLeaves()
+        public float TakenCasualLeaves()
         {
             return _takenCasualLeaves;
         }
-        public int TakenSickLeaves()
+        public float TakenSickLeaves()
         {
             return _takenSickLeaves;
         }
-        public int TakenCompoffLeaves()
+        public float TakenCompoffLeaves()
         {
             return _takenCompoffLeaves;
         }
-        public int MaxCasualLeaves()
+        public float MaxCasualLeaves()
         {
             return _maxCasualLeaves;
         }
-        public int MaxSickLeaves()
+        public float MaxSickLeaves()
         {
             return _maxSickLeaves;
         }
-        public int MaxCompoffLeaves()
+        public float MaxCompoffLeaves()
         {
             return _maxCompoffLeaves;
         }
