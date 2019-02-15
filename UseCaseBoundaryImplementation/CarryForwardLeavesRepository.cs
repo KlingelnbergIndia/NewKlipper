@@ -23,10 +23,15 @@ namespace RepositoryImplementation
                 _dbContext.CarryForwardLeaves
                 .AsQueryable()
                 .Where(x => x.EmployeeId == employeeId)
-                .Select(x => new CarryForwardLeaves()
-                {
-                    //needs to refractor domain model
-                })
+                .Select(x => new CarryForwardLeaves(
+                    x.EmployeeId,
+                    x.LeaveBalanceTillDate,
+                    x.TakenCasualLeaves,
+                    x.TakenSickLeaves,
+                    x.TakenCompoffLeaves,
+                    x.MaxCasualLeaves,
+                    x.MaxSickLeaves,
+                    x.MaxCompoffLeaves))
                 .FirstOrDefault();
         }
     }
