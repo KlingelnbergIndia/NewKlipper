@@ -44,5 +44,6 @@ namespace Application.Web.Models
             return dictionary;
         }
 
+        public List<LeaveSummaryViewModel> LeaveSummary;
     }
 }
