@@ -109,12 +109,15 @@ namespace UseCases
                 TotalCasualLeaveTaken = casualLeaveTaken,
                 TotalSickLeaveTaken = sickLeaveTaken,
                 TotalCompOffLeaveTaken = compOffLeaveTaken,
+
                 RemainingCasualLeave = totalCasualLeaveAvailable - casualLeaveTaken,
                 RemainingSickLeave = totalSickLeaveAvailable - sickLeaveTaken,
                 RemainingCompOffLeave = totalCompOffLeaveAvailable - compOffLeaveTaken,
+
                 MaximumCasualLeave = totalCasualLeaveAvailable,
                 MaximumSickLeave = totalSickLeaveAvailable,
                 MaximumCompOffLeave = totalCompOffLeaveAvailable,
+
                 LeaveBalance = leaveBalance
             };
         }
