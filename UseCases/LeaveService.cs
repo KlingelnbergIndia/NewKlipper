@@ -90,7 +90,7 @@ namespace UseCases
 
         public LeaveSummaryDTO GetTotalSummary(int employeeId)
         {
-            var carryForwardLeave = _carryForwardLeaves.GetCarryForwardLeave(employeeId);
+            var carryForwardLeave = _carryForwardLeaves.GetCarryForwardLeaveAsync(employeeId).GetAwaiter().GetResult();
 
             float totalCasualLeaveAvailable = carryForwardLeave.MaxCasualLeaves();
             float totalSickLeaveAvailable = carryForwardLeave.MaxSickLeaves();
