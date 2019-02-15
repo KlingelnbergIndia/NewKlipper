@@ -7,7 +7,7 @@ namespace UseCaseBoundary
 {
     public interface ICarryForwardLeaves
     {
-        CarryForwardLeaves GetCarryForwardLeave();
+        CarryForwardLeaves GetCarryForwardLeave(int employeeId);
        
     }
 }

@@ -37,7 +37,7 @@ namespace DataAccess
         }
 
         public IMongoCollection<DepartmentEntityModel> Departments => _database.GetCollection<DepartmentEntityModel>("Departments"); 
-        public IMongoCollection<CarryForwardLeavesEntityModel> CarryForwardLeaves => _database.GetCollection<CarryForwardLeavesEntityModel>("CarryForwardLeaves"); 
+        //public IMongoCollection<CarryForwardLeavesEntityModel> CarryForwardLeaves => _database.GetCollection<CarryForwardLeavesEntityModel>("CarryForwardLeaves"); 
 
     }
 }
