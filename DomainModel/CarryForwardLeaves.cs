@@ -6,15 +6,32 @@ namespace DomainModel
 {
     public class CarryForwardLeaves
     {
-        public int EmployeeId { get; set; }
-        public DateTime LeaveBalanceTillDate { get; set; }
+        public CarryForwardLeaves(int employeeId, DateTime leaveBalanceTillDate,
+           int takenCasualLeaves, int takenSickLeaves, int takenCompoffLeaves,
+           int maxCasualLeaves, int maxSickLeaves, int maxCompoffLeaves)
+        {
+            _employeeId = employeeId;
+            _leaveBalanceTillDate = leaveBalanceTillDate;
+            _takenCasualLeaves = takenCasualLeaves;
+            _takenSickLeaves = takenSickLeaves;
+            _takenCompoffLeaves = takenCompoffLeaves;
+            _maxCasualLeaves = maxCasualLeaves;
+            _maxSickLeaves = maxSickLeaves;
+            _maxCompoffLeaves = maxCompoffLeaves;
+        }
+        private int EmployeeId;
+        private DateTime LeaveBalanceTillDate;
 
-        public int TakenCasualLeaves { get; set; }
-        public int TakenSickLeaves { get; set; }
-        public int TakenCompoffLeaves { get; set; }
+        private int TakenCasualLeaves;
+        private int TakenSickLeaves;
+        private int _employeeId;
+        private DateTime _leaveBalanceTillDate;
+        private int _takenCasualLeaves;
+        private int _takenSickLeaves;
+        private int _takenCompoffLeaves;
+        private int _maxCasualLeaves;
+        private int _maxSickLeaves;
+        private int _maxCompoffLeaves;
 
-        public int MaxCasualLeaves { get; set; }
-        public int MaxSickLeaves { get; set; }
-        public int MaxCompoffLeaves { get; set; }
     }
 }
