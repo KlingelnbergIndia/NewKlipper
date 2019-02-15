@@ -92,16 +92,16 @@ namespace UseCases
         {
             var carryForwardLeave = _carryForwardLeaves.GetCarryForwardLeave();
 
-            float totalCasualLeaveAvailable = carryForwardLeave.MaxCasualLeaves;
-            float totalSickLeaveAvailable = carryForwardLeave.MaxSickLeaves;
-            float totalCompOffLeaveAvailable = carryForwardLeave.MaxCompoffLeaves;
+            float totalCasualLeaveAvailable = carryForwardLeave.MaxCasualLeaves();
+            float totalSickLeaveAvailable = carryForwardLeave.MaxSickLeaves();
+            float totalCompOffLeaveAvailable = carryForwardLeave.MaxCompoffLeaves();
             float TotalAvailableLeave = totalCasualLeaveAvailable + totalSickLeaveAvailable + totalCompOffLeaveAvailable;
 
             var listOfAppliedLeaves = new LeaveLogs(_leavesRepository.GetAllLeavesInfo(employeeId));
 
-            float casualLeaveTaken = listOfAppliedLeaves.CalculateCasualLeaveTaken() + carryForwardLeave.TakenCasualLeaves;
-            float sickLeaveTaken = listOfAppliedLeaves.CalculateSickLeaveTaken() + carryForwardLeave.TakenSickLeaves;
-            float compOffLeaveTaken = listOfAppliedLeaves.CalculateCompOffLeaveTaken() + carryForwardLeave.TakenCompoffLeaves;
+            float casualLeaveTaken = listOfAppliedLeaves.CalculateCasualLeaveTaken() + carryForwardLeave.TakenCasualLeaves();
+            float sickLeaveTaken = listOfAppliedLeaves.CalculateSickLeaveTaken() + carryForwardLeave.TakenSickLeaves();
+            float compOffLeaveTaken = listOfAppliedLeaves.CalculateCompOffLeaveTaken() + carryForwardLeave.TakenCompoffLeaves();
             float leaveBalance = TotalAvailableLeave - listOfAppliedLeaves.GetTotalLeaveTaken();
 
             return new LeaveSummaryDTO()
