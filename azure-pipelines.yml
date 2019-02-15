@@ -4,14 +4,29 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master
+- develop
 
-pool:
-  vmImage: 'Ubuntu-16.04'
+jobs:
+- job: WebApp
+  pool:
+    vmImage: 'Ubuntu-16.04'
 
 variables:
   buildConfiguration: 'Release'
 
-steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+  steps:
+  - script: dotnet build --configuration $(buildConfiguration)
+    displayName: 'dotnet build $(buildConfiguration)'
+
+  - task: DotNetCoreCLI@1
+    displayName: ".NET publish package"
+    condition: ${{ parameters.deployPackage }}
+    inputs:
+      command: publish
+      arguments: --configuration ${{ parameters.buildConfiguration }} --no-restore --output $(Build.ArtifactStagingDirectory)/app/pkg
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish artifacts"
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/app'
+      ArtifactName: app
