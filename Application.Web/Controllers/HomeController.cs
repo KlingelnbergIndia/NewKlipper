@@ -26,15 +26,18 @@ namespace Application.Web.Controllers
         private IDepartmentRepository _departmentRepository;
         private IAttendanceRegularizationRepository _attendanceRegularizationRepository;
         private ILeavesRepository _leavesRepository;
+        private ICarryForwardLeaves _carryForwardLeaves;
 
         public HomeController(IAccessEventsRepository accessEventRepository, IEmployeeRepository employeeRepository,
-            IDepartmentRepository departmentRepository, IAttendanceRegularizationRepository attendanceRegularizationRepository, ILeavesRepository leavesRepository)
+            IDepartmentRepository departmentRepository, IAttendanceRegularizationRepository attendanceRegularizationRepository,
+            ILeavesRepository leavesRepository,ICarryForwardLeaves carryForwardLeaves)
         {
             _accessEventRepository = accessEventRepository;
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
             _attendanceRegularizationRepository = attendanceRegularizationRepository;
             _leavesRepository = leavesRepository;
+            _carryForwardLeaves = carryForwardLeaves;
         }
 
         public async Task<IActionResult> Index(string searchFilter)
@@ -163,7 +166,7 @@ namespace Application.Web.Controllers
                 {
                     reporteeViewModel.toDate = DateTime.Now.Date;
                     reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
-                    UseCases.LeaveService leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository);
+                    UseCases.LeaveService leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
                     List<LeaveRecordDTO> listOfLeaveRecord = leaveService.GetAppliedLeaves(selectedReporteeId);
                     reporteeViewModel.leaveRecordsOfSelectedReportee = listOfLeaveRecord;
                     selectedViewTabs = ViewTabs.leaveReportMenu.ToString();

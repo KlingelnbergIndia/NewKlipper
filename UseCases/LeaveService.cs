@@ -14,14 +14,17 @@ namespace UseCases
         private ILeavesRepository _leavesRepository;
         private IEmployeeRepository _employeeRepository;
         private IDepartmentRepository _departmentRepository;
+        private ICarryForwardLeaves _carryForwardLeaves;
+
         public LeaveService(
             ILeavesRepository leavesRepository,
             IEmployeeRepository employeeRepository,
-            IDepartmentRepository departmentRepository)
+            IDepartmentRepository departmentRepository,ICarryForwardLeaves carryForwardLeaves)
         {
             _leavesRepository = leavesRepository;
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
+            _carryForwardLeaves = carryForwardLeaves;
         }
 
         public ServiceResponseDTO ApplyLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
@@ -87,24 +90,32 @@ namespace UseCases
 
         public LeaveSummaryDTO GetTotalSummary (int employeeId)
         {
-            int totalCasualLeaveAvailable = 21;
-            int totalSickLeaveAvailable = 6;
-            int totalCompOffLeaveAvailable = 0;
+            var carryForwardLeave = _carryForwardLeaves.GetCarryForwardLeave();
+
+            int totalCasualLeaveAvailable = carryForwardLeave.MaxCasualLeaves;
+            int totalSickLeaveAvailable = carryForwardLeave.MaxSickLeaves;
+            int totalCompOffLeaveAvailable = carryForwardLeave.MaxCompoffLeaves;
+            int TotalAvailableLeave = totalCasualLeaveAvailable + totalSickLeaveAvailable + totalCompOffLeaveAvailable;
 
             var listOfAppliedLeaves = new LeaveLogs(_leavesRepository.GetAllLeavesInfo(employeeId));
 
-            int CasualLeaveTaken = listOfAppliedLeaves.CalculateCasualLeaveTaken();
-            int SickLeaveTaken = listOfAppliedLeaves.CalculateSickLeaveTaken();
-            int CompOffLeaveTaken = listOfAppliedLeaves.CalculateCompOffLeaveTaken();
+            int casualLeaveTaken = listOfAppliedLeaves.CalculateCasualLeaveTaken() + carryForwardLeave.TakenCasualLeaves;
+            int sickLeaveTaken = listOfAppliedLeaves.CalculateSickLeaveTaken() + carryForwardLeave.TakenSickLeaves;
+            int compOffLeaveTaken = listOfAppliedLeaves.CalculateCompOffLeaveTaken() + carryForwardLeave.TakenCompoffLeaves;
+            int leaveBalance = TotalAvailableLeave - listOfAppliedLeaves.GetTotalLeaveTaken();
 
             return new LeaveSummaryDTO()
             {
-                TotalCasualLeaveTaken = CasualLeaveTaken,
-                TotalSickLeaveTaken = SickLeaveTaken,
-                TotalCompOffLeaveTaken = CompOffLeaveTaken,
-                BalanceOfCasualLeave = totalCasualLeaveAvailable - CasualLeaveTaken,
-                BalanceOfSickLeave = totalSickLeaveAvailable - SickLeaveTaken,
-                BalanceOfCompOffLeave = totalCompOffLeaveAvailable - CompOffLeaveTaken
+                TotalCasualLeaveTaken = casualLeaveTaken,
+                TotalSickLeaveTaken = sickLeaveTaken,
+                TotalCompOffLeaveTaken = compOffLeaveTaken,
+                RemainingCasualLeave = totalCasualLeaveAvailable - casualLeaveTaken,
+                RemainingSickLeave = totalSickLeaveAvailable - sickLeaveTaken,
+                RemainingCompOffLeave = totalCompOffLeaveAvailable - compOffLeaveTaken,
+                MaximumCasualLeave = totalCasualLeaveAvailable,
+                MaximumSickLeave = totalSickLeaveAvailable,
+                MaximumCompOffLeave = totalCompOffLeaveAvailable,
+                LeaveBalance = leaveBalance
             };
         }
     }

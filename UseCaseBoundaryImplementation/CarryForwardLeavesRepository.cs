@@ -6,7 +6,7 @@ using UseCaseBoundary;
 
 namespace RepositoryImplementation
 {
-    public class CarryForwardLeavesRepository : ICarryForwardLeaves
+    public class CarryForwardLeavesRepository 
     {
         private LeaveManagementDBContext _dbContext;
         public CarryForwardLeavesRepository()

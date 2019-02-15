@@ -21,17 +21,21 @@ namespace Application.Web.Controllers
         private readonly ILeavesRepository _leavesRepository;
         private IEmployeeRepository _employeeRepository;
         private IDepartmentRepository _departmentRepository;
-        public LeaveController(ILeavesRepository leavesRepository, IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
+        private ICarryForwardLeaves _carryForwardLeaves;
+
+        public LeaveController(ILeavesRepository leavesRepository, IEmployeeRepository employeeRepository, 
+            IDepartmentRepository departmentRepository,ICarryForwardLeaves carryForwardLeaves)
         {
             _leavesRepository = leavesRepository;
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
+            _carryForwardLeaves = carryForwardLeaves;
 
         }
         public IActionResult Index()
         {
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
-            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository);
+            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
 
             var leaveViewModel = new LeaveViewModel();
             leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
@@ -48,7 +52,7 @@ namespace Application.Web.Controllers
             }
 
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
-            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository);
+            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
             var response = leaveService.ApplyLeave(loggedInEmpId, FromDate, ToDate, LeaveType, Remark);
 
             if (response == ServiceResponseDTO.Saved)
