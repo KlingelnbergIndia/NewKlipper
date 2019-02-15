@@ -6,15 +6,15 @@ namespace UseCaseBoundary.DTO
 {
     public class LeaveSummaryDTO
     {
-        public int TotalCasualLeaveTaken;
-        public int TotalSickLeaveTaken;
-        public int TotalCompOffLeaveTaken;
-        public int RemainingCasualLeave;
-        public int RemainingSickLeave;
-        public int RemainingCompOffLeave;
-        public int MaximumCasualLeave;
-        public int MaximumSickLeave;
-        public int MaximumCompOffLeave;
-        public int LeaveBalance;
+        public float TotalCasualLeaveTaken;
+        public float TotalSickLeaveTaken;
+        public float TotalCompOffLeaveTaken;
+        public float RemainingCasualLeave;
+        public float RemainingSickLeave;
+        public float RemainingCompOffLeave;
+        public float MaximumCasualLeave;
+        public float MaximumSickLeave;
+        public float MaximumCompOffLeave;
+        public float LeaveBalance;
     }
 }
