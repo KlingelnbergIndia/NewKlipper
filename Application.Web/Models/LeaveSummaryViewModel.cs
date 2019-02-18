@@ -8,7 +8,7 @@ namespace Application.Web.Models
 {
     public class LeaveSummaryViewModel
     {
-        public LeaveType LeaveType;
+        public string LeaveType;
         public float TotalAvailableLeave;
         public float LeaveTaken;
         public float RemainingLeave;

@@ -39,26 +39,27 @@ namespace Application.Web.Controllers
 
             var leaveViewModel = new LeaveViewModel();
             leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
+            
             var leaveSummary = leaveService.GetTotalSummary(loggedInEmpId);
             List<LeaveSummaryViewModel> listOfleaveSummary = new List<LeaveSummaryViewModel>()
             {
                 new LeaveSummaryViewModel()
                 {
-                    LeaveType = LeaveType.CasualLeave,
+                    LeaveType = "Casual Leave",
                     TotalAvailableLeave = leaveSummary.MaximumCasualLeave,
                     LeaveTaken = leaveSummary.TotalCasualLeaveTaken,
                     RemainingLeave = leaveSummary.RemainingCasualLeave
                 },
                 new LeaveSummaryViewModel()
                 {
-                    LeaveType = LeaveType.SickLeave,
+                    LeaveType = "Sick Leave",
                     TotalAvailableLeave = leaveSummary.MaximumSickLeave,
                     LeaveTaken = leaveSummary.TotalSickLeaveTaken,
                     RemainingLeave = leaveSummary.RemainingSickLeave
                 },
                 new LeaveSummaryViewModel()
                 {
-                    LeaveType = LeaveType.CompOff,
+                    LeaveType = "Comp-Off",
                     TotalAvailableLeave = leaveSummary.MaximumCompOffLeave,
                     LeaveTaken = leaveSummary.TotalCompOffLeaveTaken,
                     RemainingLeave = leaveSummary.RemainingCompOffLeave
@@ -76,6 +77,14 @@ namespace Application.Web.Controllers
                 TempData["errorMessage"] = "From-date should not be greater than To-Date !";
                 return RedirectToAction("Index");
             }
+            string leaveType = HttpContext.Request.Form["leaveList"].ToString();
+            if (int.Parse(leaveType)==0)
+                LeaveType = LeaveType.CompOff;
+            else if (int.Parse(leaveType) == 1)
+                LeaveType = LeaveType.CasualLeave;
+            else if (int.Parse(leaveType) == 2)
+                LeaveType = LeaveType.SickLeave;
+
 
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
