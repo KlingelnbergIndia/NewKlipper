@@ -16,19 +16,19 @@ namespace DomainModel
 
         public int CalculateCasualLeaveTaken()
         {
-           int noOfCasualLeave = _listOfLeave.Where(x=>x.GetLeaveType()==Leave.LeaveType.CasualLeave).Count();
+           int noOfCasualLeave = _listOfLeave.Where(x=>x.GetLeaveType()==Leave.LeaveType.CasualLeave).Sum(x=>x.GetLeaveDate().Count);
             return noOfCasualLeave;
         }
 
         public int CalculateSickLeaveTaken()
         {
-            int noOfSickLeave = _listOfLeave.Where(x => x.GetLeaveType() == Leave.LeaveType.SickLeave).Count();
+            int noOfSickLeave = _listOfLeave.Where(x => x.GetLeaveType() == Leave.LeaveType.SickLeave).Sum(x => x.GetLeaveDate().Count);
             return noOfSickLeave;
         }
 
         public int CalculateCompOffLeaveTaken()
         {
-            int noOfCompOffLeave = _listOfLeave.Where(x => x.GetLeaveType() == Leave.LeaveType.CompOff).Count();
+            int noOfCompOffLeave = _listOfLeave.Where(x => x.GetLeaveType() == Leave.LeaveType.CompOff).Sum(x => x.GetLeaveDate().Count);
             return noOfCompOffLeave;
         }
 
