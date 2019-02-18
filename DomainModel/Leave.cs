@@ -14,8 +14,8 @@ namespace DomainModel
 
         public enum LeaveType
         {
-            [Display(Name = "Earned Leave")]
-            EarnedLeave,
+            [Display(Name = "Comp-Off")]
+            CompOff,
             [Display(Name = "Casual Leave")]
             CasualLeave,
             [Display(Name = "Sick Leave")]

@@ -57,13 +57,13 @@ namespace DataAccess.Helper
                 }
             },
             {
-                "EmployeeXDB",
+                "LeaveManagementDB",
                 new DBConfiguration()
                 {
                     Address = "localhost",
                     Port = "27017",
                     DBUser = "ApiUser",
-                    Password = "EmployeeX#98765"
+                    Password = "Leave#98765"
                 }
             },
         };

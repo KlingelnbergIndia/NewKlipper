@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using static DomainModel.Leave;
 
-namespace DataAccess.EntityModel.Employment
+namespace DataAccess.EntityModel.Leave
 {
     public class LeaveEntityModel
     {
@@ -25,14 +25,8 @@ namespace DataAccess.EntityModel.Employment
         public string Remark { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime LogDateTime { get; private set; } = DateTime.Now;
-
+        public bool IsLeaveCanceled { get; set; } = false;
 
     }
 
-    //public class AppliedLeaves
-    //{
-    //    [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-    //    public DateTime LeaveDate { get; set; }
-        
-    //}
 }

@@ -34,7 +34,6 @@ namespace DataAccess
         }
 
         public IMongoCollection<EmployeeEntityModel> Employees => _database.GetCollection<EmployeeEntityModel>("Employees");
-        public IMongoCollection<LeaveEntityModel> EmployeeLeaves => _database.GetCollection<LeaveEntityModel>("EmployeeLeaves");
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,10 @@ namespace UseCaseBoundary.DTO
     {
         public List<DateTime> Date;
         public LeaveType TypeOfLeave;
+        public HtmlString GetLeaveDisplayName()
+        {
+            return EnumHelperMethod.EnumDisplayNameFor(TypeOfLeave);
+        }
         public DateTime FromDate;
         public DateTime ToDate;
         public string Remark;
