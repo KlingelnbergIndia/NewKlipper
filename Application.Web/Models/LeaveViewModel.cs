@@ -23,7 +23,6 @@ namespace Application.Web.Models
         public DateTime FromDate;
         public DateTime ToDate;
         public string Remark;
-        public string ShowLeaveType;
         public LeaveType LeaveType;
         public IDictionary<int, string> GetAllLeaveTypes()
         {
