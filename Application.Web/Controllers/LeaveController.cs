@@ -85,7 +85,6 @@ namespace Application.Web.Controllers
             else if (int.Parse(leaveType) == 2)
                 LeaveType = LeaveType.SickLeave;
 
-
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
             var response = leaveService.ApplyLeave(loggedInEmpId, FromDate, ToDate, LeaveType, Remark);
@@ -97,6 +96,39 @@ namespace Application.Web.Controllers
             else if (response == ServiceResponseDTO.InvalidDays)
                 TempData["errorMessage"] = "Invalid Selected Days !";
 
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult UpdateLeave(DateTime FromDate, DateTime ToDate, LeaveType LeaveType,
+            string Remark ,List<DateTime> DatesToBeChanged)
+        {
+            if (DatesToBeChanged != null)
+            {
+                if (FromDate > ToDate)
+                {
+                    TempData["errorMessage"] = "From-date should not be greater than To-Date !";
+                    return RedirectToAction("Index");
+                }
+                string leaveType = HttpContext.Request.Form["leaveList"].ToString();
+                if (int.Parse(leaveType) == 0)
+                    LeaveType = LeaveType.CompOff;
+                else if (int.Parse(leaveType) == 1)
+                    LeaveType = LeaveType.CasualLeave;
+                else if (int.Parse(leaveType) == 2)
+                    LeaveType = LeaveType.SickLeave;
+
+                var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
+                var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
+                var response = leaveService.UpdateLeave(loggedInEmpId,FromDate, ToDate, LeaveType, Remark, DatesToBeChanged);
+
+                if (response == ServiceResponseDTO.Saved)
+                    TempData["responseMessage"] = "Your Leave is updated !";
+                else if (response == ServiceResponseDTO.RecordExists)
+                    TempData["responseMessage"] = "Your Leave is already submitted !";
+                else if (response == ServiceResponseDTO.InvalidDays)
+                    TempData["errorMessage"] = "Invalid Selected Days !";
+            }
             return RedirectToAction("Index");
         }
     }

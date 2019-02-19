@@ -30,8 +30,7 @@ namespace UseCases
         public ServiceResponseDTO ApplyLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
         {
             List<DateTime> takenLeaveDates = new List<DateTime>();
-            LeaveRecordDTO leaveRecord = new LeaveRecordDTO();
-
+           
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
             Department department = _departmentRepository.GetDepartment(employeeData.Department());
 
@@ -122,6 +121,57 @@ namespace UseCases
 
                 LeaveBalance = leaveBalance
             };
+        }
+
+        public ServiceResponseDTO UpdateLeave(int employeeId,DateTime fromDate, DateTime toDate, LeaveType LeaveType,
+            string Remark ,List<DateTime> datesToBeChanged)
+        {
+           
+            List<DateTime> takenLeaveDates = new List<DateTime>();
+            LeaveRecordDTO leaveRecord = new LeaveRecordDTO();
+
+            Employee employeeData = _employeeRepository.GetEmployee(employeeId);
+            Department department = _departmentRepository.GetDepartment(employeeData.Department());
+
+            var allAppliedLeaves = _leavesRepository.GetAllLeavesInfo(employeeId);
+            int invalidDays = 0;
+            int totalAppliedDays = 0;
+
+            for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
+            {
+                bool isLeaveExist = false;
+                if ( !datesToBeChanged.Contains(eachLeaveDay))
+                {
+                     isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date));
+                }
+                if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
+                {
+                    takenLeaveDates.Add(eachLeaveDay);
+                }
+                if (!department.IsValidWorkingDay(eachLeaveDay))
+                {
+                    invalidDays++;
+                }
+                totalAppliedDays++;
+            }
+            if (takenLeaveDates.Any())
+            {
+                var takenLeave = new Leave(employeeId, takenLeaveDates, LeaveType, Remark);
+                _leavesRepository.OverrideLeave(takenLeave, datesToBeChanged);
+                return ServiceResponseDTO.Updated;
+            }
+            else
+            {
+                if (invalidDays == totalAppliedDays)
+                {
+                    return ServiceResponseDTO.InvalidDays;
+                }
+                else
+                {
+                    return ServiceResponseDTO.RecordExists;
+                }
+            }
+          
         }
     }
 }

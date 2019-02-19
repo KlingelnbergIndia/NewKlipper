@@ -70,17 +70,21 @@ namespace RepositoryImplementation
                 .Any();
         }
 
-        public bool OverrideLeave(Leave leaveData)
+        public bool OverrideLeave(Leave leaveData,List<DateTime> datesToBeChanged)
         {
             var isLeaveExist = __leaveDBContext.AppliedLeaves
                 .AsQueryable()
-                .Where(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates == leaveData.GetLeaveDate())
+                .Where(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates== datesToBeChanged)
                 .Any();
 
             if (isLeaveExist)
             {
                 __leaveDBContext.AppliedLeaves
-                .DeleteOneAsync(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates == leaveData.GetLeaveDate());
+                .DeleteOneAsync(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates == datesToBeChanged);
+            }
+            else
+            {
+                return false;
             }
 
             var leaveEntity = new LeaveEntityModel()
@@ -96,5 +100,6 @@ namespace RepositoryImplementation
                 .GetResult();
             return true;
         }
+        
     }
 }
