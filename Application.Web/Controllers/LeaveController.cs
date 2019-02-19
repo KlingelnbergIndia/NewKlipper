@@ -67,6 +67,7 @@ namespace Application.Web.Controllers
             };
             leaveViewModel.LeaveSummary = listOfleaveSummary;
 
+
             return View(leaveViewModel);
         }
         [HttpPost]

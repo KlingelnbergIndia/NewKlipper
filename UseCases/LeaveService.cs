@@ -74,17 +74,27 @@ namespace UseCases
         public List<LeaveRecordDTO> GetAppliedLeaves(int employeeId)
         {
             List<Leave> leavesInfo = _leavesRepository.GetAllLeavesInfo(employeeId);
-            var leaveDTO = leavesInfo.Select(x => new LeaveRecordDTO()
+            var isRealizedLeave = false;
+            List<LeaveRecordDTO> listOfLeaveDTO = new List<LeaveRecordDTO>();
+            foreach (var eachLeave in leavesInfo)
             {
-                Date = x.GetLeaveDate(),
-                TypeOfLeave = x.GetLeaveType(),
-                Remark = x.GetRemark(),
-                FromDate = x.GetLeaveDate().Min(),
-                ToDate = x.GetLeaveDate().Max(),
-                NoOfDays = x.GetLeaveDate().Count()
-            })
-            .ToList();
-            return leaveDTO;
+                if (eachLeave.GetLeaveDate().Min() < DateTime.Today.Date)
+                {
+                    isRealizedLeave = true;
+                }
+                var leaveDTO = new LeaveRecordDTO()
+                {
+                    Date = eachLeave.GetLeaveDate(),
+                    TypeOfLeave = eachLeave.GetLeaveType(),
+                    Remark = eachLeave.GetRemark(),
+                    FromDate = eachLeave.GetLeaveDate().Min(),
+                    ToDate = eachLeave.GetLeaveDate().Max(),
+                    NoOfDays = eachLeave.GetLeaveDate().Count(),
+                    IsRealizedLeave = isRealizedLeave
+                };
+                listOfLeaveDTO.Add(leaveDTO);
+            }
+            return listOfLeaveDTO;
         }
 
         public LeaveSummaryDTO GetTotalSummary(int employeeId)
