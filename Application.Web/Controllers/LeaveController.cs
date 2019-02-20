@@ -104,7 +104,7 @@ namespace Application.Web.Controllers
         public IActionResult UpdateLeave(DateTime FromDate, DateTime ToDate, LeaveType LeaveType,
             string Remark ,List<DateTime> DatesToBeChanged)
         {
-            if (DatesToBeChanged != null)
+            if (DatesToBeChanged.Count != 0)
             {
                 if (FromDate > ToDate)
                 {
