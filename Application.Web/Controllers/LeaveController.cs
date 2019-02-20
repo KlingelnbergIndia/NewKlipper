@@ -132,5 +132,23 @@ namespace Application.Web.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public IActionResult CancelLeave(List<DateTime> DatesToBeChanged)
+        {
+            if (DatesToBeChanged.Count != 0)
+            {
+               // var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
+                var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
+                var response = leaveService.CancelLeave(63, DatesToBeChanged);
+
+                if (response == ServiceResponseDTO.Deleted)
+                    TempData["responseMessage"] = "Your Leave is Cancel !";
+                else 
+                    TempData["responseMessage"] = "Your Leave is not Cancel !";
+               
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

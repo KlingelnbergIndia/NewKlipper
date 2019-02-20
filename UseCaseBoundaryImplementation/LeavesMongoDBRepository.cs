@@ -100,6 +100,22 @@ namespace RepositoryImplementation
                 .GetResult();
             return true;
         }
-        
+
+        public bool CancelLeave(int empId,List<DateTime> listOfDatesToBeChange)
+        {
+            var cancelLeave = __leaveDBContext.AppliedLeaves
+               .AsQueryable()
+               .Where(x => x.EmployeeId == empId && x.AppliedLeaveDates == listOfDatesToBeChange).First();
+
+            if (cancelLeave!=null)
+            {
+                cancelLeave.IsLeaveCanceled = true;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

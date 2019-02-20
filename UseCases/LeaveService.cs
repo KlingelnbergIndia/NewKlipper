@@ -19,7 +19,7 @@ namespace UseCases
         public LeaveService(
             ILeavesRepository leavesRepository,
             IEmployeeRepository employeeRepository,
-            IDepartmentRepository departmentRepository,ICarryForwardLeaves carryForwardLeavesRepository)
+            IDepartmentRepository departmentRepository, ICarryForwardLeaves carryForwardLeavesRepository)
         {
             _leavesRepository = leavesRepository;
             _employeeRepository = employeeRepository;
@@ -30,7 +30,7 @@ namespace UseCases
         public ServiceResponseDTO ApplyLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
         {
             List<DateTime> takenLeaveDates = new List<DateTime>();
-           
+
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
             Department department = _departmentRepository.GetDepartment(employeeData.Department());
 
@@ -60,7 +60,7 @@ namespace UseCases
             }
             else
             {
-                if(invalidDays == totalAppliedDays)
+                if (invalidDays == totalAppliedDays)
                 {
                     return ServiceResponseDTO.InvalidDays;
                 }
@@ -133,10 +133,10 @@ namespace UseCases
             };
         }
 
-        public ServiceResponseDTO UpdateLeave(int employeeId,DateTime fromDate, DateTime toDate, LeaveType LeaveType,
-            string Remark ,List<DateTime> datesToBeChanged)
+        public ServiceResponseDTO UpdateLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType LeaveType,
+            string Remark, List<DateTime> datesToBeChanged)
         {
-           
+
             List<DateTime> takenLeaveDates = new List<DateTime>();
             LeaveRecordDTO leaveRecord = new LeaveRecordDTO();
 
@@ -150,9 +150,9 @@ namespace UseCases
             for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
             {
                 bool isLeaveExist = false;
-                if ( !datesToBeChanged.Contains(eachLeaveDay))
+                if (!datesToBeChanged.Contains(eachLeaveDay))
                 {
-                     isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date));
+                    isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date));
                 }
                 if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
                 {
@@ -181,7 +181,16 @@ namespace UseCases
                     return ServiceResponseDTO.RecordExists;
                 }
             }
-          
+
+        }
+
+        public ServiceResponseDTO CancelLeave(int employeeId, List<DateTime> datesToBeChanged)
+        {
+            if (_leavesRepository.CancelLeave(employeeId, datesToBeChanged))
+            {
+                return ServiceResponseDTO.Deleted;
+            }
+            return ServiceResponseDTO.InvalidDays;
         }
     }
 }
