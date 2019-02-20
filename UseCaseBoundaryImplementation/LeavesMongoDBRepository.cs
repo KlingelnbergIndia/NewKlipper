@@ -103,13 +103,19 @@ namespace RepositoryImplementation
 
         public bool CancelLeave(int empId,List<DateTime> listOfDatesToBeChange)
         {
-            var cancelLeave = __leaveDBContext.AppliedLeaves
-               .AsQueryable()
-               .Where(x => x.EmployeeId == empId && x.AppliedLeaveDates == listOfDatesToBeChange).First();
+            FilterDefinition<LeaveEntityModel> filter = Builders<LeaveEntityModel>.Filter.Eq("EmployeeId", empId);
+            UpdateDefinition<LeaveEntityModel> update = Builders<LeaveEntityModel>.Update.Set(x=>x.IsLeaveCanceled,true);
 
-            if (cancelLeave!=null)
+            var opts = new FindOneAndUpdateOptions<LeaveEntityModel>()
             {
-                cancelLeave.IsLeaveCanceled = true;
+                IsUpsert = true,
+            };
+
+            var model = __leaveDBContext.AppliedLeaves.FindOneAndUpdate(filter, update, opts);
+
+            if (model != null)
+            {
+               
                 return true;
             }
             else

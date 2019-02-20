@@ -15,7 +15,7 @@ using static DomainModel.Leave;
 
 namespace Application.Web.Controllers
 {
-    [AuthenticateSession]
+    
     public class LeaveController : Controller
     {
         private readonly ILeavesRepository _leavesRepository;
@@ -140,7 +140,7 @@ namespace Application.Web.Controllers
             {
                // var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
                 var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-                var response = leaveService.CancelLeave(63, DatesToBeChanged);
+                var response = leaveService.CancelLeave(41, DatesToBeChanged);
 
                 if (response == ServiceResponseDTO.Deleted)
                     TempData["responseMessage"] = "Your Leave is Cancel !";
