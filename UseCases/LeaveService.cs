@@ -29,6 +29,7 @@ namespace UseCases
 
         public ServiceResponseDTO ApplyLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
         {
+           
             List<DateTime> takenLeaveDates = new List<DateTime>();
 
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
@@ -51,7 +52,19 @@ namespace UseCases
                 }
                 totalAppliedDays++;
             }
+            if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
+            {
+                var leaveSummmary = GetTotalSummary(employeeId);
+                if ((leaveType == LeaveType.SickLeave && leaveSummmary.RemainingSickLeave - takenLeaveDates.Count < 0) || 
+                    (leaveType == LeaveType.CompOff && leaveSummmary.RemainingCompOffLeave - takenLeaveDates.Count < 0))
+                {
+                    return ServiceResponseDTO.CanNotApplied;
+                }
+                else
+                {
 
+                }
+            }
             if (takenLeaveDates.Any())
             {
                 var status = StatusType.Approved;
