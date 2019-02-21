@@ -16,7 +16,7 @@
             <div class="alert alert-warning success-alert-animation">@TempData["errorMessage"] </div>
         }
     </div>
-   
+
     <div class="col-md-12">
         <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ApplyLeaveModal" style="float:right">+ Apply Leave</button>
         <h3> Leave Summary</h3>
@@ -53,6 +53,7 @@
                     <th class="col-md-2 col-lg-2 col-xs-2">No Of Days</th>
                     <th class="col-md-2 col-lg-2 col-xs-2">Leave Type</th>
                     <th class="col-md-3 col-lg-3 col-xs-3">Remark</th>
+                    <th class="col-md-2 col-lg-2 col-xs-2">Change Plan</th>
                 </tr>
             </thead>
             <tbody>
@@ -64,6 +65,7 @@
                         <td>@leave.NoOfDays</td>
                         <td>@leave.GetLeaveDisplayName()</td>
                         <td>@leave.Remark</td>
+                        <td> <button type="button" class="btn btn-success btn-sm" data-toggle="modal" onclick=GetLeaveData() style="float:right">Update Leave</button></td>
                     </tr>
                 }
             </tbody>
@@ -88,4 +90,4 @@
     }
 </style>
 
-
+<script src="/lib/jquery/dist/jquery.js"></script>

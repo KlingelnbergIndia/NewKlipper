@@ -11,6 +11,7 @@ namespace DomainModel
         private readonly List<DateTime> _leaveDates;
         private readonly LeaveType _leaveType;
         private readonly string _remark;
+        public bool isCanceled;
 
         public enum LeaveType
         {
@@ -28,6 +29,7 @@ namespace DomainModel
             _leaveDates = leaveDates;
             _leaveType = leaveType;
             _remark = remark;
+            isCanceled = false;
         }
 
         public LeaveType GetLeaveType()
@@ -49,5 +51,6 @@ namespace DomainModel
         {
             return _employeeId;
         }
+
     }
 }

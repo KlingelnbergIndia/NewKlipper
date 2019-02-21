@@ -19,7 +19,7 @@ namespace UseCases
         public LeaveService(
             ILeavesRepository leavesRepository,
             IEmployeeRepository employeeRepository,
-            IDepartmentRepository departmentRepository,ICarryForwardLeaves carryForwardLeavesRepository)
+            IDepartmentRepository departmentRepository, ICarryForwardLeaves carryForwardLeavesRepository)
         {
             _leavesRepository = leavesRepository;
             _employeeRepository = employeeRepository;
@@ -30,7 +30,6 @@ namespace UseCases
         public ServiceResponseDTO ApplyLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
         {
             List<DateTime> takenLeaveDates = new List<DateTime>();
-            LeaveRecordDTO leaveRecord = new LeaveRecordDTO();
 
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
             Department department = _departmentRepository.GetDepartment(employeeData.Department());
@@ -61,7 +60,7 @@ namespace UseCases
             }
             else
             {
-                if(invalidDays == totalAppliedDays)
+                if (invalidDays == totalAppliedDays)
                 {
                     return ServiceResponseDTO.InvalidDays;
                 }
@@ -75,17 +74,27 @@ namespace UseCases
         public List<LeaveRecordDTO> GetAppliedLeaves(int employeeId)
         {
             List<Leave> leavesInfo = _leavesRepository.GetAllLeavesInfo(employeeId);
-            var leaveDTO = leavesInfo.Select(x => new LeaveRecordDTO()
+            var isRealizedLeave = false;
+            List<LeaveRecordDTO> listOfLeaveDTO = new List<LeaveRecordDTO>();
+            foreach (var eachLeave in leavesInfo)
             {
-                Date = x.GetLeaveDate(),
-                TypeOfLeave = x.GetLeaveType(),
-                Remark = x.GetRemark(),
-                FromDate = x.GetLeaveDate().Min(),
-                ToDate = x.GetLeaveDate().Max(),
-                NoOfDays = x.GetLeaveDate().Count()
-            })
-            .ToList();
-            return leaveDTO;
+                if (eachLeave.GetLeaveDate().Min() < DateTime.Today.Date)
+                {
+                    isRealizedLeave = true;
+                }
+                var leaveDTO = new LeaveRecordDTO()
+                {
+                    Date = eachLeave.GetLeaveDate(),
+                    TypeOfLeave = eachLeave.GetLeaveType(),
+                    Remark = eachLeave.GetRemark(),
+                    FromDate = eachLeave.GetLeaveDate().Min(),
+                    ToDate = eachLeave.GetLeaveDate().Max(),
+                    NoOfDays = eachLeave.GetLeaveDate().Count(),
+                    IsRealizedLeave = isRealizedLeave
+                };
+                listOfLeaveDTO.Add(leaveDTO);
+            }
+            return listOfLeaveDTO;
         }
 
         public LeaveSummaryDTO GetTotalSummary(int employeeId)
@@ -122,6 +131,66 @@ namespace UseCases
 
                 LeaveBalance = leaveBalance
             };
+        }
+
+        public ServiceResponseDTO UpdateLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType LeaveType,
+            string Remark, List<DateTime> datesToBeChanged)
+        {
+
+            List<DateTime> takenLeaveDates = new List<DateTime>();
+            LeaveRecordDTO leaveRecord = new LeaveRecordDTO();
+
+            Employee employeeData = _employeeRepository.GetEmployee(employeeId);
+            Department department = _departmentRepository.GetDepartment(employeeData.Department());
+
+            var allAppliedLeaves = _leavesRepository.GetAllLeavesInfo(employeeId);
+            int invalidDays = 0;
+            int totalAppliedDays = 0;
+
+            for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
+            {
+                bool isLeaveExist = false;
+                if (!datesToBeChanged.Contains(eachLeaveDay))
+                {
+                    isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date));
+                }
+                if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
+                {
+                    takenLeaveDates.Add(eachLeaveDay);
+                }
+                if (!department.IsValidWorkingDay(eachLeaveDay))
+                {
+                    invalidDays++;
+                }
+                totalAppliedDays++;
+            }
+            if (takenLeaveDates.Any())
+            {
+                var takenLeave = new Leave(employeeId, takenLeaveDates, LeaveType, Remark);
+                _leavesRepository.OverrideLeave(takenLeave, datesToBeChanged);
+                return ServiceResponseDTO.Updated;
+            }
+            else
+            {
+                if (invalidDays == totalAppliedDays)
+                {
+                    return ServiceResponseDTO.InvalidDays;
+                }
+                else
+                {
+                    return ServiceResponseDTO.RecordExists;
+                }
+            }
+
+        }
+
+        public ServiceResponseDTO CancelLeave(int employeeId, List<DateTime> datesToBeChanged)
+        {
+            if (_leavesRepository.CancelLeave(employeeId, datesToBeChanged))
+            {
+                return ServiceResponseDTO.Deleted;
+            }
+            return ServiceResponseDTO.InvalidDays;
         }
     }
 }
