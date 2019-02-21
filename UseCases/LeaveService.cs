@@ -52,21 +52,19 @@ namespace UseCases
                 }
                 totalAppliedDays++;
             }
-            if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
-            {
-                var leaveSummmary = GetTotalSummary(employeeId);
-                if ((leaveType == LeaveType.SickLeave && leaveSummmary.RemainingSickLeave - takenLeaveDates.Count < 0) || 
-                    (leaveType == LeaveType.CompOff && leaveSummmary.RemainingCompOffLeave - takenLeaveDates.Count < 0))
-                {
-                    return ServiceResponseDTO.CanNotApplied;
-                }
-                else
-                {
-
-                }
-            }
+            
             if (takenLeaveDates.Any())
             {
+                if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
+                {
+                    var leaveSummmary = GetTotalSummary(employeeId);
+                    if ((leaveType == LeaveType.SickLeave && leaveSummmary.RemainingSickLeave - takenLeaveDates.Count < 0) ||
+                        (leaveType == LeaveType.CompOff && leaveSummmary.RemainingCompOffLeave - takenLeaveDates.Count < 0))
+                    {
+                        return ServiceResponseDTO.CanNotApplied;
+                    }
+
+                }
                 var status = StatusType.Approved;
                 var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, remark, status);
                 _leavesRepository.AddNewLeave(takenLeave);

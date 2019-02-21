@@ -97,7 +97,7 @@ namespace Application.Web.Controllers
             else if (response == ServiceResponseDTO.InvalidDays)
                 TempData["errorMessage"] = "Invalid Selected Days !";
             else if(response == ServiceResponseDTO.CanNotApplied)
-                TempData["errorMessage"] = "Leave is not Available!";
+                TempData["errorMessage"] = "Selected Leave is Exhausted!";
             return RedirectToAction("Index");
         }
 
