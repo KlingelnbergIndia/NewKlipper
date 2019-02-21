@@ -11,7 +11,7 @@ namespace DomainModel
         private readonly List<DateTime> _leaveDates;
         private readonly LeaveType _leaveType;
         private readonly string _remark;
-        public bool isCanceled;
+        private readonly StatusType _status;
 
         public enum LeaveType
         {
@@ -22,14 +22,21 @@ namespace DomainModel
             [Display(Name = "Sick Leave")]
             SickLeave
         }
+        public enum StatusType
+        {
+            Approved,
+            Updated,
+            Cancelled,
+            LeaveAdded
+        }
 
-        public Leave(int employeeId, List<DateTime> leaveDates, LeaveType leaveType, string remark)
+        public Leave(int employeeId, List<DateTime> leaveDates, LeaveType leaveType, string remark, StatusType status)
         {
             _employeeId = employeeId;
             _leaveDates = leaveDates;
             _leaveType = leaveType;
             _remark = remark;
-            isCanceled = false;
+            _status = status;
         }
 
         public LeaveType GetLeaveType()
@@ -51,6 +58,9 @@ namespace DomainModel
         {
             return _employeeId;
         }
-
+        public StatusType GetStatus()
+        {
+            return _status;
+        }
     }
 }

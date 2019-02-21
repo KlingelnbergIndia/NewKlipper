@@ -8,6 +8,7 @@ using DataAccess.EntityModel.Leave;
 using DomainModel;
 using MongoDB.Driver;
 using UseCaseBoundary;
+using static DataAccess.EntityModel.Leave.LeaveEntityModel;
 using static DomainModel.Leave;
 
 namespace RepositoryImplementation
@@ -31,6 +32,7 @@ namespace RepositoryImplementation
                 Remark = leaveDetails.GetRemark(),
                 TypeOfLeave = leaveDetails.GetLeaveType(),
                 AppliedLeaveDates = leaveDetails.GetLeaveDate(),
+                Status = leaveDetails.GetStatus()
             };
 
             __leaveDBContext.AppliedLeaves
@@ -48,14 +50,15 @@ namespace RepositoryImplementation
                 .AsQueryable()
                 .Where(x => x.EmployeeId == employeeId)
                 .ToList();
-
+            
             foreach (var leave in empLeaves)
             {
                 leaves.Add(new Leave(
                     leave.EmployeeId,
                     leave.AppliedLeaveDates,
                     leave.TypeOfLeave,
-                    leave.Remark));
+                    leave.Remark,
+                    leave.Status));
             }
 
             return leaves;
@@ -92,7 +95,8 @@ namespace RepositoryImplementation
                 AppliedLeaveDates = leaveData.GetLeaveDate(),
                 TypeOfLeave = leaveData.GetLeaveType(),
                 Remark = leaveData.GetRemark(),
-                EmployeeId = leaveData.GetEmployeeId()
+                EmployeeId = leaveData.GetEmployeeId(),
+                Status = leaveData.GetStatus()
             };
             __leaveDBContext.AppliedLeaves
                 .InsertOneAsync(leaveEntity)
@@ -104,7 +108,7 @@ namespace RepositoryImplementation
         public bool CancelLeave(int empId,List<DateTime> listOfDatesToBeChange)
         {
             FilterDefinition<LeaveEntityModel> filter = Builders<LeaveEntityModel>.Filter.Eq("EmployeeId", empId);
-            UpdateDefinition<LeaveEntityModel> update = Builders<LeaveEntityModel>.Update.Set(x=>x.IsLeaveCanceled,true);
+            UpdateDefinition<LeaveEntityModel> update = Builders<LeaveEntityModel>.Update.Set(x=>x.Status==StatusType.Cancelled,true);
 
             var opts = new FindOneAndUpdateOptions<LeaveEntityModel>()
             {

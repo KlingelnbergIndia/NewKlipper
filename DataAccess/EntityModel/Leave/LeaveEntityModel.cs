@@ -25,7 +25,8 @@ namespace DataAccess.EntityModel.Leave
         public string Remark { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime LogDateTime { get; private set; } = DateTime.Now;
-        public bool IsLeaveCanceled { get; set; } = false;
+      
+        public StatusType Status;
 
     }
 

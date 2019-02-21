@@ -19,6 +19,7 @@ namespace UseCaseBoundary.DTO
         public DateTime FromDate;
         public DateTime ToDate;
         public string Remark;
+        public StatusType Status;
         public int NoOfDays;
         public bool IsRealizedLeave;
         public bool IsRecordSaved;
