@@ -20,6 +20,10 @@ namespace UseCaseBoundary.DTO
         public DateTime ToDate;
         public string Remark;
         public StatusType Status;
+        public HtmlString GetStatusDisplayName()
+        {
+            return EnumHelperMethod.EnumDisplayNameFor(Status);
+        }
         public int NoOfDays;
         public bool IsRealizedLeave;
         public bool IsRecordSaved;
