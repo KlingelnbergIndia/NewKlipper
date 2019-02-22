@@ -100,7 +100,7 @@ namespace UseCases
                     TypeOfLeave = eachLeave.GetLeaveType(),
                     Remark = eachLeave.GetRemark(),
                     FromDate = eachLeave.GetLeaveDate().Min(),
-                    ToDate = eachLeave.GetLeaveDate().Max(),
+                    ToDate = eachLeave.GetLeaveDate().Max(),  
                     NoOfDays = eachLeave.GetLeaveDate().Count(),
                     Status = eachLeave.GetStatus()
                 };
