@@ -68,7 +68,7 @@
                         <td class="text-center">
                             @*<button type="button" class="btn btn-success btn-sm" data-toggle="modal" onclick=GetLeaveData() style="float:right">Update Leave</button>*@
                             <span data-toggle="tooltip" class="glyphicon glyphicon-pencil" title="Update Leave" style="cursor:pointer;margin-right:10px;"></span>
-                            <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave" onclick="CancelLeave()" style="cursor:pointer;margin-right:10px;"></span>
+                            <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave" onclick=CancelLeave("@leave.LeaveId") style="cursor:pointer;margin-right:10px;"></span>
                         </td>
                     </tr>
                 }
@@ -96,9 +96,19 @@
 
 <script src="/lib/jquery/dist/jquery.js"></script>
 <script>
-    function CancelLeave() {
+    function CancelLeave(leaveId) {
         if (confirm('Do you want to really cancel this leave ?')) {
-            
+            $.ajax({
+                type: "POST",
+                url: "CancelLeave/",
+                data: {
+                    LeaveId: leaveId
+                },
+                dataType: "html",
+                success: function (response) {
+                    alert('Leave canceled !');
+                }
+            });
         }
     }
 </script>

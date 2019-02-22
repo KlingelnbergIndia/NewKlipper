@@ -10,6 +10,7 @@ namespace UseCaseBoundary.DTO
    
     public class LeaveRecordDTO
     {
+        public string LeaveId;
         public List<DateTime> Date;
         public LeaveType TypeOfLeave;
         public HtmlString GetLeaveDisplayName()
