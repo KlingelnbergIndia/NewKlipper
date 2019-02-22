@@ -42,7 +42,7 @@ namespace Klipper.Tests
             
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2,2,2,21,6,0);
@@ -69,7 +69,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 2, 2, 21, 6, 0);
@@ -95,7 +95,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved,null));
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 2, 2, 21, 6, 0);
@@ -122,7 +122,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, null));
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 6, 2, 21, 6, 0);
@@ -149,7 +149,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, null));
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 6, 2, 21, 6, 0);
@@ -176,7 +176,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, null));
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 6, 2, 21, 6, 0);
@@ -203,7 +203,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, null));
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 2, 2, 21, 6, 0);
@@ -230,7 +230,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 2, 2, 21, 6, 0);
@@ -257,7 +257,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 2, 2, 21, 6, 3);
@@ -284,7 +284,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
 
@@ -312,7 +312,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 21, 2, 2, 21, 6, 3);
@@ -339,7 +339,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 21, 2, 2, 21, 6, 2);
