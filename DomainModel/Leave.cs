@@ -13,7 +13,6 @@ namespace DomainModel
         private readonly string _remark;
         private readonly StatusType _status;
         private readonly string _leaveId;
-        public bool isCanceled;
 
         public enum LeaveType
         {
@@ -32,13 +31,14 @@ namespace DomainModel
             LeaveAdded
         }
 
-        public Leave(int employeeId, List<DateTime> leaveDates, LeaveType leaveType, string remark, string leaveId)
+        public Leave(int employeeId, List<DateTime> leaveDates, LeaveType leaveType, string remark, StatusType status, string leaveId)
         {
             _employeeId = employeeId;
             _leaveDates = leaveDates;
             _leaveType = leaveType;
             _remark = remark;
             _status = status;
+            _leaveId = leaveId;
         }
 
         public LeaveType GetLeaveType()

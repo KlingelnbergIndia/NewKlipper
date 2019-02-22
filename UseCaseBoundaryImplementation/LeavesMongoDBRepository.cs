@@ -59,7 +59,9 @@ namespace RepositoryImplementation
                     leave.AppliedLeaveDates,
                     leave.TypeOfLeave,
                     leave.Remark,
-                    leave.Status));
+                    leave.Status,
+                    leave._objectId.ToString()
+                    ));
             }
 
             return leaves;
@@ -109,7 +111,7 @@ namespace RepositoryImplementation
         public bool CancelLeave(string LeaveId)
         {
             FilterDefinition<LeaveEntityModel> filter = Builders<LeaveEntityModel>.Filter.Eq("_id", ObjectId.Parse(LeaveId));
-            UpdateDefinition<LeaveEntityModel> update = Builders<LeaveEntityModel>.Update.Set(x => x.IsLeaveCanceled, true);
+            UpdateDefinition<LeaveEntityModel> update = Builders<LeaveEntityModel>.Update.Set(x => x.Status, StatusType.Cancelled);
 
             var opts = new FindOneAndUpdateOptions<LeaveEntityModel>()
             {
