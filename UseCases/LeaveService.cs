@@ -90,7 +90,7 @@ namespace UseCases
             List<LeaveRecordDTO> listOfLeaveDTO = new List<LeaveRecordDTO>();
             foreach (var eachLeave in leavesInfo)
             {
-                if (eachLeave.GetLeaveDate().Min() < DateTime.Today.Date)
+                if (eachLeave.GetLeaveDate().Min().Date < DateTime.Today.Date)
                 {
                     isRealizedLeave = true;
                 }
