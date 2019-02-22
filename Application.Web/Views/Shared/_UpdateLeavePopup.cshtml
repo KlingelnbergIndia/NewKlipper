@@ -3,7 +3,7 @@
     var leaveTypes = @Model.GetAllLeaveTypes();
 }
 <body>
-    <div class="modal fade" id="ApplyLeaveModal" role="dialog">
+    <div class="modal fade" id="UpdateLeaveModal" role="dialog">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
@@ -75,11 +75,10 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            GetLeaveData = function () {
-
-                alert('hello');
+            UpdateLeave = function (laeveId,toDate,remark) {
+                alert(toDate);
                 document.getElementById("my_remark").value = leaveRecord.Remark;
-
+                $('#UpdateLeaveModal').modal({ 'show': true, 'backdrop': true });
             }
 
         });
