@@ -136,9 +136,6 @@ namespace Application.Web.Controllers
         [HttpPost]
         public IActionResult CancelLeave(string LeaveId)
         {
-            //if (DatesToBeChanged.Count != 0)
-            //{
-            // var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
             var response = leaveService.CancelLeave(LeaveId);
 
@@ -147,7 +144,6 @@ namespace Application.Web.Controllers
             else
                 TempData["responseMessage"] = "Your Leave is not Cancel !";
 
-            //}
             return RedirectToAction("Index");
         }
     }
