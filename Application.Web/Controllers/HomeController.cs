@@ -30,7 +30,7 @@ namespace Application.Web.Controllers
 
         public HomeController(IAccessEventsRepository accessEventRepository, IEmployeeRepository employeeRepository,
             IDepartmentRepository departmentRepository, IAttendanceRegularizationRepository attendanceRegularizationRepository,
-            ILeavesRepository leavesRepository,ICarryForwardLeaves carryForwardLeaves)
+            ILeavesRepository leavesRepository, ICarryForwardLeaves carryForwardLeaves)
         {
             _accessEventRepository = accessEventRepository;
             _employeeRepository = employeeRepository;
@@ -129,13 +129,13 @@ namespace Application.Web.Controllers
             var reportees = reporteeService.GetReporteesData(employeeId);
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
 
-                foreach (var reportee in reportees)
-                {
-                    string reporteeName = reportee.FirstName + " " + reportee.LastName ;
-                     int reporteeId = reportee.ID;
-                    reporteeViewModel.reportees.Add(reporteeId, reporteeName);
-                }
-                
+            foreach (var reportee in reportees)
+            {
+                string reporteeName = reportee.FirstName + " " + reportee.LastName;
+                int reporteeId = reportee.ID;
+                reporteeViewModel.reportees.Add(reporteeId, reporteeName);
+            }
+
             if (!string.IsNullOrEmpty(Request.Form["selectMenu"]))
             {
                 int selectedReporteeId = int.Parse(Request.Form["selectMenu"]);
@@ -166,9 +166,13 @@ namespace Application.Web.Controllers
                 {
                     reporteeViewModel.toDate = DateTime.Now.Date;
                     reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
+
                     UseCases.LeaveService leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-                    List<LeaveRecordDTO> listOfLeaveRecord = leaveService.GetAppliedLeaves(selectedReporteeId);
-                    reporteeViewModel.leaveRecordsOfSelectedReportee = listOfLeaveRecord;
+                    reporteeViewModel.leaveRecordsOfSelectedReportee = leaveService.GetAppliedLeaves(selectedReporteeId);
+
+                    var leaveSummary = leaveService.GetTotalSummary(selectedReporteeId);
+                    reporteeViewModel.LeaveSummary = reporteeViewModel.ConvertToLeaveSummaryViewModel(leaveSummary);
+
                     selectedViewTabs = ViewTabs.leaveReportMenu.ToString();
                     reporteeViewModel.LeaveFormName = reporteeViewModel.reportees[selectedReporteeId];
                     reporteeViewModel.SelectedEmpIdForLeaveTab = selectedReporteeId;

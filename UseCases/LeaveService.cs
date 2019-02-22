@@ -66,7 +66,7 @@ namespace UseCases
 
                 }
                 var status = StatusType.Approved;
-                var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, remark, status);
+                var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, remark, status,null);
                 _leavesRepository.AddNewLeave(takenLeave);
                 return ServiceResponseDTO.Saved;
             }
@@ -102,7 +102,9 @@ namespace UseCases
                     FromDate = eachLeave.GetLeaveDate().Min(),
                     ToDate = eachLeave.GetLeaveDate().Max(),  
                     NoOfDays = eachLeave.GetLeaveDate().Count(),
-                    Status = eachLeave.GetStatus()
+                    Status = eachLeave.GetStatus(),
+                    IsRealizedLeave = isRealizedLeave,
+                    LeaveId = eachLeave.GetLeaveId(),
                 };
                 listOfLeaveDTO.Add(leaveDTO);
             }
@@ -179,7 +181,7 @@ namespace UseCases
             if (takenLeaveDates.Any())
             {
                 var status = StatusType.Updated;
-                var takenLeave = new Leave(employeeId, takenLeaveDates, LeaveType, Remark, status);
+                var takenLeave = new Leave(employeeId, takenLeaveDates, LeaveType, Remark, status,null);
                 _leavesRepository.OverrideLeave(takenLeave, datesToBeChanged);
                 return ServiceResponseDTO.Updated;
             }
@@ -197,12 +199,13 @@ namespace UseCases
 
         }
 
-        public ServiceResponseDTO CancelLeave(int employeeId, List<DateTime> datesToBeChanged)
+        public ServiceResponseDTO CancelLeave(string LeaveId)
         {
-            if (_leavesRepository.CancelLeave(employeeId, datesToBeChanged))
+            if (_leavesRepository.CancelLeave(LeaveId))
             {
                 return ServiceResponseDTO.Deleted;
             }
+
             return ServiceResponseDTO.InvalidDays;
         }
     }

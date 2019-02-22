@@ -52,28 +52,29 @@
                     <th class="col-md-2 col-lg-2 col-xs-2">To Date</th>
                     <th class="col-md-2 col-lg-2 col-xs-2">No Of Days</th>
                     <th class="col-md-2 col-lg-2 col-xs-2">Leave Type</th>
-                    <th class="col-md-2 col-lg-2 col-xs-2">Status</th>
                     <th class="col-md-3 col-lg-3 col-xs-3">Remark</th>
-                    <th class="col-md-3 col-lg-3 col-xs-3">Change Plan</th>
+                    <th class="col-md-2 col-lg-2 col-xs-2">Change Plan</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var leave in @Model.GetAppliedLeaves)
                 {
-                <tr>
-                    <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
-                    <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
-                    <td>@leave.NoOfDays</td>
-                    <td>@leave.GetLeaveDisplayName()</td>
-                    <td>@leave.GetStatusDisplayName()</td>
-                    <td>@leave.Remark</td>
-                    <td> <button type="button" class="btn btn-success btn-sm" data-toggle="modal" onclick=GetLeaveData() style="float:right">Update Leave</button></td>
-                </tr>
+                    <tr>
+                        <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
+                        <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
+                        <td>@leave.NoOfDays</td>
+                        <td>@leave.GetLeaveDisplayName()</td>
+                        <td>@leave.Remark</td>
+                        <td class="text-center">
+                            @*<span data-toggle="tooltip" class="glyphicon glyphicon-pencil" title="Update Leave" style="cursor:pointer;margin-right:10px;"></span>*@
+                            <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave" onclick=CancelLeave("@leave.LeaveId") style="cursor:pointer;margin-right:10px;"></span>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
     </div>
-    <div class="col-md-12" style="@(isLeaveCountZero ==false ? "visibility:hidden" : "visibility:visible")">
+    <div class="col-md-12" style=@(isLeaveCountZero == false ? "visibility:hidden" : "visibility:visible")>
         <div class="alert alert-info col-md-3">
             <strong>Info!</strong> No applied leaves found.
         </div>
@@ -92,4 +93,4 @@
     }
 </style>
 
-<script src="/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/common.Leave.js"></script>
