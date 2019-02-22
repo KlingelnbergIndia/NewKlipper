@@ -43,16 +43,20 @@ namespace Klipper.Tests
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
             listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2,2,2,21,6,0);
             carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
             var dummyEmployee =
               new EmployeeBuilder()
               .WithUserName("Sidhdesh.Vadgaonkar")
               .WithPassword("26-12-1995")
               .BuildEmployee();
             employeeData.GetEmployee(63).Returns(dummyEmployee);
+
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
@@ -70,16 +74,20 @@ namespace Klipper.Tests
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
             listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 2, 2, 21, 6, 0);
             carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
             var dummyEmployee =
               new EmployeeBuilder()
               .WithUserName("Sidhdesh.Vadgaonkar")
               .WithPassword("26-12-1995")
               .BuildEmployee();
             employeeData.GetEmployee(63).Returns(dummyEmployee);
+
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
@@ -96,16 +104,20 @@ namespace Klipper.Tests
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
             listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved,null));
+
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 2, 2, 21, 6, 0);
             carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
             var dummyEmployee =
               new EmployeeBuilder()
               .WithUserName("Sidhdesh.Vadgaonkar")
               .WithPassword("26-12-1995")
               .BuildEmployee();
             employeeData.GetEmployee(63).Returns(dummyEmployee);
+
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
@@ -123,16 +135,20 @@ namespace Klipper.Tests
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
             listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, null));
+
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 6, 2, 21, 6, 0);
             carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
             var dummyEmployee =
               new EmployeeBuilder()
               .WithUserName("Sidhdesh.Vadgaonkar")
               .WithPassword("26-12-1995")
               .BuildEmployee();
             employeeData.GetEmployee(63).Returns(dummyEmployee);
+
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
@@ -150,16 +166,20 @@ namespace Klipper.Tests
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
             listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, null));
+
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 6, 2, 21, 6, 0);
             carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
             var dummyEmployee =
               new EmployeeBuilder()
               .WithUserName("Sidhdesh.Vadgaonkar")
               .WithPassword("26-12-1995")
               .BuildEmployee();
             employeeData.GetEmployee(63).Returns(dummyEmployee);
+
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
@@ -177,16 +197,20 @@ namespace Klipper.Tests
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
             listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, null));
+
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 6, 2, 21, 6, 0);
             carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
             var dummyEmployee =
               new EmployeeBuilder()
               .WithUserName("Sidhdesh.Vadgaonkar")
               .WithPassword("26-12-1995")
               .BuildEmployee();
             employeeData.GetEmployee(63).Returns(dummyEmployee);
+
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
@@ -204,16 +228,20 @@ namespace Klipper.Tests
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
             listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, null));
+
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 2, 2, 21, 6, 0);
             carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
             var dummyEmployee =
               new EmployeeBuilder()
               .WithUserName("Sidhdesh.Vadgaonkar")
               .WithPassword("26-12-1995")
               .BuildEmployee();
             employeeData.GetEmployee(63).Returns(dummyEmployee);
+
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
@@ -231,16 +259,20 @@ namespace Klipper.Tests
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
             listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 2, 2, 21, 6, 0);
             carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
             var dummyEmployee =
               new EmployeeBuilder()
               .WithUserName("Sidhdesh.Vadgaonkar")
               .WithPassword("26-12-1995")
               .BuildEmployee();
             employeeData.GetEmployee(63).Returns(dummyEmployee);
+
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
@@ -258,16 +290,20 @@ namespace Klipper.Tests
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
             listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 2, 2, 21, 6, 3);
             carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
             var dummyEmployee =
               new EmployeeBuilder()
               .WithUserName("Sidhdesh.Vadgaonkar")
               .WithPassword("26-12-1995")
               .BuildEmployee();
             employeeData.GetEmployee(63).Returns(dummyEmployee);
+
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
@@ -285,17 +321,20 @@ namespace Klipper.Tests
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
             listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
 
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 6, 2, 21, 6, 3);
             carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
             var dummyEmployee =
               new EmployeeBuilder()
               .WithUserName("Sidhdesh.Vadgaonkar")
               .WithPassword("26-12-1995")
               .BuildEmployee();
             employeeData.GetEmployee(63).Returns(dummyEmployee);
+
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
@@ -313,16 +352,20 @@ namespace Klipper.Tests
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
             listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 21, 2, 2, 21, 6, 3);
             carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
             var dummyEmployee =
               new EmployeeBuilder()
               .WithUserName("Sidhdesh.Vadgaonkar")
               .WithPassword("26-12-1995")
               .BuildEmployee();
             employeeData.GetEmployee(63).Returns(dummyEmployee);
+
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
@@ -340,22 +383,149 @@ namespace Klipper.Tests
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
             listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 21, 2, 2, 21, 6, 2);
             carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
             var dummyEmployee =
               new EmployeeBuilder()
               .WithUserName("Sidhdesh.Vadgaonkar")
               .WithPassword("26-12-1995")
               .BuildEmployee();
             employeeData.GetEmployee(63).Returns(dummyEmployee);
+
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), DateTime.Parse("2019-02-05"), Leave.LeaveType.CompOff, "one day sick leave apply");
+            var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), DateTime.Parse("2019-02-05"), Leave.LeaveType.CompOff, "one day sick leave apply");
 
-            Assert.That(respone, Is.EqualTo(ServiceResponseDTO.CanNotApplied));
+            Assert.That(response, Is.EqualTo(ServiceResponseDTO.CanNotApplied));
+        }
+
+        [Test]
+        public void OnApplyCompOffLeaveThenRemainingCompOffLeaveAndAvailableCompOffLeaveIsUpdated()
+        {
+            LeaveService leaveService =
+               new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
+
+            List<Leave> listOfLeave = new List<Leave>();
+            List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23") };
+
+            var dummyLeaveRecord = listOfLeave;
+            leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
+            var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 21, 2, 0, 21, 6, 5);
+            carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
+            var dummyEmployee =
+              new EmployeeBuilder()
+              .WithUserName("Sidhdesh.Vadgaonkar")
+              .WithPassword("26-12-1995")
+              .BuildEmployee();
+            employeeData.GetEmployee(63).Returns(dummyEmployee);
+
+            var department = new Department(Departments.Software);
+            departmentData.GetDepartment(Departments.Software).Returns(department);
+
+            var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23"), Leave.LeaveType.CompOff, "one day sick leave apply");
+            if(response == ServiceResponseDTO.Saved)
+            {
+
+                listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23") };
+                listOfLeave.Add(new Leave(63, listOfDate, LeaveType.CompOff, "one day sick leave apply", StatusType.Approved, "id1"));
+
+                dummyLeaveRecord = listOfLeave;
+            }
+
+            var summaryReport = leaveService.GetTotalSummary(63);
+
+            Assert.That(summaryReport.RemainingCompOffLeave, Is.EqualTo(3));
+            Assert.That(summaryReport.TotalCompOffLeaveTaken, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void OnApplyCasualLeaveLeaveThenRemainingCasualLeaveAndAvailableCasualLeaveIsUpdated()
+        {
+            LeaveService leaveService =
+               new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
+
+            List<Leave> listOfLeave = new List<Leave>();
+            List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23") };
+
+            var dummyLeaveRecord = listOfLeave;
+            leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
+            var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 1, 2, 0, 21, 6, 5);
+            carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
+            var dummyEmployee =
+              new EmployeeBuilder()
+              .WithUserName("Sidhdesh.Vadgaonkar")
+              .WithPassword("26-12-1995")
+              .BuildEmployee();
+            employeeData.GetEmployee(63).Returns(dummyEmployee);
+
+            var department = new Department(Departments.Software);
+            departmentData.GetDepartment(Departments.Software).Returns(department);
+
+            var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23"), Leave.LeaveType.CasualLeave, "one day sick leave apply");
+            if (response == ServiceResponseDTO.Saved)
+            {
+
+                listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23") };
+                listOfLeave.Add(new Leave(63, listOfDate, LeaveType.CasualLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+
+                dummyLeaveRecord = listOfLeave;
+            }
+
+            var summaryReport = leaveService.GetTotalSummary(63);
+
+            Assert.That(summaryReport.RemainingCasualLeave, Is.EqualTo(18));
+            Assert.That(summaryReport.TotalCasualLeaveTaken, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void OnApplySickLeaveThenRemainingSickLeaveAndAvailableSickLeaveIsUpdated()
+        {
+            LeaveService leaveService =
+               new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
+
+            List<Leave> listOfLeave = new List<Leave>();
+            List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23") };
+
+            var dummyLeaveRecord = listOfLeave;
+            leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
+            var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 1, 2, 0, 21, 6, 5);
+            carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
+            var dummyEmployee =
+              new EmployeeBuilder()
+              .WithUserName("Sidhdesh.Vadgaonkar")
+              .WithPassword("26-12-1995")
+              .BuildEmployee();
+            employeeData.GetEmployee(63).Returns(dummyEmployee);
+
+            var department = new Department(Departments.Software);
+            departmentData.GetDepartment(Departments.Software).Returns(department);
+
+            var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23"), Leave.LeaveType.SickLeave, "one day sick leave apply");
+            if (response == ServiceResponseDTO.Saved)
+            {
+
+                listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23") };
+                listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+
+                dummyLeaveRecord = listOfLeave;
+            }
+
+            var summaryReport = leaveService.GetTotalSummary(63);
+
+            Assert.That(summaryReport.RemainingSickLeave, Is.EqualTo(2));
+            Assert.That(summaryReport.TotalSickLeaveTaken, Is.EqualTo(4));
         }
     }
 }
