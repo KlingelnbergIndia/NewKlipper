@@ -9,6 +9,7 @@ using DomainModel;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using UseCaseBoundary;
+using static DataAccess.EntityModel.Leave.LeaveEntityModel;
 using static DomainModel.Leave;
 
 namespace RepositoryImplementation
@@ -32,6 +33,7 @@ namespace RepositoryImplementation
                 Remark = leaveDetails.GetRemark(),
                 TypeOfLeave = leaveDetails.GetLeaveType(),
                 AppliedLeaveDates = leaveDetails.GetLeaveDate(),
+                Status = leaveDetails.GetStatus()
             };
 
             __leaveDBContext.AppliedLeaves
@@ -49,7 +51,7 @@ namespace RepositoryImplementation
                 .AsQueryable()
                 .Where(x => x.EmployeeId == employeeId)
                 .ToList();
-
+            
             foreach (var leave in empLeaves)
             {
                 leaves.Add(new Leave(
@@ -57,8 +59,7 @@ namespace RepositoryImplementation
                     leave.AppliedLeaveDates,
                     leave.TypeOfLeave,
                     leave.Remark,
-                    leave._objectId.ToString()
-                    ));
+                    leave.Status));
             }
 
             return leaves;
@@ -95,7 +96,8 @@ namespace RepositoryImplementation
                 AppliedLeaveDates = leaveData.GetLeaveDate(),
                 TypeOfLeave = leaveData.GetLeaveType(),
                 Remark = leaveData.GetRemark(),
-                EmployeeId = leaveData.GetEmployeeId()
+                EmployeeId = leaveData.GetEmployeeId(),
+                Status = leaveData.GetStatus()
             };
             __leaveDBContext.AppliedLeaves
                 .InsertOneAsync(leaveEntity)
