@@ -11,6 +11,7 @@ namespace DomainModel
         private readonly List<DateTime> _leaveDates;
         private readonly LeaveType _leaveType;
         private readonly string _remark;
+        private readonly string _leaveId;
         public bool isCanceled;
 
         public enum LeaveType
@@ -23,12 +24,13 @@ namespace DomainModel
             SickLeave
         }
 
-        public Leave(int employeeId, List<DateTime> leaveDates, LeaveType leaveType, string remark)
+        public Leave(int employeeId, List<DateTime> leaveDates, LeaveType leaveType, string remark, string leaveId)
         {
             _employeeId = employeeId;
             _leaveDates = leaveDates;
             _leaveType = leaveType;
             _remark = remark;
+            _leaveId = leaveId;
             isCanceled = false;
         }
 
@@ -50,6 +52,11 @@ namespace DomainModel
         public int GetEmployeeId()
         {
             return _employeeId;
+        }
+
+        public string GetLeaveId()
+        {
+            return _leaveId;
         }
 
     }

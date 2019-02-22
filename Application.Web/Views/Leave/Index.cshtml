@@ -65,13 +65,16 @@
                         <td>@leave.NoOfDays</td>
                         <td>@leave.GetLeaveDisplayName()</td>
                         <td>@leave.Remark</td>
-                        <td> <button type="button" class="btn btn-success btn-sm" data-toggle="modal" onclick=GetLeaveData() style="float:right">Update Leave</button></td>
+                        <td class="text-center">
+                            @*<span data-toggle="tooltip" class="glyphicon glyphicon-pencil" title="Update Leave" style="cursor:pointer;margin-right:10px;"></span>*@
+                            <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave" onclick=CancelLeave("@leave.LeaveId") style="cursor:pointer;margin-right:10px;"></span>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-    <div class="col-md-12" style="@(isLeaveCountZero ==false ? "visibility:hidden" : "visibility:visible")">
+    <div class="col-md-12" style=@(isLeaveCountZero == false ? "visibility:hidden" : "visibility:visible")>
         <div class="alert alert-info col-md-3">
             <strong>Info!</strong> No applied leaves found.
         </div>
@@ -90,4 +93,22 @@
     }
 </style>
 
-<script src="/lib/jquery/dist/jquery.js"></script>
+
+<script>
+    function CancelLeave(leaveId) {
+        if (confirm('Do you want to really cancel this leave ?')) {
+            $.ajax({
+                type: "POST",
+                url: "CancelLeave/",
+                data: {
+                    LeaveId: leaveId
+                },
+                dataType: "html",
+                success: function (response) {
+                    alert('Leave canceled !');
+                    window.location.reload();
+                }
+            });
+        }
+    }
+</script>

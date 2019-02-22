@@ -6,6 +6,7 @@ using DataAccess;
 using DataAccess.EntityModel.Employment;
 using DataAccess.EntityModel.Leave;
 using DomainModel;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using UseCaseBoundary;
 using static DomainModel.Leave;
@@ -55,7 +56,9 @@ namespace RepositoryImplementation
                     leave.EmployeeId,
                     leave.AppliedLeaveDates,
                     leave.TypeOfLeave,
-                    leave.Remark));
+                    leave.Remark,
+                    leave._objectId.ToString()
+                    ));
             }
 
             return leaves;
@@ -70,11 +73,11 @@ namespace RepositoryImplementation
                 .Any();
         }
 
-        public bool OverrideLeave(Leave leaveData,List<DateTime> datesToBeChanged)
+        public bool OverrideLeave(Leave leaveData, List<DateTime> datesToBeChanged)
         {
             var isLeaveExist = __leaveDBContext.AppliedLeaves
                 .AsQueryable()
-                .Where(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates== datesToBeChanged)
+                .Where(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates == datesToBeChanged)
                 .Any();
 
             if (isLeaveExist)
@@ -101,10 +104,10 @@ namespace RepositoryImplementation
             return true;
         }
 
-        public bool CancelLeave(int empId,List<DateTime> listOfDatesToBeChange)
+        public bool CancelLeave(string LeaveId)
         {
-            FilterDefinition<LeaveEntityModel> filter = Builders<LeaveEntityModel>.Filter.Eq("EmployeeId", empId);
-            UpdateDefinition<LeaveEntityModel> update = Builders<LeaveEntityModel>.Update.Set(x=>x.IsLeaveCanceled,true);
+            FilterDefinition<LeaveEntityModel> filter = Builders<LeaveEntityModel>.Filter.Eq("_id", ObjectId.Parse(LeaveId));
+            UpdateDefinition<LeaveEntityModel> update = Builders<LeaveEntityModel>.Update.Set(x => x.IsLeaveCanceled, true);
 
             var opts = new FindOneAndUpdateOptions<LeaveEntityModel>()
             {
@@ -115,7 +118,7 @@ namespace RepositoryImplementation
 
             if (model != null)
             {
-               
+
                 return true;
             }
             else

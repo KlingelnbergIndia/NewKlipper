@@ -15,7 +15,7 @@ using static DomainModel.Leave;
 
 namespace Application.Web.Controllers
 {
-    
+
     public class LeaveController : Controller
     {
         private readonly ILeavesRepository _leavesRepository;
@@ -42,7 +42,7 @@ namespace Application.Web.Controllers
 
             var leaveViewModel = new LeaveViewModel();
             leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
-            
+
             var leaveSummary = leaveService.GetTotalSummary(loggedInEmpId);
             leaveViewModel.LeaveSummary = new ReporteeViewModel()
                 .ConvertToLeaveSummaryViewModel(leaveSummary);
@@ -59,7 +59,7 @@ namespace Application.Web.Controllers
                 return RedirectToAction("Index");
             }
             string leaveType = HttpContext.Request.Form["leaveList"].ToString();
-            if (int.Parse(leaveType)==0)
+            if (int.Parse(leaveType) == 0)
                 LeaveType = LeaveType.CompOff;
             else if (int.Parse(leaveType) == 1)
                 LeaveType = LeaveType.CasualLeave;
@@ -82,7 +82,7 @@ namespace Application.Web.Controllers
 
         [HttpPost]
         public IActionResult UpdateLeave(DateTime FromDate, DateTime ToDate, LeaveType LeaveType,
-            string Remark ,List<DateTime> DatesToBeChanged)
+            string Remark, List<DateTime> DatesToBeChanged)
         {
             if (DatesToBeChanged.Count != 0)
             {
@@ -101,7 +101,7 @@ namespace Application.Web.Controllers
 
                 var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
                 var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-                var response = leaveService.UpdateLeave(loggedInEmpId,FromDate, ToDate, LeaveType, Remark, DatesToBeChanged);
+                var response = leaveService.UpdateLeave(loggedInEmpId, FromDate, ToDate, LeaveType, Remark, DatesToBeChanged);
 
                 if (response == ServiceResponseDTO.Saved)
                     TempData["responseMessage"] = "Your Leave is updated !";
@@ -114,20 +114,16 @@ namespace Application.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult CancelLeave(List<DateTime> DatesToBeChanged)
+        public IActionResult CancelLeave(string LeaveId)
         {
-            if (DatesToBeChanged.Count != 0)
-            {
-               // var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
-                var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-                var response = leaveService.CancelLeave(41, DatesToBeChanged);
+            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
+            var response = leaveService.CancelLeave(LeaveId);
 
-                if (response == ServiceResponseDTO.Deleted)
-                    TempData["responseMessage"] = "Your Leave is Cancel !";
-                else 
-                    TempData["responseMessage"] = "Your Leave is not Cancel !";
-               
-            }
+            if (response == ServiceResponseDTO.Deleted)
+                TempData["responseMessage"] = "Your Leave is Cancel !";
+            else
+                TempData["responseMessage"] = "Your Leave is not Cancel !";
+
             return RedirectToAction("Index");
         }
     }
