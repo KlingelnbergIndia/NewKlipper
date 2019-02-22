@@ -23,8 +23,11 @@ namespace Application.Web.Controllers
         private IDepartmentRepository _departmentRepository;
         private ICarryForwardLeaves _carryForwardLeaves;
 
-        public LeaveController(ILeavesRepository leavesRepository, IEmployeeRepository employeeRepository,
-            IDepartmentRepository departmentRepository, ICarryForwardLeaves carryForwardLeaves)
+        public LeaveController(
+            ILeavesRepository leavesRepository, 
+            IEmployeeRepository employeeRepository,
+            IDepartmentRepository departmentRepository, 
+            ICarryForwardLeaves carryForwardLeaves)
         {
             _leavesRepository = leavesRepository;
             _employeeRepository = employeeRepository;
@@ -41,31 +44,8 @@ namespace Application.Web.Controllers
             leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
 
             var leaveSummary = leaveService.GetTotalSummary(loggedInEmpId);
-            List<LeaveSummaryViewModel> listOfleaveSummary = new List<LeaveSummaryViewModel>()
-            {
-                new LeaveSummaryViewModel()
-                {
-                    LeaveType = "Casual Leave",
-                    TotalAvailableLeave = leaveSummary.MaximumCasualLeave,
-                    LeaveTaken = leaveSummary.TotalCasualLeaveTaken,
-                    RemainingLeave = leaveSummary.RemainingCasualLeave
-                },
-                new LeaveSummaryViewModel()
-                {
-                    LeaveType = "Sick Leave",
-                    TotalAvailableLeave = leaveSummary.MaximumSickLeave,
-                    LeaveTaken = leaveSummary.TotalSickLeaveTaken,
-                    RemainingLeave = leaveSummary.RemainingSickLeave
-                },
-                new LeaveSummaryViewModel()
-                {
-                    LeaveType = "Comp-Off",
-                    TotalAvailableLeave = leaveSummary.MaximumCompOffLeave,
-                    LeaveTaken = leaveSummary.TotalCompOffLeaveTaken,
-                    RemainingLeave = leaveSummary.RemainingCompOffLeave
-                }
-            };
-            leaveViewModel.LeaveSummary = listOfleaveSummary;
+            leaveViewModel.LeaveSummary = new ReporteeViewModel()
+                .ConvertToLeaveSummaryViewModel(leaveSummary);
 
 
             return View(leaveViewModel);

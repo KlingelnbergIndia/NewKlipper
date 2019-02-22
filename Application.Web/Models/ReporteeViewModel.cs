@@ -26,6 +26,36 @@ namespace Application.Web.Models
         public string AttendanceFormName { get; set; }
         public int SelectedEmpIdForAttendanceTab { get; set; }
         public int SelectedEmpIdForLeaveTab { get; set; }
+        public List<LeaveSummaryViewModel> LeaveSummary { get; set; }
+
+        public List<LeaveSummaryViewModel> ConvertToLeaveSummaryViewModel(LeaveSummaryDTO leaveSummary)
+        {
+            List<LeaveSummaryViewModel> listOfleaveSummary = new List<LeaveSummaryViewModel>()
+            {
+                new LeaveSummaryViewModel()
+                {
+                    LeaveType = "Casual Leave",
+                    TotalAvailableLeave = leaveSummary.MaximumCasualLeave,
+                    LeaveTaken = leaveSummary.TotalCasualLeaveTaken,
+                    RemainingLeave = leaveSummary.RemainingCasualLeave
+                },
+                new LeaveSummaryViewModel()
+                {
+                    LeaveType = "Sick Leave",
+                    TotalAvailableLeave = leaveSummary.MaximumSickLeave,
+                    LeaveTaken = leaveSummary.TotalSickLeaveTaken,
+                    RemainingLeave = leaveSummary.RemainingSickLeave
+                },
+                new LeaveSummaryViewModel()
+                {
+                    LeaveType = "Comp-Off",
+                    TotalAvailableLeave = leaveSummary.MaximumCompOffLeave,
+                    LeaveTaken = leaveSummary.TotalCompOffLeaveTaken,
+                    RemainingLeave = leaveSummary.RemainingCompOffLeave
+                }
+            };
+            return listOfleaveSummary;
+        }
     }
 
     enum ViewTabs
