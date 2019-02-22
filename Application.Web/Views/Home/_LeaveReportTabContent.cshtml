@@ -45,11 +45,38 @@
         </div>
         @if (@Model.leaveRecordsOfSelectedReportee.Any())
         {
-            <div style="color:#23527C;">Applied leaves summary for @Model.LeaveFormName</div><br/>
+            <div style="color:#23527C;">Applied leaves summary for @Model.LeaveFormName</div><br />
         }
 
+        @if (@Model.LeaveSummary != null)
+        {
+            <div class="col-md-12">
+                <h4> Leave Summary</h4>
+                <table class="table table-responsive table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2 col-lg-2 col-xs-2">Leave Type</th>
+                            <th class="col-md-2 col-lg-2 col-xs-2">Total Leave Available</th>
+                            <th class="col-md-2 col-lg-2 col-xs-2">Leave Taken</th>
+                            <th class="col-md-2 col-lg-2 col-xs-2">Remaining Leave</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var leaveSummary in @Model.LeaveSummary)
+                        {
+                            <tr>
+                                <td>@leaveSummary.LeaveType</td>
+                                <td>@leaveSummary.TotalAvailableLeave</td>
+                                <td>@leaveSummary.LeaveTaken</td>
+                                <td>@leaveSummary.RemainingLeave</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
         <div class="col-md-12" style="@(isLeaveCountZero ? "display:none" : "display:block")">
-
+            <h4>Leave Details</h4>
             <table class="table table-responsive table-striped table-bordered">
                 <thead>
                     <tr>

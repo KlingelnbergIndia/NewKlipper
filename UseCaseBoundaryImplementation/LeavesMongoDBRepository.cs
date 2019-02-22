@@ -70,17 +70,21 @@ namespace RepositoryImplementation
                 .Any();
         }
 
-        public bool OverrideLeave(Leave leaveData)
+        public bool OverrideLeave(Leave leaveData,List<DateTime> datesToBeChanged)
         {
             var isLeaveExist = __leaveDBContext.AppliedLeaves
                 .AsQueryable()
-                .Where(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates == leaveData.GetLeaveDate())
+                .Where(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates== datesToBeChanged)
                 .Any();
 
             if (isLeaveExist)
             {
                 __leaveDBContext.AppliedLeaves
-                .DeleteOneAsync(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates == leaveData.GetLeaveDate());
+                .DeleteOneAsync(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates == datesToBeChanged);
+            }
+            else
+            {
+                return false;
             }
 
             var leaveEntity = new LeaveEntityModel()
@@ -95,6 +99,29 @@ namespace RepositoryImplementation
                 .GetAwaiter()
                 .GetResult();
             return true;
+        }
+
+        public bool CancelLeave(int empId,List<DateTime> listOfDatesToBeChange)
+        {
+            FilterDefinition<LeaveEntityModel> filter = Builders<LeaveEntityModel>.Filter.Eq("EmployeeId", empId);
+            UpdateDefinition<LeaveEntityModel> update = Builders<LeaveEntityModel>.Update.Set(x=>x.IsLeaveCanceled,true);
+
+            var opts = new FindOneAndUpdateOptions<LeaveEntityModel>()
+            {
+                IsUpsert = true,
+            };
+
+            var model = __leaveDBContext.AppliedLeaves.FindOneAndUpdate(filter, update, opts);
+
+            if (model != null)
+            {
+               
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -16,25 +16,25 @@ namespace DomainModel
 
         public int CalculateCasualLeaveTaken()
         {
-           int noOfCasualLeave = _listOfLeave.Where(x=>x.GetLeaveType()==Leave.LeaveType.CasualLeave).Sum(x=>x.GetLeaveDate().Count);
+           int noOfCasualLeave = _listOfLeave.Where(x=>x.GetLeaveType()==Leave.LeaveType.CasualLeave && x.isCanceled == false).Sum(x=>x.GetLeaveDate().Count);
             return noOfCasualLeave;
         }
 
         public int CalculateSickLeaveTaken()
         {
-            int noOfSickLeave = _listOfLeave.Where(x => x.GetLeaveType() == Leave.LeaveType.SickLeave).Sum(x => x.GetLeaveDate().Count);
+            int noOfSickLeave = _listOfLeave.Where(x => x.GetLeaveType() == Leave.LeaveType.SickLeave && x.isCanceled == false).Sum(x => x.GetLeaveDate().Count);
             return noOfSickLeave;
         }
 
         public int CalculateCompOffLeaveTaken()
         {
-            int noOfCompOffLeave = _listOfLeave.Where(x => x.GetLeaveType() == Leave.LeaveType.CompOff).Sum(x => x.GetLeaveDate().Count);
+            int noOfCompOffLeave = _listOfLeave.Where(x => x.GetLeaveType() == Leave.LeaveType.CompOff && x.isCanceled == false).Sum(x => x.GetLeaveDate().Count);
             return noOfCompOffLeave;
         }
 
         public int GetTotalLeaveTaken()
         {
-            return _listOfLeave.Count();
+            return _listOfLeave.Where(x=>x.isCanceled==false).Count();
         }
     }
 }
