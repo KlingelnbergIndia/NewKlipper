@@ -5,7 +5,7 @@ function CancelLeave(leaveId) {
     var actionName = "CancelLeave";
     var newURL = window.location.protocol + "//" + window.location.host + "/" + controllerName + "/" + actionName;
 
-    if (confirm('Do you want to really cancel this leave ?')) {
+    if (confirm('Do you really want to cancel this leave ?')) {
         $.ajax({
             type: "POST",
             url: newURL,
