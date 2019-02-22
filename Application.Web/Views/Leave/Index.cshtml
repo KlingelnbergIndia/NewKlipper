@@ -93,22 +93,4 @@
     }
 </style>
 
-
-<script>
-    function CancelLeave(leaveId) {
-        if (confirm('Do you want to really cancel this leave ?')) {
-            $.ajax({
-                type: "POST",
-                url: "CancelLeave/",
-                data: {
-                    LeaveId: leaveId
-                },
-                dataType: "html",
-                success: function (response) {
-                    alert('Leave canceled !');
-                    window.location.reload();
-                }
-            });
-        }
-    }
-</script>
+<script src="~/js/common.Leave.js"></script>

@@ -82,21 +82,26 @@
                     <tr>
                         <th class="col-md-2 col-lg-2 col-xs-2">From Date</th>
                         <th class="col-md-2 col-lg-2 col-xs-2">To Date</th>
-                        <th class="col-md-1 col-lg-1 col-xs-1">No Of Days</th>
+                        <th class="col-md-2 col-lg-2 col-xs-2">No Of Days</th>
                         <th class="col-md-2 col-lg-2 col-xs-2">Leave Type</th>
-                        <th class="col-md-6 col-lg-6 col-xs-6">Remark</th>
+                        <th class="col-md-3 col-lg-3 col-xs-3">Remark</th>
+                        <th class="col-md-2 col-lg-2 col-xs-2">Change Plan</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var leave in @Model.leaveRecordsOfSelectedReportee)
                     {
-                        <tr>
-                            <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
-                            <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
-                            <td>@leave.NoOfDays</td>
-                            <td>@leave.TypeOfLeave</td>
-                            <td>@leave.Remark</td>
-                        </tr>
+                    <tr>
+                        <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
+                        <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
+                        <td>@leave.NoOfDays</td>
+                        <td>@leave.TypeOfLeave</td>
+                        <td>@leave.Remark</td>
+                        <td class="text-center">
+                            @*<span data-toggle="tooltip" class="glyphicon glyphicon-pencil" title="Update Leave" style="cursor:pointer;margin-right:10px;"></span>*@
+                            <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave" onclick=CancelLeave("@leave.LeaveId") style="cursor:pointer;margin-right:10px;"></span>
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
@@ -105,3 +110,4 @@
     </div>
 
 </div>
+<script src="~/js/common.Leave.js"></script>
