@@ -46,7 +46,7 @@ namespace Application.Web.Controllers
             var leaveSummary = leaveService.GetTotalSummary(loggedInEmpId);
             leaveViewModel.LeaveSummary = new ReporteeViewModel()
                 .ConvertToLeaveSummaryViewModel(leaveSummary);
-
+           
 
             return View(leaveViewModel);
         }
