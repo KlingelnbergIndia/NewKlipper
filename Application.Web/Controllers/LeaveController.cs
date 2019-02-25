@@ -84,6 +84,7 @@ namespace Application.Web.Controllers
         [HttpPost]
         public IActionResult UpdateLeave(string leaveId,DateTime FromDate, DateTime ToDate, LeaveType LeaveType, string Remark)
         {
+            string ExistingLeaveId = HttpContext.Request.Form["leaveId"].ToString();
             if (leaveId != null)
             {
                 if (FromDate > ToDate)
@@ -101,9 +102,9 @@ namespace Application.Web.Controllers
 
                 var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
                 var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-                var response = leaveService.UpdateLeave(leaveId, loggedInEmpId, FromDate,ToDate,LeaveType,Remark);
+                var response = leaveService.UpdateLeave(ExistingLeaveId, loggedInEmpId, FromDate,ToDate,LeaveType,Remark);
 
-                if (response == ServiceResponseDTO.Saved)
+                if (response == ServiceResponseDTO.Updated)
                     TempData["responseMessage"] = "Your Leave is updated !";
                 else if (response == ServiceResponseDTO.RecordExists)
                     TempData["responseMessage"] = "Your Leave is already submitted !";
