@@ -20,11 +20,11 @@ namespace Klipper.Tests.Leaves
         private IDepartmentRepository departmentData;
         private ICarryForwardLeaves carryForwardLeavesData;
         List<DateTime> appliedLeaveDates = new List<DateTime>()
-            {
-                DateTime.Parse("2019-01-01"),
-                DateTime.Parse("2019-01-02"),
-                DateTime.Parse("2019-01-03")
-            };
+        {
+            DateTime.Parse("2019-01-01"),
+            DateTime.Parse("2019-01-02"),
+            DateTime.Parse("2019-01-03")
+        };
 
         [SetUp]
         public void setup()
@@ -41,6 +41,7 @@ namespace Klipper.Tests.Leaves
         [Test]
         public void IdentifyThatGivenDateIsRealisedLeaveDate()
         {
+            //SETUP
             Leave leave = new DummyLeaveBuilder()
                 .WithEmployeeId(63)
                 .WithLeaveType(LeaveType.CasualLeave)
@@ -49,6 +50,7 @@ namespace Klipper.Tests.Leaves
                 .Build();
             leaveRecordData.GetAllLeavesInfo(63).Returns(new List<Leave>() { leave });
 
+            //CALL USECASE
             LeaveService leaveService = new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
             var resultData = leaveService.GetAppliedLeaves(63);
 
@@ -58,6 +60,7 @@ namespace Klipper.Tests.Leaves
         [Test]
         public void IdentifyThatGivenDateIsNotRealisedLeaveDate()
         {
+            //SETUP
             Leave leave = new DummyLeaveBuilder()
                 .WithEmployeeId(63)
                 .WithLeaveType(LeaveType.CasualLeave)
@@ -66,6 +69,7 @@ namespace Klipper.Tests.Leaves
                 .Build();
             leaveRecordData.GetAllLeavesInfo(63).Returns(new List<Leave>() { leave });
 
+            //CALL USECASE
             LeaveService leaveService = new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
             var resultData = leaveService.GetAppliedLeaves(63);
 
@@ -75,6 +79,7 @@ namespace Klipper.Tests.Leaves
         [Test]
         public void OnApplyingLeaveSummaryShouldGetUpdated()
         {
+            //SETUP
             var dummyEmployee =
                 new EmployeeBuilder()
                 .WithID(63)
@@ -92,20 +97,13 @@ namespace Klipper.Tests.Leaves
             var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 6, 2, 21, 6, 0);
             carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
 
+            //CALL USECASE
             LeaveService leaveService = new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
             leaveService.ApplyLeave(63, DateTime.Parse("2019-01-01"), DateTime.Parse("2019-01-01"), LeaveType.CasualLeave, "");
             var summaryData = leaveService.GetTotalSummary(63);
 
             Assert.That(summaryData.TotalCasualLeaveTaken, Is.EqualTo(3));
-
         }
 
-
-        private List<LeaveRecordDTO> DummyLeaveData()
-        {
-            List<LeaveRecordDTO> dummyLeaveRecords = new List<LeaveRecordDTO>();
-            dummyLeaveRecords.Add(new LeaveRecordDTO() { Date = appliedLeaveDates });
-            return dummyLeaveRecords;
-        }
     }
 }
