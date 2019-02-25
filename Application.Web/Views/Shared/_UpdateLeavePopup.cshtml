@@ -75,7 +75,8 @@
                 document.getElementById("fromDate").value = convertDateToHtmlFormat(new Date(fromDate));
                 document.getElementById("toDate").value = convertDateToHtmlFormat(new Date(toDate));
                 document.getElementById("leaveType").value = leaveTypeId;
-                document.getElementById("leaveId").value = leaveId ;
+                document.getElementById("leaveId").value = leaveId;
+                document.getElementById("remark").value = decodeString(remark) ;
             }
 
         });

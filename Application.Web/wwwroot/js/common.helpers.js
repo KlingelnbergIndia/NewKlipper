@@ -27,3 +27,8 @@ function convertDateToHtmlFormat(fromDate) {
         return null;
     }
 }
+
+function decodeString(encodedString) {
+    var str = encodedString.replace("%", " ");
+    return str;
+}

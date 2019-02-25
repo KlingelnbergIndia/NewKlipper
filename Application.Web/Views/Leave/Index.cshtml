@@ -1,7 +1,10 @@
 ﻿@model Application.Web.Models.LeaveViewModel
+
+
 @{
     var leaveTypes = @Model.GetAllLeaveTypes();
     var isLeaveCountZero = @Model.GetAppliedLeaves.Count == 0;
+    var stringEncodeSettings = new Newtonsoft.Json.JsonSerializerSettings { StringEscapeHandling = Newtonsoft.Json.StringEscapeHandling.EscapeHtml };
 }
 
 <div class="main">
@@ -62,6 +65,8 @@
                     var isRealisedLeave = @leave.IsRealizedLeave.ToString().ToLower();
                     string disableColor = @leave.IsRealizedLeave ? "dimgray" : "black";
                     int LeaveTypeId = (int)@leave.TypeOfLeave;
+                    var remark = System.Text.RegularExpressions.Regex.Replace(@leave.Remark, @"[^0-9a-zA-Z]+", "%");
+
                     <tr>
                         <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
                         <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
@@ -70,7 +75,7 @@
                         <td>@leave.Remark</td>
                         <td class="text-center">
                             <span data-toggle="tooltip" class="glyphicon glyphicon-pencil" title="Update Leave" 
-                                  onclick=UpdateLeave("@leave.LeaveId",dateToYMD('@leave.FromDate.ToString("yyyy-MM-dd")'),dateToYMD('@leave.ToDate.ToString("yyyy-MM-dd")'),"@LeaveTypeId","@leave.Remark") 
+                                  onclick=UpdateLeave('@leave.LeaveId','@leave.FromDate.ToString("yyyy-MM-dd")','@leave.ToDate.ToString("yyyy-MM-dd")','@LeaveTypeId','@remark') 
                                   style="cursor:pointer;margin-right:10px;"></span>
                             <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave" 
                                   onclick=CancelLeave("@leave.LeaveId") 
