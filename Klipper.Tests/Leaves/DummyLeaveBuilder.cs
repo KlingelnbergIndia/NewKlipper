@@ -10,6 +10,8 @@ namespace Klipper.Tests.Leaves
         private int _EmployeeId;
         private LeaveType _LeaveType;
         private StatusType _StatusType;
+        private string _leaveId;
+
         public List<DateTime> AppliedLeaveDates { get; private set; }
 
         public DummyLeaveBuilder WithEmployeeId(int employeeId)
@@ -36,9 +38,22 @@ namespace Klipper.Tests.Leaves
             return this;
         }
 
+        public DummyLeaveBuilder WithLeaveId(string leaveId)
+        {
+            this._leaveId = leaveId;
+            return this;
+        }
+
         public Leave Build()
         {
-            return new Leave(this._EmployeeId,this.AppliedLeaveDates,this._LeaveType = LeaveType.CasualLeave,"",this._StatusType,"");
+            return new Leave(
+                this._EmployeeId,
+                this.AppliedLeaveDates,
+                this._LeaveType = LeaveType.CasualLeave,
+                "",
+                this._StatusType,
+                this._leaveId);
         }
+
     }
 }
