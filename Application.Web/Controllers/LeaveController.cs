@@ -82,10 +82,9 @@ namespace Application.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateLeave(DateTime FromDate, DateTime ToDate, LeaveType LeaveType,
-            string Remark, List<DateTime> DatesToBeChanged)
+        public IActionResult UpdateLeave(string leaveId,DateTime FromDate, DateTime ToDate, LeaveType LeaveType, string Remark)
         {
-            if (DatesToBeChanged.Count != 0)
+            if (leaveId != null)
             {
                 if (FromDate > ToDate)
                 {
@@ -102,7 +101,7 @@ namespace Application.Web.Controllers
 
                 var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
                 var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-                var response = leaveService.UpdateLeave();
+                var response = leaveService.UpdateLeave(leaveId, loggedInEmpId, FromDate,ToDate,LeaveType,Remark);
 
                 if (response == ServiceResponseDTO.Saved)
                     TempData["responseMessage"] = "Your Leave is updated !";
