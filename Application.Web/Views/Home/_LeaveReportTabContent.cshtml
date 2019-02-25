@@ -91,17 +91,21 @@
                 <tbody>
                     @foreach (var leave in @Model.leaveRecordsOfSelectedReportee)
                     {
-                    <tr>
-                        <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
-                        <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
-                        <td>@leave.NoOfDays</td>
-                        <td>@leave.TypeOfLeave</td>
-                        <td>@leave.Remark</td>
-                        <td class="text-center">
-                            @*<span data-toggle="tooltip" class="glyphicon glyphicon-pencil" title="Update Leave" style="cursor:pointer;margin-right:10px;"></span>*@
-                            <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave" onclick=CancelLeave("@leave.LeaveId") style="cursor:pointer;margin-right:10px;"></span>
-                        </td>
-                    </tr>
+                        var isRealisedLeave = @leave.IsRealizedLeave.ToString().ToLower();
+                        string disableColor = @leave.IsRealizedLeave ? "dimgray" : "black";
+                        <tr>
+                            <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@leave.NoOfDays</td>
+                            <td>@leave.TypeOfLeave</td>
+                            <td>@leave.Remark</td>
+                            <td class="text-center">
+                                @*<span data-toggle="tooltip" class="glyphicon glyphicon-pencil" title="Update Leave" style="cursor:pointer;margin-right:10px;"></span>*@
+                                <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave"
+                                      onclick=CancelLeave("@leave.LeaveId","@isRealisedLeave")
+                                      style="cursor:pointer;margin-right:10px;color:@disableColor"></span>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>

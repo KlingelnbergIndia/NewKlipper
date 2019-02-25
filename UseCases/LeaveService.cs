@@ -29,6 +29,7 @@ namespace UseCases
 
         public ServiceResponseDTO ApplyLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
         {
+           
             List<DateTime> takenLeaveDates = new List<DateTime>();
 
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
@@ -51,10 +52,21 @@ namespace UseCases
                 }
                 totalAppliedDays++;
             }
-
+            
             if (takenLeaveDates.Any())
             {
-                var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, remark,null);
+                if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
+                {
+                    var leaveSummmary = GetTotalSummary(employeeId);
+                    if ((leaveType == LeaveType.SickLeave && leaveSummmary.RemainingSickLeave - takenLeaveDates.Count < 0) ||
+                        (leaveType == LeaveType.CompOff && leaveSummmary.RemainingCompOffLeave - takenLeaveDates.Count < 0))
+                    {
+                        return ServiceResponseDTO.CanNotApplied;
+                    }
+
+                }
+                var status = StatusType.Approved;
+                var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, remark, status,null);
                 _leavesRepository.AddNewLeave(takenLeave);
                 return ServiceResponseDTO.Saved;
             }
@@ -78,7 +90,7 @@ namespace UseCases
             List<LeaveRecordDTO> listOfLeaveDTO = new List<LeaveRecordDTO>();
             foreach (var eachLeave in leavesInfo)
             {
-                if (eachLeave.GetLeaveDate().Min() < DateTime.Today.Date)
+                if (eachLeave.GetLeaveDate().Min().Date < DateTime.Today.Date)
                 {
                     isRealizedLeave = true;
                 }
@@ -88,10 +100,11 @@ namespace UseCases
                     TypeOfLeave = eachLeave.GetLeaveType(),
                     Remark = eachLeave.GetRemark(),
                     FromDate = eachLeave.GetLeaveDate().Min(),
-                    ToDate = eachLeave.GetLeaveDate().Max(),
+                    ToDate = eachLeave.GetLeaveDate().Max(),  
                     NoOfDays = eachLeave.GetLeaveDate().Count(),
+                    Status = eachLeave.GetStatus(),
                     IsRealizedLeave = isRealizedLeave,
-                    LeaveId = eachLeave.GetLeaveId()
+                    LeaveId = eachLeave.GetLeaveId(),
                 };
                 listOfLeaveDTO.Add(leaveDTO);
             }
@@ -167,7 +180,8 @@ namespace UseCases
             }
             if (takenLeaveDates.Any())
             {
-                var takenLeave = new Leave(employeeId, takenLeaveDates, LeaveType, Remark,null);
+                var status = StatusType.Updated;
+                var takenLeave = new Leave(employeeId, takenLeaveDates, LeaveType, Remark, status,null);
                 _leavesRepository.OverrideLeave(takenLeave, datesToBeChanged);
                 return ServiceResponseDTO.Updated;
             }
