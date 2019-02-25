@@ -76,36 +76,37 @@ namespace RepositoryImplementation
                 .Any();
         }
 
-        public bool OverrideLeave(Leave leaveData, List<DateTime> datesToBeChanged)
+        public bool OverrideLeave(string leaveId,Leave leaveData)
         {
             var isLeaveExist = __leaveDBContext.AppliedLeaves
                 .AsQueryable()
-                .Where(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates == datesToBeChanged)
+                .Where(x => x._objectId == ObjectId.Parse(leaveId))
                 .Any();
 
             if (isLeaveExist)
             {
+                __leaveDBContext.AppliedLeaves.DeleteOneAsync(x => x._objectId == ObjectId.Parse(leaveId));
+
+                var leaveEntity = new LeaveEntityModel()
+                {
+                    AppliedLeaveDates = leaveData.GetLeaveDate(),
+                    TypeOfLeave = leaveData.GetLeaveType(),
+                    Remark = leaveData.GetRemark(),
+                    EmployeeId = leaveData.GetEmployeeId(),
+                    Status = leaveData.GetStatus()
+                };
                 __leaveDBContext.AppliedLeaves
-                .DeleteOneAsync(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates == datesToBeChanged);
+                    .InsertOneAsync(leaveEntity)
+                    .GetAwaiter()
+                    .GetResult();
+                return true;
+                
             }
             else
             {
                 return false;
             }
 
-            var leaveEntity = new LeaveEntityModel()
-            {
-                AppliedLeaveDates = leaveData.GetLeaveDate(),
-                TypeOfLeave = leaveData.GetLeaveType(),
-                Remark = leaveData.GetRemark(),
-                EmployeeId = leaveData.GetEmployeeId(),
-                Status = leaveData.GetStatus()
-            };
-            __leaveDBContext.AppliedLeaves
-                .InsertOneAsync(leaveEntity)
-                .GetAwaiter()
-                .GetResult();
-            return true;
         }
 
         public bool CancelLeave(string LeaveId)

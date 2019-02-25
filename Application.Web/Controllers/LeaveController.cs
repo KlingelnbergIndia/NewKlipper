@@ -102,7 +102,7 @@ namespace Application.Web.Controllers
 
                 var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
                 var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-                var response = leaveService.UpdateLeave(loggedInEmpId, FromDate, ToDate, LeaveType, Remark, DatesToBeChanged);
+                var response = leaveService.UpdateLeave();
 
                 if (response == ServiceResponseDTO.Saved)
                     TempData["responseMessage"] = "Your Leave is updated !";
