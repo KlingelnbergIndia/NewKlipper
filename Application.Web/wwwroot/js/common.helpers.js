@@ -13,3 +13,17 @@ function dateToYMD(date) {
         return null;
     }
 }
+
+//HTML formt is yyyy-mm-dd
+function convertDateToHtmlFormat(fromDate) {
+    try {
+        fromDate = new Date(fromDate)
+        var d = fromDate.getDate();
+        var m = fromDate.getMonth() + 1;
+        var y = fromDate.getFullYear();
+        return '' + y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+    } catch (e) {
+        alert('Invalid date');
+        return null;
+    }
+}

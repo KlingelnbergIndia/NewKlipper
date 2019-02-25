@@ -71,9 +71,8 @@
 
             UpdateLeave = function (laeveId, fromDate, toDate, leaveTypeId, remark) {
                 $('#UpdateLeaveModal').modal({ 'show': true, 'backdrop': true });
-                alert(fromDate);
-                document.getElementById("fromDate").value = convertDateToHtmlFormat(fromDate);
-                document.getElementById("toDate").value = convertDateToHtmlFormat(toDate);
+                document.getElementById("fromDate").value = convertDateToHtmlFormat(new Date(fromDate));
+                document.getElementById("toDate").value = convertDateToHtmlFormat(new Date(toDate));
                 document.getElementById("leaveType").value = leaveTypeId;
                 document.getElementById("remark").value = remark ;
             }
@@ -83,18 +82,3 @@
 </body>
 <link href="~/css/_ApplyLeavePagePopup.css" rel="stylesheet" />
 <script src="~/js/common.helpers.js"></script>
-<script>
-    function convertDateToHtmlFormat(fromDate) {
-        //HTML formt is yyyy-mm-dd
-        try {
-            fromDate = new Date(fromDate)
-            var d = fromDate.getDate();
-            var m = fromDate.getMonth()+1;
-            var y = fromDate.getFullYear();
-            return '' + y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
-        } catch (e) {
-            alert('Invalid date');
-            return null;
-        }
-    }
-</script>
