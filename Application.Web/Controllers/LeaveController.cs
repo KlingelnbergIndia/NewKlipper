@@ -112,6 +112,8 @@ namespace Application.Web.Controllers
                     TempData["errorMessage"] = "Invalid Selected Days !";
                 else if (response == ServiceResponseDTO.CanNotApplied)
                     TempData["errorMessage"] = "Selected Leave is Exhausted!";
+                else if (response == ServiceResponseDTO.Deleted)
+                    TempData["errorMessage"] = "Cancelled Leave can not be update !";
             }
             return RedirectToAction("Index");
         }

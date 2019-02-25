@@ -160,49 +160,59 @@ namespace UseCases
             int invalidDays = 0;
             int totalAppliedDays = 0;
 
-            for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
-            {
-                bool isLeaveExist = false;
-               
-                    isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date) && x.GetLeaveId()!= leaveId && x.GetStatus()!=StatusType.Cancelled);
-               
-                if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
-                {
-                    takenLeaveDates.Add(eachLeaveDay);
-                }
-                if (!department.IsValidWorkingDay(eachLeaveDay))
-                {
-                    invalidDays++;
-                }
-                totalAppliedDays++;
-            }
-            if (takenLeaveDates.Any())
-            {
-                if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
-                {
-                    var leaveSummmary = GetTotalSummary(employeeId);
-                    if ((leaveType == LeaveType.SickLeave && leaveSummmary.RemainingSickLeave - takenLeaveDates.Count < 0) ||
-                        (leaveType == LeaveType.CompOff && leaveSummmary.RemainingCompOffLeave - takenLeaveDates.Count < 0))
-                    {
-                        return ServiceResponseDTO.CanNotApplied;
-                    }
+            var exixtingLeaveToBeUpdated = allAppliedLeaves.Any(x=>x.GetLeaveId() == leaveId && x.GetStatus()!=StatusType.Cancelled);
 
-                }
-                var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, remark,StatusType.Updated,null);
-                _leavesRepository.OverrideLeave(leaveId, takenLeave);
-                return ServiceResponseDTO.Updated;
-            }
-            else
+            if (exixtingLeaveToBeUpdated)
             {
-                if (invalidDays == totalAppliedDays)
+                for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
                 {
-                    return ServiceResponseDTO.InvalidDays;
+                    bool isLeaveExist = false;
+
+                    isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date) && x.GetLeaveId() != leaveId && x.GetStatus() != StatusType.Cancelled);
+
+                    if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
+                    {
+                        takenLeaveDates.Add(eachLeaveDay);
+                    }
+                    if (!department.IsValidWorkingDay(eachLeaveDay))
+                    {
+                        invalidDays++;
+                    }
+                    totalAppliedDays++;
+                }
+                if (takenLeaveDates.Any())
+                {
+                    if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
+                    {
+                        var leaveSummmary = GetTotalSummary(employeeId);
+                        if ((leaveType == LeaveType.SickLeave && leaveSummmary.RemainingSickLeave - takenLeaveDates.Count < 0) ||
+                            (leaveType == LeaveType.CompOff && leaveSummmary.RemainingCompOffLeave - takenLeaveDates.Count < 0))
+                        {
+                            return ServiceResponseDTO.CanNotApplied;
+                        }
+
+                    }
+                    var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, remark, StatusType.Updated, null);
+                    _leavesRepository.OverrideLeave(leaveId, takenLeave);
+                    return ServiceResponseDTO.Updated;
                 }
                 else
                 {
-                    return ServiceResponseDTO.RecordExists;
+                    if (invalidDays == totalAppliedDays)
+                    {
+                        return ServiceResponseDTO.InvalidDays;
+                    }
+                    else
+                    {
+                        return ServiceResponseDTO.RecordExists;
+                    }
                 }
             }
+            else
+            {
+                return ServiceResponseDTO.Deleted;
+            }
+           
 
         }
 
