@@ -68,29 +68,43 @@
                         <td>@leave.GetLeaveDisplayName()</td>
                         <td>@leave.Remark</td>
                         <td class="text-center">
-                            @*<span data-toggle="tooltip" class="glyphicon glyphicon-pencil" title="Update Leave" style="cursor:pointer;margin-right:10px;"></span>*@
+                            <span data-toggle="tooltip" class="glyphicon glyphicon-pencil" title="Update Leave" 
+                                  onclick=UpdateLeave("@leave.LeaveId",dateToYMD('@leave.FromDate.ToString("yyyy-MM-dd")'),dateToYMD('@leave.ToDate.ToString("yyyy-MM-dd")'),"@leave.Remark") 
+                                  style="cursor:pointer;margin-right:10px;"></span>
                             <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave" 
-                                  onclick=CancelLeave("@leave.LeaveId","@isRealisedLeave") 
-                                  style="cursor:pointer;margin-right:10px;color:@disableColor"></span>
+                                  onclick=CancelLeave("@leave.LeaveId") 
+                                  style="cursor:pointer;margin-right:10px;"></span>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-    <div class="col-md-12" style=@(isLeaveCountZero == false ? "visibility:hidden" : "visibility:visible")>
+    <div class="col-md-12" style=@(isLeaveCountZero ==false ? "visibility:hidden" : "visibility:visible" )>
         <div class="alert alert-info col-md-3">
             <strong>Info!</strong> No applied leaves found.
         </div>
     </div>
 </div>
-
+<script>
+    function dateToYMD(date) {
+        try {
+            var strArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var d = date.getDate();
+            var m = strArray[date.getMonth()];
+            var y = date.getFullYear();
+            return '' + (d <= 9 ? '0' + d : d) + ' ' + m + ' ' + y;
+        } catch (e) {
+            alert('Invalid date');
+            return null;
+        }
+    }
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ApplyLeavePopup", @Model);}
+    @{await Html.RenderPartialAsync("_UpdateLeavePopup", @Model);}
 }
-
-
 <style>
     #ApplyLeaveModal > div > div {
         width: 400px;

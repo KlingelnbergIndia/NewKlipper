@@ -3,17 +3,17 @@
     var leaveTypes = @Model.GetAllLeaveTypes();
 }
 <body>
-    <div class="modal fade" id="ApplyLeaveModal" role="dialog">
+    <div class="modal fade" id="UpdateLeaveModal" role="dialog">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title" id="popupDateSpan"> Apply Leave</h3>
+                    <h3 class="modal-title" > Update Leave</h3>
                 </div>
                 <div id="ModalBody" style="margin-left:9px;margin-right:10px">
                     <div class="col-md-12">
                         <form method="post" asp-controller="Leave" asp-action="ApplyLeave">
-                            <div class="col-md-6">
+                            <div class="col-md-6" id="fromDate">
                                 <label for="from">From</label>
                                 <input type="date" class="form-control input-sm"
                                        value="@DateTime.Now.ToString("yyyy-MM-dd")"
@@ -24,9 +24,9 @@
                                        style="width:150px;"
                                        required>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6" id="toDate">
                                 <label for="to">To</label>
-                                <input type="date" class="form-control input-sm"
+                                <input type="date" class="form-control input-sm" 
                                        value="@DateTime.Now.ToString("yyyy-MM-dd")"
                                        min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
                                        max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")"
@@ -35,9 +35,9 @@
                                        required>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group" style="width:200px;margin-top:14px;">
+                                <div class="form-group" id="leaveType" style="width:200px;margin-top:14px;">
                                     <label>Leave Type</label>
-                                    <select id="leaveList" name="leaveList" class="form-control input-sm" asp-for="@Model.LeaveType" style="width:150px;">
+                                    <select id="leaveList" name="leaveList" class="form-control input-sm"  asp-for="@Model.LeaveType" style="width:150px;">
                                         @if (Model.LeaveType.ToString() == null)
                                         {
                                             <option value="" selected>--Select LeaveType--</option>
@@ -53,7 +53,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Remark</label>
-                                    <textarea asp-for="@Model.Remark" class="form-control input-sm" id="my_remark" placeholder="Remark" rows="6" required></textarea>
+                                    <textarea asp-for="@Model.Remark" class="form-control input-sm" id="remark" placeholder="Remark" rows="6" required></textarea>
                                     <span asp-validation-for="@Model.Remark" class="text-danger input-sm"></span>
                                 </div>
                             </div>
@@ -74,16 +74,20 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            var _convertStringToDateObject;
 
-            GetLeaveData = function () {
+            UpdateLeave = function (laeveId,fromDate,toDate,remark) {
+                alert(remark);
 
-                alert('hello');
-                document.getElementById("my_remark").value = leaveRecord.Remark;
-
+                document.getElementById("fromDate").value = fromDate;
+                document.getElementById("toDate").value = toDate;
+                //document.getElementById("my_remark").value = remark;
+                document.getElementById("remark").value = remark;
+                $('#UpdateLeaveModal').modal({ 'show': true, 'backdrop': true });
             }
 
         });
-
     </script>
 </body>
 <link href="~/css/_ApplyLeavePagePopup.css" rel="stylesheet" />
+<script src="~/js/common.helpers.js"></script>
