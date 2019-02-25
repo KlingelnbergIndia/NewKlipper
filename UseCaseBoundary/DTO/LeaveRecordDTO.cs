@@ -38,6 +38,7 @@ namespace UseCaseBoundary.DTO
         Deleted,
         RecordExists,
         InvalidDays,
-        CanNotApplied
+        CanNotApplied,
+        RealizedLeave
     }
 }

@@ -13,5 +13,6 @@ namespace UseCaseBoundary
         bool IsLeaveExist(int employeeId, DateTime leaveDate);
         bool OverrideLeave(string leaveId, Leave leaveData);
         bool CancelLeave(string LeaveId);
+        Leave GetLeaveByLeaveId(string LeaveId);
     }
 }

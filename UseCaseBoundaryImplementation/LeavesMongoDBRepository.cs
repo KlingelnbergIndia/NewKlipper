@@ -131,5 +131,15 @@ namespace RepositoryImplementation
                 return false;
             }
         }
+
+        public Leave GetLeaveByLeaveId(string leaveId)
+        {
+            var leave = __leaveDBContext.AppliedLeaves.AsQueryable()
+                .Where(x => x._objectId == ObjectId.Parse(leaveId)).FirstOrDefault();
+
+            var leaveToLeaveObject = new Leave(leave.EmployeeId, leave.AppliedLeaveDates, leave.TypeOfLeave,leave.Remark, leave.Status, leave._objectId.ToString());
+
+            return leaveToLeaveObject;
+        }
     }
 }

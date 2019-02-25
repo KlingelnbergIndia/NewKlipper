@@ -78,9 +78,9 @@
                     <td class="text-center">
                         <span data-toggle="tooltip" class="glyphicon glyphicon-pencil" title="Update Leave"
                               onclick=UpdateLeave('@leave.LeaveId','@leave.FromDate.ToString("yyyy-MM-dd")','@leave.ToDate.ToString("yyyy-MM-dd")','@LeaveTypeId','@remark')
-                              style="cursor:pointer;margin-right:10px;"></span>
+                              style="cursor:pointer;margin-right:10px;color:'@disableColor'"></span>
                         <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave"
-                              onclick=CancelLeave("@leave.LeaveId")
+                              onclick=CancelLeave("@leave.LeaveId","@isRealisedLeave")
                               style="cursor:pointer;margin-right:10px;"></span>
                     </td>
                 </tr>

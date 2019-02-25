@@ -114,6 +114,8 @@ namespace Application.Web.Controllers
                     TempData["errorMessage"] = "Selected Leave is Exhausted!";
                 else if (response == ServiceResponseDTO.Deleted)
                     TempData["errorMessage"] = "Cancelled Leave can not be update !";
+                else if (response == ServiceResponseDTO.RealizedLeave)
+                    TempData["errorMessage"] = "realized Leave can not be update !";
             }
             return RedirectToAction("Index");
         }

@@ -90,10 +90,7 @@ namespace UseCases
             List<LeaveRecordDTO> listOfLeaveDTO = new List<LeaveRecordDTO>();
             foreach (var eachLeave in leavesInfo)
             {
-                if (eachLeave.GetLeaveDate().Min().Date >= DateTime.Today.Date)
-                {
-                    isRealizedLeave = true;
-                }
+                
                 var leaveDTO = new LeaveRecordDTO()
                 {
                     Date = eachLeave.GetLeaveDate(),
@@ -103,7 +100,7 @@ namespace UseCases
                     ToDate = eachLeave.GetLeaveDate().Max(),  
                     NoOfDays = eachLeave.GetLeaveDate().Count(),
                     Status = eachLeave.GetStatus(),
-                    IsRealizedLeave = isRealizedLeave,
+                    IsRealizedLeave = IsRealizedLeave(eachLeave.GetLeaveId()),
                     LeaveId = eachLeave.GetLeaveId(),
                 };
                 listOfLeaveDTO.Add(leaveDTO);
@@ -160,15 +157,20 @@ namespace UseCases
             int invalidDays = 0;
             int totalAppliedDays = 0;
 
-            var exixtingLeaveToBeUpdated = allAppliedLeaves.Any(x=>x.GetLeaveId() == leaveId && x.GetStatus()!=StatusType.Cancelled);
+            var exixtingLeaveIsCancelledLeave = allAppliedLeaves.Any(x=>x.GetLeaveId() == leaveId && x.GetStatus()!=StatusType.Cancelled);
+            if (IsRealizedLeave(leaveId))
+            {
+                return ServiceResponseDTO.RealizedLeave;
+            }
 
-            if (exixtingLeaveToBeUpdated)
+            if (!exixtingLeaveIsCancelledLeave)
             {
                 for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
                 {
                     bool isLeaveExist = false;
 
-                    isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date) && x.GetLeaveId() != leaveId && x.GetStatus() != StatusType.Cancelled);
+                    isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date) 
+                    && x.GetLeaveId() != leaveId && x.GetStatus() != StatusType.Cancelled);
 
                     if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
                     {
@@ -218,12 +220,30 @@ namespace UseCases
 
         public ServiceResponseDTO CancelLeave(string LeaveId)
         {
+            if (IsRealizedLeave(LeaveId))
+            {
+                return ServiceResponseDTO.RealizedLeave;
+            }
             if (_leavesRepository.CancelLeave(LeaveId))
             {
                 return ServiceResponseDTO.Deleted;
             }
 
             return ServiceResponseDTO.InvalidDays;
+        }
+
+        private bool IsRealizedLeave(string LeaveId)
+        {
+            var leave = _leavesRepository.GetLeaveByLeaveId(LeaveId);
+                if(leave!=null)
+               {
+                if(leave.GetLeaveDate().Min() >= DateTime.Now.Date)
+                {
+                    return true;
+                }
+               }
+          
+            return false;
         }
     }
 }
