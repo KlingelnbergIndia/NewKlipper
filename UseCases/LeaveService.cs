@@ -147,8 +147,7 @@ namespace UseCases
             };
         }
 
-        public ServiceResponseDTO UpdateLeave(int employeeId, DateTime fromDate, DateTime toDate, LeaveType LeaveType,
-            string Remark, List<DateTime> datesToBeChanged)
+        public ServiceResponseDTO UpdateLeave(string leaveId, int employeeId, DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
         {
 
             List<DateTime> takenLeaveDates = new List<DateTime>();
@@ -164,10 +163,9 @@ namespace UseCases
             for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
             {
                 bool isLeaveExist = false;
-                if (!datesToBeChanged.Contains(eachLeaveDay))
-                {
-                    isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date));
-                }
+               
+                    isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date) && x.GetLeaveId()!= leaveId);
+               
                 if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
                 {
                     takenLeaveDates.Add(eachLeaveDay);
@@ -180,9 +178,9 @@ namespace UseCases
             }
             if (takenLeaveDates.Any())
             {
-                var status = StatusType.Updated;
-                var takenLeave = new Leave(employeeId, takenLeaveDates, LeaveType, Remark, status,null);
-                _leavesRepository.OverrideLeave(takenLeave, datesToBeChanged);
+ 
+                var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, remark,StatusType.Updated,null);
+                _leavesRepository.OverrideLeave(leaveId, takenLeave);
                 return ServiceResponseDTO.Updated;
             }
             else

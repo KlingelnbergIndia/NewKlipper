@@ -11,7 +11,7 @@ namespace UseCaseBoundary
         bool AddNewLeave(Leave leave);
         List<Leave> GetAllLeavesInfo(int employeeId);
         bool IsLeaveExist(int employeeId, DateTime leaveDate);
-        bool OverrideLeave(Leave leaveDto,List<DateTime> listOfDatesToBeChange);
+        bool OverrideLeave(string leaveId, Leave leaveData);
         bool CancelLeave(string LeaveId);
     }
 }

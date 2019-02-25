@@ -12,10 +12,11 @@
                 </div>
                 <div id="ModalBody" style="margin-left:9px;margin-right:10px">
                     <div class="col-md-12">
-                        <form method="post" asp-controller="Leave" asp-action="ApplyLeave">
+                        <form method="post" asp-controller="Leave" asp-action="UpdateLeave">
+                            <input type="hidden" id="leaveId" name="leaveId" />
                             <div class="col-md-6">
                                 <label for="from">From</label>
-                                <input type="date" id ="fromDate" class="form-control input-sm"  value=""
+                                <input type="date" id="fromDate" class="form-control input-sm" value=""
                                        min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
                                        max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")"
                                        asp-for="@Model.FromDate"
@@ -24,7 +25,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="to">To</label>
-                                <input type="date" id="toDate" class="form-control input-sm" 
+                                <input type="date" id="toDate" class="form-control input-sm"
                                        min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
                                        max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")"
                                        style="width:150px;"
@@ -69,12 +70,12 @@
         $(document).ready(function () {
             var _convertStringToDateObject;
 
-            UpdateLeave = function (laeveId, fromDate, toDate, leaveTypeId, remark) {
+            UpdateLeave = function (leaveId, fromDate, toDate, leaveTypeId, remark) {
                 $('#UpdateLeaveModal').modal({ 'show': true, 'backdrop': true });
                 document.getElementById("fromDate").value = convertDateToHtmlFormat(new Date(fromDate));
                 document.getElementById("toDate").value = convertDateToHtmlFormat(new Date(toDate));
                 document.getElementById("leaveType").value = leaveTypeId;
-                document.getElementById("remark").value = remark ;
+                document.getElementById("leaveId").value = leaveId ;
             }
 
         });
