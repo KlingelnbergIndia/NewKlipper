@@ -61,6 +61,7 @@
                 {
                     var isRealisedLeave = @leave.IsRealizedLeave.ToString().ToLower();
                     string disableColor = @leave.IsRealizedLeave ? "dimgray" : "black";
+                    int LeaveTypeId = (int)@leave.TypeOfLeave;
                     <tr>
                         <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
                         <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
@@ -69,7 +70,7 @@
                         <td>@leave.Remark</td>
                         <td class="text-center">
                             <span data-toggle="tooltip" class="glyphicon glyphicon-pencil" title="Update Leave" 
-                                  onclick=UpdateLeave("@leave.LeaveId",dateToYMD('@leave.FromDate.ToString("yyyy-MM-dd")'),dateToYMD('@leave.ToDate.ToString("yyyy-MM-dd")'),"@leave.Remark") 
+                                  onclick=UpdateLeave("@leave.LeaveId",dateToYMD('@leave.FromDate.ToString("yyyy-MM-dd")'),dateToYMD('@leave.ToDate.ToString("yyyy-MM-dd")'),"@LeaveTypeId","@leave.Remark") 
                                   style="cursor:pointer;margin-right:10px;"></span>
                             <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave" 
                                   onclick=CancelLeave("@leave.LeaveId") 

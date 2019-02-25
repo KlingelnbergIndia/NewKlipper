@@ -4,7 +4,7 @@
 }
 <body>
     <div class="modal fade" id="UpdateLeaveModal" role="dialog">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-sm" style="width:370px;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -13,36 +13,29 @@
                 <div id="ModalBody" style="margin-left:9px;margin-right:10px">
                     <div class="col-md-12">
                         <form method="post" asp-controller="Leave" asp-action="ApplyLeave">
-                            <div class="col-md-6" id="fromDate">
+                            <div class="col-md-6">
                                 <label for="from">From</label>
-                                <input type="date" class="form-control input-sm"
-                                       value="@DateTime.Now.ToString("yyyy-MM-dd")"
+                                <input type="date" id ="fromDate" class="form-control input-sm"  value=""
                                        min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
                                        max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")"
                                        asp-for="@Model.FromDate"
-                                       id="FromDate"
                                        style="width:150px;"
-                                       required>
-                            </div>
-                            <div class="col-md-6" id="toDate">
-                                <label for="to">To</label>
-                                <input type="date" class="form-control input-sm" 
-                                       value="@DateTime.Now.ToString("yyyy-MM-dd")"
-                                       min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
-                                       max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")"
-                                       style="width:150px;"
-                                       asp-for="@Model.ToDate" id="ToDate"
                                        required>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group" id="leaveType" style="width:200px;margin-top:14px;">
+                                <label for="to">To</label>
+                                <input type="date" id="toDate" class="form-control input-sm" 
+                                       min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                                       max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")"
+                                       style="width:150px;"
+                                       asp-for="@Model.ToDate"
+                                       required>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group" style="width:200px;margin-top:14px;">
                                     <label>Leave Type</label>
-                                    <select id="leaveList" name="leaveList" class="form-control input-sm"  asp-for="@Model.LeaveType" style="width:150px;">
-                                        @if (Model.LeaveType.ToString() == null)
-                                        {
-                                            <option value="" selected>--Select LeaveType--</option>
-                                        }
-
+                                    <select id="leaveType" name="leaveList" class="form-control input-sm" asp-for="@Model.LeaveType" style="width:150px;">
+                                        <option value="-1" disabled selected>select leave type</option>
                                         @foreach (var leave in leaveTypes)
                                         {
                                             <option value="@leave.Key">@leave.Value</option>
@@ -76,14 +69,13 @@
         $(document).ready(function () {
             var _convertStringToDateObject;
 
-            UpdateLeave = function (laeveId,fromDate,toDate,remark) {
-                alert(remark);
-
-                document.getElementById("fromDate").value = fromDate;
-                document.getElementById("toDate").value = toDate;
-                //document.getElementById("my_remark").value = remark;
-                document.getElementById("remark").value = remark;
+            UpdateLeave = function (laeveId, fromDate, toDate, leaveTypeId, remark) {
                 $('#UpdateLeaveModal').modal({ 'show': true, 'backdrop': true });
+                alert(fromDate);
+                document.getElementById("fromDate").value = convertDateToHtmlFormat(fromDate);
+                document.getElementById("toDate").value = convertDateToHtmlFormat(toDate);
+                document.getElementById("leaveType").value = leaveTypeId;
+                document.getElementById("remark").value = remark ;
             }
 
         });
@@ -91,3 +83,18 @@
 </body>
 <link href="~/css/_ApplyLeavePagePopup.css" rel="stylesheet" />
 <script src="~/js/common.helpers.js"></script>
+<script>
+    function convertDateToHtmlFormat(fromDate) {
+        //HTML formt is yyyy-mm-dd
+        try {
+            fromDate = new Date(fromDate)
+            var d = fromDate.getDate();
+            var m = fromDate.getMonth()+1;
+            var y = fromDate.getFullYear();
+            return '' + y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+        } catch (e) {
+            alert('Invalid date');
+            return null;
+        }
+    }
+</script>
