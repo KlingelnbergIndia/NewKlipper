@@ -14,18 +14,27 @@ namespace DataAccess.EntityModel.Leave
         [BsonId]
         [JsonConverter(typeof(ObjectIdConverter))]
         public ObjectId _objectId { get; set; }
+
         public int EmployeeId { get; set; }
+
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-        public DateTime FromDate { get; set; } 
+        public DateTime FromDate { get; set; }
+
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime ToDate { get; set; }
+
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public List<DateTime> AppliedLeaveDates { get; set; }
+
+        [BsonRepresentation(BsonType.String)]
         public LeaveType TypeOfLeave { get; set; }
+
         public string Remark { get; set; }
+
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime LogDateTime { get; private set; } = DateTime.Now;
-        public bool IsLeaveCanceled { get; set; } = false;
+      
+        public StatusType Status;
 
     }
 

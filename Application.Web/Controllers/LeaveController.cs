@@ -15,7 +15,7 @@ using static DomainModel.Leave;
 
 namespace Application.Web.Controllers
 {
-    [AuthenticateSession]
+
     public class LeaveController : Controller
     {
         private readonly ILeavesRepository _leavesRepository;
@@ -23,8 +23,11 @@ namespace Application.Web.Controllers
         private IDepartmentRepository _departmentRepository;
         private ICarryForwardLeaves _carryForwardLeaves;
 
-        public LeaveController(ILeavesRepository leavesRepository, IEmployeeRepository employeeRepository,
-            IDepartmentRepository departmentRepository, ICarryForwardLeaves carryForwardLeaves)
+        public LeaveController(
+            ILeavesRepository leavesRepository, 
+            IEmployeeRepository employeeRepository,
+            IDepartmentRepository departmentRepository, 
+            ICarryForwardLeaves carryForwardLeaves)
         {
             _leavesRepository = leavesRepository;
             _employeeRepository = employeeRepository;
@@ -39,33 +42,11 @@ namespace Application.Web.Controllers
 
             var leaveViewModel = new LeaveViewModel();
             leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
-            
+
             var leaveSummary = leaveService.GetTotalSummary(loggedInEmpId);
-            List<LeaveSummaryViewModel> listOfleaveSummary = new List<LeaveSummaryViewModel>()
-            {
-                new LeaveSummaryViewModel()
-                {
-                    LeaveType = "Casual Leave",
-                    TotalAvailableLeave = leaveSummary.MaximumCasualLeave,
-                    LeaveTaken = leaveSummary.TotalCasualLeaveTaken,
-                    RemainingLeave = leaveSummary.RemainingCasualLeave
-                },
-                new LeaveSummaryViewModel()
-                {
-                    LeaveType = "Sick Leave",
-                    TotalAvailableLeave = leaveSummary.MaximumSickLeave,
-                    LeaveTaken = leaveSummary.TotalSickLeaveTaken,
-                    RemainingLeave = leaveSummary.RemainingSickLeave
-                },
-                new LeaveSummaryViewModel()
-                {
-                    LeaveType = "Comp-Off",
-                    TotalAvailableLeave = leaveSummary.MaximumCompOffLeave,
-                    LeaveTaken = leaveSummary.TotalCompOffLeaveTaken,
-                    RemainingLeave = leaveSummary.RemainingCompOffLeave
-                }
-            };
-            leaveViewModel.LeaveSummary = listOfleaveSummary;
+            leaveViewModel.LeaveSummary = new ReporteeViewModel()
+                .ConvertToLeaveSummaryViewModel(leaveSummary);
+           
 
             return View(leaveViewModel);
         }
@@ -78,13 +59,12 @@ namespace Application.Web.Controllers
                 return RedirectToAction("Index");
             }
             string leaveType = HttpContext.Request.Form["leaveList"].ToString();
-            if (int.Parse(leaveType)==0)
+            if (int.Parse(leaveType) == 0)
                 LeaveType = LeaveType.CompOff;
             else if (int.Parse(leaveType) == 1)
                 LeaveType = LeaveType.CasualLeave;
             else if (int.Parse(leaveType) == 2)
                 LeaveType = LeaveType.SickLeave;
-
 
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
@@ -96,6 +76,60 @@ namespace Application.Web.Controllers
                 TempData["responseMessage"] = "Your Leave is already submitted !";
             else if (response == ServiceResponseDTO.InvalidDays)
                 TempData["errorMessage"] = "Invalid Selected Days !";
+            else if(response == ServiceResponseDTO.CanNotApplied)
+                TempData["errorMessage"] = "Selected Leave is Exhausted!";
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult UpdateLeave(string leaveId,DateTime FromDate, DateTime ToDate, LeaveType LeaveType, string Remark)
+        {
+            string ExistingLeaveId = HttpContext.Request.Form["leaveId"].ToString();
+            if (leaveId != null)
+            {
+                if (FromDate > ToDate)
+                {
+                    TempData["errorMessage"] = "From-date should not be greater than To-Date !";
+                    return RedirectToAction("Index");
+                }
+                string leaveType = HttpContext.Request.Form["leaveList"].ToString();
+                if (int.Parse(leaveType) == 0)
+                    LeaveType = LeaveType.CompOff;
+                else if (int.Parse(leaveType) == 1)
+                    LeaveType = LeaveType.CasualLeave;
+                else if (int.Parse(leaveType) == 2)
+                    LeaveType = LeaveType.SickLeave;
+
+                var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
+                var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
+                var response = leaveService.UpdateLeave(ExistingLeaveId, loggedInEmpId, FromDate,ToDate,LeaveType,Remark);
+
+                if (response == ServiceResponseDTO.Updated)
+                    TempData["responseMessage"] = "Your Leave is updated !";
+                else if (response == ServiceResponseDTO.RecordExists)
+                    TempData["responseMessage"] = "Your Leave is already submitted !";
+                else if (response == ServiceResponseDTO.InvalidDays)
+                    TempData["errorMessage"] = "Invalid Selected Days !";
+                else if (response == ServiceResponseDTO.CanNotApplied)
+                    TempData["errorMessage"] = "Selected Leave is Exhausted!";
+                else if (response == ServiceResponseDTO.Deleted)
+                    TempData["errorMessage"] = "Cancelled Leave can not be update !";
+                else if (response == ServiceResponseDTO.RealizedLeave)
+                    TempData["errorMessage"] = "realized Leave can not be update !";
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult CancelLeave(string LeaveId)
+        {
+            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
+            var response = leaveService.CancelLeave(LeaveId);
+
+            if (response == ServiceResponseDTO.Deleted)
+                TempData["responseMessage"] = "Your Leave is Cancel !";
+            else
+                TempData["responseMessage"] = "Your Leave is not Cancel !";
 
             return RedirectToAction("Index");
         }

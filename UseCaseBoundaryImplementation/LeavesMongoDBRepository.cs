@@ -6,8 +6,10 @@ using DataAccess;
 using DataAccess.EntityModel.Employment;
 using DataAccess.EntityModel.Leave;
 using DomainModel;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using UseCaseBoundary;
+using static DataAccess.EntityModel.Leave.LeaveEntityModel;
 using static DomainModel.Leave;
 
 namespace RepositoryImplementation
@@ -31,6 +33,7 @@ namespace RepositoryImplementation
                 Remark = leaveDetails.GetRemark(),
                 TypeOfLeave = leaveDetails.GetLeaveType(),
                 AppliedLeaveDates = leaveDetails.GetLeaveDate(),
+                Status = leaveDetails.GetStatus()
             };
 
             __leaveDBContext.AppliedLeaves
@@ -48,14 +51,17 @@ namespace RepositoryImplementation
                 .AsQueryable()
                 .Where(x => x.EmployeeId == employeeId)
                 .ToList();
-
+            
             foreach (var leave in empLeaves)
             {
                 leaves.Add(new Leave(
                     leave.EmployeeId,
                     leave.AppliedLeaveDates,
                     leave.TypeOfLeave,
-                    leave.Remark));
+                    leave.Remark,
+                    leave.Status,
+                    leave._objectId.ToString()
+                    ));
             }
 
             return leaves;
@@ -70,31 +76,70 @@ namespace RepositoryImplementation
                 .Any();
         }
 
-        public bool OverrideLeave(Leave leaveData)
+        public bool OverrideLeave(string leaveId,Leave leaveData)
         {
             var isLeaveExist = __leaveDBContext.AppliedLeaves
                 .AsQueryable()
-                .Where(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates == leaveData.GetLeaveDate())
+                .Where(x => x._objectId == ObjectId.Parse(leaveId))
                 .Any();
 
             if (isLeaveExist)
             {
+                __leaveDBContext.AppliedLeaves.DeleteOneAsync(x => x._objectId == ObjectId.Parse(leaveId));
+
+                var leaveEntity = new LeaveEntityModel()
+                {
+                    AppliedLeaveDates = leaveData.GetLeaveDate(),
+                    TypeOfLeave = leaveData.GetLeaveType(),
+                    Remark = leaveData.GetRemark(),
+                    EmployeeId = leaveData.GetEmployeeId(),
+                    Status = leaveData.GetStatus()
+                };
                 __leaveDBContext.AppliedLeaves
-                .DeleteOneAsync(x => x.EmployeeId == leaveData.GetEmployeeId() && x.AppliedLeaveDates == leaveData.GetLeaveDate());
+                    .InsertOneAsync(leaveEntity)
+                    .GetAwaiter()
+                    .GetResult();
+                return true;
+                
+            }
+            else
+            {
+                return false;
             }
 
-            var leaveEntity = new LeaveEntityModel()
+        }
+
+        public bool CancelLeave(string LeaveId)
+        {
+            FilterDefinition<LeaveEntityModel> filter = Builders<LeaveEntityModel>.Filter.Eq("_id", ObjectId.Parse(LeaveId));
+            UpdateDefinition<LeaveEntityModel> update = Builders<LeaveEntityModel>.Update.Set(x => x.Status, StatusType.Cancelled);
+
+            var opts = new FindOneAndUpdateOptions<LeaveEntityModel>()
             {
-                AppliedLeaveDates = leaveData.GetLeaveDate(),
-                TypeOfLeave = leaveData.GetLeaveType(),
-                Remark = leaveData.GetRemark(),
-                EmployeeId = leaveData.GetEmployeeId()
+                IsUpsert = true,
             };
-            __leaveDBContext.AppliedLeaves
-                .InsertOneAsync(leaveEntity)
-                .GetAwaiter()
-                .GetResult();
-            return true;
+
+            var model = __leaveDBContext.AppliedLeaves.FindOneAndUpdate(filter, update, opts);
+
+            if (model != null)
+            {
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public Leave GetLeaveByLeaveId(string leaveId)
+        {
+            var leave = __leaveDBContext.AppliedLeaves.AsQueryable()
+                .Where(x => x._objectId == ObjectId.Parse(leaveId)).FirstOrDefault();
+
+            var leaveToLeaveObject = new Leave(leave.EmployeeId, leave.AppliedLeaveDates, leave.TypeOfLeave,leave.Remark, leave.Status, leave._objectId.ToString());
+
+            return leaveToLeaveObject;
         }
     }
 }
