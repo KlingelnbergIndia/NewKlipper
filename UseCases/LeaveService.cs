@@ -98,7 +98,7 @@ namespace UseCases
                     ToDate = eachLeave.GetLeaveDate().Max(),
                     NoOfDays = eachLeave.GetLeaveDate().Count(),
                     Status = eachLeave.GetStatus(),
-                    IsRealizedLeave = false,
+                    IsRealizedLeave = IsRealizedLeave(eachLeave.GetLeaveId()),
                     LeaveId = eachLeave.GetLeaveId(),
                 };
                 listOfLeaveDTO.Add(leaveDTO);
@@ -155,14 +155,21 @@ namespace UseCases
             int invalidDays = 0;
             int totalAppliedDays = 0;
 
-            var exixtingLeaveIsCancelledLeave = allAppliedLeaves.Any(x => x.GetLeaveId() == leaveId && x.GetStatus() != StatusType.Cancelled);
-            //if (IsRealizedLeave(leaveId))
-            //{
-            //    return ServiceResponseDTO.RealizedLeave;
-            //}
+            var exixtingLeaveIsCancelledLeave = allAppliedLeaves.Any(x => x.GetLeaveId() == leaveId && 
+            x.GetStatus() != StatusType.Cancelled);
 
-            if (exixtingLeaveIsCancelledLeave)
+            if (!exixtingLeaveIsCancelledLeave)
             {
+                return ServiceResponseDTO.Deleted;
+            }
+
+            if (employeeData.Reportees()==null)
+            {
+                if (IsRealizedLeave(leaveId))
+                {
+                    return ServiceResponseDTO.RealizedLeave;
+                }
+            }
                 for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
                 {
                     bool isLeaveExist = false;
@@ -207,21 +214,14 @@ namespace UseCases
                         return ServiceResponseDTO.RecordExists;
                     }
                 }
-            }
-            else
-            {
-                return ServiceResponseDTO.Deleted;
-            }
-
-
         }
 
         public ServiceResponseDTO CancelLeave(string LeaveId)
         {
-            //if (IsRealizedLeave(LeaveId))
-            //{
-            //    return ServiceResponseDTO.RealizedLeave;
-            //}
+            if (IsRealizedLeave(LeaveId))
+            {
+                return ServiceResponseDTO.RealizedLeave;
+            }
             if (_leavesRepository.CancelLeave(LeaveId))
             {
                 return ServiceResponseDTO.Deleted;
