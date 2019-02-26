@@ -100,7 +100,7 @@ namespace UseCases
                     ToDate = eachLeave.GetLeaveDate().Max(),  
                     NoOfDays = eachLeave.GetLeaveDate().Count(),
                     Status = eachLeave.GetStatus(),
-                    IsRealizedLeave = IsRealizedLeave(eachLeave.GetLeaveId()),
+                    IsRealizedLeave = false,
                     LeaveId = eachLeave.GetLeaveId(),
                 };
                 listOfLeaveDTO.Add(leaveDTO);
@@ -158,12 +158,12 @@ namespace UseCases
             int totalAppliedDays = 0;
 
             var exixtingLeaveIsCancelledLeave = allAppliedLeaves.Any(x=>x.GetLeaveId() == leaveId && x.GetStatus()!=StatusType.Cancelled);
-            if (IsRealizedLeave(leaveId))
-            {
-                return ServiceResponseDTO.RealizedLeave;
-            }
+            //if (IsRealizedLeave(leaveId))
+            //{
+            //    return ServiceResponseDTO.RealizedLeave;
+            //}
 
-            if (!exixtingLeaveIsCancelledLeave)
+            if (exixtingLeaveIsCancelledLeave)
             {
                 for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
                 {
@@ -220,10 +220,10 @@ namespace UseCases
 
         public ServiceResponseDTO CancelLeave(string LeaveId)
         {
-            if (IsRealizedLeave(LeaveId))
-            {
-                return ServiceResponseDTO.RealizedLeave;
-            }
+            //if (IsRealizedLeave(LeaveId))
+            //{
+            //    return ServiceResponseDTO.RealizedLeave;
+            //}
             if (_leavesRepository.CancelLeave(LeaveId))
             {
                 return ServiceResponseDTO.Deleted;
@@ -237,7 +237,7 @@ namespace UseCases
             var leave = _leavesRepository.GetLeaveByLeaveId(LeaveId);
                 if(leave!=null)
                {
-                if(leave.GetLeaveDate().Min() >= DateTime.Now.Date)
+                if(leave.GetLeaveDate().Min() <= DateTime.Now.Date)
                 {
                     return true;
                 }

@@ -10,7 +10,7 @@ function CancelLeave(leaveId,isRealisedLeave) {
     //    return;
     //}
 
-    if (confirm('Do you want to really cancel this leave ?')) {
+    if (confirm('Do you want to cancel this leave ?')) {
         $.ajax({
             type: "POST",
             url: newURL,
