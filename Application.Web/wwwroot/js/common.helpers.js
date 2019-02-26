@@ -30,5 +30,8 @@ function convertDateToHtmlFormat(fromDate) {
 
 function decodeString(encodedString) {
     var str = encodedString.replace("%", " ");
+    for (i = 0; i < encodedString.length; i++) {
+        str = str.replace("%", " ");
+    }
     return str;
 }

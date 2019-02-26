@@ -5,10 +5,10 @@ function CancelLeave(leaveId,isRealisedLeave) {
     var actionName = "CancelLeave";
     var newURL = window.location.protocol + "//" + window.location.host + "/" + controllerName + "/" + actionName;
 
-    if (isRealisedLeave == "true") {
-        alert('Realised leave can not be regularized !');
-        return;
-    }
+    //if (isRealisedLeave == "true") {
+    //    alert('Realised leave can not be regularized !');
+    //    return;
+    //}
 
     if (confirm('Do you want to really cancel this leave ?')) {
         $.ajax({
