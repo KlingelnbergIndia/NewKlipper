@@ -39,25 +39,6 @@ namespace Klipper.Tests.Leaves
         }
 
         [Test]
-        public void IdentifyThatGivenDateIsRealisedLeaveDate()
-        {
-            //SETUP
-            Leave leave = new DummyLeaveBuilder()
-                .WithEmployeeId(63)
-                .WithLeaveType(LeaveType.CasualLeave)
-                .WithLeaveStatusType(StatusType.Approved)
-                .WithLeaveDates(appliedLeaveDates)
-                .Build();
-            leaveRecordData.GetAllLeavesInfo(63).Returns(new List<Leave>() { leave });
-
-            //CALL USECASE
-            LeaveService leaveService = new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
-            var resultData = leaveService.GetAppliedLeaves(63);
-
-            Assert.That(resultData[0].IsRealizedLeave, Is.EqualTo(true));
-        }
-
-        [Test]
         public void IdentifyThatGivenDateIsNotRealisedLeaveDate()
         {
             //SETUP
