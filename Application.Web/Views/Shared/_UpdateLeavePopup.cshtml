@@ -70,7 +70,11 @@
         $(document).ready(function () {
             var _convertStringToDateObject;
 
-            UpdateLeave = function (leaveId, fromDate, toDate, leaveTypeId, remark) {
+            UpdateLeave = function (leaveId, fromDate, toDate, leaveTypeId, remark, isrealized,isCancelledLeave) {
+                if (isrealized == "true" || isCancelledLeave=="true") {
+                    alert('leave can not be update');
+                    return false;
+                }
                 $('#UpdateLeaveModal').modal({ 'show': true, 'backdrop': true });
                 document.getElementById("fromDate").value = convertDateToHtmlFormat(new Date(fromDate));
                 document.getElementById("toDate").value = convertDateToHtmlFormat(new Date(toDate));
@@ -84,3 +88,4 @@
 </body>
 <script src="~/js/common.helpers.js"></script>
 <link href="~/css/_ApplyLeavePagePopup.css" rel="stylesheet" />
+<script src="~/js/common.Leave.js"></script>

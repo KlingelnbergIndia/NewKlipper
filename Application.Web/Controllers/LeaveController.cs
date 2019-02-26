@@ -124,12 +124,15 @@ namespace Application.Web.Controllers
         public IActionResult CancelLeave(string LeaveId)
         {
             var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-            var response = leaveService.CancelLeave(LeaveId);
+            var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
+            var response = leaveService.CancelLeave(LeaveId, loggedInEmpId);
 
             if (response == ServiceResponseDTO.Deleted)
                 TempData["responseMessage"] = "Your Leave is Cancel !";
+            else if (response == ServiceResponseDTO.RealizedLeave)
+                TempData["responseMessage"] = "realized Leave can not be Cancel !";
             else
-                TempData["responseMessage"] = "Your Leave is not Cancel !";
+            TempData["responseMessage"] = "Your Leave is not Cancel !";
 
             return RedirectToAction("Index");
         }

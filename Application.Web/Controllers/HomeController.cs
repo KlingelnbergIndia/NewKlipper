@@ -184,9 +184,23 @@ namespace Application.Web.Controllers
                 reporteeViewModel.toDate = DateTime.Now.Date;
                 reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
             }
-
+            reporteeViewModel.leaveViewModel = GetLeave();
             ViewBag.SelectedTab = selectedViewTabs;
             return View("Reportees", reporteeViewModel);
+        }
+
+        private LeaveViewModel GetLeave()
+        {
+            var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
+            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
+
+            var leaveViewModel = new LeaveViewModel();
+            leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
+
+            var leaveSummary = leaveService.GetTotalSummary(loggedInEmpId);
+            leaveViewModel.LeaveSummary = new ReporteeViewModel()
+                .ConvertToLeaveSummaryViewModel(leaveSummary);
+            return leaveViewModel;
         }
 
         [HttpGet]

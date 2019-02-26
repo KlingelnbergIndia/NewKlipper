@@ -24,8 +24,9 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_AccessEventsPopup");}
     @{await Html.RenderPartialAsync("_HoursRegularizationPopup");}
-}
+    @{await Html.RenderPartialAsync("_UpdateLeavePopup", @Model.leaveViewModel);}
 
+}
 
 
 

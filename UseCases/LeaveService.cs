@@ -98,7 +98,7 @@ namespace UseCases
                     ToDate = eachLeave.GetLeaveDate().Max(),
                     NoOfDays = eachLeave.GetLeaveDate().Count(),
                     Status = eachLeave.GetStatus(),
-                    IsRealizedLeave = false,
+                    IsRealizedLeave = IsRealizedLeave(eachLeave.GetLeaveId()),
                     LeaveId = eachLeave.GetLeaveId(),
                 };
                 listOfLeaveDTO.Add(leaveDTO);
@@ -142,11 +142,11 @@ namespace UseCases
             };
         }
 
-        public ServiceResponseDTO UpdateLeave(string leaveId, int employeeId, DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
+        public ServiceResponseDTO UpdateLeave(string leaveId, int employeeId,
+            DateTime fromDate, DateTime toDate, LeaveType leaveType, string remark)
         {
 
             List<DateTime> takenLeaveDates = new List<DateTime>();
-            LeaveRecordDTO leaveRecord = new LeaveRecordDTO();
 
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
             Department department = _departmentRepository.GetDepartment(employeeData.Department());
@@ -155,19 +155,28 @@ namespace UseCases
             int invalidDays = 0;
             int totalAppliedDays = 0;
 
-            var exixtingLeaveIsCancelledLeave = allAppliedLeaves.Any(x => x.GetLeaveId() == leaveId && x.GetStatus() != StatusType.Cancelled);
-            //if (IsRealizedLeave(leaveId))
-            //{
-            //    return ServiceResponseDTO.RealizedLeave;
-            //}
+            var existingLeaveIsCancelledLeave = allAppliedLeaves.Any(x =>
+            x.GetLeaveId() == leaveId && x.GetStatus() == StatusType.Cancelled);
+            var empIdOfLeaveToBeUpdate = _leavesRepository.GetLeaveByLeaveId(leaveId).GetEmployeeId();
 
-            if (exixtingLeaveIsCancelledLeave)
+            if (existingLeaveIsCancelledLeave)
             {
-                for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
-                {
-                    bool isLeaveExist = false;
+                return ServiceResponseDTO.Deleted;
+            }
 
-                    isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date)
+            if (empIdOfLeaveToBeUpdate == employeeId)
+            {
+                if (IsRealizedLeave(leaveId))
+                {
+                    return ServiceResponseDTO.RealizedLeave;
+                }
+            }
+        
+                for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; 
+                    eachLeaveDay = eachLeaveDay.AddDays(1).Date)
+                {
+                  
+                    bool isLeaveExist = allAppliedLeaves.Any(x=> x.GetLeaveDate().Contains(eachLeaveDay.Date)
                     && x.GetLeaveId() != leaveId && x.GetStatus() != StatusType.Cancelled);
 
                     if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
@@ -182,6 +191,7 @@ namespace UseCases
                 }
                 if (takenLeaveDates.Any())
                 {
+                
                     if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
                     {
                         var leaveSummmary = GetTotalSummary(employeeId);
@@ -207,22 +217,20 @@ namespace UseCases
                         return ServiceResponseDTO.RecordExists;
                     }
                 }
-            }
-            else
-            {
-                return ServiceResponseDTO.Deleted;
-            }
-
 
         }
 
-        public ServiceResponseDTO CancelLeave(string LeaveId)
+        public ServiceResponseDTO CancelLeave(string leaveId, int employeeId)
         {
-            //if (IsRealizedLeave(LeaveId))
-            //{
-            //    return ServiceResponseDTO.RealizedLeave;
-            //}
-            if (_leavesRepository.CancelLeave(LeaveId))
+            var empIdOfLeaveToBeUpdate = _leavesRepository.GetLeaveByLeaveId(leaveId).GetEmployeeId();
+            if (empIdOfLeaveToBeUpdate == employeeId)
+            {
+                if (IsRealizedLeave(leaveId))
+                {
+                    return ServiceResponseDTO.RealizedLeave;
+                }
+            }
+            if (_leavesRepository.CancelLeave(leaveId))
             {
                 return ServiceResponseDTO.Deleted;
             }
