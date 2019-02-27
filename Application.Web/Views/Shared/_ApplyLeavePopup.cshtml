@@ -45,18 +45,22 @@
                                         <option value="@leave.Key">@leave.Value</option>
                                     }
                                 </select>
+
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-6" style="margin-top:28px;">
+                            <label class="checkbox"><input type="checkbox" asp-for="@Model.IsHalfDay" value="true">Half Day</label>
+                         </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Remark</label>
+                                    <textarea asp-for="@Model.Remark" class="form-control input-sm" placeholder="Remark" rows="6" required></textarea>
+                                    <span asp-validation-for="@Model.Remark" class="text-danger input-sm"></span>
+                                </div>
+                            </div>
                             <div class="form-group">
-                                <label>Remark</label>
-                                <textarea asp-for="@Model.Remark" class="form-control input-sm" placeholder="Remark" rows="6" required></textarea>
-                                <span asp-validation-for="@Model.Remark" class="text-danger input-sm"></span>
+                                <input type="submit" value="submit" class="btn btn-default btn-info pull-right" />
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="submit" class="btn btn-default btn-info pull-right" />
-                        </div>
                     </form>
                 </div>
 
