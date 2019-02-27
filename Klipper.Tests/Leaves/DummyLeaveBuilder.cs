@@ -50,6 +50,7 @@ namespace Klipper.Tests.Leaves
                 this._EmployeeId,
                 this.AppliedLeaveDates,
                 this._LeaveType = LeaveType.CasualLeave,
+                false,
                 "",
                 this._StatusType,
                 this._leaveId);

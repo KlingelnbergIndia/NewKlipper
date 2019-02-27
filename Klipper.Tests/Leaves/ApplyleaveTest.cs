@@ -42,7 +42,7 @@ namespace Klipper.Tests
             
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, false, "one day sick leave apply", StatusType.Approved, "id1"));
 
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
@@ -60,7 +60,8 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var respone =leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22"), Leave.LeaveType.SickLeave, "one day sick leave apply");
+            var respone =leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"),
+                DateTime.Parse("2019-02-22"), Leave.LeaveType.SickLeave, false, "one day sick leave apply");
 
             Assert.That(respone, Is.EqualTo(ServiceResponseDTO.RecordExists));
         }
@@ -73,7 +74,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, false, "one day sick leave apply", StatusType.Approved, "id1"));
 
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
@@ -91,7 +92,8 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22"), Leave.LeaveType.CasualLeave, "one day sick leave apply");
+            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"), 
+                DateTime.Parse("2019-02-22"), Leave.LeaveType.CasualLeave, false, "one day sick leave apply");
 
             Assert.That(respone, Is.EqualTo(ServiceResponseDTO.RecordExists));
         }
@@ -103,7 +105,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved,null));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, false, "one day sick leave apply", StatusType.Approved,null));
 
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
@@ -121,7 +123,8 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22"), Leave.LeaveType.CompOff, "one day sick leave apply");
+            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"),
+                DateTime.Parse("2019-02-22"), Leave.LeaveType.CompOff, false, "one day sick leave apply");
 
             Assert.That(respone, Is.EqualTo(ServiceResponseDTO.RecordExists));
         }
@@ -134,7 +137,8 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, null));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, 
+                false, "one day sick leave apply", StatusType.Approved, null));
 
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
@@ -152,7 +156,8 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-02"), DateTime.Parse("2019-02-02"), Leave.LeaveType.SickLeave, "one day sick leave apply");
+            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-02"),
+                DateTime.Parse("2019-02-02"), Leave.LeaveType.SickLeave, false, "one day sick leave apply");
 
             Assert.That(respone, Is.EqualTo(ServiceResponseDTO.InvalidDays));
         }
@@ -165,7 +170,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, null));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, false, "one day sick leave apply", StatusType.Approved, null));
 
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
@@ -183,7 +188,8 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-02"), DateTime.Parse("2019-02-02"), Leave.LeaveType.CasualLeave, "one day sick leave apply");
+            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-02"), 
+                DateTime.Parse("2019-02-02"), Leave.LeaveType.CasualLeave, false, "one day sick leave apply");
 
             Assert.That(respone, Is.EqualTo(ServiceResponseDTO.InvalidDays));
         }
@@ -195,8 +201,10 @@ namespace Klipper.Tests
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
             List<Leave> listOfLeave = new List<Leave>();
-            List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, null));
+            List<DateTime> listOfDate = new List<DateTime>()
+            { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave,
+                false, "one day sick leave apply", StatusType.Approved, null));
 
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
@@ -214,7 +222,8 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-02"), DateTime.Parse("2019-02-02"), Leave.LeaveType.CompOff, "one day sick leave apply");
+            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-02"),
+                DateTime.Parse("2019-02-02"), Leave.LeaveType.CompOff,false, "one day sick leave apply");
 
             Assert.That(respone, Is.EqualTo(ServiceResponseDTO.InvalidDays));
         }
@@ -227,7 +236,8 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, null));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave,
+                false, "one day sick leave apply", StatusType.Approved, null));
 
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
@@ -245,7 +255,8 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), DateTime.Parse("2019-02-05"), Leave.LeaveType.SickLeave, "one day sick leave apply");
+            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"),
+                DateTime.Parse("2019-02-05"), Leave.LeaveType.SickLeave,false, "one day sick leave apply");
 
             Assert.That(respone, Is.EqualTo(ServiceResponseDTO.Saved));
         }
@@ -258,7 +269,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, false, "one day sick leave apply", StatusType.Approved, "id1"));
 
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
@@ -276,7 +287,8 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), DateTime.Parse("2019-02-05"), Leave.LeaveType.CasualLeave, "one day sick leave apply");
+            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), 
+                DateTime.Parse("2019-02-05"), Leave.LeaveType.CasualLeave,false, "one day sick leave apply");
 
             Assert.That(respone, Is.EqualTo(ServiceResponseDTO.Saved));
         }
@@ -289,7 +301,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, false, "one day sick leave apply", StatusType.Approved, "id1"));
 
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
@@ -307,7 +319,8 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), DateTime.Parse("2019-02-05"), Leave.LeaveType.CompOff, "one day sick leave apply");
+            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), 
+                DateTime.Parse("2019-02-05"), Leave.LeaveType.CompOff,false, "one day sick leave apply");
 
             Assert.That(respone, Is.EqualTo(ServiceResponseDTO.Saved));
         }
@@ -320,7 +333,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave,false, "one day sick leave apply", StatusType.Approved, "id1"));
 
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
@@ -338,7 +351,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), DateTime.Parse("2019-02-05"), Leave.LeaveType.SickLeave, "one day sick leave apply");
+            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), DateTime.Parse("2019-02-05"), Leave.LeaveType.SickLeave,false, "one day sick leave apply");
 
             Assert.That(respone, Is.EqualTo(ServiceResponseDTO.CanNotApplied));
         }
@@ -351,7 +364,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, false, "one day sick leave apply", StatusType.Approved, "id1"));
 
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
@@ -369,7 +382,8 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), DateTime.Parse("2019-02-05"), Leave.LeaveType.CasualLeave, "one day sick leave apply");
+            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"),
+                DateTime.Parse("2019-02-05"), Leave.LeaveType.CasualLeave, false, "one day sick leave apply");
 
             Assert.That(respone, Is.EqualTo(ServiceResponseDTO.Saved));
         }
@@ -382,7 +396,7 @@ namespace Klipper.Tests
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
-            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, false, "one day sick leave apply", StatusType.Approved, "id1"));
 
             var dummyLeaveRecord = listOfLeave;
             leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
@@ -400,7 +414,8 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), DateTime.Parse("2019-02-05"), Leave.LeaveType.CompOff, "one day sick leave apply");
+            var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"),
+                DateTime.Parse("2019-02-05"), Leave.LeaveType.CompOff, false, "one day sick leave apply");
 
             Assert.That(response, Is.EqualTo(ServiceResponseDTO.CanNotApplied));
         }
@@ -430,12 +445,13 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23"), Leave.LeaveType.CompOff, "one day sick leave apply");
+            var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"),
+                DateTime.Parse("2019-02-23"), Leave.LeaveType.CompOff, false, "one day sick leave apply");
             if(response == ServiceResponseDTO.Saved)
             {
 
                 listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23") };
-                listOfLeave.Add(new Leave(63, listOfDate, LeaveType.CompOff, "one day sick leave apply", StatusType.Approved, "id1"));
+                listOfLeave.Add(new Leave(63, listOfDate, LeaveType.CompOff, false, "one day sick leave apply", StatusType.Approved, "id1"));
 
                 dummyLeaveRecord = listOfLeave;
             }
@@ -471,12 +487,14 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23"), Leave.LeaveType.CasualLeave, "one day sick leave apply");
+            var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"),
+                DateTime.Parse("2019-02-23"), Leave.LeaveType.CasualLeave, false, "one day sick leave apply");
             if (response == ServiceResponseDTO.Saved)
             {
 
                 listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23") };
-                listOfLeave.Add(new Leave(63, listOfDate, LeaveType.CasualLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+                listOfLeave.Add(new Leave(63, listOfDate, LeaveType.CasualLeave, 
+                    false, "one day sick leave apply", StatusType.Approved, "id1"));
 
                 dummyLeaveRecord = listOfLeave;
             }
@@ -512,12 +530,14 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
-            var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23"), Leave.LeaveType.SickLeave, "one day sick leave apply");
+            var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"),
+                DateTime.Parse("2019-02-23"), Leave.LeaveType.SickLeave, false, "one day sick leave apply");
             if (response == ServiceResponseDTO.Saved)
             {
 
                 listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-23") };
-                listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave, "one day sick leave apply", StatusType.Approved, "id1"));
+                listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave,
+                    false, "one day sick leave apply", StatusType.Approved, "id1"));
 
                 dummyLeaveRecord = listOfLeave;
             }

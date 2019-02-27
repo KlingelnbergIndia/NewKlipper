@@ -68,7 +68,7 @@ namespace Application.Web.Controllers
 
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-            var response = leaveService.ApplyLeave(loggedInEmpId, FromDate, ToDate, LeaveType, Remark);
+            var response = leaveService.ApplyLeave(loggedInEmpId, FromDate, ToDate, LeaveType,true, Remark);
 
             if (response == ServiceResponseDTO.Saved)
                 TempData["responseMessage"] = "Leave applied sucessfully !";
@@ -102,7 +102,7 @@ namespace Application.Web.Controllers
 
                 var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
                 var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-                var response = leaveService.UpdateLeave(ExistingLeaveId, loggedInEmpId, FromDate,ToDate,LeaveType,Remark);
+                var response = leaveService.UpdateLeave(ExistingLeaveId, loggedInEmpId, FromDate,ToDate,LeaveType,false,Remark);
 
                 if (response == ServiceResponseDTO.Updated)
                     TempData["responseMessage"] = "Leave updated sucessfully !";
