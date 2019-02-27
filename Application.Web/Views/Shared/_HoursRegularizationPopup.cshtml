@@ -14,7 +14,7 @@
                 </div>
                 <div class="form-group" style="margin-top:10px;">
                     <label class="control-label" for="remark">Remark:</label>
-                    <textarea class="form-control" rows="5" id="remark"></textarea>
+                    <textarea class="form-control" rows="5" id="remark" required></textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -56,7 +56,6 @@
                     remark: remarkTxt
                 },
                 success: function (response) {
-                    alert(response.value);
                     window.location.reload();
                 }
             });
