@@ -64,7 +64,8 @@
                 @foreach (var leave in @Model.GetAppliedLeaves)
                 {
                     var isRealisedLeave = @leave.IsRealizedLeave.ToString().ToLower();
-                    string disableColor = @leave.IsRealizedLeave ? "dimgray" : "black"; 
+                    string disableColor = @leave.IsRealizedLeave || @leave.Status == DomainModel.Leave.StatusType.Cancelled ? "lightslategray" : "black";
+                    string isCancelLeave = @leave.Status == DomainModel.Leave.StatusType.Cancelled ? "true" : "false";
                     int LeaveTypeId = (int)@leave.TypeOfLeave;
                     var remark = System.Text.RegularExpressions.Regex.Replace(@leave.Remark, @"[^0-9a-zA-Z]+", "%");
 
@@ -76,15 +77,15 @@
                     <td>@leave.Remark</td>
                     <td>@leave.Status</td>
                     <td class="text-center">
-                        <span data-toggle="tooltip" class="glyphicon glyphicon-pencil" title="Update Leave"
-                              onclick=UpdateLeave('@leave.LeaveId','@leave.FromDate.ToString("yyyy-MM-dd")','@leave.ToDate.ToString("yyyy-MM-dd")','@LeaveTypeId','@remark')
-                              style="cursor:pointer;margin-right:10px;color:'@disableColor'"></span>
+                        <span data-toggle="tooltip" class="glyphicon glyphicon-pencil"  title="Update Leave"
+                              onclick=UpdateLeave("@leave.LeaveId","@leave.FromDate.ToString("yyyy-MM-dd")","@leave.ToDate.ToString("yyyy-MM-dd")","@LeaveTypeId","@remark","@isRealisedLeave","@isCancelLeave")
+                              style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>
                         <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave"
-                              onclick=CancelLeave("@leave.LeaveId","@isRealisedLeave")
-                              style="cursor:pointer;margin-right:10px;"></span>
+                              onclick=CancelLeave("@leave.LeaveId","@isRealisedLeave","@isCancelLeave")
+                              style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>
                     </td>
                 </tr>
-                }
+             }
             </tbody>
         </table>
     </div>

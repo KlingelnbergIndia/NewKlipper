@@ -1,14 +1,14 @@
 ﻿
 //cancel leave
-function CancelLeave(leaveId,isRealisedLeave) {
+function CancelLeave(leaveId, isRealisedLeave, isCancelledLeave) {
     var controllerName = "Leave";
     var actionName = "CancelLeave";
     var newURL = window.location.protocol + "//" + window.location.host + "/" + controllerName + "/" + actionName;
 
-    //if (isRealisedLeave == "true") {
-    //    alert('Realised leave can not be regularized !');
-    //    return;
-    //}
+    if (isRealisedLeave == "true" || isCancelledLeave=="true") {
+        alert('leave can not be cancel!');
+        return;
+    }
 
     if (confirm('Do you want to cancel this leave ?')) {
         $.ajax({
@@ -19,7 +19,6 @@ function CancelLeave(leaveId,isRealisedLeave) {
             },
             dataType: "html",
             success: function (response) {
-                alert('Leave canceled !');
                 window.location.reload();
             }
         });
