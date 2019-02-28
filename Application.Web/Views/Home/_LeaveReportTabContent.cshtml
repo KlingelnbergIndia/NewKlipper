@@ -2,6 +2,7 @@
 
 @{
     var isLeaveCountZero = @Model.leaveRecordsOfSelectedReportee.Count == 0;
+   
 }
 <div class="panel-info" style="@(Model.reportees.Count==0 ? "visibility:hidden" : "visibility:visible")">
     <div class="panel panel-heading col-md-12 col-sm-12">
@@ -92,6 +93,17 @@
                 <tbody>
                     @foreach (var leave in @Model.leaveRecordsOfSelectedReportee)
                     {
+                        string displayLeaveType;
+                        if (leave.isHalfDayLeave)
+                        {
+                            var addedStringToHalfDay = " - Half Day";
+                            var leaveType = @leave.GetLeaveDisplayName().ToString();
+                            displayLeaveType = string.Concat(leaveType, addedStringToHalfDay);
+                        }
+                        else
+                        {
+                            displayLeaveType = @leave.GetLeaveDisplayName().ToString();
+                        }
                         var isRealisedLeave = "false";
                         string disableColor = @leave.Status == DomainModel.Leave.StatusType.Cancelled ? "lightslategray" : "black";
                         string isCancelledLeave = @leave.Status == DomainModel.Leave.StatusType.Cancelled ? "true" : "false";
@@ -100,7 +112,7 @@
                             <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
                             <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
                             <td>@leave.NoOfDays</td>
-                            <td>@leave.TypeOfLeave</td>
+                            <td>@displayLeaveType</td>
                             <td>@leave.Remark</td>
                             <td>@leave.Status</td>
                             <td class="text-center">
