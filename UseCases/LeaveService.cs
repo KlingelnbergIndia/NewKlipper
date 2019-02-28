@@ -31,7 +31,7 @@ namespace UseCases
         {
             if (IsMultipleDateForHalfDayLeave(fromDate, toDate, isHalfDay))
             {
-                return ServiceResponseDTO.CanNotApplied;
+                return ServiceResponseDTO.InvalidDays;
             }
             List<DateTime> takenLeaveDates = new List<DateTime>();
 
@@ -150,7 +150,7 @@ namespace UseCases
         {
             if (IsMultipleDateForHalfDayLeave(fromDate, toDate, isHalfDayLeave))
             {
-                return ServiceResponseDTO.CanNotApplied;
+                return ServiceResponseDTO.InvalidDays;
             }
             List<DateTime> takenLeaveDates = new List<DateTime>();
 
