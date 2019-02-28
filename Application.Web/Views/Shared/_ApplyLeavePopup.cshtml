@@ -5,7 +5,7 @@
 }
 
 <div class="modal fade" id="ApplyLeaveModal" role="dialog">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-sm" style="width:370px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -27,7 +27,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="to">To</label>
-                            <input type="date" class="form-control input-sm"
+                            <input type="date" class="form-control input-sm "
                                    value="@DateTime.Now.ToString("yyyy-MM-dd")"
                                    min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
                                    max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")"
@@ -48,8 +48,8 @@
 
                             </div>
                         </div>
-                        <div class="col-md-6" style="margin-top:28px;">
-                            <label class="checkbox"><input type="checkbox" asp-for="@Model.IsHalfDay" value="true">Half Day</label>
+                        <div class="col-md-6 form-inline" style="margin-top:40px;">
+                            <label class="checkbox form-inline"><input type="checkbox" asp-for="@Model.IsHalfDay" value="true">Half Day</label>
                          </div>
                             <div class="col-md-12">
                                 <div class="form-group">

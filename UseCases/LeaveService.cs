@@ -148,7 +148,10 @@ namespace UseCases
         public ServiceResponseDTO UpdateLeave(string leaveId, int employeeId,
             DateTime fromDate, DateTime toDate, LeaveType leaveType,bool isHalfDayLeave, string remark)
         {
-
+            if (IsMultipleDateForHalfDayLeave(fromDate, toDate, isHalfDayLeave))
+            {
+                return ServiceResponseDTO.CanNotApplied;
+            }
             List<DateTime> takenLeaveDates = new List<DateTime>();
 
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
