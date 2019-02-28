@@ -14,27 +14,41 @@ namespace DomainModel
             _listOfLeave = listOfLeave;
         }
 
-        public int CalculateCasualLeaveTaken()
+        public float CalculateCasualLeaveTaken()
         {
-           int noOfCasualLeave = _listOfLeave.Where(x=>x.GetLeaveType()==LeaveType.CasualLeave && x.GetStatus()!= StatusType.Cancelled).Sum(x=>x.GetLeaveDate().Count);
-            return noOfCasualLeave;
+           float noOfCasualLeaveTaken = _listOfLeave.Where(x=>x.GetLeaveType()==LeaveType.CasualLeave
+           && x.GetStatus()!= StatusType.Cancelled && x.IsHalfDayLeave()==false)
+           .Sum(x=>x.GetLeaveDate().Count);
+           float noOfHalfDayCasualLeaveTaken = _listOfLeave.Where(x => x.GetLeaveType() == LeaveType.CasualLeave
+            && x.GetStatus() != StatusType.Cancelled && x.IsHalfDayLeave() == true)
+            .Sum(x => x.GetLeaveDate().Count);
+
+            return noOfCasualLeaveTaken + noOfHalfDayCasualLeaveTaken/2;
         }
 
-        public int CalculateSickLeaveTaken()
+        public float CalculateSickLeaveTaken()
         {
-            int noOfSickLeave = _listOfLeave.Where(x => x.GetLeaveType() == LeaveType.SickLeave && x.GetStatus() != StatusType.Cancelled).Sum(x => x.GetLeaveDate().Count);
-            return noOfSickLeave;
+            float noOfSickLeaveTaken = _listOfLeave.Where(x => x.GetLeaveType() == LeaveType.SickLeave
+            && x.GetStatus() != StatusType.Cancelled && x.IsHalfDayLeave() == false)
+            .Sum(x => x.GetLeaveDate().Count);
+            float noOfHalfDaySickLeaveTaken = _listOfLeave.Where(x => x.GetLeaveType() == LeaveType.SickLeave
+            && x.GetStatus() != StatusType.Cancelled && x.IsHalfDayLeave() == true)
+            .Sum(x => x.GetLeaveDate().Count);
+
+            return noOfSickLeaveTaken + noOfHalfDaySickLeaveTaken/2;
         }
 
-        public int CalculateCompOffLeaveTaken()
+        public float CalculateCompOffLeaveTaken()
         {
-            int noOfCompOffLeave = _listOfLeave.Where(x => x.GetLeaveType() == LeaveType.CompOff && x.GetStatus() != StatusType.Cancelled).Sum(x => x.GetLeaveDate().Count);
-            return noOfCompOffLeave;
+            float noOfCompOffLeaveTaken = _listOfLeave.Where(x => x.GetLeaveType() == LeaveType.CompOff
+            && x.GetStatus() != StatusType.Cancelled && x.IsHalfDayLeave() == false)
+            .Sum(x => x.GetLeaveDate().Count);
+            float noOfHalfDayCompOffLeaveTaken = _listOfLeave.Where(x => x.GetLeaveType() == LeaveType.CompOff
+           && x.GetStatus() != StatusType.Cancelled && x.IsHalfDayLeave() == true)
+           .Sum(x => x.GetLeaveDate().Count) ;
+
+            return noOfCompOffLeaveTaken + noOfHalfDayCompOffLeaveTaken/2;
         }
 
-        public int GetTotalLeaveTaken()
-        {
-            return _listOfLeave.Where(x=> x.GetStatus() != StatusType.Cancelled).Count();
-        }
     }
 }

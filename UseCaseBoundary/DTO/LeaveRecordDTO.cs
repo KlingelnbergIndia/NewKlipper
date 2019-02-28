@@ -13,6 +13,7 @@ namespace UseCaseBoundary.DTO
         public string LeaveId;
         public List<DateTime> Date;
         public LeaveType TypeOfLeave;
+        public bool isHalfDayLeave;
         public HtmlString GetLeaveDisplayName()
         {
             return EnumHelperMethod.EnumDisplayNameFor(TypeOfLeave);

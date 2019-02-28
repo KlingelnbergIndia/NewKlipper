@@ -28,6 +28,7 @@ namespace DataAccess.EntityModel.Leave
 
         [BsonRepresentation(BsonType.String)]
         public LeaveType TypeOfLeave { get; set; }
+        public bool IsHalfDayLeave { get; set; }
 
         public string Remark { get; set; }
 

@@ -32,6 +32,7 @@ namespace RepositoryImplementation
                 ToDate = leaveDetails.GetLeaveDate().Max(),
                 Remark = leaveDetails.GetRemark(),
                 TypeOfLeave = leaveDetails.GetLeaveType(),
+                IsHalfDayLeave = leaveDetails.IsHalfDayLeave(),
                 AppliedLeaveDates = leaveDetails.GetLeaveDate(),
                 Status = leaveDetails.GetStatus()
             };
@@ -58,6 +59,7 @@ namespace RepositoryImplementation
                     leave.EmployeeId,
                     leave.AppliedLeaveDates,
                     leave.TypeOfLeave,
+                     leave.IsHalfDayLeave,
                     leave.Remark,
                     leave.Status,
                     leave._objectId.ToString()
@@ -91,6 +93,7 @@ namespace RepositoryImplementation
                 {
                     AppliedLeaveDates = leaveData.GetLeaveDate(),
                     TypeOfLeave = leaveData.GetLeaveType(),
+                    IsHalfDayLeave = leaveData.IsHalfDayLeave(),
                     Remark = leaveData.GetRemark(),
                     EmployeeId = leaveData.GetEmployeeId(),
                     Status = leaveData.GetStatus()
@@ -137,7 +140,9 @@ namespace RepositoryImplementation
             var leave = __leaveDBContext.AppliedLeaves.AsQueryable()
                 .Where(x => x._objectId == ObjectId.Parse(leaveId)).FirstOrDefault();
 
-            var leaveToLeaveObject = new Leave(leave.EmployeeId, leave.AppliedLeaveDates, leave.TypeOfLeave,leave.Remark, leave.Status, leave._objectId.ToString());
+            var leaveToLeaveObject = new Leave(leave.EmployeeId, leave.AppliedLeaveDates, 
+                leave.TypeOfLeave,leave.IsHalfDayLeave,leave.Remark, leave.Status,
+                leave._objectId.ToString());
 
             return leaveToLeaveObject;
         }
