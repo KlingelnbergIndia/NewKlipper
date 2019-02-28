@@ -21,7 +21,8 @@
     </div>
 
     <div class="col-md-12">
-        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ApplyLeaveModal" style="float:right">+ Apply Leave</button>
+        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" 
+                data-target="#ApplyLeaveModal" style="float:right">+ Apply Leave</button>
         <h3> Leave Summary</h3>
         <table class="table table-responsive table-striped table-bordered">
             <thead>
@@ -57,12 +58,22 @@
                     <th class="col-md-2 col-lg-2 col-xs-2">Leave Type</th>
                     <th class="col-md-3 col-lg-3 col-xs-3">Remark</th>
                     <th class="col-md-1 col-lg-1 col-xs-1">Status</th>
-                    <th class="col-md-2 col-lg-2 col-xs-2">Change Plan</th>
+                    <th class="col-md-1 col-lg-1 col-xs-1">Change Plan</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var leave in @Model.GetAppliedLeaves)
                 {
+                    string displayLeaveType;
+                 @if (leave.isHalfDayLeave == true)
+                 {
+                        string addedStringToHalfDay = " - Half Day";
+                        string leaveType = @leave.GetLeaveDisplayName().ToString();
+                        displayLeaveType = string.Concat(leaveType, addedStringToHalfDay);
+                    }
+                 else {
+                        displayLeaveType= @leave.GetLeaveDisplayName().ToString();
+                    }
                     var isRealisedLeave = @leave.IsRealizedLeave.ToString().ToLower();
                     string disableColor = @leave.IsRealizedLeave || @leave.Status == DomainModel.Leave.StatusType.Cancelled ? "lightslategray" : "black";
                     string isCancelLeave = @leave.Status == DomainModel.Leave.StatusType.Cancelled ? "true" : "false";
@@ -73,13 +84,13 @@
                     <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
                     <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
                     <td>@leave.NoOfDays</td>
-                    <td>@leave.GetLeaveDisplayName()</td>
+                    <td>@displayLeaveType</td>
                     <td>@leave.Remark</td>
                     <td>@leave.Status</td>
                     <td class="text-center">
                         <span data-toggle="tooltip" class="glyphicon glyphicon-pencil"  title="Update Leave"
                               onclick=UpdateLeave("@leave.LeaveId","@leave.FromDate.ToString("yyyy-MM-dd")","@leave.ToDate.ToString("yyyy-MM-dd")","@LeaveTypeId","@remark","@isRealisedLeave","@isCancelLeave")
-                              style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>
+                              style="cursor:pointer;margin-right:10px;color:@disableColor;" ></span>
                         <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave"
                               onclick=CancelLeave("@leave.LeaveId","@isRealisedLeave","@isCancelLeave")
                               style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>
@@ -118,6 +129,22 @@
     #ApplyLeaveModal > div > div {
         width: 400px;
     }
+    .table td {
+        text-align: center;
+    }
+
+    .table th {
+        text-align: center;
+    }
+
+    .panel-heading {
+        padding: 10px 0px;
+    }
+
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+        background-color: #D9EDF7;
+    }
+    
 </style>
 
 <script src="~/js/common.Leave.js"></script>

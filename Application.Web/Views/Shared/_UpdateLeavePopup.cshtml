@@ -16,7 +16,8 @@
                             <input type="hidden" id="leaveId" name="leaveId" />
                             <div class="col-md-6">
                                 <label for="from">From</label>
-                                <input type="date" id="fromDate" class="form-control input-sm" value=""
+                                <input type="date" id="fromDate" class="form-control input-sm" 
+                                      value=""
                                        min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
                                        max="@DateTime.Today.AddYears(1).ToString("yyyy-MM-dd")"
                                        asp-for="@Model.FromDate"
@@ -43,6 +44,9 @@
                                         }
                                     </select>
                                 </div>
+                            </div>
+                            <div class="col-md-6 form-inline" style="margin-top:40px;">
+                                <label class="checkbox"><input type="checkbox" asp-for="@Model.IsHalfDay" value="true">Half Day</label>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -71,8 +75,12 @@
             var _convertStringToDateObject;
 
             UpdateLeave = function (leaveId, fromDate, toDate, leaveTypeId, remark, isrealized,isCancelledLeave) {
-                if (isrealized == "true" || isCancelledLeave=="true") {
-                    alert('leave can not be update');
+                if (isrealized == "true") {
+                    alert('Passed leaves can not be updated !');
+                    return false;
+                }
+                if (isCancelledLeave == "true"){
+                    alert('Cancelled leaves can not be updated !');
                     return false;
                 }
                 $('#UpdateLeaveModal').modal({ 'show': true, 'backdrop': true });

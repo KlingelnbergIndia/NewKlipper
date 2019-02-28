@@ -11,6 +11,7 @@ namespace Klipper.Tests.Leaves
         private LeaveType _LeaveType;
         private StatusType _StatusType;
         private string _leaveId;
+        private bool _IsHalfDayLeave;
 
         public List<DateTime> AppliedLeaveDates { get; private set; }
 
@@ -49,11 +50,16 @@ namespace Klipper.Tests.Leaves
             return new Leave(
                 this._EmployeeId,
                 this.AppliedLeaveDates,
-                this._LeaveType = LeaveType.CasualLeave,
+                this._LeaveType,
+               this._IsHalfDayLeave,
                 "",
                 this._StatusType,
                 this._leaveId);
         }
-
+        public DummyLeaveBuilder WithIsHalfDayLeave(bool isHalfDayLeave)
+        {
+            this._IsHalfDayLeave = isHalfDayLeave;
+            return this;
+        }
     }
 }

@@ -86,7 +86,7 @@
                         <th class="col-md-2 col-lg-2 col-xs-2">Leave Type</th>
                         <th class="col-md-3 col-lg-3 col-xs-3">Remark</th>
                         <th class="col-md-1 col-lg-1 col-xs-1">Status</th>
-                        <th class="col-md-2 col-lg-2 col-xs-2">Change Plan</th>
+                        <th class="col-md-1 col-lg-1 col-xs-1">Change Plan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -96,7 +96,6 @@
                         string disableColor = @leave.Status == DomainModel.Leave.StatusType.Cancelled ? "lightslategray" : "black";
                         string isCancelledLeave = @leave.Status == DomainModel.Leave.StatusType.Cancelled ? "true" : "false";
                         int LeaveTypeId = (int)@leave.TypeOfLeave;
-                        var remark = System.Text.RegularExpressions.Regex.Replace(@leave.Remark, @"[^0-9a-zA-Z]+", "%");
                         <tr>
                             <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
                             <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
@@ -105,9 +104,6 @@
                             <td>@leave.Remark</td>
                             <td>@leave.Status</td>
                             <td class="text-center">
-                                <span data-toggle="tooltip" class="glyphicon glyphicon-pencil" title="Update Leave"
-                                      onclick=UpdateLeave("@leave.LeaveId","@leave.FromDate.ToString("yyyy-MM-dd")","@leave.ToDate.ToString("yyyy-MM-dd")","@LeaveTypeId","@remark","@isRealisedLeave","@isCancelledLeave")
-                                      style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>
                                 <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave"
                                       onclick=CancelLeave("@leave.LeaveId","@isRealisedLeave","@isCancelledLeave")
                                       style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>

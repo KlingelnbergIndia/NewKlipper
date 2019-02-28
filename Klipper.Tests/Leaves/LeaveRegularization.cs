@@ -80,11 +80,32 @@ namespace Klipper.Tests.Leaves
 
             //CALL USECASE
             LeaveService leaveService = new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
-            leaveService.ApplyLeave(63, DateTime.Parse("2019-01-01"), DateTime.Parse("2019-01-01"), LeaveType.CasualLeave, "");
+            leaveService.ApplyLeave(63, DateTime.Parse("2019-01-01"),
+                DateTime.Parse("2019-01-01"), LeaveType.CasualLeave, false, "");
             var summaryData = leaveService.GetTotalSummary(63);
 
             Assert.That(summaryData.TotalCasualLeaveTaken, Is.EqualTo(3));
         }
 
+        [Test]
+        public void IdentifyThatGivenDateIsRealisedLeaveDate()
+        {
+            //SETUP
+            Leave leave = new DummyLeaveBuilder()
+                .WithLeaveId("bco0123ed")
+                .WithEmployeeId(63)
+                .WithLeaveType(LeaveType.CasualLeave)
+                .WithLeaveStatusType(StatusType.Approved)
+                .WithLeaveDates(appliedLeaveDates)
+                .Build();
+            leaveRecordData.GetAllLeavesInfo(63).Returns(new List<Leave>() { leave });
+            leaveRecordData.GetLeaveByLeaveId("bco0123ed").Returns(leave);
+
+            //CALL USECASE
+            LeaveService leaveService = new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
+            var resultData = leaveService.GetAppliedLeaves(63);
+
+            Assert.That(resultData[0].IsRealizedLeave, Is.EqualTo(true));
+        }
     }
 }

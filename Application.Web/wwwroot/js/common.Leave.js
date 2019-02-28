@@ -5,10 +5,15 @@ function CancelLeave(leaveId, isRealisedLeave, isCancelledLeave) {
     var actionName = "CancelLeave";
     var newURL = window.location.protocol + "//" + window.location.host + "/" + controllerName + "/" + actionName;
 
-    if (isRealisedLeave == "true" || isCancelledLeave=="true") {
-        alert('leave can not be cancel!');
+    if (isRealisedLeave == "true") {
+        alert('Passed leaves can not be cancelled !');
         return;
     }
+    if (isCancelledLeave == "true") {
+        alert('cancelled leaves can not be updated !');
+            return;
+    }
+   
 
     if (confirm('Do you want to cancel this leave ?')) {
         $.ajax({

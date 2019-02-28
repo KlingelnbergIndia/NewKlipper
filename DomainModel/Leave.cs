@@ -10,6 +10,7 @@ namespace DomainModel
         private readonly int _employeeId;
         private readonly List<DateTime> _leaveDates;
         private readonly LeaveType _leaveType;
+        private readonly bool _isHalfDayLeave;
         private readonly string _remark;
         private readonly StatusType _status;
         private readonly string _leaveId;
@@ -31,11 +32,12 @@ namespace DomainModel
             LeaveAdded
         }
 
-        public Leave(int employeeId, List<DateTime> leaveDates, LeaveType leaveType, string remark, StatusType status, string leaveId)
+        public Leave(int employeeId, List<DateTime> leaveDates, LeaveType leaveType,bool isHalfDayLeave, string remark, StatusType status, string leaveId)
         {
             _employeeId = employeeId;
             _leaveDates = leaveDates;
             _leaveType = leaveType;
+            _isHalfDayLeave = isHalfDayLeave;
             _remark = remark;
             _status = status;
             _leaveId = leaveId;
@@ -68,6 +70,10 @@ namespace DomainModel
         public string GetLeaveId()
         {
             return _leaveId;
+        }
+        public bool IsHalfDayLeave()
+        {
+            return _isHalfDayLeave;
         }
 
     }

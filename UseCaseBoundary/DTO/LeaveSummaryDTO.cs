@@ -15,6 +15,5 @@ namespace UseCaseBoundary.DTO
         public float MaximumCasualLeave;
         public float MaximumSickLeave;
         public float MaximumCompOffLeave;
-        public float LeaveBalance;
     }
 }
