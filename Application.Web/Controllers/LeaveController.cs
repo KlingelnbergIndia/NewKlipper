@@ -55,7 +55,7 @@ namespace Application.Web.Controllers
         {
             if (FromDate > ToDate)
             {
-                TempData["errorMessage"] = "From-date should not be greater than To-Date !";
+                TempData["errorMessage"] = "Please select valid date range !";
                 return RedirectToAction("Index");
             }
             string leaveType = HttpContext.Request.Form["leaveList"].ToString();
@@ -71,13 +71,13 @@ namespace Application.Web.Controllers
             var response = leaveService.ApplyLeave(loggedInEmpId, FromDate, ToDate, LeaveType, Remark);
 
             if (response == ServiceResponseDTO.Saved)
-                TempData["responseMessage"] = "Your Leave is submitted !";
+                TempData["responseMessage"] = "Leave applied sucessfully !";
             else if (response == ServiceResponseDTO.RecordExists)
-                TempData["responseMessage"] = "Your Leave is already submitted !";
+                TempData["errorMessage"] = "Leave record is available for selected date !";
             else if (response == ServiceResponseDTO.InvalidDays)
-                TempData["errorMessage"] = "Invalid Selected Days !";
+                TempData["errorMessage"] = "Please select valid date range !";
             else if(response == ServiceResponseDTO.CanNotApplied)
-                TempData["errorMessage"] = "Selected Leave is Exhausted!";
+                TempData["errorMessage"] = "Selected leave is not available !";
             return RedirectToAction("Index");
         }
 
@@ -89,7 +89,7 @@ namespace Application.Web.Controllers
             {
                 if (FromDate > ToDate)
                 {
-                    TempData["errorMessage"] = "From-date should not be greater than To-Date !";
+                    TempData["errorMessage"] = "Please select valid date range !";
                     return RedirectToAction("Index");
                 }
                 string leaveType = HttpContext.Request.Form["leaveList"].ToString();
@@ -105,17 +105,17 @@ namespace Application.Web.Controllers
                 var response = leaveService.UpdateLeave(ExistingLeaveId, loggedInEmpId, FromDate,ToDate,LeaveType,Remark);
 
                 if (response == ServiceResponseDTO.Updated)
-                    TempData["responseMessage"] = "Your Leave is updated !";
+                    TempData["responseMessage"] = "Leave updated sucessfully !";
                 else if (response == ServiceResponseDTO.RecordExists)
-                    TempData["responseMessage"] = "Your Leave is already submitted !";
+                    TempData["errorMessage"] = "Leave record is available for selected date !";
                 else if (response == ServiceResponseDTO.InvalidDays)
-                    TempData["errorMessage"] = "Invalid Selected Days !";
+                    TempData["errorMessage"] = "Please select valid date range !";
                 else if (response == ServiceResponseDTO.CanNotApplied)
-                    TempData["errorMessage"] = "Selected Leave is Exhausted!";
+                    TempData["errorMessage"] = "Selected leave is not available!";
                 else if (response == ServiceResponseDTO.Deleted)
-                    TempData["errorMessage"] = "Cancelled Leave can not be update !";
+                    TempData["errorMessage"] = "Cancelled leaves can not be updated !";
                 else if (response == ServiceResponseDTO.RealizedLeave)
-                    TempData["errorMessage"] = "realized Leave can not be update !";
+                    TempData["errorMessage"] = "Passed leaves can not be updated !";
             }
             return RedirectToAction("Index");
         }
@@ -128,11 +128,11 @@ namespace Application.Web.Controllers
             var response = leaveService.CancelLeave(LeaveId, loggedInEmpId);
 
             if (response == ServiceResponseDTO.Deleted)
-                TempData["responseMessage"] = "Your Leave is Cancel !";
+                TempData["responseMessage"] = "Leave deleted sucessfully !";
             else if (response == ServiceResponseDTO.RealizedLeave)
-                TempData["responseMessage"] = "realized Leave can not be Cancel !";
+                TempData["errorMessage"] = "Passed leaves can not be cancelled !";
             else
-            TempData["responseMessage"] = "Your Leave is not Cancel !";
+            TempData["errorMessage"] = "Cancelled leaves can not be updated !";
 
             return RedirectToAction("Index");
         }

@@ -72,7 +72,7 @@
 
             UpdateLeave = function (leaveId, fromDate, toDate, leaveTypeId, remark, isrealized,isCancelledLeave) {
                 if (isrealized == "true" || isCancelledLeave=="true") {
-                    alert('leave can not be update');
+                    alert('Passed leaves can not be updated');
                     return false;
                 }
                 $('#UpdateLeaveModal').modal({ 'show': true, 'backdrop': true });
