@@ -18,6 +18,7 @@ namespace Klipper.Tests
         private IEmployeeRepository employeeData;
         private IDepartmentRepository departmentData;
         private IAttendanceRegularizationRepository regularizationData;
+        private ILeavesRepository leaveData;
 
         [SetUp]
         public void Setup()
@@ -26,13 +27,14 @@ namespace Klipper.Tests
             employeeData = Substitute.For<IEmployeeRepository>();
             departmentData = Substitute.For<IDepartmentRepository>();
             regularizationData = Substitute.For<IAttendanceRegularizationRepository>();
+            leaveData = Substitute.For<ILeavesRepository>();
         }
 
         [Test]
         public async Task GivenDateGetCountOfAccessEventRecords()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-10-01"));
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-01")).Returns(dummyAccessevents);
 
@@ -45,7 +47,7 @@ namespace Klipper.Tests
         public async Task WithRespectiveTimeInAndTimeOutOfMainEntryGetTotalTimeSpend()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-10-05"));
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
 
@@ -58,7 +60,8 @@ namespace Klipper.Tests
         [Test]
         public async Task WithRespectiveTimeInAndTimeOutOfRecreationEntryGetTotalTimeSpend()
         {
-            AttendanceService attendanceService = new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData);
+            AttendanceService attendanceService =
+                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-10-08"));
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-08")).Returns(dummyAccessevents);
 
@@ -72,7 +75,7 @@ namespace Klipper.Tests
         public async Task WithRespectiveTimeInAndTimeOutOfGymnasiumEntryGetTotalTimeSpend()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-09-28"));
 
@@ -88,7 +91,7 @@ namespace Klipper.Tests
         public async Task WithGymnasiumEntryPointAndSingleAccessEventSetTimeOutAndTimeSpendZero()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-09-29"));
 
@@ -107,7 +110,7 @@ namespace Klipper.Tests
         public async Task WithRecreationEntryPointAndSingleAccessEventSetTimeOutAndTimeSpendZero()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-09-29"));
 
@@ -126,7 +129,7 @@ namespace Klipper.Tests
         public async Task WithMainEntryPointAndSingleAccessEventSetTimeOutAndTimeSpendZero()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-09-29"));
 
@@ -145,7 +148,7 @@ namespace Klipper.Tests
         public async Task WithMainEntryPointAndOddNoOfAccessEventsGetTimeInAndTimeOutSetTimeSpendZero()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-10-01"));
 
@@ -172,7 +175,7 @@ namespace Klipper.Tests
         public async Task WithRecreationEntryPointAndOddNoOfAccessEventsGetTimeInAndTimeOutSetTimeSpendZero()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-09-30"));
 
@@ -199,7 +202,7 @@ namespace Klipper.Tests
         public async Task WithGymEntryPointAndOddNoOfAccessEventsGetTimeInAndTimeOutSetTimeSpendZero()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-09-30"));
 

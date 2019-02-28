@@ -15,24 +15,41 @@ namespace UseCases
         private IEmployeeRepository _employeeRepository;
         private IDepartmentRepository _departmentRepository;
         private IAttendanceRegularizationRepository _attendanceRegularizationRepository;
+        private ILeavesRepository _leavesRepository;
 
         public AttendanceService(
             IAccessEventsRepository accessEventsRepository, 
             IEmployeeRepository employeeRepository,
             IDepartmentRepository departmentRepository, 
-            IAttendanceRegularizationRepository attendanceRegularizationRepository)
+            IAttendanceRegularizationRepository attendanceRegularizationRepository,ILeavesRepository leavesRepository)
         {
             _accessEventsRepository = accessEventsRepository;
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
             _attendanceRegularizationRepository = attendanceRegularizationRepository;
+            _leavesRepository = leavesRepository;
+        }
+
+        public AttendanceRecordsDTO GenerateAttendanceRecords(int employeeId, DateTime fromDate, DateTime toDate)
+        {
+            var accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
+            var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
+
+            var listOfLeave=_leavesRepository.GetAllLeavesInfo(employeeId);
+
+            List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecord = 
+                CreatePerDayAttendanceRecord(employeeId,datewiseAccessEvents, listOfLeave);
+
+            return new AttendanceRecordsDTO();
         }
 
         public async Task<AttendanceRecordsDTO> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
         {
             WorkLogs accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
-            List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecord = await CreatePerDayAttendanceRecordAsync(datewiseAccessEvents, employeeId);
+            var listOfLeave = _leavesRepository.GetAllLeavesInfo(employeeId);
+            List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecord =
+                CreatePerDayAttendanceRecord(employeeId,datewiseAccessEvents,  listOfLeave);
             listOfPerDayAttendanceRecord = IncludeHolidays(listOfPerDayAttendanceRecord, fromDate, toDate, employeeId);
 
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
@@ -127,7 +144,8 @@ namespace UseCases
             return listOfaccessPointRecords;
         }
 
-        private List<PerDayAttendanceRecordDTO> IncludeHolidays(List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecordDTOs, DateTime fromDate, DateTime toDate, int employeeId)
+        private List<PerDayAttendanceRecordDTO> IncludeHolidays(List<PerDayAttendanceRecordDTO>
+            listOfPerDayAttendanceRecordDTOs, DateTime fromDate, DateTime toDate, int employeeId)
         {
             var availableDates = listOfPerDayAttendanceRecordDTOs.Select(x => x.Date).Distinct().ToList();
             var listOfAttendanceRecordDTO = listOfPerDayAttendanceRecordDTOs;
@@ -175,7 +193,8 @@ namespace UseCases
             return listOfAttendanceRecordDTO;
         }
 
-        private async Task<List<PerDayAttendanceRecordDTO>> CreatePerDayAttendanceRecordAsync(IList<PerDayWorkRecord> workRecordByDate, int employeeId)
+        private List<PerDayAttendanceRecordDTO> CreatePerDayAttendanceRecord
+            (int employeeId,IList<PerDayWorkRecord> workRecordByDate,List<Leave> listOfLeave)
         {
             List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
@@ -183,6 +202,11 @@ namespace UseCases
 
             foreach (var perDayWorkRecord in workRecordByDate)
             {
+                var leaveOfParticularDate = listOfLeave.Where(x => x.GetLeaveDate().Contains(perDayWorkRecord.Date)).FirstOrDefault();
+                if (leaveOfParticularDate != null)
+                {
+
+                }
                 var timeIn = perDayWorkRecord.GetTimeIn();
                 var timeOut = perDayWorkRecord.GetTimeOut();
                 var workingHours = perDayWorkRecord.CalculateWorkingHours();
@@ -226,11 +250,7 @@ namespace UseCases
                 };
                 listOfPerDayAttendanceRecordDTO.Add(attendanceRecord);
             }
-
-            return await Task.Run(() =>
-            {
-                return listOfPerDayAttendanceRecordDTO;
-            });
+            return listOfPerDayAttendanceRecordDTO;
         }
 
         private Time GetOverTime(TimeSpan workingHours, double noOfHoursToBeWorked)

@@ -44,7 +44,7 @@ namespace Application.Web.Controllers
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository);
+                _departmentRepository, _attendanceRegularizationRepository,_leavesRepository);
 
             EmployeeViewModel employeeViewModel = new EmployeeViewModel();
 
@@ -98,7 +98,7 @@ namespace Application.Web.Controllers
 
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository);
+                _departmentRepository, _attendanceRegularizationRepository,_leavesRepository);
             List<AttendanceRecordsDTO> listOfAttendanceRecord = new List<AttendanceRecordsDTO>();
 
             if (reportees.Count != 0)
@@ -150,7 +150,7 @@ namespace Application.Web.Controllers
                         reporteeViewModel.toDate = DateTime.Parse(toDate);
 
                         AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                        _departmentRepository, _attendanceRegularizationRepository);
+                        _departmentRepository, _attendanceRegularizationRepository,_leavesRepository);
 
                         AttendanceRecordsDTO listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(selectedReporteeId,
                             reporteeViewModel.fromDate, reporteeViewModel.toDate);
@@ -207,7 +207,7 @@ namespace Application.Web.Controllers
         public async Task<IActionResult> AccessPointDetail(DateTime date, int employeeId)
         {
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository);
+                _departmentRepository, _attendanceRegularizationRepository, _leavesRepository);
             List<AccessPointRecord> listofaccesspointdetail = await attendanceService.GetAccessPointDetails(employeeId, date);
             listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST(date, listofaccesspointdetail);
             return View(listofaccesspointdetail);
@@ -218,7 +218,7 @@ namespace Application.Web.Controllers
         public IActionResult SaveRegularizedHours(DateTime date, int employeeId, DateTime timeToBeRegularize, string remark)
         {
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository);
+                _departmentRepository, _attendanceRegularizationRepository, _leavesRepository);
             var redularizationData = new RegularizationDTO()
             {
                 EmployeeID = employeeId,

@@ -16,6 +16,7 @@ namespace Klipper.Tests
         private IAccessEventsRepository accessEventsData;
         private IEmployeeRepository employeeData;
         private IDepartmentRepository departmentData;
+        private ILeavesRepository leaveData;
         private IAttendanceRegularizationRepository regularizationData;
 
 
@@ -25,6 +26,7 @@ namespace Klipper.Tests
             accessEventsData = Substitute.For<IAccessEventsRepository>();
             employeeData = Substitute.For<IEmployeeRepository>();
             departmentData = Substitute.For<IDepartmentRepository>();
+            leaveData = Substitute.For<ILeavesRepository>();
             regularizationData = Substitute.For<IAttendanceRegularizationRepository>();
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
@@ -35,7 +37,8 @@ namespace Klipper.Tests
         public void ShowRegularizedHoursAsTotalWorkingHoursForADay()
         {
             // Setup
-            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData);
+            AttendanceService attendanceService = new AttendanceService
+                (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsData
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
@@ -66,7 +69,8 @@ namespace Klipper.Tests
         public void ShowActualWorkingHoursOfRegularizedRecord()
         {
             // Setup
-            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData);
+            AttendanceService attendanceService = new AttendanceService
+                (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"));
             accessEventsData
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
@@ -101,7 +105,8 @@ namespace Klipper.Tests
         public void ShowRegularizedWorkingHoursOfRegularizedRecord()
         {
             // Setup
-            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData);
+            AttendanceService attendanceService =
+                new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData, leaveData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"));
             accessEventsData
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
@@ -136,7 +141,8 @@ namespace Klipper.Tests
         public void ShowRemarkOfRegularizedRecord()
         {
             // Setup
-            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData);
+            AttendanceService attendanceService = new AttendanceService
+                (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsData
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
