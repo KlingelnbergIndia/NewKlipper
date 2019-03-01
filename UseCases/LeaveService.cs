@@ -101,7 +101,7 @@ namespace UseCases
                     Remark = eachLeave.GetRemark(),
                     FromDate = eachLeave.GetLeaveDate().Min(),
                     ToDate = eachLeave.GetLeaveDate().Max(),
-                    NoOfDays = eachLeave.GetLeaveDate().Count(),
+                    NoOfDays = CalculateNoOfDays(eachLeave),
                     Status = eachLeave.GetStatus(),
                     IsRealizedLeave = IsRealizedLeave(eachLeave.GetLeaveId()),
                     LeaveId = eachLeave.GetLeaveId(),
@@ -264,6 +264,14 @@ namespace UseCases
                 return true ;
             }
             return false;
+        }
+        private float CalculateNoOfDays(Leave leave)
+        {
+            if (leave.IsHalfDayLeave() == true)
+            {
+               return  (float)leave.GetLeaveDate().Count() / 2;
+            }
+            return leave.GetLeaveDate().Count();
         }
     }
 }

@@ -26,7 +26,7 @@ namespace UseCaseBoundary.DTO
         {
             return EnumHelperMethod.EnumDisplayNameFor(Status);
         }
-        public int NoOfDays;
+        public float NoOfDays;
         public bool IsRealizedLeave;
         public bool IsRecordSaved;
         public ServiceResponseDTO ServiceResponse;
