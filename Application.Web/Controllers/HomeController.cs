@@ -44,7 +44,7 @@ namespace Application.Web.Controllers
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository);
+                _departmentRepository, _attendanceRegularizationRepository,_leavesRepository);
 
             EmployeeViewModel employeeViewModel = new EmployeeViewModel();
 
@@ -57,7 +57,7 @@ namespace Application.Web.Controllers
                 employeeViewModel.toDate = DateTime.Parse(toDate);
 
                 employeeViewModel.employeeAttendaceRecords =
-                    await attendanceService.GetAccessEventsForDateRange(employeeId, employeeViewModel.fromDate, employeeViewModel.toDate);
+                    await attendanceService.AttendanceReportForDateRange(employeeId, employeeViewModel.fromDate, employeeViewModel.toDate);
 
                 ViewData["resultMessage"] = String.Format(
                     "Attendance from {0} to {1}. Total days:{2}",
@@ -74,7 +74,7 @@ namespace Application.Web.Controllers
                 employeeViewModel.fromDate = fromDate;
 
                 employeeViewModel.employeeAttendaceRecords =
-                    await attendanceService.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
+                    await attendanceService.AttendanceReportForDateRange(employeeId, fromDate, toDate);
             }
 
             employeeViewModel.EmployeeId = employeeId;
@@ -98,7 +98,7 @@ namespace Application.Web.Controllers
 
             ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository);
+                _departmentRepository, _attendanceRegularizationRepository,_leavesRepository);
             List<AttendanceRecordsDTO> listOfAttendanceRecord = new List<AttendanceRecordsDTO>();
 
             if (reportees.Count != 0)
@@ -150,9 +150,9 @@ namespace Application.Web.Controllers
                         reporteeViewModel.toDate = DateTime.Parse(toDate);
 
                         AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                        _departmentRepository, _attendanceRegularizationRepository);
+                        _departmentRepository, _attendanceRegularizationRepository,_leavesRepository);
 
-                        AttendanceRecordsDTO listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(selectedReporteeId,
+                        AttendanceRecordsDTO listOfAttendanceRecord = await attendanceService.AttendanceReportForDateRange(selectedReporteeId,
                             reporteeViewModel.fromDate, reporteeViewModel.toDate);
                         reporteeViewModel.AttendaceRecordsOfSelectedReportee = listOfAttendanceRecord;
 
@@ -207,7 +207,7 @@ namespace Application.Web.Controllers
         public async Task<IActionResult> AccessPointDetail(DateTime date, int employeeId)
         {
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository);
+                _departmentRepository, _attendanceRegularizationRepository, _leavesRepository);
             List<AccessPointRecord> listofaccesspointdetail = await attendanceService.GetAccessPointDetails(employeeId, date);
             listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST(date, listofaccesspointdetail);
             return View(listofaccesspointdetail);
@@ -218,7 +218,7 @@ namespace Application.Web.Controllers
         public IActionResult SaveRegularizedHours(DateTime date, int employeeId, DateTime timeToBeRegularize, string remark)
         {
             AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository);
+                _departmentRepository, _attendanceRegularizationRepository, _leavesRepository);
             var redularizationData = new RegularizationDTO()
             {
                 EmployeeID = employeeId,

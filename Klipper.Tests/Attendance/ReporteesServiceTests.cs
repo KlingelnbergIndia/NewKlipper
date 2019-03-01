@@ -70,6 +70,7 @@ namespace Klipper.Tests
                 .BuildEmployee();
             employeeDataContainer.GetEmployee(46).Returns(reportee46);
 
+            // Execute usecase
             var actualreporteesData = reporteeService.GetReporteesData(29);
             var dummyreporteesData = new List<UseCaseBoundary.DTO.ReporteeDTO>();
             dummyreporteesData.Add(ConvertEmployeeToReporteeData(reportee40));
@@ -90,6 +91,7 @@ namespace Klipper.Tests
                 .BuildEmployee();
             employeeDataContainer.GetEmployee(29).Returns(employee);
 
+            // Execute usecase
             var actualreporteesData = reporteeService.GetReporteesData(29);
             var dummyreporteesData = new List<UseCaseBoundary.DTO.ReporteeDTO>();
 

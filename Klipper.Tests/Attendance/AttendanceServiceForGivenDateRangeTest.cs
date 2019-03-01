@@ -1,4 +1,5 @@
 ﻿using DomainModel;
+using Klipper.Tests.Leaves;
 using Newtonsoft.Json;
 using NSubstitute;
 using NUnit.Framework;
@@ -13,6 +14,7 @@ using UseCaseBoundary;
 using UseCaseBoundary.DTO;
 using UseCaseBoundary.Model;
 using UseCases;
+using static DomainModel.Leave;
 
 namespace Klipper.Tests
 {
@@ -23,7 +25,7 @@ namespace Klipper.Tests
         private IEmployeeRepository employeeData;
         private IDepartmentRepository departmentData;
         private IAttendanceRegularizationRepository regularizationData;
-
+        private ILeavesRepository leaveData;
 
         [SetUp]
         public void setup()
@@ -32,6 +34,7 @@ namespace Klipper.Tests
             employeeData = Substitute.For<IEmployeeRepository>();
             departmentData = Substitute.For<IDepartmentRepository>();
             regularizationData = Substitute.For<IAttendanceRegularizationRepository>();
+            leaveData= Substitute.For<ILeavesRepository>();
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
             regularizationData.GetRegularizedRecords(48).Returns(new List<Regularization>());
@@ -41,7 +44,8 @@ namespace Klipper.Tests
         public void GivenDateRangeAndEmployeeIdShouldDisplayCorrectNumberOfRecords()
         {
             //Setup
-            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData);
+            AttendanceService attendanceService = new AttendanceService
+                (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-08"));
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-08"))
                 .Returns(dummyAccessevents);
@@ -52,9 +56,12 @@ namespace Klipper.Tests
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
 
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             // Execute usecase
             var accessEvents = attendanceService
-                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-08"))
+                .AttendanceReportForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-08"))
                 .GetAwaiter()
                 .GetResult();
 
@@ -65,10 +72,14 @@ namespace Klipper.Tests
         public void RetrivedAccessEventsHasAccurateData()
         {
             //Setup
-            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData);
-            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"));
+            AttendanceService attendanceService = new AttendanceService
+                (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
+
+            var dummyAccessevents = new AccessEventsBuilder()
+                .BuildBetweenDate(DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"));
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
                 .Returns(dummyAccessevents);
+
             var dummyEmployee =
                 new EmployeeBuilder()
                 .WithUserName("Sidhdesh.Vadgaonkar")
@@ -76,6 +87,7 @@ namespace Klipper.Tests
                 .WithID(48)
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
+
             var expectedData = new PerDayAttendanceRecordDTO()
             {
                 Date = DateTime.Parse("2018/10/09"),
@@ -86,9 +98,12 @@ namespace Klipper.Tests
                 WorkingHours = new Time(11, 3)
             };
 
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             // Execute usecase
             var accessEvents = attendanceService
-                .GetAccessEventsForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
+                .AttendanceReportForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
                 .GetAwaiter()
                 .GetResult();
             var actualData = accessEvents.ListOfAttendanceRecordDTO.Where(x => x.Date == DateTime.Parse("2018/10/09")).Single();
@@ -112,11 +127,13 @@ namespace Klipper.Tests
         public void CalculateTotalDeficitTimeForGivenDateRange()
         {
             // Setup
-            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData);
+            AttendanceService attendanceService = new AttendanceService
+                (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsData
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
                 .Returns(dummyAccessevents);
+
             var dummyEmployee =
                 new EmployeeBuilder()
                 .WithUserName("Sidhdesh.Vadgaonkar")
@@ -124,9 +141,12 @@ namespace Klipper.Tests
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
 
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             // Execute usecase
             var actualData = attendanceService
-                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
+                .AttendanceReportForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
                 .GetAwaiter()
                 .GetResult()
                 .TotalDeficitOrExtraHours;
@@ -139,11 +159,14 @@ namespace Klipper.Tests
         public void CalculateTotalExtraTimeForGivenDateRange()
         {
             // Setup
-            AttendanceService attendanceService = new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData);
+            AttendanceService attendanceService = new AttendanceService
+                (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
+
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-09"), DateTime.Parse("2018-10-09"));
             accessEventsData
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-09"), DateTime.Parse("2018-10-09"))
                 .Returns(dummyAccessevents);
+
             var dummyEmployee =
                 new EmployeeBuilder()
                 .WithUserName("Sidhdesh.Vadgaonkar")
@@ -151,9 +174,12 @@ namespace Klipper.Tests
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
 
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             // Execute usecase
             var actualData = attendanceService
-                .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-09"), DateTime.Parse("2018-10-09"))
+                .AttendanceReportForDateRange(48, DateTime.Parse("2018-10-09"), DateTime.Parse("2018-10-09"))
                 .GetAwaiter()
                 .GetResult()
                 .TotalDeficitOrExtraHours;
@@ -166,7 +192,7 @@ namespace Klipper.Tests
         public async Task GivenOddNOoFGymEntryAccessEventsSetWorkingHoursZero()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData);
+                new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData, leaveData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-30"), DateTime.Parse("2018-10-30"));
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-30"), DateTime.Parse("2018-10-30")).Returns(dummyAccessevents);
@@ -177,8 +203,12 @@ namespace Klipper.Tests
                 .WithPassword("26-12-1995")
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
+
+            var dummyLeaves = new List<Leave>() ;
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.
-                GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-30"), DateTime.Parse("2018-10-30"));
+                AttendanceReportForDateRange(48, DateTime.Parse("2018-10-30"), DateTime.Parse("2018-10-30"));
 
             Assert.That(
                 listOfAttendanceRecordForSpecifiedDays.ListOfAttendanceRecordDTO[0].WorkingHours.Hour,
@@ -192,7 +222,7 @@ namespace Klipper.Tests
         public async Task GivenOddNOoFMainEntryAccessEventsSetWorkingHoursZero()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData);
+                new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData, leaveData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-01"));
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-01")).Returns(dummyAccessevents);
@@ -204,8 +234,11 @@ namespace Klipper.Tests
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
 
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             var listOfAttendanceRecordForSpecifiedDays = await attendanceService.
-                GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-01"));
+                AttendanceReportForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-01"));
 
 
             Assert.That(
