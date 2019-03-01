@@ -31,7 +31,7 @@ namespace UseCases
         {
             if (IsMultipleDateForHalfDayLeave(fromDate, toDate, isHalfDay))
             {
-                return ServiceResponseDTO.CanNotApplied;
+                return ServiceResponseDTO.InvalidDays;
             }
             List<DateTime> takenLeaveDates = new List<DateTime>();
 
@@ -101,7 +101,7 @@ namespace UseCases
                     Remark = eachLeave.GetRemark(),
                     FromDate = eachLeave.GetLeaveDate().Min(),
                     ToDate = eachLeave.GetLeaveDate().Max(),
-                    NoOfDays = eachLeave.GetLeaveDate().Count(),
+                    NoOfDays = CalculateNoOfDays(eachLeave),
                     Status = eachLeave.GetStatus(),
                     IsRealizedLeave = IsRealizedLeave(eachLeave.GetLeaveId()),
                     LeaveId = eachLeave.GetLeaveId(),
@@ -150,7 +150,7 @@ namespace UseCases
         {
             if (IsMultipleDateForHalfDayLeave(fromDate, toDate, isHalfDayLeave))
             {
-                return ServiceResponseDTO.CanNotApplied;
+                return ServiceResponseDTO.InvalidDays;
             }
             List<DateTime> takenLeaveDates = new List<DateTime>();
 
@@ -264,6 +264,14 @@ namespace UseCases
                 return true ;
             }
             return false;
+        }
+        private float CalculateNoOfDays(Leave leave)
+        {
+            if (leave.IsHalfDayLeave() == true)
+            {
+               return  (float)leave.GetLeaveDate().Count() / 2;
+            }
+            return leave.GetLeaveDate().Count();
         }
     }
 }
