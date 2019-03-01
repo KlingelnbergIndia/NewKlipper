@@ -51,7 +51,7 @@ namespace Klipper.Tests
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsContainer.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
 
-            var listOfAccessEventsRecord = await attendanceService.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
+            var listOfAccessEventsRecord = await attendanceService.AttendanceReportForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
 
             Assert.That(listOfAccessEventsRecord.ListOfAttendanceRecordDTO[0].OverTime.Hour, Is.EqualTo(0));
             Assert.That(listOfAccessEventsRecord.ListOfAttendanceRecordDTO[0].OverTime.Minute, Is.EqualTo(0));
@@ -80,7 +80,7 @@ namespace Klipper.Tests
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsContainer.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
 
-            var listOfAccessEventsRecord = await attendanceService.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
+            var listOfAccessEventsRecord = await attendanceService.AttendanceReportForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
 
             Assert.That(listOfAccessEventsRecord.ListOfAttendanceRecordDTO[0].OverTime.Hour, Is.EqualTo(0));
             Assert.That(listOfAccessEventsRecord.ListOfAttendanceRecordDTO[0].OverTime.Minute, Is.EqualTo(0));

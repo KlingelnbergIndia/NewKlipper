@@ -25,7 +25,8 @@ namespace UseCaseBoundary.DTO
         WorkingDay,
         NonWorkingDay,
         Holiday,
-        Leave
+        Leave,
+        HalfDayLeave
     }
 
    

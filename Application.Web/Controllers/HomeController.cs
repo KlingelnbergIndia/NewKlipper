@@ -57,7 +57,7 @@ namespace Application.Web.Controllers
                 employeeViewModel.toDate = DateTime.Parse(toDate);
 
                 employeeViewModel.employeeAttendaceRecords =
-                    await attendanceService.GetAccessEventsForDateRange(employeeId, employeeViewModel.fromDate, employeeViewModel.toDate);
+                    await attendanceService.AttendanceReportForDateRange(employeeId, employeeViewModel.fromDate, employeeViewModel.toDate);
 
                 ViewData["resultMessage"] = String.Format(
                     "Attendance from {0} to {1}. Total days:{2}",
@@ -74,7 +74,7 @@ namespace Application.Web.Controllers
                 employeeViewModel.fromDate = fromDate;
 
                 employeeViewModel.employeeAttendaceRecords =
-                    await attendanceService.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
+                    await attendanceService.AttendanceReportForDateRange(employeeId, fromDate, toDate);
             }
 
             employeeViewModel.EmployeeId = employeeId;
@@ -152,7 +152,7 @@ namespace Application.Web.Controllers
                         AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
                         _departmentRepository, _attendanceRegularizationRepository,_leavesRepository);
 
-                        AttendanceRecordsDTO listOfAttendanceRecord = await attendanceService.GetAccessEventsForDateRange(selectedReporteeId,
+                        AttendanceRecordsDTO listOfAttendanceRecord = await attendanceService.AttendanceReportForDateRange(selectedReporteeId,
                             reporteeViewModel.fromDate, reporteeViewModel.toDate);
                         reporteeViewModel.AttendaceRecordsOfSelectedReportee = listOfAttendanceRecord;
 
