@@ -18,6 +18,7 @@ namespace UseCaseBoundary.DTO
         public bool IsHoursRegularized;
         public bool HaveLeave;
         public Time RegularizedHours;
+       
     }
 
     public enum DayStatus
@@ -29,5 +30,5 @@ namespace UseCaseBoundary.DTO
         HalfDayLeave
     }
 
-   
+
 }

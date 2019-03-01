@@ -131,21 +131,29 @@
                         <td class="@overTimeClass">@item.OverTime.Hour.ToString("D2"):@item.OverTime.Minute.ToString("D2")</td>
                     }
 
-                    @if (item.TimeIn.Hour == 0 && item.TimeIn.Minute == 0 && item.TimeOut.Hour == 0 && item.TimeOut.Minute == 0 && item.IsHoursRegularized == false)
+                    @if (item.RegularizedHours.Hour == 0 && item.RegularizedHours.Minute == 0
+                       && item.WorkingHours.Hour == 0 && item.WorkingHours.Minute == 0)
                     {
                         <td>Missing entry</td>
                     }
                     else
                     {
-                        <td>
-                            <u class="open-Dialog" data-toggle="modal" onclick=getDailyData('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID) style="cursor:pointer">
-                                @item.WorkingHours.Hour.ToString("D2"):@item.WorkingHours.Minute.ToString("D2")
-                            </u>
-                        </td>
+                        @if (item.DayStatus.ToString() == "Leave")
+                        {
+                        <td> @item.WorkingHours.Hour.ToString("D2"):@item.WorkingHours.Minute.ToString("D2")</td>
+                        }
+                        else
+                        {
+                            <td>
+                                <u class="open-Dialog" data-toggle="modal" onclick=getDailyData('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID) style="cursor:pointer">
+                                    @item.WorkingHours.Hour.ToString("D2"):@item.WorkingHours.Minute.ToString("D2")
+                                </u>
+                            </td>
+                        }
                     }
-                    <td>@item.RegularizedHours.Hour.ToString("D2"):@item.RegularizedHours.Minute.ToString("D2")</td>
-                    <td class="text-left small">@item.Remark</td>
-                </tr>
+                            <td>@item.RegularizedHours.Hour.ToString("D2"):@item.RegularizedHours.Minute.ToString("D2")</td>
+                            <td class="text-center">@item.Remark</td>
+                        </tr>
                 }
             </tbody>
         </table>
