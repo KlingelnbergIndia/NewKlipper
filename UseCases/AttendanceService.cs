@@ -31,19 +31,6 @@ namespace UseCases
             _leavesRepository = leavesRepository;
         }
 
-        //public AttendanceRecordsDTO GenerateAttendanceRecords(int employeeId, DateTime fromDate, DateTime toDate)
-        //{
-        //    var accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
-        //    var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
-
-        //    var listOfLeave=_leavesRepository.GetAllLeavesInfo(employeeId);
-
-        //    List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecord = 
-        //        CreatePerDayAttendanceRecord(employeeId,datewiseAccessEvents, listOfLeave);
-
-        //    return new AttendanceRecordsDTO();
-        //}
-
         public async Task<AttendanceRecordsDTO> GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
         {
             WorkLogs accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
