@@ -1,4 +1,5 @@
 ﻿using DomainModel;
+using Klipper.Tests.Leaves;
 using NSubstitute;
 using NUnit.Framework;
 using System;
@@ -8,6 +9,7 @@ using System.Text;
 using Tests;
 using UseCaseBoundary;
 using UseCases;
+using static DomainModel.Leave;
 
 namespace Klipper.Tests
 {
@@ -39,16 +41,22 @@ namespace Klipper.Tests
             // Setup
             AttendanceService attendanceService = new AttendanceService
                 (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
+
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsData
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
                 .Returns(dummyAccessevents);
+
             var dummyEmployee =
                 new EmployeeBuilder()
                 .WithUserName("Sidhdesh.Vadgaonkar")
                 .WithPassword("26-12-1995")
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
+
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             var regularizationsData = new List<Regularization>() {
                 new Regularization(48,DateTime.Parse("2018-10-05"),TimeSpan.Parse("08:05:00"),"remark added")
             };
@@ -71,6 +79,7 @@ namespace Klipper.Tests
             // Setup
             AttendanceService attendanceService = new AttendanceService
                 (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
+
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"));
             accessEventsData
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
@@ -82,6 +91,9 @@ namespace Klipper.Tests
                 .WithPassword("26-12-1995")
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
+
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
 
             var regularizationsData = new List<Regularization>()
             {
@@ -119,6 +131,9 @@ namespace Klipper.Tests
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
 
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             var regularizationsData = new List<Regularization>()
             {
                 new Regularization(48,DateTime.Parse("2018/10/09"),TimeSpan.Parse("08:05:00"),"test remark")
@@ -143,16 +158,23 @@ namespace Klipper.Tests
             // Setup
             AttendanceService attendanceService = new AttendanceService
                 (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
-            var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
+
+            var dummyAccessevents = new AccessEventsBuilder()
+                .BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsData
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
                 .Returns(dummyAccessevents);
+
             var dummyEmployee =
                 new EmployeeBuilder()
                 .WithUserName("Sidhdesh.Vadgaonkar")
                 .WithPassword("26-12-1995")
                 .BuildEmployee();
             employeeData.GetEmployee(48).Returns(dummyEmployee);
+
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             var regularizationsData = new List<Regularization>() {
                 new Regularization(48,DateTime.Parse("2018-10-05"),TimeSpan.Parse("08:05:00"),"test remark")
             };

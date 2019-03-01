@@ -38,6 +38,7 @@ namespace Klipper.Tests
         [Test]
         public void GivingAlreadyAppliedDateAndSickLeaveThenGetRecordExistsResponse()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
             
@@ -61,6 +62,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var respone =leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"),
                 DateTime.Parse("2019-02-22"), Leave.LeaveType.SickLeave, false, "one day sick leave apply");
 
@@ -70,6 +72,7 @@ namespace Klipper.Tests
         [Test]
         public void GivingAlreadyAppliedDateAndCasualLeaveThenGetRecordExistsResponse()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -93,6 +96,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"), 
                 DateTime.Parse("2019-02-22"), Leave.LeaveType.CasualLeave, false, "one day sick leave apply");
 
@@ -101,6 +105,7 @@ namespace Klipper.Tests
         [Test]
         public void GivingAlreadyAppliedDateAndCompOffLeaveThenGetRecordExistsResponse()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -124,6 +129,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"),
                 DateTime.Parse("2019-02-22"), Leave.LeaveType.CompOff, false, "one day sick leave apply");
 
@@ -133,6 +139,7 @@ namespace Klipper.Tests
         [Test]
         public void ApplySickLeaveOfNonWorkingDayThenGetInValidDaysResponse()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -157,6 +164,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-02"),
                 DateTime.Parse("2019-02-02"), Leave.LeaveType.SickLeave, false, "one day sick leave apply");
 
@@ -166,6 +174,7 @@ namespace Klipper.Tests
         [Test]
         public void ApplyCasualLeaveOfNonWorkingDayThenGetInValidDaysResponse()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -189,6 +198,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-02"), 
                 DateTime.Parse("2019-02-02"), Leave.LeaveType.CasualLeave, false, "one day sick leave apply");
 
@@ -198,6 +208,7 @@ namespace Klipper.Tests
         [Test]
         public void ApplyCompOffLeaveOfNonWorkingDayThenGetInValidDaysResponse()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -223,6 +234,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-02"),
                 DateTime.Parse("2019-02-02"), Leave.LeaveType.CompOff,false, "one day sick leave apply");
 
@@ -232,6 +244,7 @@ namespace Klipper.Tests
         [Test]
         public void ApplyNewSickLeaveThenGetSavedResponse()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -256,6 +269,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"),
                 DateTime.Parse("2019-02-05"), Leave.LeaveType.SickLeave,false, "one day sick leave apply");
 
@@ -265,6 +279,7 @@ namespace Klipper.Tests
         [Test]
         public void ApplyNewCasualLeaveThenGetSavedResponse()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -288,6 +303,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), 
                 DateTime.Parse("2019-02-05"), Leave.LeaveType.CasualLeave,false, "one day sick leave apply");
 
@@ -297,6 +313,7 @@ namespace Klipper.Tests
         [Test]
         public void ApplyNewCompOffLeaveThenGetSavedResponse()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -320,6 +337,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), 
                 DateTime.Parse("2019-02-05"), Leave.LeaveType.CompOff,false, "one day sick leave apply");
 
@@ -329,6 +347,7 @@ namespace Klipper.Tests
         [Test]
         public void ApplySickLeaveAndSickLeaveIsExhaustedThenGetCanNotAppliedResponse()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -352,6 +371,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"), DateTime.Parse("2019-02-05"), Leave.LeaveType.SickLeave,false, "one day sick leave apply");
 
             Assert.That(respone, Is.EqualTo(ServiceResponseDTO.CanNotApplied));
@@ -360,6 +380,7 @@ namespace Klipper.Tests
         [Test]
         public void ApplyCasualLeaveAndCasualLeaveIsExhaustedThenGetSavedResponse()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -383,6 +404,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"),
                 DateTime.Parse("2019-02-05"), Leave.LeaveType.CasualLeave, false, "one day sick leave apply");
 
@@ -392,6 +414,7 @@ namespace Klipper.Tests
         [Test]
         public void ApplyCompOffLeaveAndCompOffLeaveIsExhaustedThenGetCanNotAppliedResponse()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -415,6 +438,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"),
                 DateTime.Parse("2019-02-05"), Leave.LeaveType.CompOff, false, "one day sick leave apply");
 
@@ -424,6 +448,7 @@ namespace Klipper.Tests
         [Test]
         public void OnApplyCompOffLeaveThenRemainingCompOffLeaveAndAvailableCompOffLeaveIsUpdated()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -446,6 +471,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"),
                 DateTime.Parse("2019-02-23"), Leave.LeaveType.CompOff, false, "one day sick leave apply");
             if(response == ServiceResponseDTO.Saved)
@@ -466,6 +492,7 @@ namespace Klipper.Tests
         [Test]
         public void OnApplyCasualLeaveLeaveThenRemainingCasualLeaveAndAvailableCasualLeaveIsUpdated()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -488,6 +515,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"),
                 DateTime.Parse("2019-02-23"), Leave.LeaveType.CasualLeave, false, "one day sick leave apply");
             if (response == ServiceResponseDTO.Saved)
@@ -509,6 +537,7 @@ namespace Klipper.Tests
         [Test]
         public void OnApplySickLeaveThenRemainingSickLeaveAndAvailableSickLeaveIsUpdated()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -531,6 +560,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"),
                 DateTime.Parse("2019-02-23"), Leave.LeaveType.SickLeave, false, "one day sick leave apply");
             if (response == ServiceResponseDTO.Saved)
@@ -553,6 +583,7 @@ namespace Klipper.Tests
         [Test]
         public void OnApplyHalfDaySickLeaveThenRemainingSickLeaveAndAvailableSickLeaveIsUpdated()
         {
+            // Setup
             LeaveService leaveService =
                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
 
@@ -574,6 +605,7 @@ namespace Klipper.Tests
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
 
+            //CALL USECASE
             var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"),
                 DateTime.Parse("2019-02-22"), Leave.LeaveType.SickLeave,true, "one day sick leave apply");
             if (response == ServiceResponseDTO.Saved)
@@ -690,7 +722,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public void OnApplyHalfDayForMultipleDayLeaveThenGetResponseCanNotApplied()
+        public void OnApplyHalfDayForMultipleDayLeaveThenGetResponseInValidDay()
         {
             //SETUP
             LeaveService leaveService =
@@ -715,8 +747,7 @@ namespace Klipper.Tests
             var response = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-22"),
                 DateTime.Parse("2019-02-23"), Leave.LeaveType.CompOff, true, "one day sick leave apply");
             
-            Assert.That(response, Is.EqualTo(ServiceResponseDTO.CanNotApplied));
-            Assert.That(response, Is.EqualTo(ServiceResponseDTO.CanNotApplied));
+            Assert.That(response, Is.EqualTo(ServiceResponseDTO.InvalidDays));
         }
     }
 }

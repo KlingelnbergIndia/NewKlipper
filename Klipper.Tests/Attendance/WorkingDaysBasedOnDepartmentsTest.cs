@@ -58,6 +58,9 @@ namespace Klipper.Tests
                 .BuildEmployee();
             employeeContainer.GetEmployee(666).Returns(dummyEmployee);
 
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             var expectedData = new PerDayAttendanceRecordDTO()
             {
                 Date = DateTime.Parse("2019/02/02"),
@@ -97,6 +100,9 @@ namespace Klipper.Tests
                 .WithDepartment(Departments.Software)
                 .BuildEmployee();
             employeeContainer.GetEmployee(666).Returns(dummyEmployee);
+
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
 
             var expectedData = new PerDayAttendanceRecordDTO()
             {
@@ -139,6 +145,9 @@ namespace Klipper.Tests
                 .BuildEmployee();
             employeeContainer.GetEmployee(666).Returns(dummyEmployee);
 
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             //EXECUTE TEST CASES
             var dactualData = attendanceService
                 .AttendanceReportForDateRange(666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Result;
@@ -168,6 +177,9 @@ namespace Klipper.Tests
                 .BuildEmployee();
             employeeContainer.GetEmployee(666).Returns(dummyEmployee);
 
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             //EXECUTE TEST CASES
             var dactualData = attendanceService
                 .AttendanceReportForDateRange(666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Result;
@@ -195,6 +207,9 @@ namespace Klipper.Tests
                 .WithDepartment(Departments.Design)
                 .BuildEmployee();
             employeeContainer.GetEmployee(666).Returns(dummyEmployee);
+
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
 
             //EXECUTE TEST CASES
             var dactualData = attendanceService.AttendanceReportForDateRange
@@ -226,6 +241,9 @@ namespace Klipper.Tests
             employeeContainer.GetEmployee(77).Returns(dummyEmployee);
             regularizationData.GetRegularizedRecords(77).Returns(new List<Regularization>());
 
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             //EXECUTE TEST CASES
             var dactualData = attendanceService.AttendanceReportForDateRange
                 (77, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Result;
@@ -255,6 +273,10 @@ namespace Klipper.Tests
                 .BuildEmployee();
             employeeContainer.GetEmployee(77).Returns(dummyEmployee);
             regularizationData.GetRegularizedRecords(77).Returns(new List<Regularization>());
+
+            var dummyLeaves = new List<Leave>();
+            leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
+
             //EXECUTE TEST CASES
             var dactualData = attendanceService
                 .AttendanceReportForDateRange(77, DateTime.Parse("2019/02/09"), DateTime.Parse("2019/02/09")).Result;

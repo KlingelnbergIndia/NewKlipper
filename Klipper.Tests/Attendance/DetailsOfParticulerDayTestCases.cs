@@ -33,6 +33,7 @@ namespace Klipper.Tests
         [Test]
         public async Task GivenDateGetCountOfAccessEventRecords()
         {
+            // Setup
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-10-01"));
@@ -46,11 +47,13 @@ namespace Klipper.Tests
         [Test]
         public async Task WithRespectiveTimeInAndTimeOutOfMainEntryGetTotalTimeSpend()
         {
+            // Setup
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-10-05"));
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
 
+            // Execute usecase
             var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-10-05"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeSpend.Hour, Is.EqualTo(8));
@@ -60,11 +63,13 @@ namespace Klipper.Tests
         [Test]
         public async Task WithRespectiveTimeInAndTimeOutOfRecreationEntryGetTotalTimeSpend()
         {
+            // Setup
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-10-08"));
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-08")).Returns(dummyAccessevents);
 
+            // Execute usecase
             var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-10-08"));
 
             Assert.That(listOfAccessEventsRecord[1].TimeSpend.Hour, Is.EqualTo(0));
@@ -74,6 +79,7 @@ namespace Klipper.Tests
         [Test]
         public async Task WithRespectiveTimeInAndTimeOutOfGymnasiumEntryGetTotalTimeSpend()
         {
+            // Setup
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
@@ -81,6 +87,7 @@ namespace Klipper.Tests
 
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-09-28")).Returns(dummyAccessevents);
 
+            // Execute usecase
             var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-09-28"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeSpend.Hour, Is.EqualTo(0));
@@ -90,6 +97,7 @@ namespace Klipper.Tests
         [Test]
         public async Task WithGymnasiumEntryPointAndSingleAccessEventSetTimeOutAndTimeSpendZero()
         {
+            // Setup
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
@@ -97,6 +105,7 @@ namespace Klipper.Tests
 
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-09-29")).Returns(dummyAccessevents);
 
+            // Execute usecase
             var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-09-29"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeOut.Hour, Is.EqualTo(0));
@@ -109,6 +118,7 @@ namespace Klipper.Tests
         [Test]
         public async Task WithRecreationEntryPointAndSingleAccessEventSetTimeOutAndTimeSpendZero()
         {
+            // Setup
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
@@ -116,6 +126,7 @@ namespace Klipper.Tests
 
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-09-29")).Returns(dummyAccessevents);
 
+            // Execute usecase
             var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-09-29"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeOut.Hour, Is.EqualTo(0));
@@ -128,6 +139,7 @@ namespace Klipper.Tests
         [Test]
         public async Task WithMainEntryPointAndSingleAccessEventSetTimeOutAndTimeSpendZero()
         {
+            // Setup
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
@@ -135,6 +147,7 @@ namespace Klipper.Tests
 
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-09-29")).Returns(dummyAccessevents);
 
+            // Execute usecase
             var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-09-29"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeOut.Hour, Is.EqualTo(0));
@@ -147,6 +160,7 @@ namespace Klipper.Tests
         [Test]
         public async Task WithMainEntryPointAndOddNoOfAccessEventsGetTimeInAndTimeOutSetTimeSpendZero()
         {
+            // Setup
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
@@ -154,6 +168,7 @@ namespace Klipper.Tests
 
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-01")).Returns(dummyAccessevents);
 
+            // Execute usecase
             var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-10-01"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeIn.Hour, Is.EqualTo(3));
@@ -174,6 +189,7 @@ namespace Klipper.Tests
         [Test]
         public async Task WithRecreationEntryPointAndOddNoOfAccessEventsGetTimeInAndTimeOutSetTimeSpendZero()
         {
+            // Setup
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
@@ -181,6 +197,7 @@ namespace Klipper.Tests
 
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-09-30")).Returns(dummyAccessevents);
 
+            // Execute usecase
             var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-09-30"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeIn.Hour, Is.EqualTo(7));
@@ -201,6 +218,7 @@ namespace Klipper.Tests
         [Test]
         public async Task WithGymEntryPointAndOddNoOfAccessEventsGetTimeInAndTimeOutSetTimeSpendZero()
         {
+            // Setup
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
@@ -208,6 +226,7 @@ namespace Klipper.Tests
 
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-09-30")).Returns(dummyAccessevents);
 
+            // Execute usecase
             var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-09-30"));
 
             Assert.That(listOfAccessEventsRecord[2].TimeIn.Hour, Is.EqualTo(12));

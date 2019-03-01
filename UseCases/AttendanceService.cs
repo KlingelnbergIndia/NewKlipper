@@ -110,11 +110,17 @@ namespace UseCases
         }
         private Regularization GetRegularizationEntryByDate(int employeeId, DateTime date)
         {
+            Regularization regularizedDataOfADay = null;
             var listOfRegularizedData = _attendanceRegularizationRepository
                 .GetRegularizedRecords(employeeId).ToList();
-            var regularizedDataOfADay = listOfRegularizedData
+            
+            if (listOfRegularizedData!=null)
+            {
+                regularizedDataOfADay = listOfRegularizedData
                 .Where(x => x.RegularizedDate().Date == date.Date)
                 .FirstOrDefault();
+            }
+            
             return regularizedDataOfADay;
         }
 
@@ -166,10 +172,14 @@ namespace UseCases
                 {
                     if (department.IsValidWorkingDay(i.Date.Date) == true)
                     {
-                        var leaveOfParticularDay = listOfLeave
-                            .Where(x=>x.GetLeaveDate().Contains(i.Date.Date) 
-                            && x.GetStatus()!=Leave.StatusType.Cancelled)
+                        Leave leaveOfParticularDay = null;
+                        if (listOfLeave != null)
+                        {
+                            leaveOfParticularDay = listOfLeave
+                            .Where(x => x.GetLeaveDate().Contains(i.Date.Date)
+                            && x.GetStatus() != Leave.StatusType.Cancelled)
                             .FirstOrDefault();
+                        }
                         var reguralizedEntry = GetRegularizationEntryByDate(employeeId, i.Date.Date);
                         string remark = GetRemark(leaveOfParticularDay, reguralizedEntry);
                         bool flag = IsRegularizedEntry(leaveOfParticularDay, reguralizedEntry);
@@ -211,10 +221,15 @@ namespace UseCases
 
             foreach (var perDayWorkRecord in workRecordByDate)
             {
-                var leaveOfParticularDate = listOfLeave
+                Leave leaveOfParticularDate = null;
+                if (listOfLeave != null)
+                {
+                    leaveOfParticularDate = listOfLeave
                     .Where(x => x.GetLeaveDate().Contains(perDayWorkRecord.Date)
-                    && x.GetStatus()!=Leave.StatusType.Cancelled)
+                    && x.GetStatus() != Leave.StatusType.Cancelled)
                     .FirstOrDefault();
+                }
+                
                 var timeIn = perDayWorkRecord.GetTimeIn();
                 var timeOut = perDayWorkRecord.GetTimeOut();
                 var workingHours = perDayWorkRecord.CalculateWorkingHours();
@@ -440,8 +455,11 @@ namespace UseCases
                             var regularizedHours = AttendanceRecordDTO.RegularizedHours;
                             sumOfTotalWorkingHours += new TimeSpan(regularizedHours.Hour, regularizedHours.Minute, 00);
                         }
+                    else
+                    {
                         var workingHours = AttendanceRecordDTO.WorkingHours;
                         sumOfTotalWorkingHours += new TimeSpan(workingHours.Hour, workingHours.Minute, 00);
+                    }
                     }
             }
            
