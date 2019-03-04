@@ -51,9 +51,10 @@ namespace UseCases
             {
                 ListOfAttendanceRecordDTO = listOfPerDayAttendanceRecord,
                 TotalWorkingHours = CalculateTotalWorkingHours(listOfPerDayAttendanceRecord),
-                TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime
+                EstimatedHours = CalculateEstimatedHours
                  (listOfPerDayAttendanceRecord, department.GetNoOfHoursToBeWorked()),
-
+                TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime
+                 (listOfPerDayAttendanceRecord, department.GetNoOfHoursToBeWorked())
             };
         }
 
@@ -423,8 +424,19 @@ namespace UseCases
 
             return new Time(
                 (int)extraTime.TotalHours,
-                (int)extraTime.Minutes);
+                Math.Abs((int)extraTime.Minutes));
 
+        }
+        private Time CalculateEstimatedHours
+                 (List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecord,double noOfHoursToBeWorked)
+        {
+            if (listOfPerDayAttendanceRecord.Count == 0)
+            {
+                return new Time(00, 00);
+            }
+             double totalRequiredHoursToBeWorked = listOfPerDayAttendanceRecord
+               .Count(x => x.DayStatus != DayStatus.NonWorkingDay) * noOfHoursToBeWorked;
+            return new Time ((int)totalRequiredHoursToBeWorked,00);
         }
 
         private Time CalculateTotalWorkingHours(List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO)

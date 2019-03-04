@@ -19,7 +19,7 @@ using DomainModel;
 using FizzWare.NBuilder;
 using OfficeOpenXml;
 using System.Drawing;
-using System.IO;
+using UseCaseBoundary.DTO;
 
 namespace Application.Web.Controllers
 {
@@ -57,7 +57,6 @@ namespace Application.Web.Controllers
             {
                 string fromDate = HttpContext.Request.Form["fromDate"].ToString();
                 string toDate = HttpContext.Request.Form["toDate"].ToString();
-                Export(fromDate, toDate);
                 employeeViewModel.fromDate = DateTime.Parse(fromDate);
                 employeeViewModel.toDate = DateTime.Parse(toDate);
 
@@ -237,55 +236,80 @@ namespace Application.Web.Controllers
         }
 
         [HttpPost]
-        public FileResult Export(string fromDate,string toDate)
+        public FileResult ExportAttendanceReport(string fromDate,string toDate)
         {
                 var stream = new System.IO.MemoryStream();
                 using (ExcelPackage package = new ExcelPackage(stream))
                 {
                     IList<EmployeeViewModel> empList = GetAttendanceDataOfAllReporteesAndTeamLead(fromDate, toDate);
 
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Employee");
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("AttendanceReport");
                     worksheet.TabColor = Color.Gold;
                     worksheet.DefaultColWidth = 20;
-                    worksheet.Cells[1, 1].Style.Font.Color.SetColor(Color.Blue);
-                    worksheet.Cells[1, 2].Style.Font.Color.SetColor(Color.Blue);
-                    worksheet.Cells[1, 3].Style.Font.Color.SetColor(Color.Blue);
-                    worksheet.Cells[1, 4].Style.Font.Color.SetColor(Color.Blue);
-
                     int totalRows = empList.Count();
-
-                    for (int j = 1; j <= empList.Count();)
+                    int j = 1;
+                foreach (var empdata in empList)
                     {
                         worksheet.Cells[j, 1].Value = "Employee ID";
                         worksheet.Cells[j + 1, 1].Value = "Employee Name";
-                        worksheet.Cells[j, 2].Value = empList[j - 1].EmployeeId;
-                        worksheet.Cells[j + 1, 2].Value = empList[j - 1].EmployeeName;
+                        worksheet.Cells[j, 2].Value = empdata.EmployeeId;
+                        worksheet.Cells[j + 1, 2].Value = empdata.EmployeeName;
+                    worksheet.Cells[j, 6].Value = "Estimated Hours";
+                    worksheet.Cells[j, 7].Value = string.Concat
+                        (empdata.employeeAttendaceRecords.EstimatedHours.Hour.ToString("D2"),
+                        ":", 
+                        empdata.employeeAttendaceRecords.EstimatedHours.Minute.ToString("D2"));
+                    worksheet.Cells[j + 1, 6].Value = "Actual Hours";
+                    worksheet.Cells[j + 1, 7].Value = string.Concat
+                    (empdata.employeeAttendaceRecords.TotalWorkingHours.Hour.ToString("D2"),
+                    ":",
+                    empdata.employeeAttendaceRecords.TotalWorkingHours.Minute.ToString("D2"));
+                    worksheet.Cells[j + 2, 6].Value = "Difference";
+                    worksheet.Cells[j + 2, 7].Value = string.Concat
+                        (empdata.employeeAttendaceRecords.TotalDeficitOrExtraHours.Hour,
+                        ":", 
+                        empdata.employeeAttendaceRecords.TotalDeficitOrExtraHours.Minute.ToString("D2"));
 
-                        worksheet.Cells[j + 4, 1].Value = "Date";
-                        worksheet.Cells[j + 4, 2].Value = "Day";
-                        worksheet.Cells[j + 4, 3].Value = "Time In";
-                        worksheet.Cells[j + 4, 4].Value = "Time Out";
-                        worksheet.Cells[j + 4, 5].Value = "Deficit Time";
-                        worksheet.Cells[j + 4, 6].Value = "Over Time";
-                        worksheet.Cells[j + 4, 7].Value = "Actual Hours";
-                        worksheet.Cells[j + 4, 8].Value = "Regularized Hours";
-                        worksheet.Cells[j + 5, 9].Value = "Remark";
+                    worksheet.Cells[j , 6].Style.Font.Color.SetColor(Color.Blue);
+                    worksheet.Cells[j + 1, 6].Style.Font.Color.SetColor(Color.Blue);
+                    worksheet.Cells[j + 2, 6].Style.Font.Color.SetColor(Color.Blue);
 
-                        int k = 5;
-                        foreach (var perdayRecord in empList[j - 1].employeeAttendaceRecords.ListOfAttendanceRecordDTO)
+                    int z = 4;
+                    worksheet.Cells[j + z, 1].Style.Font.Color.SetColor(Color.Black);
+                    worksheet.Cells[j + z, 2].Style.Font.Color.SetColor(Color.Black);
+                    worksheet.Cells[j + z, 3].Style.Font.Color.SetColor(Color.Black);
+                    worksheet.Cells[j + z, 4].Style.Font.Color.SetColor(Color.Black);
+                    worksheet.Cells[j + z, 5].Style.Font.Color.SetColor(Color.Black);
+                    worksheet.Cells[j + z, 6].Style.Font.Color.SetColor(Color.Black);
+                    worksheet.Cells[j + z, 7].Style.Font.Color.SetColor(Color.Black);
+                    worksheet.Cells[j + z, 8].Style.Font.Color.SetColor(Color.Black);
+                    worksheet.Cells[j + z, 9].Style.Font.Color.SetColor(Color.Black);
+
+                        worksheet.Cells[j + z, 1].Value = "Date";
+                        worksheet.Cells[j + z, 2].Value = "Day";
+                        worksheet.Cells[j + z, 3].Value = "Time In";
+                        worksheet.Cells[j + z, 4].Value = "Time Out";
+                        worksheet.Cells[j + z, 5].Value = "Deficit Time";
+                        worksheet.Cells[j + z, 6].Value = "Over Time";
+                        worksheet.Cells[j + z, 7].Value = "Actual Hours";
+                        worksheet.Cells[j + z, 8].Value = "Regularized Hours";
+                        worksheet.Cells[j + z, 9].Value = "Remark";
+
+                        int k = j+z+1;
+                        foreach (var perdayRecord in empdata.employeeAttendaceRecords.ListOfAttendanceRecordDTO)
                         {
-                            worksheet.Cells[k, 1].Value = perdayRecord.Date;
+                            worksheet.Cells[k, 1].Value = perdayRecord.Date.ToString("yyyy-MM-dd");
                             worksheet.Cells[k, 2].Value = perdayRecord.Date.DayOfWeek;
-                            worksheet.Cells[k, 3].Value = perdayRecord.TimeIn;
-                            worksheet.Cells[k, 4].Value = perdayRecord.TimeOut;
-                            worksheet.Cells[k, 5].Value = perdayRecord.LateBy;
-                            worksheet.Cells[k, 6].Value = perdayRecord.OverTime;
-                            worksheet.Cells[k, 7].Value = perdayRecord.WorkingHours;
-                            worksheet.Cells[k, 8].Value = perdayRecord.RegularizedHours;
-                            worksheet.Cells[k, 9].Value = perdayRecord.Remark;
+                            worksheet.Cells[k, 3].Value = string.Concat(perdayRecord.TimeIn.Hour.ToString("D2"), ":", perdayRecord.TimeIn.Minute.ToString("D2"));
+                            worksheet.Cells[k, 4].Value = string.Concat(perdayRecord.TimeOut.Hour.ToString("D2"), ":", perdayRecord.TimeOut.Minute.ToString("D2"));
+                        worksheet.Cells[k, 5].Value = string.Concat(perdayRecord.LateBy.Hour.ToString("D2"), ":", perdayRecord.LateBy.Minute.ToString("D2"));
+                        worksheet.Cells[k, 6].Value = string.Concat(perdayRecord.OverTime.Hour.ToString("D2"), ":", perdayRecord.OverTime.Minute.ToString("D2"));
+                        worksheet.Cells[k, 7].Value = string.Concat(perdayRecord.WorkingHours.Hour.ToString("D2"), ":", perdayRecord.WorkingHours.Minute.ToString("D2"));
+                        worksheet.Cells[k, 8].Value = string.Concat(perdayRecord.RegularizedHours.Hour.ToString("D2"), ":", perdayRecord.RegularizedHours.Minute.ToString("D2"));
+                        worksheet.Cells[k, 9].Value = perdayRecord.Remark;
                             k++;
                         }
-                        j += k + 2;
+                        j = k + 1;
                     }
                     package.Save();
                 }
