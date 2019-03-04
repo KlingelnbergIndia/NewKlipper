@@ -18,7 +18,11 @@ namespace UseCaseBoundary.DTO
         public bool IsHoursRegularized;
         public bool HaveLeave;
         public Time RegularizedHours;
-       
+
+        public string ToString(Time time)
+        {
+            return string.Concat(time.Hour, ":", time.Minute);
+        }
     }
 
     public enum DayStatus
@@ -30,5 +34,6 @@ namespace UseCaseBoundary.DTO
         HalfDayLeave
     }
 
+    
 
 }

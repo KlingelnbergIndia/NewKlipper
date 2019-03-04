@@ -65,8 +65,6 @@ namespace Klipper.Tests
             // Execute usecase
             var actualData = attendanceService
                 .AttendanceReportForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
-                .GetAwaiter()
-                .GetResult()
                 .TotalWorkingHours;
 
             Assert.That(actualData.Hour, Is.EqualTo(08));
@@ -103,9 +101,8 @@ namespace Klipper.Tests
 
             // Execute usecase
             var accessEvents = attendanceService
-                .AttendanceReportForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
-                .GetAwaiter()
-                .GetResult();
+                .AttendanceReportForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"));
+               
             var actualData = accessEvents.ListOfAttendanceRecordDTO.Where(x => x.Date == DateTime.Parse("2018/10/09")).Single();
 
             // Assert
@@ -142,9 +139,8 @@ namespace Klipper.Tests
 
             // Execute usecase
             var accessEvents = attendanceService
-                .AttendanceReportForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
-                .GetAwaiter()
-                .GetResult();
+                .AttendanceReportForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"));
+               
             var actualData = accessEvents.ListOfAttendanceRecordDTO.Where(x => x.Date == DateTime.Parse("2018/10/09")).Single();
 
             // Assert
@@ -183,8 +179,6 @@ namespace Klipper.Tests
             // Execute usecase
             var actualData = attendanceService
                 .AttendanceReportForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
-                .GetAwaiter()
-                .GetResult()
                 .ListOfAttendanceRecordDTO
                 .First();
 
