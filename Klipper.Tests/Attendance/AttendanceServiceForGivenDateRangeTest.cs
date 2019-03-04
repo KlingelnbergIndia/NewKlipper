@@ -61,9 +61,8 @@ namespace Klipper.Tests
 
             // Execute usecase
             var accessEvents = attendanceService
-                .AttendanceReportForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-08"))
-                .GetAwaiter()
-                .GetResult();
+                .AttendanceReportForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-08"));
+                
 
             Assert.That(accessEvents.ListOfAttendanceRecordDTO.Count, Is.EqualTo(6));
         }
@@ -103,9 +102,8 @@ namespace Klipper.Tests
 
             // Execute usecase
             var accessEvents = attendanceService
-                .AttendanceReportForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"))
-                .GetAwaiter()
-                .GetResult();
+                .AttendanceReportForDateRange(48, DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"));
+                
             var actualData = accessEvents.ListOfAttendanceRecordDTO.Where(x => x.Date == DateTime.Parse("2018/10/09")).Single();
 
             // Assert
@@ -147,8 +145,6 @@ namespace Klipper.Tests
             // Execute usecase
             var actualData = attendanceService
                 .AttendanceReportForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
-                .GetAwaiter()
-                .GetResult()
                 .TotalDeficitOrExtraHours;
 
             Assert.That(actualData.Hour, Is.EqualTo(0));
@@ -180,8 +176,6 @@ namespace Klipper.Tests
             // Execute usecase
             var actualData = attendanceService
                 .AttendanceReportForDateRange(48, DateTime.Parse("2018-10-09"), DateTime.Parse("2018-10-09"))
-                .GetAwaiter()
-                .GetResult()
                 .TotalDeficitOrExtraHours;
 
             Assert.That(actualData.Hour, Is.EqualTo(2));
@@ -207,7 +201,7 @@ namespace Klipper.Tests
             var dummyLeaves = new List<Leave>() ;
             leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
 
-            var listOfAttendanceRecordForSpecifiedDays = await attendanceService.
+            var listOfAttendanceRecordForSpecifiedDays = attendanceService.
                 AttendanceReportForDateRange(48, DateTime.Parse("2018-10-30"), DateTime.Parse("2018-10-30"));
 
             Assert.That(
@@ -237,7 +231,7 @@ namespace Klipper.Tests
             var dummyLeaves = new List<Leave>();
             leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
 
-            var listOfAttendanceRecordForSpecifiedDays = await attendanceService.
+            var listOfAttendanceRecordForSpecifiedDays =attendanceService.
                 AttendanceReportForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-01"));
 
 

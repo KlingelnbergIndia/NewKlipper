@@ -74,7 +74,7 @@ namespace Klipper.Tests
 
             //EXECUTE TEST CASES
             var dactualData = attendanceService
-                .AttendanceReportForDateRange(666,DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Result;
+                .AttendanceReportForDateRange(666,DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
             var dactualDataForADay = dactualData.ListOfAttendanceRecordDTO.First();
 
             //ASSERT
@@ -118,7 +118,7 @@ namespace Klipper.Tests
             //EXECUTE TEST CASES
             var dactualData = attendanceService.
                 AttendanceReportForDateRange
-                (666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Result;
+                (666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
             var dactualDataForADay = dactualData.ListOfAttendanceRecordDTO.First();
 
             //ASSERT
@@ -150,7 +150,7 @@ namespace Klipper.Tests
 
             //EXECUTE TEST CASES
             var dactualData = attendanceService
-                .AttendanceReportForDateRange(666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Result;
+                .AttendanceReportForDateRange(666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
             var dactualDataForADay = dactualData.ListOfAttendanceRecordDTO.First();
 
             //ASSERT
@@ -182,7 +182,7 @@ namespace Klipper.Tests
 
             //EXECUTE TEST CASES
             var dactualData = attendanceService
-                .AttendanceReportForDateRange(666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Result;
+                .AttendanceReportForDateRange(666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
             var dactualDataForADay = dactualData.ListOfAttendanceRecordDTO.FirstOrDefault();
 
             //ASSERT
@@ -213,7 +213,7 @@ namespace Klipper.Tests
 
             //EXECUTE TEST CASES
             var dactualData = attendanceService.AttendanceReportForDateRange
-                (666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Result;
+                (666, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
             var dactualDataForADay = dactualData.ListOfAttendanceRecordDTO.FirstOrDefault();
 
             //ASSERT
@@ -246,7 +246,7 @@ namespace Klipper.Tests
 
             //EXECUTE TEST CASES
             var dactualData = attendanceService.AttendanceReportForDateRange
-                (77, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02")).Result;
+                (77, DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
             var dactualDataForADay = dactualData.ListOfAttendanceRecordDTO.FirstOrDefault();
 
             //ASSERT
@@ -279,7 +279,7 @@ namespace Klipper.Tests
 
             //EXECUTE TEST CASES
             var dactualData = attendanceService
-                .AttendanceReportForDateRange(77, DateTime.Parse("2019/02/09"), DateTime.Parse("2019/02/09")).Result;
+                .AttendanceReportForDateRange(77, DateTime.Parse("2019/02/09"), DateTime.Parse("2019/02/09"));
             var dactualDataForADay = dactualData.ListOfAttendanceRecordDTO.FirstOrDefault();
 
             //ASSERT

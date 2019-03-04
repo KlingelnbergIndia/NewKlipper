@@ -1,0 +1,23 @@
+﻿
+<form action="Export" method="post">
+    <div class="form-inline">
+        <div class="form-group">
+            <label for="fromDate">From</label>
+            <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
+                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                   value="@(Model.fromDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd"))" required>
+        </div>
+        <div class="form-group">
+            <label for="toDate" style="margin-left:10px;">To</label>
+            <input type="date" id="toDate" name="toDate" class="form-control input-sm"
+                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                   max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                   value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Show" class="btn btn-info btn-sm pull" style="margin-left:10px;" />
+        </div>
+    </div>
+
+</form>

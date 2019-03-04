@@ -31,7 +31,7 @@ namespace UseCases
             _leavesRepository = leavesRepository;
         }
 
-        public async Task<AttendanceRecordsDTO> AttendanceReportForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
+        public AttendanceRecordsDTO AttendanceReportForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
         {
             WorkLogs accessEvents = _accessEventsRepository.GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
@@ -47,16 +47,14 @@ namespace UseCases
             Employee employeeData = _employeeRepository.GetEmployee(employeeId);
             Department department = _departmentRepository.GetDepartment(employeeData.Department());
 
-            return await Task.Run(() =>
+            return new AttendanceRecordsDTO
             {
-                return new AttendanceRecordsDTO()
-                {
-                    ListOfAttendanceRecordDTO = listOfPerDayAttendanceRecord,
-                    TotalWorkingHours = CalculateTotalWorkingHours(listOfPerDayAttendanceRecord),
-                    TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime
-                    (listOfPerDayAttendanceRecord, department.GetNoOfHoursToBeWorked()),
-                };
-            });
+                ListOfAttendanceRecordDTO = listOfPerDayAttendanceRecord,
+                TotalWorkingHours = CalculateTotalWorkingHours(listOfPerDayAttendanceRecord),
+                TotalDeficitOrExtraHours = CalculateDeficiateOrExtraTime
+                 (listOfPerDayAttendanceRecord, department.GetNoOfHoursToBeWorked()),
+
+            };
         }
 
         public async Task<List<AccessPointRecord>> GetAccessPointDetails(int employeeId, DateTime date)

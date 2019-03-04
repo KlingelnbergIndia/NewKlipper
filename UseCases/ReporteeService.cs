@@ -46,5 +46,29 @@ namespace UseCases
             }
             return reporteeDtobjs;
         }
+
+        public ReporteeDTO GetTeamLeadData(int employeeId)
+        {
+            Employee currentEmployee = _employeeRepository.GetEmployee(employeeId);
+
+            if (currentEmployee != null)
+            {
+                var reporteesOfCurrentEmployee = currentEmployee.Reportees();
+
+                if (reporteesOfCurrentEmployee.Count != 0)
+                {
+                    ReporteeDTO reporteeDto = new ReporteeDTO();
+                    var teamLeadData = _employeeRepository.GetEmployee(employeeId);
+                    if (teamLeadData != null)
+                    {
+                        reporteeDto.ID = teamLeadData.Id();
+                        reporteeDto.FirstName = teamLeadData.FirstName();
+                        reporteeDto.LastName = teamLeadData.LastName();
+                    }
+                    return reporteeDto;
+                }
+            }
+            return null;
+        }
     }
 }

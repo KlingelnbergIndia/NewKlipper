@@ -36,7 +36,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public async Task GivenNineHoursWorkedDeptartmentGetAccurateOverTimeAndDeficitHours()
+        public void GivenNineHoursWorkedDeptartmentGetAccurateOverTimeAndDeficitHours()
         {
             // Setup
             var dummyEmployee =
@@ -60,7 +60,7 @@ namespace Klipper.Tests
             accessEventsContainer.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
 
             // Execute usecase
-            var listOfAccessEventsRecord = await attendanceService.AttendanceReportForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
+            var listOfAccessEventsRecord = attendanceService.AttendanceReportForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
 
             Assert.That(listOfAccessEventsRecord.ListOfAttendanceRecordDTO[0].OverTime.Hour, Is.EqualTo(0));
             Assert.That(listOfAccessEventsRecord.ListOfAttendanceRecordDTO[0].OverTime.Minute, Is.EqualTo(0));
@@ -70,7 +70,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public async Task GivenTenHoursWorkedDeptartmentGetAccurateOverTimeAndDeficitHours()
+        public void GivenTenHoursWorkedDeptartmentGetAccurateOverTimeAndDeficitHours()
         {
             // Setup
             var dummyEmployee =
@@ -94,7 +94,7 @@ namespace Klipper.Tests
             accessEventsContainer.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
 
             // Execute usecase
-            var listOfAccessEventsRecord = await attendanceService.AttendanceReportForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
+            var listOfAccessEventsRecord =attendanceService.AttendanceReportForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
 
             Assert.That(listOfAccessEventsRecord.ListOfAttendanceRecordDTO[0].OverTime.Hour, Is.EqualTo(0));
             Assert.That(listOfAccessEventsRecord.ListOfAttendanceRecordDTO[0].OverTime.Minute, Is.EqualTo(0));
@@ -104,7 +104,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public async Task OnApplyLeaveGetTotalWorkingHours10According10HourWorkingDepartment()
+        public void OnApplyLeaveGetTotalWorkingHours10According10HourWorkingDepartment()
         {
             // Setup
             var dummyEmployee =
@@ -141,7 +141,7 @@ namespace Klipper.Tests
                    new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
             // Execute usecase
-            var listOfAccessEventsRecord = await attendanceService
+            var listOfAccessEventsRecord = attendanceService
                 .AttendanceReportForDateRange(48, DateTime.Parse("2018-03-05"), DateTime.Parse("2018-03-05"));
 
             Assert.That(listOfAccessEventsRecord.TotalWorkingHours.Hour, Is.EqualTo(10));
@@ -149,7 +149,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public async Task OnApplyHalfDayLeaveGetTotalWorkingHours5According10HourWorkingDepartment()
+        public void OnApplyHalfDayLeaveGetTotalWorkingHours5According10HourWorkingDepartment()
         {
             // Setup
             var dummyEmployee =
@@ -188,7 +188,7 @@ namespace Klipper.Tests
                    new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
 
             // Execute usecase
-            var listOfAccessEventsRecord = await attendanceService
+            var listOfAccessEventsRecord = attendanceService
                 .AttendanceReportForDateRange(48, DateTime.Parse("2018-03-05"), DateTime.Parse("2018-03-05"));
 
             Assert.That(listOfAccessEventsRecord.TotalWorkingHours.Hour, Is.EqualTo(05));

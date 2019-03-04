@@ -7,6 +7,7 @@
 <ul class="nav nav-tabs">
     <li class="tab-pane @(@SelectedTab.Equals("attendanceReportMenu") ? "active" : "notactive")"><a data-toggle="tab" href="#attendanceReportMenu"><label>Attendance report</label></a></li>
     <li class="tab-pane @(@SelectedTab.Equals("leaveReportMenu") ? "active" : "notactive")"><a data-toggle="tab" href="#leaveReportMenu"><label>Leave report</label></a></li>
+    <li class="tab-pane @(@SelectedTab.Equals("exportReportMenu") ? "active" : "notactive")"><a data-toggle="tab" href="#exportReportMenu"><label>Export report</label></a></li>
 </ul>
 
 <div class="tab-content">
@@ -15,6 +16,9 @@
     </div>
     <div id="leaveReportMenu" class="tab-pane @(@SelectedTab.Equals("leaveReportMenu") ? "fade in active" : "")">
         @{await Html.RenderPartialAsync("_LeaveReportTabContent", @Model);}
+    </div>
+    <div id="exportReportMenu" class="tab-pane @(@SelectedTab.Equals("exportReportMenu") ? "fade in active" : "")">
+        @{await Html.RenderPartialAsync("_exportReportTabContent", @Model);}
     </div>
 </div>
 @*tab-pane fade in*@
