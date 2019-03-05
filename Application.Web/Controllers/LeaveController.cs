@@ -17,7 +17,7 @@ using static DomainModel.Leave;
 
 namespace Application.Web.Controllers
 {
-
+    [AuthenticateSession]
     public class LeaveController : Controller
     {
         private readonly ILeavesRepository _leavesRepository;
