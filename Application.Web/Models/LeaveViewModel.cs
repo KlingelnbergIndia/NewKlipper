@@ -16,7 +16,7 @@ namespace Application.Web.Models
     {
         public LeaveRecordDTO leaveDTO;
 
-        public List<LeaveRecordDTO> GetAppliedLeaves { get; set; }
+        public List<LeaveRecordDTO> GetAppliedLeaves = new List<LeaveRecordDTO>();
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FromDate;
         public DateTime ToDate;
@@ -43,6 +43,6 @@ namespace Application.Web.Models
             return dictionary;
         }
 
-        public List<LeaveSummaryViewModel> LeaveSummary;
+        public List<LeaveSummaryViewModel> LeaveSummary = new List<LeaveSummaryViewModel>();
     }
 }

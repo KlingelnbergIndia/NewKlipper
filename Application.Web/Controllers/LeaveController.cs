@@ -151,26 +151,33 @@ namespace Application.Web.Controllers
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("LeaveReport");
                 worksheet.TabColor = Color.Gold;
                 worksheet.DefaultColWidth = 20;
-                worksheet.Cells[1, 1].Style.Font.Color.SetColor(Color.Blue);
-                worksheet.Cells[1, 2].Style.Font.Color.SetColor(Color.Blue);
-                worksheet.Cells[1, 3].Style.Font.Color.SetColor(Color.Blue);
-                worksheet.Cells[1, 4].Style.Font.Color.SetColor(Color.Blue);
+               
 
                 int totalRows = empList.Count();
-
-                for (int j = 1; j <= empList.Count();)
+                int j = 1;
+                foreach (var perEmployeeRecord in empList)
                 {
-                    worksheet.Cells[j, 1].Value = "Leave Type";
-                    worksheet.Cells[j, 2].Value = "Total Leave Available";
-                    worksheet.Cells[j, 3].Value = "Leave Taken";
-                    worksheet.Cells[j, 4].Value = "Remaining Leave";
+                    worksheet.Cells[j, 1].Value = "Employee ID";
+                    worksheet.Cells[j + 1, 1].Value = "Employee Name";
+                    worksheet.Cells[j, 2].Value = perEmployeeRecord.EmployeeId;
+                    worksheet.Cells[j + 1, 2].Value = perEmployeeRecord.EmployeeName;
+
+                    worksheet.Cells[j, 4].Value = "Leave Type";
+                    worksheet.Cells[j, 5].Value = "Total Leave Available";
+                    worksheet.Cells[j, 6].Value = "Leave Taken";
+                    worksheet.Cells[j, 7].Value = "Remaining Leave";
+
+                    worksheet.Cells[j, 4].Style.Font.Color.SetColor(Color.Blue);
+                    worksheet.Cells[j, 5].Style.Font.Color.SetColor(Color.Blue);
+                    worksheet.Cells[j, 6].Style.Font.Color.SetColor(Color.Blue);
+                    worksheet.Cells[j, 7].Style.Font.Color.SetColor(Color.Blue);
                     int i = 1;
-                    foreach (var leaveSummary in empList[j-1].LeaveViewModel.LeaveSummary)
+                    foreach (var leaveSummary in perEmployeeRecord.LeaveViewModel.LeaveSummary)
                     {
-                        worksheet.Cells[j + i, 1].Value = leaveSummary.LeaveType;
-                        worksheet.Cells[j + i, 2].Value = leaveSummary.TotalAvailableLeave;
-                        worksheet.Cells[j + i, 3].Value = leaveSummary.LeaveTaken;
-                        worksheet.Cells[j + i, 4].Value = leaveSummary.RemainingLeave;
+                        worksheet.Cells[j + i, 4].Value = leaveSummary.LeaveType;
+                        worksheet.Cells[j + i, 5].Value = leaveSummary.TotalAvailableLeave;
+                        worksheet.Cells[j + i, 6].Value = leaveSummary.LeaveTaken;
+                        worksheet.Cells[j + i, 7].Value = leaveSummary.RemainingLeave;
                         i++;
                     }
 
@@ -182,22 +189,22 @@ namespace Application.Web.Controllers
                     worksheet.Cells[k, 5].Value = "Remark";
                     worksheet.Cells[k, 6].Value = "Status";
                     k++;
-                    foreach (var perLeaveRecord in empList[j - 1].LeaveViewModel.GetAppliedLeaves)
+                    foreach (var perLeaveRecord in perEmployeeRecord.LeaveViewModel.GetAppliedLeaves)
                     {
-                        worksheet.Cells[k, 1].Value = perLeaveRecord.FromDate;
-                        worksheet.Cells[k, 2].Value = perLeaveRecord.ToDate;
-                        worksheet.Cells[k, 3].Value = perLeaveRecord.NoOfDays;
+                        worksheet.Cells[k, 1].Value = perLeaveRecord.FromDate.ToString("yyyy-MM-dd");
+                        worksheet.Cells[k, 2].Value = perLeaveRecord.ToDate.ToString("yyyy-MM-dd");
+                        worksheet.Cells[k, 3].Value = perLeaveRecord.NoOfDays.ToString();
                         worksheet.Cells[k, 4].Value = perLeaveRecord.GetLeaveDisplayName();
                         worksheet.Cells[k, 5].Value = perLeaveRecord.Remark;
                         worksheet.Cells[k, 6].Value = perLeaveRecord.GetStatusDisplayName();
                         
                         k++;
                     }
-                    j += k + 2;
+                    j = k + 2;
                 }
                 package.Save();
             }
-            string fileName = @"Report_" + DateTime.Now.ToString("dd_MM") + ".xlsx";
+            string fileName = @"LeaveReport_" + DateTime.Now.ToString("dd_MM") + ".xlsx";
             string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             stream.Position = 0;
             return File(stream, fileType, fileName);
@@ -221,13 +228,9 @@ namespace Application.Web.Controllers
 
                     employeeViewModel.EmployeeId = reportee.ID;
                     employeeViewModel.EmployeeName = string.Concat(reportee.FirstName, " ", reportee.LastName);
-                    var leaveViewModel = new LeaveViewModel()
-                    {
-                        GetAppliedLeaves = leaveService.GetAppliedLeaves(reportee.ID),
-                        LeaveSummary = new ReporteeViewModel()
-                 .ConvertToLeaveSummaryViewModel(leaveService.GetTotalSummary(reportee.ID))
-                };
-                    employeeViewModel.LeaveViewModel = leaveViewModel;
+                    employeeViewModel.LeaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(reportee.ID);
+                    employeeViewModel.LeaveViewModel.LeaveSummary = new ReporteeViewModel()
+                 .ConvertToLeaveSummaryViewModel(leaveService.GetTotalSummary(reportee.ID));
                     listOfReporteesLeaveRecord.Add(employeeViewModel);
                 }
                 return listOfReporteesLeaveRecord;
