@@ -232,8 +232,10 @@ namespace Application.Web.Controllers
                     employeeViewModel.EmployeeId = reportee.ID;
                     employeeViewModel.EmployeeName = string.Concat(reportee.FirstName, " ", reportee.LastName);
                     employeeViewModel.LeaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(reportee.ID);
+                    var leaveSummary = leaveService.GetTotalSummary(reportee.ID);
+                    if (leaveSummary!=null)
                     employeeViewModel.LeaveViewModel.LeaveSummary = new ReporteeViewModel()
-                 .ConvertToLeaveSummaryViewModel(leaveService.GetTotalSummary(reportee.ID));
+                    .ConvertToLeaveSummaryViewModel(leaveSummary);
                     listOfReporteesLeaveRecord.Add(employeeViewModel);
                 }
                 return listOfReporteesLeaveRecord;

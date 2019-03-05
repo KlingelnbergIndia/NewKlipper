@@ -44,7 +44,8 @@ namespace UseCases
 
             for (DateTime eachLeaveDay = fromDate.Date; eachLeaveDay <= toDate; eachLeaveDay = eachLeaveDay.AddDays(1).Date)
             {
-                bool isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId && x.GetLeaveDate().Contains(eachLeaveDay.Date) && x.GetStatus() != StatusType.Cancelled);
+                bool isLeaveExist = allAppliedLeaves.Any(x => x.GetEmployeeId() == employeeId 
+                && x.GetLeaveDate().Contains(eachLeaveDay.Date) && x.GetStatus() != StatusType.Cancelled);
                 if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
                 {
                     takenLeaveDates.Add(eachLeaveDay);
@@ -61,6 +62,8 @@ namespace UseCases
                 if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
                 {
                     var leaveSummmary = GetTotalSummary(employeeId);
+                    if(leaveSummmary==null)
+                        return ServiceResponseDTO.CanNotApplied;
                     if ((leaveType == LeaveType.SickLeave && leaveSummmary.RemainingSickLeave - takenLeaveDates.Count < 0) ||
                         (leaveType == LeaveType.CompOff && leaveSummmary.RemainingCompOffLeave - takenLeaveDates.Count < 0))
                     {
