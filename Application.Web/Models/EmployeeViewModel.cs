@@ -18,5 +18,7 @@ namespace Application.Web.Models
         public int EmployeeId;
 
         public string EmployeeName;
+
+        public LeaveViewModel LeaveViewModel;
     }
 }
