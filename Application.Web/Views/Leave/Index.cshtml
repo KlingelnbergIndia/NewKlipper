@@ -10,15 +10,21 @@
 
 <div class="main">
 
-    <div class="col-md-12" style="margin-bottom:10px;">
+    <div class="col-md-12" style="margin-bottom:10px;animation-timing-function:initial;">
         @if (@TempData["responseMessage"] != null)
         {
-            <div class="alert alert-success success-alert-animation">@TempData["responseMessage"] </div>
+            <div class="alert alert-success success-alert-animation alert-dismissible fade in">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                @TempData["responseMessage"]
+            </div>
         }
         @if (@TempData["errorMessage"] != null)
         {
-            <div class="alert alert-warning success-alert-animation">@TempData["errorMessage"] </div>
-        }
+            <div class="alert alert-warning success-alert-animation alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                @TempData["errorMessage"]
+            </div>
+        } 
     </div>
 
     <div class="col-md-12">
