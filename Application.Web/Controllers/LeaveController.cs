@@ -143,98 +143,102 @@ namespace Application.Web.Controllers
         }
 
 
-        //    [HttpPost]
-        //    public FileResult ExportLeaveReport()
-        //    {
-        //        var stream = new System.IO.MemoryStream();
-        //        using (ExcelPackage package = new ExcelPackage(stream))
-        //        {
-        //            IList<EmployeeViewModel> empList = GetLeaveDataOfAllReporteesAndTeamLead();
+        [HttpPost]
+        public FileResult ExportLeaveReport()
+        {
+            var stream = new System.IO.MemoryStream();
+            using (ExcelPackage package = new ExcelPackage(stream))
+            {
+                IList<EmployeeViewModel> empList = GetLeaveDataOfAllReporteesAndTeamLead();
 
-        //            ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("LeaveReport");
-        //            worksheet.TabColor = Color.Gold;
-        //            worksheet.DefaultColWidth = 20;
-        //            worksheet.Cells[1, 1].Style.Font.Color.SetColor(Color.Blue);
-        //            worksheet.Cells[1, 2].Style.Font.Color.SetColor(Color.Blue);
-        //            worksheet.Cells[1, 3].Style.Font.Color.SetColor(Color.Blue);
-        //            worksheet.Cells[1, 4].Style.Font.Color.SetColor(Color.Blue);
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("LeaveReport");
+                worksheet.TabColor = Color.Gold;
+                worksheet.DefaultColWidth = 20;
+               
 
-        //            int totalRows = empList.Count();
+                int totalRows = empList.Count();
+                int j = 1;
+                foreach (var perEmployeeRecord in empList)
+                {
+                    worksheet.Cells[j, 1].Value = "Employee ID";
+                    worksheet.Cells[j + 1, 1].Value = "Employee Name";
+                    worksheet.Cells[j, 2].Value = perEmployeeRecord.EmployeeId;
+                    worksheet.Cells[j + 1, 2].Value = perEmployeeRecord.EmployeeName;
 
-        //            for (int j = 1; j <= empList.Count();)
-        //            {
-        //                worksheet.Cells[j, 1].Value = "Employee ID";
-        //                worksheet.Cells[j + 1, 1].Value = "Employee Name";
-        //                worksheet.Cells[j, 2].Value = empList[j - 1].EmployeeId;
-        //                worksheet.Cells[j + 1, 2].Value = empList[j - 1].EmployeeName;
+                    worksheet.Cells[j, 4].Value = "Leave Type";
+                    worksheet.Cells[j, 5].Value = "Total Leave Available";
+                    worksheet.Cells[j, 6].Value = "Leave Taken";
+                    worksheet.Cells[j, 7].Value = "Remaining Leave";
 
-        //                worksheet.Cells[j + 4, 1].Value = "Date";
-        //                worksheet.Cells[j + 4, 2].Value = "Day";
-        //                worksheet.Cells[j + 4, 3].Value = "Time In";
-        //                worksheet.Cells[j + 4, 4].Value = "Time Out";
-        //                worksheet.Cells[j + 4, 5].Value = "Deficit Time";
-        //                worksheet.Cells[j + 4, 6].Value = "Over Time";
-        //                worksheet.Cells[j + 4, 7].Value = "Actual Hours";
-        //                worksheet.Cells[j + 4, 8].Value = "Regularized Hours";
-        //                worksheet.Cells[j + 5, 9].Value = "Remark";
+                    worksheet.Cells[j, 4].Style.Font.Color.SetColor(Color.Blue);
+                    worksheet.Cells[j, 5].Style.Font.Color.SetColor(Color.Blue);
+                    worksheet.Cells[j, 6].Style.Font.Color.SetColor(Color.Blue);
+                    worksheet.Cells[j, 7].Style.Font.Color.SetColor(Color.Blue);
+                    int i = 1;
+                    foreach (var leaveSummary in perEmployeeRecord.LeaveViewModel.LeaveSummary)
+                    {
+                        worksheet.Cells[j + i, 4].Value = leaveSummary.LeaveType;
+                        worksheet.Cells[j + i, 5].Value = leaveSummary.TotalAvailableLeave;
+                        worksheet.Cells[j + i, 6].Value = leaveSummary.LeaveTaken;
+                        worksheet.Cells[j + i, 7].Value = leaveSummary.RemainingLeave;
+                        i++;
+                    }
 
-        //                int k = 5;
-        //                foreach (var perdayRecord in empList[j - 1].employeeAttendaceRecords.ListOfAttendanceRecordDTO)
-        //                {
-        //                    worksheet.Cells[k, 1].Value = perdayRecord.Date;
-        //                    worksheet.Cells[k, 2].Value = perdayRecord.Date.DayOfWeek;
-        //                    worksheet.Cells[k, 3].Value = perdayRecord.TimeIn;
-        //                    worksheet.Cells[k, 4].Value = perdayRecord.TimeOut;
-        //                    worksheet.Cells[k, 5].Value = perdayRecord.LateBy;
-        //                    worksheet.Cells[k, 6].Value = perdayRecord.OverTime;
-        //                    worksheet.Cells[k, 7].Value = perdayRecord.WorkingHours;
-        //                    worksheet.Cells[k, 8].Value = perdayRecord.RegularizedHours;
-        //                    worksheet.Cells[k, 9].Value = perdayRecord.Remark;
-        //                    k++;
-        //                }
-        //                j += k + 2;
-        //            }
-        //            package.Save();
-        //        }
-        //        string fileName = @"Report_" + DateTime.Now.ToString("dd_MM") + ".xlsx";
-        //        string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        //        stream.Position = 0;
-        //        return File(stream, fileType, fileName);
-        //    }
+                    int k = j + i + 1;
+                    worksheet.Cells[k, 1].Value = "From Date";
+                    worksheet.Cells[k, 2].Value = "To Date";
+                    worksheet.Cells[k, 3].Value = "No Of Days";
+                    worksheet.Cells[k, 4].Value = "Leave Type";
+                    worksheet.Cells[k, 5].Value = "Remark";
+                    worksheet.Cells[k, 6].Value = "Status";
+                    k++;
+                    foreach (var perLeaveRecord in perEmployeeRecord.LeaveViewModel.GetAppliedLeaves)
+                    {
+                        worksheet.Cells[k, 1].Value = perLeaveRecord.FromDate.ToString("yyyy-MM-dd");
+                        worksheet.Cells[k, 2].Value = perLeaveRecord.ToDate.ToString("yyyy-MM-dd");
+                        worksheet.Cells[k, 3].Value = perLeaveRecord.NoOfDays.ToString();
+                        worksheet.Cells[k, 4].Value = perLeaveRecord.GetLeaveDisplayName();
+                        worksheet.Cells[k, 5].Value = perLeaveRecord.Remark;
+                        worksheet.Cells[k, 6].Value = perLeaveRecord.GetStatusDisplayName();
+                        
+                        k++;
+                    }
+                    j = k + 2;
+                }
+                package.Save();
+            }
+            string fileName = @"LeaveReport_" + DateTime.Now.ToString("dd_MM") + ".xlsx";
+            string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            stream.Position = 0;
+            return File(stream, fileType, fileName);
+        }
 
-        //    private GetLeaveDataOfAllReporteesAndTeamLead()
-        //    {
-        //        var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-        //        ReporteeService reporteeService = new ReporteeService(_employeeRepository);
-        //        LeaveService leaveService = new LeaveService(_leavesRepository, _employeeRepository,
-        //          _departmentRepository, _carryForwardLeaves);
+        private List<EmployeeViewModel> GetLeaveDataOfAllReporteesAndTeamLead()
+        {
+            var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
+            ReporteeService reporteeService = new ReporteeService(_employeeRepository);
+            LeaveService leaveService = new LeaveService(_leavesRepository, _employeeRepository,
+              _departmentRepository, _carryForwardLeaves);
 
-        //        var reportees = reporteeService.GetReporteesData(employeeId);
-        //        var listOfReporteesAttendanceRecord = new List<EmployeeViewModel>();
-        //        if (reportees.Count() != 0)
-        //        {
-        //            reportees.Add(reporteeService.GetTeamLeadData(employeeId));
-        //            foreach (var reportee in reportees)
-        //            {
-        //                EmployeeViewModel employeeViewModel = new EmployeeViewModel();
-        //                var listOfLeaveRecord = new List<LeaveRecordDTO>();
-        //                employeeViewModel.fromDate = DateTime.Parse(fromDate);
-        //                employeeViewModel.toDate = DateTime.Parse(toDate);
-        //                employeeViewModel.EmployeeId = reportee.ID;
-        //                employeeViewModel.EmployeeName = string.Concat(reportee.FirstName, " ", reportee.LastName);
+            var reportees = reporteeService.GetReporteesData(employeeId);
+            var listOfReporteesLeaveRecord = new List<EmployeeViewModel>();
+            if (reportees.Count() != 0)
+            {
+                reportees.Add(reporteeService.GetTeamLeadData(employeeId));
+                foreach (var reportee in reportees)
+                {
+                    EmployeeViewModel employeeViewModel = new EmployeeViewModel();
 
-        //                employeeViewModel.employeeAttendaceRecords = attendanceService.AttendanceReportForDateRange
-        //                    (reportee.ID, employeeViewModel.fromDate, employeeViewModel.toDate);
-
-        //                employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO =
-        //                    ConvertAttendanceRecordsTimeToIST(employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO);
-
-        //                listOfReporteesAttendanceRecord.Add(employeeViewModel);
-        //            }
-        //            return listOfReporteesAttendanceRecord;
-        //        }
-        //        return null;
-        //    }
-        //}
+                    employeeViewModel.EmployeeId = reportee.ID;
+                    employeeViewModel.EmployeeName = string.Concat(reportee.FirstName, " ", reportee.LastName);
+                    employeeViewModel.LeaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(reportee.ID);
+                    employeeViewModel.LeaveViewModel.LeaveSummary = new ReporteeViewModel()
+                 .ConvertToLeaveSummaryViewModel(leaveService.GetTotalSummary(reportee.ID));
+                    listOfReporteesLeaveRecord.Add(employeeViewModel);
+                }
+                return listOfReporteesLeaveRecord;
+            }
+            return null;
+        }
     }
 }
