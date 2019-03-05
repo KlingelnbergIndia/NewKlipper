@@ -8,15 +8,10 @@ using Application.Web.Models;
 using UseCaseBoundary;
 using UseCaseBoundary.Model;
 using UseCases;
-using UseCaseBoundaryImplementation;
 using Microsoft.AspNetCore.Http;
 using Klipper.Web.UI;
-using System.Dynamic;
-using System.Text.RegularExpressions;
 using Application.Web.PageAccessAuthentication;
 using UseCaseBoundary.DTO;
-using DomainModel;
-using FizzWare.NBuilder;
 using OfficeOpenXml;
 using System.Drawing;
 
@@ -172,6 +167,7 @@ namespace Application.Web.Controllers
                     reporteeViewModel.leaveRecordsOfSelectedReportee = leaveService.GetAppliedLeaves(selectedReporteeId);
 
                     var leaveSummary = leaveService.GetTotalSummary(selectedReporteeId);
+                    if(leaveSummary!=null)
                     reporteeViewModel.LeaveSummary = reporteeViewModel.ConvertToLeaveSummaryViewModel(leaveSummary);
 
                     selectedViewTabs = ViewTabs.leaveReportMenu.ToString();
@@ -199,6 +195,7 @@ namespace Application.Web.Controllers
             leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
 
             var leaveSummary = leaveService.GetTotalSummary(loggedInEmpId);
+            if(leaveSummary!=null)
             leaveViewModel.LeaveSummary = new ReporteeViewModel()
                 .ConvertToLeaveSummaryViewModel(leaveSummary);
             return leaveViewModel;
