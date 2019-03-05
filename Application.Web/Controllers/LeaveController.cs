@@ -196,7 +196,7 @@ namespace Application.Web.Controllers
                     {
                         worksheet.Cells[k, 1].Value = perLeaveRecord.FromDate.ToString("yyyy-MM-dd");
                         worksheet.Cells[k, 2].Value = perLeaveRecord.ToDate.ToString("yyyy-MM-dd");
-                        worksheet.Cells[k, 3].Value = perLeaveRecord.NoOfDays.ToString();
+                        worksheet.Cells[k, 3].Value = perLeaveRecord.NoOfDays;
                         worksheet.Cells[k, 4].Value = perLeaveRecord.GetLeaveDisplayName();
                         worksheet.Cells[k, 5].Value = perLeaveRecord.Remark;
                         worksheet.Cells[k, 6].Value = perLeaveRecord.GetStatusDisplayName();

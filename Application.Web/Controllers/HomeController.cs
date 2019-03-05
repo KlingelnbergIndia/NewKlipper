@@ -309,7 +309,7 @@ namespace Application.Web.Controllers
                     }
                     package.Save();
                 }
-                string fileName = @"Report_" + DateTime.Now.ToString("dd_MM") + ".xlsx";
+                string fileName = @"AttendanceReport_" + DateTime.Now.ToString("dd_MM") + ".xlsx";
                 string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 stream.Position = 0;
                 return File(stream, fileType, fileName);
