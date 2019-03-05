@@ -424,7 +424,7 @@ namespace UseCases
 
             return new Time(
                 (int)extraTime.TotalHours,
-                Math.Abs((int)extraTime.Minutes));
+                (int)extraTime.Minutes);
 
         }
         private Time CalculateEstimatedHours
