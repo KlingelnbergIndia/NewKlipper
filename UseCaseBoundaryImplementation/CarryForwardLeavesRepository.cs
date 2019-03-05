@@ -30,7 +30,7 @@ namespace RepositoryImplementation
 
             if (leaves != null)
             {
-                new CarryForwardLeaves(
+                return new CarryForwardLeaves(
                    leaves.EmployeeId,
                    leaves.LeaveBalanceTillDate,
                    leaves.TakenCasualLeaves,
@@ -39,6 +39,7 @@ namespace RepositoryImplementation
                    leaves.MaxCasualLeaves,
                    leaves.MaxSickLeaves,
                    leaves.MaxCompoffLeaves);
+
             }
             return null;
                

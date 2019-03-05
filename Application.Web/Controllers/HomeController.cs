@@ -167,6 +167,7 @@ namespace Application.Web.Controllers
                     reporteeViewModel.leaveRecordsOfSelectedReportee = leaveService.GetAppliedLeaves(selectedReporteeId);
 
                     var leaveSummary = leaveService.GetTotalSummary(selectedReporteeId);
+                    if(leaveSummary!=null)
                     reporteeViewModel.LeaveSummary = reporteeViewModel.ConvertToLeaveSummaryViewModel(leaveSummary);
 
                     selectedViewTabs = ViewTabs.leaveReportMenu.ToString();
@@ -194,6 +195,7 @@ namespace Application.Web.Controllers
             leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
 
             var leaveSummary = leaveService.GetTotalSummary(loggedInEmpId);
+            if(leaveSummary!=null)
             leaveViewModel.LeaveSummary = new ReporteeViewModel()
                 .ConvertToLeaveSummaryViewModel(leaveSummary);
             return leaveViewModel;
