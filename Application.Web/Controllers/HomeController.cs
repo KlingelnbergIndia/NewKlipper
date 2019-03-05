@@ -261,10 +261,12 @@ namespace Application.Web.Controllers
                     ":",
                     empdata.employeeAttendaceRecords.TotalWorkingHours.Minute.ToString("D2"));
                     worksheet.Cells[j + 2, 6].Value = "Difference";
+                    var difference = new Time(empdata.employeeAttendaceRecords.TotalDeficitOrExtraHours.Hour,
+                        Math.Abs(empdata.employeeAttendaceRecords.TotalDeficitOrExtraHours.Minute));
                     worksheet.Cells[j + 2, 7].Value = string.Concat
-                        (empdata.employeeAttendaceRecords.TotalDeficitOrExtraHours.Hour,
-                        ":", 
-                        empdata.employeeAttendaceRecords.TotalDeficitOrExtraHours.Minute.ToString("D2"));
+                        (difference.Hour.ToString("D2"),
+                        ":",
+                        difference.Minute.ToString("D2"));
 
                     worksheet.Cells[j , 6].Style.Font.Color.SetColor(Color.Blue);
                     worksheet.Cells[j + 1, 6].Style.Font.Color.SetColor(Color.Blue);
@@ -296,12 +298,18 @@ namespace Application.Web.Controllers
                         {
                             worksheet.Cells[k, 1].Value = perdayRecord.Date.ToString("yyyy-MM-dd");
                             worksheet.Cells[k, 2].Value = perdayRecord.Date.DayOfWeek;
-                            worksheet.Cells[k, 3].Value = string.Concat(perdayRecord.TimeIn.Hour.ToString("D2"), ":", perdayRecord.TimeIn.Minute.ToString("D2"));
-                            worksheet.Cells[k, 4].Value = string.Concat(perdayRecord.TimeOut.Hour.ToString("D2"), ":", perdayRecord.TimeOut.Minute.ToString("D2"));
-                        worksheet.Cells[k, 5].Value = string.Concat(perdayRecord.LateBy.Hour.ToString("D2"), ":", perdayRecord.LateBy.Minute.ToString("D2"));
-                        worksheet.Cells[k, 6].Value = string.Concat(perdayRecord.OverTime.Hour.ToString("D2"), ":", perdayRecord.OverTime.Minute.ToString("D2"));
-                        worksheet.Cells[k, 7].Value = string.Concat(perdayRecord.WorkingHours.Hour.ToString("D2"), ":", perdayRecord.WorkingHours.Minute.ToString("D2"));
-                        worksheet.Cells[k, 8].Value = string.Concat(perdayRecord.RegularizedHours.Hour.ToString("D2"), ":", perdayRecord.RegularizedHours.Minute.ToString("D2"));
+                            worksheet.Cells[k, 3].Value = string.Concat
+                            (perdayRecord.TimeIn.Hour.ToString("D2"), ":", perdayRecord.TimeIn.Minute.ToString("D2"));
+                            worksheet.Cells[k, 4].Value = string.Concat
+                            (perdayRecord.TimeOut.Hour.ToString("D2"), ":", perdayRecord.TimeOut.Minute.ToString("D2"));
+                        worksheet.Cells[k, 5].Value = string.Concat
+                            (perdayRecord.LateBy.Hour.ToString("D2"), ":", perdayRecord.LateBy.Minute.ToString("D2"));
+                        worksheet.Cells[k, 6].Value = string.Concat
+                            (perdayRecord.OverTime.Hour.ToString("D2"), ":", perdayRecord.OverTime.Minute.ToString("D2"));
+                        worksheet.Cells[k, 7].Value = string.Concat
+                            (perdayRecord.WorkingHours.Hour.ToString("D2"), ":", perdayRecord.WorkingHours.Minute.ToString("D2"));
+                        worksheet.Cells[k, 8].Value = string.Concat
+                            (perdayRecord.RegularizedHours.Hour.ToString("D2"), ":", perdayRecord.RegularizedHours.Minute.ToString("D2"));
                         worksheet.Cells[k, 9].Value = perdayRecord.Remark;
                             k++;
                         }
