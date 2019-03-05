@@ -43,12 +43,15 @@ namespace Application.Web.Controllers
             var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
 
             var leaveViewModel = new LeaveViewModel();
-            leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
+            var appliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
+            if (appliedLeaves != null)
+                leaveViewModel.GetAppliedLeaves = appliedLeaves;
 
             var leaveSummary = leaveService.GetTotalSummary(loggedInEmpId);
-            leaveViewModel.LeaveSummary = new ReporteeViewModel()
-                .ConvertToLeaveSummaryViewModel(leaveSummary);
-           
+            if (leaveSummary != null)
+                leaveViewModel.LeaveSummary = new ReporteeViewModel()
+                    .ConvertToLeaveSummaryViewModel(leaveSummary);
+
 
             return View(leaveViewModel);
         }

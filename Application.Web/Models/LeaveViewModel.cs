@@ -43,6 +43,6 @@ namespace Application.Web.Models
             return dictionary;
         }
 
-        public List<LeaveSummaryViewModel> LeaveSummary;
+        public List<LeaveSummaryViewModel> LeaveSummary = new List<LeaveSummaryViewModel>();
     }
 }

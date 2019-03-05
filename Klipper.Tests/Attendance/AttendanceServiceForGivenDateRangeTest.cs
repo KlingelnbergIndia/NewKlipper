@@ -183,7 +183,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public async Task GivenOddNOoFGymEntryAccessEventsSetWorkingHoursZero()
+        public void  GivenOddNOoFGymEntryAccessEventsSetWorkingHoursZero()
         {
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData, leaveData);
@@ -213,7 +213,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public async Task GivenOddNOoFMainEntryAccessEventsSetWorkingHoursZero()
+        public void GivenOddNOoFMainEntryAccessEventsSetWorkingHoursZero()
         {
             AttendanceService attendanceService =
                 new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData, leaveData);
