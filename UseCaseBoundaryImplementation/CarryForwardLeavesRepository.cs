@@ -28,16 +28,20 @@ namespace RepositoryImplementation
             var leaves = (await _dbContext.CarryForwardLeaves
                 .FindAsync(x => x.EmployeeId == employeeId)).FirstOrDefault();
 
-            return
+            if (leaves != null)
+            {
                 new CarryForwardLeaves(
-                    leaves.EmployeeId,
-                    leaves.LeaveBalanceTillDate,
-                    leaves.TakenCasualLeaves,
-                    leaves.TakenSickLeaves,
-                    leaves.TakenCompoffLeaves,
-                    leaves.MaxCasualLeaves,
-                    leaves.MaxSickLeaves,
-                    leaves.MaxCompoffLeaves);
+                   leaves.EmployeeId,
+                   leaves.LeaveBalanceTillDate,
+                   leaves.TakenCasualLeaves,
+                   leaves.TakenSickLeaves,
+                   leaves.TakenCompoffLeaves,
+                   leaves.MaxCasualLeaves,
+                   leaves.MaxSickLeaves,
+                   leaves.MaxCompoffLeaves);
+            }
+            return null;
+               
         }
     }
 }

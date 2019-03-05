@@ -10,14 +10,5 @@ namespace UseCaseBoundary.DTO
         public string FirstName;
         public string LastName;
 
-        public override bool Equals(object other)
-        {
-            var toCompareWith = other as ReporteeDTO;
-            if (toCompareWith == null)
-                return false;
-            return this.ID == toCompareWith.ID &&
-                   this.FirstName == toCompareWith.FirstName &&
-                   this.LastName == toCompareWith.LastName;
-        }
     }
 }

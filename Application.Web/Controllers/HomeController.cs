@@ -8,18 +8,12 @@ using Application.Web.Models;
 using UseCaseBoundary;
 using UseCaseBoundary.Model;
 using UseCases;
-using UseCaseBoundaryImplementation;
 using Microsoft.AspNetCore.Http;
 using Klipper.Web.UI;
-using System.Dynamic;
-using System.Text.RegularExpressions;
 using Application.Web.PageAccessAuthentication;
 using UseCaseBoundary.DTO;
-using DomainModel;
-using FizzWare.NBuilder;
 using OfficeOpenXml;
 using System.Drawing;
-using UseCaseBoundary.DTO;
 
 namespace Application.Web.Controllers
 {

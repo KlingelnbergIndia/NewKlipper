@@ -117,6 +117,10 @@ namespace UseCases
                 .GetAwaiter()
                 .GetResult();
 
+            if (carryForwardLeave==null)
+            {
+                return null;
+            }
             float totalCasualLeaveAvailable = carryForwardLeave.MaxCasualLeaves();
             float totalSickLeaveAvailable = carryForwardLeave.MaxSickLeaves();
             float totalCompOffLeaveAvailable = carryForwardLeave.MaxCompoffLeaves();
