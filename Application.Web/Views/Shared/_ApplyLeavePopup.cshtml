@@ -13,7 +13,6 @@
             </div>
             <div id="ModalBody" style="margin-left:9px;margin-right:10px">
                 <div class="col-md-12">
-                    <form method="post" asp-controller="Leave" asp-action="ApplyLeave">
                         <div class="col-md-6">
                             <label for="from">From</label>
                             <input type="date" class="form-control input-sm"
@@ -49,19 +48,19 @@
                             </div>
                         </div>
                         <div class="col-md-6 form-inline" style="margin-top:42px;">
-                            <label class="checkbox"><input type="checkbox" asp-for="@Model.IsHalfDay" value="true" style="margin-right:5px;">Half Day</label>
+                            <label class="checkbox"><input type="checkbox" id="isHalfDay" value="true" name="isHalfDay"
+                                            asp-for="@Model.IsHalfDay" style="margin-right:5px;">Half Day</label>
                          </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Remark</label>
-                                    <textarea asp-for="@Model.Remark" class="form-control input-sm" placeholder="Remark" rows="6" required></textarea>
+                                    <textarea asp-for="@Model.Remark" id="remark" class="form-control input-sm" placeholder="Remark" rows="6" required></textarea>
                                     <span asp-validation-for="@Model.Remark" class="text-danger input-sm"></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <input type="submit" value="submit" class="btn btn-default btn-info pull-right" />
+                                <input type="submit" value="submit" onclick="checkDateForHalfDay()" class="btn btn-default btn-info pull-right" />
                             </div>
-                    </form>
                 </div>
 
             </div>
@@ -95,6 +94,30 @@
         }
     });
 
+    checkDateForHalfDay = function () {
+        var isHalfDay = document.querySelector('[name="isHalfDay"]:checked') == null ?
+            "false" : document.querySelector('[name="isHalfDay"]:checked').value;
+        var fromDate = dateToYMD(document.getElementById("FromDate").value.toString());
+        var toDate = dateToYMD(document.getElementById("ToDate").value.toString());
+        if (isHalfDay == "true" && fromDate != toDate) {
+            alert('Please select same date for half day');
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "ApplyLeave/",
+            data: {
+                fromDate : fromDate,
+                toDate : toDate,
+                leaveType: document.getElementById("leaveList").value,
+                isHalfDay: isHalfDay,
+                remark: document.getElementById("remark").value
+            },
+            success: function (response) {
+                window.location.reload();
+            }
+        });
+    }
 
     function dateToYMD(date) {
         try {
