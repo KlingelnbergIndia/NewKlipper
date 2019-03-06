@@ -23,26 +23,22 @@ namespace Application.Web.Models
         public string Remark;
         public string IsHalfDay;
         public LeaveType LeaveType;
-        public IDictionary<int, string> GetAllLeaveTypes()
+        public List<string> GetAllLeaveTypes()
         {
-            var dictionary = new Dictionary<int, string>();
-
+            var leaveTypes = new List<string>();
             var enumerationType = typeof(LeaveType);
             foreach (int value in Enum.GetValues(enumerationType))
             {
                 if (value == (int)LeaveType.CompOff)
-                    dictionary.Add(value, "Comp-Off");
+                    leaveTypes.Add(EnumHelperMethod.EnumDisplayNameFor(LeaveType.CompOff).ToString());
                 else if (value == (int)LeaveType.CasualLeave)
-                    dictionary.Add(value, "Casual Leave");
+                    leaveTypes.Add(EnumHelperMethod.EnumDisplayNameFor(LeaveType.CasualLeave).ToString());
                 else if (value == (int)LeaveType.SickLeave)
-                    dictionary.Add(value, "Sick Leave");
-                else
-                    dictionary.Add(value, ((LeaveType)value).ToString());
+                    leaveTypes.Add(EnumHelperMethod.EnumDisplayNameFor(LeaveType.SickLeave).ToString());
             }
 
-            return dictionary;
+            return leaveTypes;
         }
-
         public List<LeaveSummaryViewModel> LeaveSummary = new List<LeaveSummaryViewModel>();
     }
 }

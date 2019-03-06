@@ -36,11 +36,10 @@
                             <div class="col-md-6">
                                 <div class="form-group" style="width:200px;margin-top:14px;">
                                     <label>Leave Type</label>
-                                    <select id="leaveType" name="leaveList" class="form-control input-sm" asp-for="@Model.LeaveType" style="width:150px;">
-                                        <option value="-1" disabled selected>select leave type</option>
+                                    <select id="leaveList" name="leaveList" class="form-control input-sm" asp-for="@Model.LeaveType" style="width:150px;">
                                         @foreach (var leave in leaveTypes)
                                         {
-                                            <option value="@leave.Key">@leave.Value</option>
+                                            <option value="@leave">@leave</option>
                                         }
                                     </select>
                                 </div>
