@@ -51,8 +51,13 @@ namespace Application.Web.Controllers
             {
                 string fromDate = HttpContext.Request.Form["fromDate"].ToString();
                 string toDate = HttpContext.Request.Form["toDate"].ToString();
+                
                 employeeViewModel.fromDate = DateTime.Parse(fromDate);
                 employeeViewModel.toDate = DateTime.Parse(toDate);
+                if (employeeViewModel.fromDate > employeeViewModel.toDate)
+                {
+                    TempData["errorMessage"] = "Please select valid date range !";
+                }
 
                 employeeViewModel.employeeAttendaceRecords =
                     attendanceService.AttendanceReportForDateRange(employeeId, employeeViewModel.fromDate, employeeViewModel.toDate);

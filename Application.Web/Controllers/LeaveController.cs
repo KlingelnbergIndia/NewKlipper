@@ -64,11 +64,11 @@ namespace Application.Web.Controllers
                 return RedirectToAction("Index");
             }
             string leaveType = HttpContext.Request.Form["leaveList"].ToString();
-            if (int.Parse(leaveType) == 0)
+            if (leaveType == "Comp-Off")
                 LeaveType = LeaveType.CompOff;
-            else if (int.Parse(leaveType) == 1)
+            else if (leaveType == "Casual Leave")
                 LeaveType = LeaveType.CasualLeave;
-            else if (int.Parse(leaveType) == 2)
+            else if (leaveType == "Sick Leave")
                 LeaveType = LeaveType.SickLeave;
 
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
