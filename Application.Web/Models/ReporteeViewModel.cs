@@ -25,7 +25,8 @@ namespace Application.Web.Models
         public string AttendanceFormName { get; set; }
         public int SelectedEmpIdForAttendanceTab { get; set; }
         public int SelectedEmpIdForLeaveTab { get; set; }
-        public List<LeaveSummaryViewModel> LeaveSummary { get; set; }
+        public List<LeaveSummaryViewModel> LeaveSummary = new List<LeaveSummaryViewModel>();
+
         public LeaveViewModel leaveViewModel = new LeaveViewModel();
 
         public List<LeaveSummaryViewModel> ConvertToLeaveSummaryViewModel(LeaveSummaryDTO leaveSummary)
