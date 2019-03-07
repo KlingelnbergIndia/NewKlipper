@@ -63,7 +63,7 @@ namespace Application.Web.Controllers
                 TempData["errorMessage"] = "Please select valid date range !";
                 return RedirectToAction("Index");
             }
-            string leaveType = HttpContext.Request.Form["leaveList"].ToString();
+            string leaveType = HttpContext.Request.Form["leaveType"].ToString();
             if (leaveType == "Comp-Off")
                 LeaveType = LeaveType.CompOff;
             else if (leaveType == "Casual Leave")

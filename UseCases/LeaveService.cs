@@ -62,7 +62,7 @@ namespace UseCases
                 if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
                 {
                     var leaveSummmary = GetTotalSummary(employeeId);
-                    int CountOfTakenLeaveDates = takenLeaveDates.Count;
+                    float CountOfTakenLeaveDates = takenLeaveDates.Count;
                     if (leaveSummmary == null)
                         return ServiceResponseDTO.CanNotApplied;
                     if (isHalfDay == true)
