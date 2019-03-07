@@ -2,7 +2,8 @@
 
 @{
     var isLeaveCountZero = @Model.leaveRecordsOfSelectedReportee.Count == 0;
-   
+    var isleaveSummaryZero = @Model.LeaveSummary.Count == 0;
+
 }
 <div class="panel-info" style="@(Model.reportees.Count==0 ? "visibility:hidden" : "visibility:visible")">
     <div class="panel panel-heading col-md-12 col-sm-12">
@@ -38,18 +39,20 @@
 
 
     <div class="main">
+        <div class="col-md-12" style="@(isleaveSummaryZero ==false ? "display:none" : "display:block")">
+            @if (!string.IsNullOrEmpty(@Model.LeaveFormName))
+            {
+            <div class="row" style="color:#23527C;">No applied leave summary found for @Model.LeaveFormName</div>
+            }
+        </div>
         <div class="col-md-12" style="@(isLeaveCountZero ==false ? "display:none" : "display:block")">
             @if (!string.IsNullOrEmpty(@Model.LeaveFormName))
             {
                 <div class="row" style="color:#23527C;">No applied leaves found for @Model.LeaveFormName</div>
             }
         </div>
-        @if (@Model.leaveRecordsOfSelectedReportee.Any())
-        {
-            <div style="color:#23527C;">Applied leaves summary for @Model.LeaveFormName</div><br />
-        }
 
-        @if (@Model.LeaveSummary != null)
+        @if (isleaveSummaryZero == false)
         {
             <div class="col-md-12">
                 <h4> Leave Summary</h4>
