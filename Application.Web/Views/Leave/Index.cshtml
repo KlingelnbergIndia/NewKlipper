@@ -159,6 +159,31 @@
             return null;
         }
     }
+
+    checkDateForHalfDay = function () {
+        var isHalfDay = document.querySelector('[name="isHalfDay"]:checked') == null ?
+            "false" : document.querySelector('[name="isHalfDay"]:checked').value;
+        var fromDate = dateToYMD(document.getElementById("FromDate").value.toString());
+        var toDate = dateToYMD(document.getElementById("ToDate").value.toString());
+        if (isHalfDay == "true" && fromDate != toDate) {
+            alert('Please select same date for half day');
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "ApplyLeave/",
+            data: {
+                fromDate: fromDate,
+                toDate: toDate,
+                leaveType: document.getElementById("leaveList").value,
+                isHalfDay: isHalfDay,
+                remark: document.getElementById("remark").value
+            },
+            success: function (response) {
+                window.location.reload();
+            }
+        });
+    }
 </script>
 
 @section Scripts {
