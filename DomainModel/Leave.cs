@@ -17,12 +17,12 @@ namespace DomainModel
 
         public enum LeaveType
         {
-            [Display(Name = "Comp-Off")]
-            CompOff,
             [Display(Name = "Casual Leave")]
             CasualLeave,
             [Display(Name = "Sick Leave")]
-            SickLeave
+            SickLeave,
+            [Display(Name = "Comp-Off")]
+            CompOff
         }
         public enum StatusType
         {
