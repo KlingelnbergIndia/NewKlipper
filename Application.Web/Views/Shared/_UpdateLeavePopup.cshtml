@@ -36,17 +36,16 @@
                             <div class="col-md-6">
                                 <div class="form-group" style="width:200px;margin-top:14px;">
                                     <label>Leave Type</label>
-                                    <select id="leaveType" name="leaveList" class="form-control input-sm" asp-for="@Model.LeaveType" style="width:150px;">
-                                        <option value="-1" disabled selected>select leave type</option>
+                                    <select id="leaveType" name="leaveType" class="form-control input-sm" asp-for="@Model.LeaveType" style="width:150px;">
                                         @foreach (var leave in leaveTypes)
                                         {
-                                            <option value="@leave.Key">@leave.Value</option>
+                                            <option value="@leave">@leave</option>
                                         }
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6 form-inline" style="margin-top:42px;">
-                                <label class="checkbox"><input type="checkbox" asp-for="@Model.IsHalfDay" value="true" style="margin-right:5px;">Half Day</label>
+                                <label class="checkbox"><input type="checkbox" id="isHalfDay" asp-for="@Model.IsHalfDay" value="true" style="margin-right:5px;">Half Day</label>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -74,7 +73,8 @@
         $(document).ready(function () {
             var _convertStringToDateObject;
 
-            UpdateLeave = function (leaveId, fromDate, toDate, leaveTypeId, remark, isrealized,isCancelledLeave) {
+
+            UpdateLeave = function (leaveId, fromDate, toDate, leaveTypeId, isHalfDay,remark, isrealized,isCancelledLeave) {
                 if (isrealized == "true") {
                     alert('Passed leaves can not be updated !');
                     return false;
@@ -83,12 +83,17 @@
                     alert('Cancelled leaves can not be updated !');
                     return false;
                 }
+               
                 $('#UpdateLeaveModal').modal({ 'show': true, 'backdrop': true });
                 document.getElementById("fromDate").value = convertDateToHtmlFormat(new Date(fromDate));
                 document.getElementById("toDate").value = convertDateToHtmlFormat(new Date(toDate));
                 document.getElementById("leaveType").value = leaveTypeId;
                 document.getElementById("leaveId").value = leaveId;
-                document.getElementById("remark").value = decodeString(remark) ;
+                document.getElementById("remark").value = decodeString(remark);
+               document.getElementById("isHalfDay").checked = false;
+                if (isHalfDay == "true") {
+                    document.getElementById("isHalfDay").checked = true;
+                }
             }
 
         });
