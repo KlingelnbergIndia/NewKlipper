@@ -10,7 +10,7 @@
 
 <div class="main">
 
-    <div class="col-md-12" style="margin-bottom:10px;" data-auto-dismiss="5s">
+    <div class="col-md-12" style="margin-bottom:10px;" >
         @if (@TempData["responseMessage"] != null)
         {
             <div class="alert alert-success success-alert-animation alert-dismissible" >
@@ -83,7 +83,7 @@
                     @foreach (var leave in @Model.GetAppliedLeaves)
                     {
                         string displayLeaveType;
-                        string leaveType =leave.GetLeaveDisplayName().ToString(); ;
+                        string leaveType =leave.GetLeaveDisplayName().ToString();
                         if (leave.isHalfDayLeave == true)
                         {
                             string addedStringToHalfDay = " - Half Day";
