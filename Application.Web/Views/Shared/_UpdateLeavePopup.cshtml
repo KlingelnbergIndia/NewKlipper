@@ -35,7 +35,7 @@
                             <div class="col-md-6">
                                 <div class="form-group" style="width:200px;margin-top:14px;">
                                     <label>Leave Type</label>
-                                    <select id="leaveType" name="leaveType" class="form-control input-sm" asp-for="@Model.LeaveType" style="width:150px;">
+                                    <select id="leaveType" name="leaveType" class="form-control input-sm" asp-for="@Model.LeaveType" style="width:150px;" required>
                                         @foreach (var leave in leaveTypes)
                                         {
                                             <option value="@leave">@leave</option>
