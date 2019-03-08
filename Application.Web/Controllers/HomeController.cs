@@ -191,20 +191,7 @@ namespace Application.Web.Controllers
             return View("Reportees", reporteeViewModel);
         }
 
-        private LeaveViewModel GetLeave()
-        {
-            var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
-            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-
-            var leaveViewModel = new LeaveViewModel();
-            leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
-
-            var leaveSummary = leaveService.GetTotalSummary(loggedInEmpId);
-            if(leaveSummary!=null)
-            leaveViewModel.LeaveSummary = new ReporteeViewModel()
-                .ConvertToLeaveSummaryViewModel(leaveSummary);
-            return leaveViewModel;
-        }
+       
 
         [HttpGet]
         public async Task<IActionResult> AccessPointDetail(DateTime date, int employeeId)
@@ -237,6 +224,7 @@ namespace Application.Web.Controllers
         }
 
         [HttpPost]
+        [AuthenticateTeamLeaderRole]
         public FileResult ExportAttendanceReport(string fromDate,string toDate)
         {
                 var stream = new System.IO.MemoryStream();
@@ -328,8 +316,29 @@ namespace Application.Web.Controllers
                 return File(stream, fileType, fileName);
             }
 
-    private List<EmployeeViewModel> GetAttendanceDataOfAllReporteesAndTeamLead(string fromDate, string toDate)
-    {
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private LeaveViewModel GetLeave()
+        {
+            var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
+            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
+
+            var leaveViewModel = new LeaveViewModel();
+            leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
+
+            var leaveSummary = leaveService.GetTotalSummary(loggedInEmpId);
+            if (leaveSummary != null)
+                leaveViewModel.LeaveSummary = new ReporteeViewModel()
+                    .ConvertToLeaveSummaryViewModel(leaveSummary);
+            return leaveViewModel;
+        }
+
+        private List<EmployeeViewModel> GetAttendanceDataOfAllReporteesAndTeamLead(string fromDate, string toDate)
+         {
         var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
         ReporteeService reporteeService = new ReporteeService(_employeeRepository);
         AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
@@ -393,13 +402,6 @@ namespace Application.Web.Controllers
             }
 
             return listOfAccessPointRecord;
-        }
-
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         private Time ConvertTimeZone(DateTime date, Time time)

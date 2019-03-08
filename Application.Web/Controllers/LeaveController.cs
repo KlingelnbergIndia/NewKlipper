@@ -143,6 +143,7 @@ namespace Application.Web.Controllers
 
 
         [HttpPost]
+        [AuthenticateTeamLeaderRole]
         public FileResult ExportLeaveReport()
         {
             var stream = new System.IO.MemoryStream();
