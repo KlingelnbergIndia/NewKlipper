@@ -212,8 +212,10 @@ namespace UseCases
                 
                     if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
                     {
-                        var leaveSummmary = GetTotalSummary(employeeId);
-                        if ((leaveType == LeaveType.SickLeave && leaveSummmary.RemainingSickLeave - takenLeaveDates.Count < 0) ||
+                    var leaveSummmary = GetTotalSummary(employeeId);
+                    if (leaveSummmary == null)
+                        return ServiceResponseDTO.CanNotApplied;
+                    if ((leaveType == LeaveType.SickLeave && leaveSummmary.RemainingSickLeave - takenLeaveDates.Count < 0) ||
                             (leaveType == LeaveType.CompOff && leaveSummmary.RemainingCompOffLeave - takenLeaveDates.Count < 0))
                         {
                             return ServiceResponseDTO.CanNotApplied;
