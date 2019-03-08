@@ -55,25 +55,25 @@ namespace Application.Web.Controllers
 
             return View(leaveViewModel);
         }
-        [HttpPost]
-        public IActionResult ApplyLeave(DateTime FromDate, DateTime ToDate, LeaveType LeaveType,bool isHalfDay, string Remark)
+
+        public IActionResult ApplyLeave(DateTime fromDate, DateTime toDate, string leaveType,bool isHalfDay, string remark)
         {
-            if (FromDate > ToDate)
+            if (fromDate > toDate)
             {
                 TempData["errorMessage"] = "Please select valid date range !";
                 return RedirectToAction("Index");
             }
-            string leaveType = HttpContext.Request.Form["leaveType"].ToString();
+            LeaveType LeaveType= LeaveType.CasualLeave;
             if (leaveType == "Comp-Off")
                 LeaveType = LeaveType.CompOff;
-            else if (leaveType == "Casual Leave")
+             if (leaveType == "Casual Leave")
                 LeaveType = LeaveType.CasualLeave;
-            else if (leaveType == "Sick Leave")
+             if (leaveType == "Sick Leave")
                 LeaveType = LeaveType.SickLeave;
 
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-            var response = leaveService.ApplyLeave(loggedInEmpId, FromDate, ToDate, LeaveType, isHalfDay, Remark);
+            var response = leaveService.ApplyLeave(loggedInEmpId, fromDate, toDate, LeaveType, isHalfDay, remark);
 
             if (response == ServiceResponseDTO.Saved)
                 TempData["responseMessage"] = "Leave applied sucessfully !";
@@ -86,18 +86,17 @@ namespace Application.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public IActionResult UpdateLeave(string leaveId,DateTime FromDate, DateTime ToDate, LeaveType LeaveType, bool isHalfDay, string Remark)
+        
+        public IActionResult UpdateLeave(string leaveId,DateTime fromDate, DateTime toDate, string leaveType, bool isHalfDay, string remark)
         {
-            string ExistingLeaveId = HttpContext.Request.Form["leaveId"].ToString();
             if (leaveId != null)
             {
-                if (FromDate > ToDate)
+                if (fromDate > toDate)
                 {
                     TempData["errorMessage"] = "Please select valid date range !";
                     return RedirectToAction("Index");
                 }
-                string leaveType = HttpContext.Request.Form["leaveType"].ToString();
+                LeaveType LeaveType = LeaveType.CasualLeave;
                 if (leaveType == "Comp-Off")
                     LeaveType = LeaveType.CompOff;
                 else if (leaveType == "Casual Leave")
@@ -107,7 +106,7 @@ namespace Application.Web.Controllers
 
                 var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
                 var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-                var response = leaveService.UpdateLeave(ExistingLeaveId, loggedInEmpId, FromDate,ToDate,LeaveType, isHalfDay, Remark);
+                var response = leaveService.UpdateLeave(leaveId, loggedInEmpId, fromDate,toDate, LeaveType, isHalfDay, remark);
 
                 if (response == ServiceResponseDTO.Updated)
                     TempData["responseMessage"] = "Leave updated sucessfully !";

@@ -37,7 +37,7 @@
                         <div class="col-md-6">
                             <div class="form-group" style="width:200px;margin-top:14px;">
                                 <label>Leave Type</label>
-                                <select id="leaveList" name="leaveList" class="form-control input-sm" asp-for="@Model.LeaveType" style="width:150px;">
+                                <select id="LeaveType" name="leaveType" class="form-control input-sm" asp-for="@Model.LeaveType" style="width:150px;">
                                     @foreach (var leave in leaveTypes)
                                     {
                                         <option value="@leave">@leave</option>
@@ -47,18 +47,18 @@
                             </div>
                         </div>
                         <div class="col-md-6 form-inline" style="margin-top:42px;">
-                            <label class="checkbox"><input type="checkbox" id="isHalfDay" value="true" name="isHalfDay"
+                            <label class="checkbox"><input type="checkbox" id="IsHalfDay" value="true" name="IsHalfDay"
                                             asp-for="@Model.IsHalfDay" style="margin-right:5px;">Half Day</label>
                          </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Remark</label>
-                                    <textarea asp-for="@Model.Remark" id="remark" class="form-control input-sm" placeholder="Remark" rows="6" required></textarea>
+                                    <textarea asp-for="@Model.Remark" id="Remark" class="form-control input-sm" placeholder="Remark" rows="6" required></textarea>
                                     <span asp-validation-for="@Model.Remark" class="text-danger input-sm"></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <input type="submit" value="submit" onclick="checkDateForHalfDay()" class="btn btn-default btn-info pull-right" />
+                                <input type="submit" value="submit" onclick="checkDateForHalfDay('applyLeave')" class="btn btn-default btn-info pull-right" />
                             </div>
                 </div>
 

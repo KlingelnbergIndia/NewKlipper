@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <input type="submit" value="submit" onclick="checkDateForHalfDay()" class="btn btn-default btn-info pull-right" />
+                                <input type="submit" value="submit" onclick="checkDateForHalfDay('UpdateLeave')" class="btn btn-default btn-info pull-right" />
                             </div>
                     </div>
 
@@ -88,7 +88,7 @@
                 document.getElementById("leaveType").value = leaveTypeId;
                 document.getElementById("leaveId").value = leaveId;
                 document.getElementById("remark").value = decodeString(remark);
-               document.getElementById("isHalfDay").checked = false;
+                document.getElementById("isHalfDay").checked = false;
                 if (isHalfDay == "true") {
                     document.getElementById("isHalfDay").checked = true;
                 }

@@ -13,16 +13,16 @@
     <div class="col-md-12" style="margin-bottom:10px;" data-auto-dismiss="5s">
         @if (@TempData["responseMessage"] != null)
         {
-            <div class="alert alert-success success-alert-animation " >
+            <div class="alert alert-success success-alert-animation ">
                 @TempData["responseMessage"]
             </div>
         }
         @if (@TempData["errorMessage"] != null)
         {
-            <div class="alert alert-warning success-alert-animation "  >
+            <div class="alert alert-warning success-alert-animation ">
                 @TempData["errorMessage"]
             </div>
-        } 
+        }
     </div>
 
     <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
@@ -157,29 +157,58 @@
         }
     }
 
-    checkDateForHalfDay = function () {
-        var isHalfDay = document.querySelector('[name="isHalfDay"]:checked') == null ?
-            "false" : document.querySelector('[name="isHalfDay"]:checked').value;
-        var fromDate = dateToYMD(document.getElementById("FromDate").value.toString());
-        var toDate = dateToYMD(document.getElementById("ToDate").value.toString());
-        if (isHalfDay == "true" && fromDate != toDate) {
-            alert('Please select same date for half day');
+    checkDateForHalfDay = function (action)
+    {
+        var IsHalfDay = document.querySelector('[name="IsHalfDay"]:checked') == null ?
+            false : document.querySelector('[name="IsHalfDay"]:checked').value;
+        var FromDate = dateToYMD(document.getElementById("FromDate").value.toString());
+        var ToDate = dateToYMD(document.getElementById("ToDate").value.toString());
+        var LeaveType = document.getElementById("LeaveType").value.toString();
+        if (IsHalfDay == "true" && FromDate != ToDate) {
+            alert('Please Select Single Date For Half Day');
             return;
         }
-        $.ajax({
-            type: "POST",
-            url: "ApplyLeave/",
-            data: {
+        var Remark = document.getElementById("Remark").value;
+        
+        var isHalfDay = document.getElementById("isHalfDay").checked;
+        alert(isHalfDay);
+        alert(isHalfDay);
+        var fromDate = dateToYMD(document.getElementById("fromDate").value.toString());
+        var toDate = dateToYMD(document.getElementById("toDate").value.toString());
+        var leaveType = document.getElementById("leaveType").value.toString();
+        if (isHalfDay == "true" && fromDate != toDate) {
+            alert('Please Select Single Date For Half Day');
+            return;
+        }
+        var remark = document.getElementById("remark").value;
+        if (action == 'applyLeave')
+        {
+            var data =
+            {
+                fromDate: FromDate,
+                toDate: ToDate,
+                leaveType: LeaveType,
+                isHalfDay: IsHalfDay,
+                remark: Remark
+            };
+            var url = "ApplyLeave?fromDate=" + data.fromDate + "&toDate=" + data.toDate + "&leaveType=" + data.leaveType + "&isHalfDay=" + data.isHalfDay + "&remark=" + data.remark;
+           
+        }
+        else {
+            var leaveId = document.getElementById("leaveId").value.toString();
+            var data =
+            {
                 fromDate: fromDate,
                 toDate: toDate,
-                leaveType: document.getElementById("leaveList").value,
+                leaveType: leaveType,
                 isHalfDay: isHalfDay,
-                remark: document.getElementById("remark").value
-            },
-            success: function (response) {
-                window.location.reload();
-            }
-        });
+                remark: remark,
+                leaveId: leaveId
+            };
+           
+            var url = "UpdateLeave?leaveId=" + data.leaveId + "&fromDate=" + data.fromDate + "&toDate=" + data.toDate + "&leaveType=" + data.leaveType + "&isHalfDay=" + data.isHalfDay + "&remark=" + data.remark;
+        }
+        window.location = url;
     }
 </script>
 
@@ -191,6 +220,7 @@
     #ApplyLeaveModal > div > div {
         width: 400px;
     }
+
     .table td {
         text-align: center;
     }
