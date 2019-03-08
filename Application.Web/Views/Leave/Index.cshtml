@@ -157,37 +157,25 @@
     }
 
     checkDateForHalfDay = function (action) {
-        var IsHalfDay = document.querySelector('[name="IsHalfDay"]:checked') == null ?
-            false : document.querySelector('[name="IsHalfDay"]:checked').value;
-        var FromDate = dateToYMD(document.getElementById("FromDate").value.toString());
-        var ToDate = dateToYMD(document.getElementById("ToDate").value.toString());
-        var LeaveType = document.getElementById("LeaveType").value.toString();
+      
        
-        if (IsHalfDay == "true" && FromDate != ToDate) {
-            alert('Please Select Single Date For Half Day');
-            return;
-        }
-        var Remark = document.getElementById("Remark").value;
-        if (Remark == null || Remark == '') {
+        if (action == 'applyLeave') {
+            var IsHalfDay = document.querySelector('[name="IsHalfDay"]:checked') == null ?
+                false : document.querySelector('[name="IsHalfDay"]:checked').value;
+            var FromDate = dateToYMD(document.getElementById("FromDate").value.toString());
+            var ToDate = dateToYMD(document.getElementById("ToDate").value.toString());
+            var LeaveType = document.getElementById("LeaveType").value.toString();
+
+            if (IsHalfDay == "true" && FromDate != ToDate) {
+                alert('Please Select Single Date For Half Day');
+                return;
+            }
+            var Remark = document.getElementById("Remark").value;
+            if (Remark == null || Remark == '') {
                 alert('Please enter remark');
                 return;
-        }
+            }
 
-        var isHalfDay = document.getElementById("isHalfDay").checked;
-        var fromDate = dateToYMD(document.getElementById("fromDate").value.toString());
-        var toDate = dateToYMD(document.getElementById("toDate").value.toString());
-        var leaveType = document.getElementById("leaveType").value.toString();
-        
-        if (isHalfDay == true && fromDate != toDate) {
-            alert('Please Select Single Date For Half Day');
-            return;
-        }
-        var remark = document.getElementById("remark").value;
-        if (remark == null || remark == '') {
-            alert('Please enter remark');
-            return;
-        }
-        if (action == 'applyLeave') {
             var data =
             {
                 fromDate: FromDate,
@@ -200,6 +188,20 @@
 
         }
         else {
+            var isHalfDay = document.getElementById("isHalfDay").checked;
+            var fromDate = dateToYMD(document.getElementById("fromDate").value.toString());
+            var toDate = dateToYMD(document.getElementById("toDate").value.toString());
+            var leaveType = document.getElementById("leaveType").value.toString();
+
+            if (isHalfDay == true && fromDate != toDate) {
+                alert('Please Select Single Date For Half Day');
+                return;
+            }
+            var remark = document.getElementById("remark").value;
+            if (remark == null || remark == '') {
+                alert('Please enter remark');
+                return;
+            }
             var leaveId = document.getElementById("leaveId").value.toString();
             var data =
             {
