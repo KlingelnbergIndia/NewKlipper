@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DataAccess;
-using DataAccess.EntityModel.Employment;
 using DataAccess.EntityModel.Leave;
 using DomainModel;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using UseCaseBoundary;
-using static DataAccess.EntityModel.Leave.LeaveEntityModel;
 using static DomainModel.Leave;
 
 namespace RepositoryImplementation

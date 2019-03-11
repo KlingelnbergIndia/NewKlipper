@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace UseCaseBoundary.DTO
+﻿namespace UseCaseBoundary.DTO
 {
     public class LeaveSummaryDTO
     {

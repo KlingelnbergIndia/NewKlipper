@@ -27,9 +27,12 @@ namespace Application.Web.Controllers
         private ILeavesRepository _leavesRepository;
         private ICarryForwardLeaves _carryForwardLeaves;
 
-        public HomeController(IAccessEventsRepository accessEventRepository, IEmployeeRepository employeeRepository,
-            IDepartmentRepository departmentRepository, IAttendanceRegularizationRepository attendanceRegularizationRepository,
-            ILeavesRepository leavesRepository, ICarryForwardLeaves carryForwardLeaves)
+        public HomeController(IAccessEventsRepository accessEventRepository,
+            IEmployeeRepository employeeRepository,
+            IDepartmentRepository departmentRepository, 
+            IAttendanceRegularizationRepository attendanceRegularizationRepository,
+            ILeavesRepository leavesRepository, 
+            ICarryForwardLeaves carryForwardLeaves)
         {
             _accessEventRepository = accessEventRepository;
             _employeeRepository = employeeRepository;
@@ -42,10 +45,12 @@ namespace Application.Web.Controllers
         public IActionResult Index(string searchFilter)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository,_leavesRepository);
+            var attendanceService = new AttendanceService
+            (_accessEventRepository, _employeeRepository,
+                _departmentRepository, _attendanceRegularizationRepository,
+                _leavesRepository);
 
-            EmployeeViewModel employeeViewModel = new EmployeeViewModel();
+            var employeeViewModel = new EmployeeViewModel();
 
             if (searchFilter == SearchFilter.AccessEventsByDateRange.ToString())
             {
@@ -60,13 +65,16 @@ namespace Application.Web.Controllers
                 }
 
                 employeeViewModel.employeeAttendaceRecords =
-                    attendanceService.AttendanceReportForDateRange(employeeId, employeeViewModel.fromDate, employeeViewModel.toDate);
+                    attendanceService.AttendanceReportForDateRange
+                        (employeeId, employeeViewModel.fromDate, employeeViewModel.toDate);
 
                 ViewData["resultMessage"] = String.Format(
                     "Attendance from {0} to {1}. Total days:{2}",
                     employeeViewModel.fromDate.ToShortDateString(),
                     employeeViewModel.toDate.ToShortDateString(),
-                    employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO.Count());
+                    employeeViewModel.employeeAttendaceRecords.
+                        ListOfAttendanceRecordDTO
+                        .Count());
             }
             else
             {
@@ -87,7 +95,8 @@ namespace Application.Web.Controllers
                 .ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST
                 (employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO);
 
-            ViewData["VisibilityReporteesTab"] = HttpContext.Session.GetString("VisibilityOfReporteesTab");
+            ViewData["VisibilityReporteesTab"] = 
+                HttpContext.Session.GetString("VisibilityOfReporteesTab");
 
             return View(employeeViewModel);
         }
@@ -115,7 +124,8 @@ namespace Application.Web.Controllers
             reporteeViewModel.AttendanceFormName = string.Empty;
             reporteeViewModel.LeaveFormName = string.Empty;
             reporteeViewModel.toDate = DateTime.Now.Date;
-            reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
+            reporteeViewModel.fromDate = DateTime.Now.AddDays
+                (DayOfWeek.Monday - DateTime.Now.DayOfWeek);
             ViewBag.SelectedTab = selectedViewTabs;
             return View(reporteeViewModel);
         }
@@ -150,15 +160,23 @@ namespace Application.Web.Controllers
                         reporteeViewModel.fromDate = DateTime.Parse(fromDate);
                         reporteeViewModel.toDate = DateTime.Parse(toDate);
 
-                        AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                        _departmentRepository, _attendanceRegularizationRepository,_leavesRepository);
+                        var attendanceService = new AttendanceService
+                        (_accessEventRepository, _employeeRepository,
+                        _departmentRepository, _attendanceRegularizationRepository,
+                        _leavesRepository);
 
-                        AttendanceRecordsDTO listOfAttendanceRecord = attendanceService.AttendanceReportForDateRange(selectedReporteeId,
+                        var listOfAttendanceRecord = attendanceService
+                            .AttendanceReportForDateRange(selectedReporteeId,
                             reporteeViewModel.fromDate, reporteeViewModel.toDate);
-                        reporteeViewModel.AttendaceRecordsOfSelectedReportee = listOfAttendanceRecord;
+                        reporteeViewModel.AttendaceRecordsOfSelectedReportee = 
+                            listOfAttendanceRecord;
 
-                        reporteeViewModel.AttendaceRecordsOfSelectedReportee.ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(listOfAttendanceRecord.ListOfAttendanceRecordDTO);
-                        reporteeViewModel.AttendanceFormName = reporteeViewModel.reportees[selectedReporteeId];
+                        reporteeViewModel.AttendaceRecordsOfSelectedReportee
+                                .ListOfAttendanceRecordDTO = 
+                            ConvertAttendanceRecordsTimeToIST
+                                (listOfAttendanceRecord.ListOfAttendanceRecordDTO);
+                        reporteeViewModel.AttendanceFormName = 
+                            reporteeViewModel.reportees[selectedReporteeId];
                         reporteeViewModel.SelectedEmpIdForAttendanceTab = selectedReporteeId;
 
                     }
@@ -166,17 +184,23 @@ namespace Application.Web.Controllers
                 else
                 {
                     reporteeViewModel.toDate = DateTime.Now.Date;
-                    reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
+                    reporteeViewModel.fromDate = DateTime.Now.AddDays
+                        (DayOfWeek.Monday - DateTime.Now.DayOfWeek);
 
-                    UseCases.LeaveService leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-                    reporteeViewModel.leaveRecordsOfSelectedReportee = leaveService.GetAppliedLeaves(selectedReporteeId);
+                    var leaveService = new LeaveService
+                        (_leavesRepository, _employeeRepository, 
+                        _departmentRepository, _carryForwardLeaves);
+                    reporteeViewModel.leaveRecordsOfSelectedReportee =
+                        leaveService.GetAppliedLeaves(selectedReporteeId);
 
                     var leaveSummary = leaveService.GetTotalSummary(selectedReporteeId);
                     if(leaveSummary!=null)
-                    reporteeViewModel.LeaveSummary = reporteeViewModel.ConvertToLeaveSummaryViewModel(leaveSummary);
+                    reporteeViewModel.LeaveSummary = reporteeViewModel
+                        .ConvertToLeaveSummaryViewModel(leaveSummary);
 
                     selectedViewTabs = ViewTabs.leaveReportMenu.ToString();
-                    reporteeViewModel.LeaveFormName = reporteeViewModel.reportees[selectedReporteeId];
+                    reporteeViewModel.LeaveFormName = reporteeViewModel.
+                        reportees[selectedReporteeId];
                     reporteeViewModel.SelectedEmpIdForLeaveTab = selectedReporteeId;
                 }
                 reporteeViewModel.EmployeeId = selectedReporteeId;
@@ -184,7 +208,8 @@ namespace Application.Web.Controllers
             else
             {
                 reporteeViewModel.toDate = DateTime.Now.Date;
-                reporteeViewModel.fromDate = DateTime.Now.AddDays(DayOfWeek.Monday - DateTime.Now.DayOfWeek);
+                reporteeViewModel.fromDate = DateTime.Now.AddDays
+                    (DayOfWeek.Monday - DateTime.Now.DayOfWeek);
             }
             reporteeViewModel.leaveViewModel = GetLeave();
             ViewBag.SelectedTab = selectedViewTabs;
@@ -196,10 +221,14 @@ namespace Application.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> AccessPointDetail(DateTime date, int employeeId)
         {
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository, _leavesRepository);
-            List<AccessPointRecord> listofaccesspointdetail = await attendanceService.GetAccessPointDetails(employeeId, date);
-            listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST(date, listofaccesspointdetail);
+            var attendanceService = new AttendanceService
+            (_accessEventRepository, _employeeRepository,
+                _departmentRepository, _attendanceRegularizationRepository,
+                _leavesRepository);
+            var listofaccesspointdetail = await attendanceService.
+                GetAccessPointDetails(employeeId, date);
+            listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST
+                (date, listofaccesspointdetail);
             return View(listofaccesspointdetail);
         }
 
@@ -207,8 +236,10 @@ namespace Application.Web.Controllers
         [AuthenticateTeamLeaderRole]
         public IActionResult SaveRegularizedHours(DateTime date, int employeeId, DateTime timeToBeRegularize, string remark)
         {
-            AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository, _leavesRepository);
+            var attendanceService = new AttendanceService
+            (_accessEventRepository, _employeeRepository,
+                _departmentRepository, _attendanceRegularizationRepository,
+                _leavesRepository);
             var redularizationData = new RegularizationDTO()
             {
                 EmployeeID = employeeId,
@@ -230,9 +261,9 @@ namespace Application.Web.Controllers
                 var stream = new System.IO.MemoryStream();
                 using (ExcelPackage package = new ExcelPackage(stream))
                 {
-                    IList<EmployeeViewModel> empList = GetAttendanceDataOfAllReporteesAndTeamLead(fromDate, toDate);
+                    var empList = GetAttendanceDataOfAllReporteesAndTeamLead(fromDate, toDate);
 
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("AttendanceReport");
+                    var worksheet = package.Workbook.Worksheets.Add("AttendanceReport");
                     worksheet.TabColor = Color.Gold;
                     worksheet.DefaultColWidth = 20;
                     int totalRows = empList.Count();
@@ -254,8 +285,10 @@ namespace Application.Web.Controllers
                     ":",
                     empdata.employeeAttendaceRecords.TotalWorkingHours.Minute.ToString("D2"));
                     worksheet.Cells[j + 2, 6].Value = "Difference";
-                    var difference = new Time(empdata.employeeAttendaceRecords.TotalDeficitOrExtraHours.Hour,
-                        Math.Abs(empdata.employeeAttendaceRecords.TotalDeficitOrExtraHours.Minute));
+                    var difference = new Time
+                    (empdata.employeeAttendaceRecords.TotalDeficitOrExtraHours.Hour,
+                        Math.Abs
+                            (empdata.employeeAttendaceRecords.TotalDeficitOrExtraHours.Minute));
                     worksheet.Cells[j + 2, 7].Value = string.Concat
                         (difference.Hour.ToString("D2"),
                         ":",
@@ -287,22 +320,32 @@ namespace Application.Web.Controllers
                         worksheet.Cells[j + z, 9].Value = "Remark";
 
                         int k = j+z+1;
-                        foreach (var perdayRecord in empdata.employeeAttendaceRecords.ListOfAttendanceRecordDTO)
+                        foreach (var perdayRecord in empdata
+                            .employeeAttendaceRecords
+                            .ListOfAttendanceRecordDTO)
                         {
-                            worksheet.Cells[k, 1].Value = perdayRecord.Date.ToString("yyyy-MM-dd");
-                            worksheet.Cells[k, 2].Value = perdayRecord.Date.DayOfWeek;
+                            worksheet.Cells[k, 1].Value =
+                                perdayRecord.Date.ToString("yyyy-MM-dd");
+                            worksheet.Cells[k, 2].Value =
+                                perdayRecord.Date.DayOfWeek;
                             worksheet.Cells[k, 3].Value = string.Concat
-                            (perdayRecord.TimeIn.Hour.ToString("D2"), ":", perdayRecord.TimeIn.Minute.ToString("D2"));
+                            (perdayRecord.TimeIn.Hour.ToString("D2"), ":",
+                                perdayRecord.TimeIn.Minute.ToString("D2"));
                             worksheet.Cells[k, 4].Value = string.Concat
-                            (perdayRecord.TimeOut.Hour.ToString("D2"), ":", perdayRecord.TimeOut.Minute.ToString("D2"));
+                            (perdayRecord.TimeOut.Hour.ToString("D2"), ":",
+                                perdayRecord.TimeOut.Minute.ToString("D2"));
                         worksheet.Cells[k, 5].Value = string.Concat
-                            (perdayRecord.LateBy.Hour.ToString("D2"), ":", perdayRecord.LateBy.Minute.ToString("D2"));
+                            (perdayRecord.LateBy.Hour.ToString("D2"), ":",
+                            perdayRecord.LateBy.Minute.ToString("D2"));
                         worksheet.Cells[k, 6].Value = string.Concat
-                            (perdayRecord.OverTime.Hour.ToString("D2"), ":", perdayRecord.OverTime.Minute.ToString("D2"));
+                            (perdayRecord.OverTime.Hour.ToString("D2"), ":",
+                            perdayRecord.OverTime.Minute.ToString("D2"));
                         worksheet.Cells[k, 7].Value = string.Concat
-                            (perdayRecord.WorkingHours.Hour.ToString("D2"), ":", perdayRecord.WorkingHours.Minute.ToString("D2"));
+                            (perdayRecord.WorkingHours.Hour.ToString("D2"), ":",
+                            perdayRecord.WorkingHours.Minute.ToString("D2"));
                         worksheet.Cells[k, 8].Value = string.Concat
-                            (perdayRecord.RegularizedHours.Hour.ToString("D2"), ":", perdayRecord.RegularizedHours.Minute.ToString("D2"));
+                            (perdayRecord.RegularizedHours.Hour.ToString("D2"), ":",
+                            perdayRecord.RegularizedHours.Minute.ToString("D2"));
                         worksheet.Cells[k, 9].Value = perdayRecord.Remark;
                             k++;
                         }
@@ -310,8 +353,10 @@ namespace Application.Web.Controllers
                     }
                     package.Save();
                 }
-                string fileName = @"AttendanceReport_" + DateTime.Now.ToString("dd_MM") + ".xlsx";
-                string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                string fileName =
+                    @"AttendanceReport_" + DateTime.Now.ToString("dd_MM") + ".xlsx";
+                string fileType = 
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 stream.Position = 0;
                 return File(stream, fileType, fileName);
             }
@@ -319,13 +364,16 @@ namespace Application.Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel
+                { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         private LeaveViewModel GetLeave()
         {
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
-            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
+            var leaveService = new LeaveService
+                (_leavesRepository, _employeeRepository, _departmentRepository, 
+                _carryForwardLeaves);
 
             var leaveViewModel = new LeaveViewModel();
             leaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
@@ -337,12 +385,15 @@ namespace Application.Web.Controllers
             return leaveViewModel;
         }
 
-        private List<EmployeeViewModel> GetAttendanceDataOfAllReporteesAndTeamLead(string fromDate, string toDate)
+        private List<EmployeeViewModel> GetAttendanceDataOfAllReporteesAndTeamLead
+            (string fromDate, string toDate)
          {
         var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-        ReporteeService reporteeService = new ReporteeService(_employeeRepository);
-        AttendanceService attendanceService = new AttendanceService(_accessEventRepository, _employeeRepository,
-          _departmentRepository, _attendanceRegularizationRepository, _leavesRepository);
+        var reporteeService = new ReporteeService(_employeeRepository);
+        var attendanceService = new AttendanceService
+        (_accessEventRepository, _employeeRepository,
+          _departmentRepository, _attendanceRegularizationRepository,
+          _leavesRepository);
 
         var reportees = reporteeService.GetReporteesData(employeeId);
         var listOfReporteesAttendanceRecord = new List<EmployeeViewModel>();
@@ -351,18 +402,24 @@ namespace Application.Web.Controllers
             reportees.Add(reporteeService.GetTeamLeadData(employeeId));
             foreach (var reportee in reportees)
             {
-                EmployeeViewModel employeeViewModel = new EmployeeViewModel();
+                var employeeViewModel = new EmployeeViewModel();
                 var listOfAttendanceRecord = new List<AttendanceRecordsDTO>();
                 employeeViewModel.fromDate = DateTime.Parse(fromDate);
                 employeeViewModel.toDate = DateTime.Parse(toDate);
                 employeeViewModel.EmployeeId = reportee.ID;
-                employeeViewModel.EmployeeName = string.Concat(reportee.FirstName, " ", reportee.LastName);
+                employeeViewModel.EmployeeName = string
+                    .Concat(reportee.FirstName, " ", reportee.LastName);
 
-                employeeViewModel.employeeAttendaceRecords = attendanceService.AttendanceReportForDateRange
+                employeeViewModel.employeeAttendaceRecords = 
+                    attendanceService.
+                        AttendanceReportForDateRange
                     (reportee.ID, employeeViewModel.fromDate, employeeViewModel.toDate);
 
-                employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO =
-                    ConvertAttendanceRecordsTimeToIST(employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO);
+                employeeViewModel.
+                        employeeAttendaceRecords
+                        .ListOfAttendanceRecordDTO =
+                    ConvertAttendanceRecordsTimeToIST
+                        (employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO);
 
                 listOfReporteesAttendanceRecord.Add(employeeViewModel);
             }
@@ -371,33 +428,39 @@ namespace Application.Web.Controllers
         return null;
     }
 
-        private List<PerDayAttendanceRecordDTO> ConvertAttendanceRecordsTimeToIST(List<PerDayAttendanceRecordDTO> listOfAttendanceRecord)
+        private List<PerDayAttendanceRecordDTO> ConvertAttendanceRecordsTimeToIST
+            (List<PerDayAttendanceRecordDTO> listOfAttendanceRecord)
         {
             foreach (var attendanceRecord in listOfAttendanceRecord)
             {
                 if (attendanceRecord.TimeIn.Hour != 0 || attendanceRecord.TimeIn.Minute != 0)
                 {
-                    attendanceRecord.TimeIn = ConvertTimeZone(attendanceRecord.Date, attendanceRecord.TimeIn);
+                    attendanceRecord.TimeIn = 
+                        ConvertTimeZone(attendanceRecord.Date, attendanceRecord.TimeIn);
                 }
                 if (attendanceRecord.TimeOut.Hour != 0 || attendanceRecord.TimeOut.Minute != 0)
                 {
-                    attendanceRecord.TimeOut = ConvertTimeZone(attendanceRecord.Date, attendanceRecord.TimeOut);
+                    attendanceRecord.TimeOut = 
+                        ConvertTimeZone(attendanceRecord.Date, attendanceRecord.TimeOut);
                 }
             }
 
             return listOfAttendanceRecord;
         }
-        private List<AccessPointRecord> ConvertAccessPointRecordsTimeToIST(DateTime date, List<AccessPointRecord> listOfAccessPointRecord)
+        private List<AccessPointRecord> ConvertAccessPointRecordsTimeToIST
+            (DateTime date, List<AccessPointRecord> listOfAccessPointRecord)
         {
             foreach (var accessPointRecord in listOfAccessPointRecord)
             {
                 if (accessPointRecord.TimeIn.Hour != 0 || accessPointRecord.TimeIn.Minute != 0)
                 {
-                    accessPointRecord.TimeIn = ConvertTimeZone(date, accessPointRecord.TimeIn);
+                    accessPointRecord.TimeIn = 
+                        ConvertTimeZone(date, accessPointRecord.TimeIn);
                 }
                 if (accessPointRecord.TimeOut.Hour != 0 || accessPointRecord.TimeOut.Minute != 0)
                 {
-                    accessPointRecord.TimeOut = ConvertTimeZone(date, accessPointRecord.TimeOut);
+                    accessPointRecord.TimeOut = 
+                        ConvertTimeZone(date, accessPointRecord.TimeOut);
                 }
             }
 

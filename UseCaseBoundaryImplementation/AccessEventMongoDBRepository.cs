@@ -5,7 +5,6 @@ using DataAccess;
 using DataAccess.EntityModel;
 using DomainModel;
 using MongoDB.Driver;
-using Newtonsoft.Json;
 using UseCaseBoundary;
 
 namespace UseCaseBoundaryImplementation

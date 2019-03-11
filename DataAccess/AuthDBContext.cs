@@ -1,5 +1,4 @@
 ﻿using DataAccess.EntityModel.Authentication;
-using DataAccess.EntityModel.Employment;
 using DataAccess.Helper;
 using MongoDB.Driver;
 
@@ -34,7 +33,8 @@ namespace DataAccess
             _database = mongoClient.GetDatabase("AuthDB");
         }
 
-        public IMongoCollection<UsersEntityModel> Users => _database.GetCollection<UsersEntityModel>("Users");
+        public IMongoCollection<UsersEntityModel> Users => 
+            _database.GetCollection<UsersEntityModel>("Users");
 
     }
 }

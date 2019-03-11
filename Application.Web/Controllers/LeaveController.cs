@@ -40,7 +40,9 @@ namespace Application.Web.Controllers
         public IActionResult Index()
         {
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
-            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
+            var leaveService = new LeaveService
+                (_leavesRepository, _employeeRepository, 
+                _departmentRepository, _carryForwardLeaves);
 
             var leaveViewModel = new LeaveViewModel();
             var appliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
@@ -56,7 +58,8 @@ namespace Application.Web.Controllers
             return View(leaveViewModel);
         }
 
-        public IActionResult ApplyLeave(DateTime fromDate, DateTime toDate, string leaveType,bool isHalfDay, string remark)
+        public IActionResult ApplyLeave(DateTime fromDate, DateTime toDate,
+            string leaveType,bool isHalfDay, string remark)
         {
             if (fromDate > toDate)
             {
@@ -72,8 +75,11 @@ namespace Application.Web.Controllers
                 LeaveType = LeaveType.SickLeave;
 
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
-            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-            var response = leaveService.ApplyLeave(loggedInEmpId, fromDate, toDate, LeaveType, isHalfDay, remark);
+            var leaveService = new LeaveService
+                (_leavesRepository, _employeeRepository, 
+                _departmentRepository, _carryForwardLeaves);
+            var response = leaveService
+                .ApplyLeave(loggedInEmpId, fromDate, toDate, LeaveType, isHalfDay, remark);
 
             if (response == ServiceResponseDTO.Saved)
                 TempData["responseMessage"] = "Leave applied sucessfully !";
@@ -87,7 +93,9 @@ namespace Application.Web.Controllers
         }
 
         
-        public IActionResult UpdateLeave(string leaveId,DateTime fromDate, DateTime toDate, string leaveType, bool isHalfDay, string remark)
+        public IActionResult UpdateLeave
+            (string leaveId,DateTime fromDate, DateTime toDate,
+            string leaveType, bool isHalfDay, string remark)
         {
             if (leaveId != null)
             {
@@ -105,8 +113,12 @@ namespace Application.Web.Controllers
                     LeaveType = LeaveType.SickLeave;
 
                 var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
-                var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
-                var response = leaveService.UpdateLeave(leaveId, loggedInEmpId, fromDate,toDate, LeaveType, isHalfDay, remark);
+                var leaveService = new LeaveService
+                    (_leavesRepository, _employeeRepository, 
+                    _departmentRepository, _carryForwardLeaves);
+                var response = leaveService
+                    .UpdateLeave
+                        (leaveId, loggedInEmpId, fromDate,toDate, LeaveType, isHalfDay, remark);
 
                 if (response == ServiceResponseDTO.Updated)
                     TempData["responseMessage"] = "Leave updated sucessfully !";
@@ -127,7 +139,9 @@ namespace Application.Web.Controllers
         [HttpPost]
         public IActionResult CancelLeave(string LeaveId)
         {
-            var leaveService = new UseCases.LeaveService(_leavesRepository, _employeeRepository, _departmentRepository, _carryForwardLeaves);
+            var leaveService = new LeaveService
+                (_leavesRepository, _employeeRepository, 
+                _departmentRepository, _carryForwardLeaves);
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var response = leaveService.CancelLeave(LeaveId, loggedInEmpId);
 
@@ -192,14 +206,22 @@ namespace Application.Web.Controllers
                     worksheet.Cells[k, 5].Value = "Remark";
                     worksheet.Cells[k, 6].Value = "Status";
                     k++;
-                    foreach (var perLeaveRecord in perEmployeeRecord.LeaveViewModel.GetAppliedLeaves)
+                    foreach (var perLeaveRecord in perEmployeeRecord
+                        .LeaveViewModel
+                        .GetAppliedLeaves)
                     {
-                        worksheet.Cells[k, 1].Value = perLeaveRecord.FromDate.ToString("yyyy-MM-dd");
-                        worksheet.Cells[k, 2].Value = perLeaveRecord.ToDate.ToString("yyyy-MM-dd");
-                        worksheet.Cells[k, 3].Value = perLeaveRecord.NoOfDays;
-                        worksheet.Cells[k, 4].Value = perLeaveRecord.GetLeaveDisplayName();
-                        worksheet.Cells[k, 5].Value = perLeaveRecord.Remark;
-                        worksheet.Cells[k, 6].Value = perLeaveRecord.GetStatusDisplayName();
+                        worksheet.Cells[k, 1].Value = 
+                            perLeaveRecord.FromDate.ToString("yyyy-MM-dd");
+                        worksheet.Cells[k, 2].Value = 
+                            perLeaveRecord.ToDate.ToString("yyyy-MM-dd");
+                        worksheet.Cells[k, 3].Value = 
+                            perLeaveRecord.NoOfDays;
+                        worksheet.Cells[k, 4].Value = 
+                            perLeaveRecord.GetLeaveDisplayName();
+                        worksheet.Cells[k, 5].Value = 
+                            perLeaveRecord.Remark;
+                        worksheet.Cells[k, 6].Value = 
+                            perLeaveRecord.GetStatusDisplayName();
                         
                         k++;
                     }
@@ -207,8 +229,10 @@ namespace Application.Web.Controllers
                 }
                 package.Save();
             }
-            string fileName = @"LeaveReport_" + DateTime.Now.ToString("dd_MM") + ".xlsx";
-            string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = @"LeaveReport_" + 
+                              DateTime.Now.ToString("dd_MM") + ".xlsx";
+            string fileType =
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             stream.Position = 0;
             return File(stream, fileType, fileName);
         }
@@ -230,8 +254,10 @@ namespace Application.Web.Controllers
                     EmployeeViewModel employeeViewModel = new EmployeeViewModel();
 
                     employeeViewModel.EmployeeId = reportee.ID;
-                    employeeViewModel.EmployeeName = string.Concat(reportee.FirstName, " ", reportee.LastName);
-                    employeeViewModel.LeaveViewModel.GetAppliedLeaves = leaveService.GetAppliedLeaves(reportee.ID);
+                    employeeViewModel.EmployeeName = string
+                        .Concat(reportee.FirstName, " ", reportee.LastName);
+                    employeeViewModel.LeaveViewModel.GetAppliedLeaves =
+                        leaveService.GetAppliedLeaves(reportee.ID);
                     var leaveSummary = leaveService.GetTotalSummary(reportee.ID);
                     if (leaveSummary!=null)
                     employeeViewModel.LeaveViewModel.LeaveSummary = new ReporteeViewModel()

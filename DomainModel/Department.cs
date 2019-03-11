@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 
 namespace DomainModel
 {
@@ -46,7 +44,8 @@ namespace DomainModel
             if (WeekDay == DayOfWeek.Sunday)
                 return false;
 
-            if ((_department == Departments.Software || _department == Departments.Design) && WeekDay == DayOfWeek.Saturday)
+            if ((_department == Departments.Software || _department == Departments.Design)
+                && WeekDay == DayOfWeek.Saturday)
                 return false;
 
             if (!(_department == Departments.Software || _department == Departments.Design) &&
@@ -60,10 +59,12 @@ namespace DomainModel
         {
             DateTime beginningOfMonth = new DateTime(date.Year, date.Month, 1);
 
-            while (date.Date.AddDays(1).DayOfWeek != CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)
+            while (date.Date.AddDays(1).DayOfWeek != 
+                   CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)
                 date = date.AddDays(1);
 
-            return (int)Math.Truncate((double)date.Subtract(beginningOfMonth).TotalDays / 7f) + 1;
+            return 
+                (int)Math.Truncate((double)date.Subtract(beginningOfMonth).TotalDays / 7f) + 1;
         }
     }
 }
