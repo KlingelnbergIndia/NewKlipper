@@ -18,7 +18,8 @@ namespace UseCases
 
         public List<ReporteeDTO> GetReporteesData(int employeeId)
         {
-            Employee currentEmployee = _employeeRepository.GetEmployee(employeeId);
+            Employee currentEmployee = 
+                _employeeRepository.GetEmployee(employeeId);
 
             if (currentEmployee == null)
             {
