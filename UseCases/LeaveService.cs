@@ -48,7 +48,7 @@ namespace UseCases
             int totalAppliedDays = 0;
 
             CountTakenLeaveDates
-                (employeeId, fromDate, toDate, takenLeaveDates, 
+                (employeeId,null, fromDate, toDate, takenLeaveDates, 
                 department, allAppliedLeaves, ref invalidDays,
                 ref totalAppliedDays);
 
@@ -191,7 +191,7 @@ namespace UseCases
             }
 
             CountTakenLeaveDates
-            (employeeId, fromDate, toDate, takenLeaveDates,
+            (employeeId, leaveId, fromDate, toDate, takenLeaveDates,
                 department, allAppliedLeaves, ref invalidDays,
                 ref totalAppliedDays);
 
@@ -244,7 +244,7 @@ namespace UseCases
         }
 
         private static void CountTakenLeaveDates
-           (int employeeId, DateTime fromDate, DateTime toDate,
+           (int employeeId,string leaveId, DateTime fromDate, DateTime toDate,
            List<DateTime> takenLeaveDates, Department department,
            List<Leave> allAppliedLeaves, ref int invalidDays,
            ref int totalAppliedDays)
@@ -253,11 +253,25 @@ namespace UseCases
                             eachLeaveDay <= toDate;
                             eachLeaveDay = eachLeaveDay.AddDays(1).Date)
             {
-                bool isLeaveExist = allAppliedLeaves
-                    .Any(x => x.GetEmployeeId() == employeeId
-                && x.GetLeaveDate()
-                    .Contains(eachLeaveDay.Date)
-                && x.GetStatus() != StatusType.Cancelled);
+                bool isLeaveExist;
+                if (leaveId == null)
+                {
+                    isLeaveExist = allAppliedLeaves
+                        .Any(x => x.GetEmployeeId() == employeeId
+                                  && x.GetLeaveDate()
+                                      .Contains(eachLeaveDay.Date)
+                                  && x.GetStatus() != StatusType.Cancelled);
+                }
+                else
+                {
+                    isLeaveExist = allAppliedLeaves
+                            .Any(x => x.GetEmployeeId() == employeeId
+                                      && x.GetLeaveDate()
+                                          .Contains(eachLeaveDay.Date)
+                                      && x.GetLeaveId() != leaveId
+                                      && x.GetStatus() != StatusType.Cancelled);
+                   
+                }
                 if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
                 {
                     takenLeaveDates.Add(eachLeaveDay);
