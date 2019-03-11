@@ -174,7 +174,13 @@
                         @if (item.RegularizedHours.Hour == 0 && item.RegularizedHours.Minute == 0
                              && item.WorkingHours.Hour == 0 && item.WorkingHours.Minute == 0)
                         {
-                            <td>Missing entry</td>
+                            <td>
+                                Missing entry
+                                <span data-toggle="tooltip"
+                                      class="glyphicon glyphicon-time pull-right"
+                                      onclick=regularizeHours('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID)
+                                      title="Regularize hrs"></span>
+                            </td>
                         }
                         else
                         {
@@ -185,9 +191,14 @@
                              else
                              {
                                  <td>
-                                     <u class="open-Dialog" data-toggle="modal" onclick=getDailyData('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID) style="cursor:pointer">
+                                     <u class="open-Dialog" data-toggle="modal" 
+                                        onclick=getDailyData('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID) 
+                                        style="cursor:pointer">
                                          @item.WorkingHours.Hour.ToString("D2"):@item.WorkingHours.Minute.ToString("D2")
                                      </u>
+                                     <span data-toggle="tooltip" class="glyphicon glyphicon-time pull-right" 
+                                           onclick=regularizeHours('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID) 
+                                           title="Regularize hrs"></span>
                                  </td>
                              }
                         }
