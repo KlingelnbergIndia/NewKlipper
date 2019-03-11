@@ -46,6 +46,7 @@ namespace UseCases
                 .GetAllLeavesInfo(employeeId);
             int invalidDays = 0;
             int totalAppliedDays = 0;
+
             CountTakenLeaveDates
                 (employeeId, fromDate, toDate, takenLeaveDates, 
                 department, allAppliedLeaves, ref invalidDays,
@@ -53,24 +54,9 @@ namespace UseCases
 
             if (takenLeaveDates.Any())
             {
-                if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
+                if (IsSelectedLeaveIsAvailableToApply(employeeId, leaveType, takenLeaveDates, isHalfDay) == false)
                 {
-                    var leaveSummmary = GetTotalSummary(employeeId);
-                    float CountOfTakenLeaveDates = takenLeaveDates.Count;
-                    if (leaveSummmary == null)
-                        return ServiceResponseDTO.CanNotApplied;
-                    if (isHalfDay == true)
-                    {
-                        CountOfTakenLeaveDates = CountOfTakenLeaveDates / 2;
-                    }
-                    if ((leaveType == LeaveType.SickLeave &&
-                         leaveSummmary.RemainingSickLeave - CountOfTakenLeaveDates < 0) ||
-                        (leaveType == LeaveType.CompOff &&
-                         leaveSummmary.RemainingCompOffLeave - CountOfTakenLeaveDates < 0))
-                    {
-                        return ServiceResponseDTO.CanNotApplied;
-                    }
-
+                    return ServiceResponseDTO.CanNotApplied;
                 }
                 var status = StatusType.Approved;
                 var takenLeave = new Leave(employeeId, takenLeaveDates,
@@ -92,33 +78,7 @@ namespace UseCases
             }
         }
 
-        private static void CountTakenLeaveDates
-            (int employeeId, DateTime fromDate, DateTime toDate, 
-            List<DateTime> takenLeaveDates, Department department, 
-            List<Leave> allAppliedLeaves, ref int invalidDays,
-            ref int totalAppliedDays)
-        {
-            for (DateTime eachLeaveDay = fromDate.Date;
-                            eachLeaveDay <= toDate;
-                            eachLeaveDay = eachLeaveDay.AddDays(1).Date)
-            {
-                bool isLeaveExist = allAppliedLeaves
-                    .Any(x => x.GetEmployeeId() == employeeId
-                && x.GetLeaveDate()
-                    .Contains(eachLeaveDay.Date)
-                && x.GetStatus() != StatusType.Cancelled);
-                if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
-                {
-                    takenLeaveDates.Add(eachLeaveDay);
-                }
-                if (!department.IsValidWorkingDay(eachLeaveDay))
-                {
-                    invalidDays++;
-                }
-                totalAppliedDays++;
-            }
-        }
-
+       
         public List<LeaveRecordDTO> GetAppliedLeaves(int employeeId)
         {
             List<Leave> leavesInfo = _leavesRepository.GetAllLeavesInfo(employeeId);
@@ -214,7 +174,7 @@ namespace UseCases
                          x.GetStatus() == StatusType.Cancelled);
             var empIdOfLeaveToBeUpdate = _leavesRepository
                 .GetLeaveByLeaveId(leaveId).GetEmployeeId();
-            bool isToBeUpdateLeaveAndAppliedLeaveIsSameType =
+            bool UpdateLeaveAndAppliedLeaveTypeIsSame =
                 _leavesRepository.GetLeaveByLeaveId(leaveId).GetLeaveType()== leaveType;
 
             if (existingLeaveIsCancelledLeave)
@@ -236,45 +196,13 @@ namespace UseCases
                 ref totalAppliedDays);
 
             if (takenLeaveDates.Any())
+            {
+                if (IsSelectedLeaveIsAvailableToUpdate
+                    (employeeId, leaveType, isHalfDayLeave, UpdateLeaveAndAppliedLeaveTypeIsSame,
+                        takenLeaveDates, leaveId) == false)
                 {
-                
-                    if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
-                    {
-                    var leaveSummmary = GetTotalSummary(employeeId);
-                    float CountOfTakenLeaveDates = takenLeaveDates.Count;
-                    if (leaveSummmary == null)
-                        return ServiceResponseDTO.CanNotApplied;
-                    if (isHalfDayLeave == true)
-                    {
-                        CountOfTakenLeaveDates = CountOfTakenLeaveDates / 2;
-                    }
-
-                    if (!isToBeUpdateLeaveAndAppliedLeaveIsSameType)
-                    {
-                        if ((leaveType == LeaveType.SickLeave && 
-                             leaveSummmary.RemainingSickLeave - CountOfTakenLeaveDates < 0) ||
-                            (leaveType == LeaveType.CompOff && 
-                             leaveSummmary.RemainingCompOffLeave - CountOfTakenLeaveDates < 0))
-                        {
-                            return ServiceResponseDTO.CanNotApplied;
-                        }
-                    }
-                    else
-                    {
-                        if ((leaveType == LeaveType.SickLeave && 
-                             (leaveSummmary.RemainingSickLeave + 
-                               CalculateNoOfDays(_leavesRepository.GetLeaveByLeaveId(leaveId))) 
-                             - CountOfTakenLeaveDates < 0) ||
-                            (leaveType == LeaveType.CompOff && 
-                             (leaveSummmary.RemainingSickLeave +
-                               CalculateNoOfDays(_leavesRepository.GetLeaveByLeaveId(leaveId))) 
-                             - CountOfTakenLeaveDates < 0))
-                        {
-                            return ServiceResponseDTO.CanNotApplied;
-                        }
-                    }
-
-                    }
+                    return ServiceResponseDTO.CanNotApplied;
+                }
                     var takenLeave = new Leave
                         (employeeId, takenLeaveDates, leaveType, isHalfDayLeave,
                         remark, StatusType.Updated, null);
@@ -314,6 +242,102 @@ namespace UseCases
 
             return ServiceResponseDTO.InvalidDays;
         }
+
+        private static void CountTakenLeaveDates
+           (int employeeId, DateTime fromDate, DateTime toDate,
+           List<DateTime> takenLeaveDates, Department department,
+           List<Leave> allAppliedLeaves, ref int invalidDays,
+           ref int totalAppliedDays)
+        {
+            for (DateTime eachLeaveDay = fromDate.Date;
+                            eachLeaveDay <= toDate;
+                            eachLeaveDay = eachLeaveDay.AddDays(1).Date)
+            {
+                bool isLeaveExist = allAppliedLeaves
+                    .Any(x => x.GetEmployeeId() == employeeId
+                && x.GetLeaveDate()
+                    .Contains(eachLeaveDay.Date)
+                && x.GetStatus() != StatusType.Cancelled);
+                if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
+                {
+                    takenLeaveDates.Add(eachLeaveDay);
+                }
+                if (!department.IsValidWorkingDay(eachLeaveDay))
+                {
+                    invalidDays++;
+                }
+                totalAppliedDays++;
+            }
+        }
+
+        private bool IsSelectedLeaveIsAvailableToApply
+            (int employeeId, LeaveType leaveType, List<DateTime> takenLeaveDates, bool isHalfDay)
+        {
+            if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
+            {
+                var leaveSummmary = GetTotalSummary(employeeId);
+                float CountOfTakenLeaveDates = takenLeaveDates.Count;
+                if (leaveSummmary == null)
+                    return false;
+                if (isHalfDay == true)
+                {
+                    CountOfTakenLeaveDates = CountOfTakenLeaveDates / 2;
+                }
+                if ((leaveType == LeaveType.SickLeave &&
+                     leaveSummmary.RemainingSickLeave - CountOfTakenLeaveDates < 0) ||
+                    (leaveType == LeaveType.CompOff &&
+                     leaveSummmary.RemainingCompOffLeave - CountOfTakenLeaveDates < 0))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool IsSelectedLeaveIsAvailableToUpdate
+        (int employeeId, LeaveType leaveType, bool isHalfDayLeave,
+            bool UpdateLeaveAndAppliedLeaveTypeIsSame, List<DateTime> takenLeaveDates, string leaveId)
+        {
+            if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
+            {
+                var leaveSummmary = GetTotalSummary(employeeId);
+                float CountOfTakenLeaveDates = takenLeaveDates.Count;
+                if (leaveSummmary == null)
+                    return false;
+                if (isHalfDayLeave == true)
+                {
+                    CountOfTakenLeaveDates = CountOfTakenLeaveDates / 2;
+                }
+
+                if (!UpdateLeaveAndAppliedLeaveTypeIsSame)
+                {
+                    if ((leaveType == LeaveType.SickLeave &&
+                         leaveSummmary.RemainingSickLeave - CountOfTakenLeaveDates < 0) ||
+                        (leaveType == LeaveType.CompOff &&
+                         leaveSummmary.RemainingCompOffLeave - CountOfTakenLeaveDates < 0))
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if ((leaveType == LeaveType.SickLeave &&
+                         (leaveSummmary.RemainingSickLeave +
+                          CalculateNoOfDays(_leavesRepository.GetLeaveByLeaveId(leaveId)))
+                         - CountOfTakenLeaveDates < 0) ||
+                        (leaveType == LeaveType.CompOff &&
+                         (leaveSummmary.RemainingSickLeave +
+                          CalculateNoOfDays(_leavesRepository.GetLeaveByLeaveId(leaveId)))
+                         - CountOfTakenLeaveDates < 0))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
 
         private bool IsRealizedLeave(string LeaveId)
         {
