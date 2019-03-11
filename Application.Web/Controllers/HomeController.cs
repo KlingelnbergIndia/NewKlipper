@@ -96,7 +96,6 @@ namespace Application.Web.Controllers
                     reporteeViewModel.reportees.Add(reporteeId, reporteeName);
                 }
             }
-
             reporteeViewModel.AttendanceFormName = string.Empty;
             reporteeViewModel.LeaveFormName = string.Empty;
             reporteeViewModel.toDate = DateTime.Now.Date;
@@ -148,8 +147,6 @@ namespace Application.Web.Controllers
             ViewBag.SelectedTab = selectedViewTabs;
             return View("Reportees", reporteeViewModel);
         }
-
-
 
         [HttpGet]
         public async Task<IActionResult> AccessPointDetail(DateTime date, int employeeId)
@@ -215,7 +212,6 @@ namespace Application.Web.Controllers
 
                 package.Save();
             }
-
             string fileName =
                 @"AttendanceReport_" + DateTime.Now.ToString("dd_MM") + ".xlsx";
             string fileType =
@@ -324,8 +320,6 @@ namespace Application.Web.Controllers
 
             return k;
         }
-
-        
 
         private static void GetCurrentWeekAttendanceRecord
         (int employeeId, AttendanceService attendanceService,

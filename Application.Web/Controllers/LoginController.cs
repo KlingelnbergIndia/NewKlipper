@@ -38,7 +38,8 @@ namespace Application.Web.Controllers
             if (loggedInUserDetails != null)
             {
                 HttpContext.Session.SetString
-                    ("EmployeeName", $"{loggedInUserDetails.FirstName()} {loggedInUserDetails.LastName()}");
+                    ("EmployeeName", 
+                    $"{loggedInUserDetails.FirstName()} {loggedInUserDetails.LastName()}");
                 HttpContext.Session.SetString
                     ("Title", loggedInUserDetails.Title());
                 HttpContext.Session.SetInt32
