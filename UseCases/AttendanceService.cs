@@ -90,7 +90,8 @@ namespace UseCases
 
             listOfAccessPointRecord.Sort((x, y) =>
                 x.TimeIn.Hour.CompareTo(y.TimeIn.Hour) == 0 ?
-                x.TimeIn.Minute.CompareTo(y.TimeIn.Minute) : x.TimeIn.Hour.CompareTo(y.TimeIn.Hour));
+                x.TimeIn.Minute.CompareTo(y.TimeIn.Minute) 
+                : x.TimeIn.Hour.CompareTo(y.TimeIn.Hour));
 
             return await Task.Run(() =>
             {
@@ -133,7 +134,8 @@ namespace UseCases
             return regularizedDataOfADay;
         }
 
-        private List<AccessPointRecord> GetAccessPointRecord(List<AccessEvent> listOfAccessEvent, AccessPoint accessPoint)
+        private List<AccessPointRecord> GetAccessPointRecord
+            (List<AccessEvent> listOfAccessEvent, AccessPoint accessPoint)
         {
             List<AccessPointRecord> listOfaccessPointRecords = new List<AccessPointRecord>();
             for (int i = 0; i < listOfAccessEvent.Count; i += 2)
@@ -163,12 +165,16 @@ namespace UseCases
             return listOfaccessPointRecords;
         }
 
-        private List<PerDayAttendanceRecordDTO> IncludeHolidays(List<PerDayAttendanceRecordDTO>
-            listOfPerDayAttendanceRecordDTOs,List<Leave> listOfLeave, DateTime fromDate, DateTime toDate, int employeeId)
+        private List<PerDayAttendanceRecordDTO> IncludeHolidays
+        (List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecordDTOs,
+            List<Leave> listOfLeave, DateTime fromDate,
+            DateTime toDate, int employeeId)
         {
             var accessEventAvailableDates = Enumerable
                 .Select<PerDayAttendanceRecordDTO, DateTime>
-                (listOfPerDayAttendanceRecordDTOs, (Func<PerDayAttendanceRecordDTO, DateTime>)(x => (DateTime)x.Date))
+                (listOfPerDayAttendanceRecordDTOs,
+                    (Func<PerDayAttendanceRecordDTO, DateTime>)
+                    (x => (DateTime)x.Date))
                 .Distinct()
                 .ToList();
 
