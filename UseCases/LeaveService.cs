@@ -176,6 +176,7 @@ namespace UseCases
             var existingLeaveIsCancelledLeave = allAppliedLeaves.Any(x =>
             x.GetLeaveId() == leaveId && x.GetStatus() == StatusType.Cancelled);
             var empIdOfLeaveToBeUpdate = _leavesRepository.GetLeaveByLeaveId(leaveId).GetEmployeeId();
+            bool isToBeUpdateLeaveAndAppliedLeaveIsSameType = _leavesRepository.GetLeaveByLeaveId(leaveId).GetLeaveType()== leaveType;
 
             if (existingLeaveIsCancelledLeave)
             {
@@ -213,13 +214,36 @@ namespace UseCases
                     if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
                     {
                     var leaveSummmary = GetTotalSummary(employeeId);
+                    float CountOfTakenLeaveDates = takenLeaveDates.Count;
                     if (leaveSummmary == null)
                         return ServiceResponseDTO.CanNotApplied;
-                    if ((leaveType == LeaveType.SickLeave && leaveSummmary.RemainingSickLeave - takenLeaveDates.Count < 0) ||
-                            (leaveType == LeaveType.CompOff && leaveSummmary.RemainingCompOffLeave - takenLeaveDates.Count < 0))
+                    if (isHalfDayLeave == true)
+                    {
+                        CountOfTakenLeaveDates = CountOfTakenLeaveDates / 2;
+                    }
+
+                    if (!isToBeUpdateLeaveAndAppliedLeaveIsSameType)
+                    {
+                        if ((leaveType == LeaveType.SickLeave && leaveSummmary.RemainingSickLeave - CountOfTakenLeaveDates < 0) ||
+                            (leaveType == LeaveType.CompOff && leaveSummmary.RemainingCompOffLeave - CountOfTakenLeaveDates < 0))
                         {
                             return ServiceResponseDTO.CanNotApplied;
                         }
+                    }
+                    else
+                    {
+                        if ((leaveType == LeaveType.SickLeave && 
+                             (leaveSummmary.RemainingSickLeave + 
+                               CalculateNoOfDays(_leavesRepository.GetLeaveByLeaveId(leaveId))) 
+                             - CountOfTakenLeaveDates < 0) ||
+                            (leaveType == LeaveType.CompOff && 
+                             (leaveSummmary.RemainingSickLeave +
+                               CalculateNoOfDays(_leavesRepository.GetLeaveByLeaveId(leaveId))) 
+                             - CountOfTakenLeaveDates < 0))
+                        {
+                            return ServiceResponseDTO.CanNotApplied;
+                        }
+                    }
 
                     }
                     var takenLeave = new Leave(employeeId, takenLeaveDates, leaveType, isHalfDayLeave, remark, StatusType.Updated, null);
