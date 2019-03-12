@@ -40,13 +40,17 @@ namespace DomainModel
             var listOfAccessEvent = _accessEvents;
             for (int i = 0; i < listOfAccessEvent.Count; i += 2)
             {
-                var timeIn = CalculateAbsoluteOutTimeAndInTime(listOfAccessEvent[i].EventTime.TimeOfDay, AbsoluteTime.TimeIn);
+                var timeIn = CalculateAbsoluteOutTimeAndInTime
+                    (listOfAccessEvent[i].EventTime.TimeOfDay,
+                    AbsoluteTime.TimeIn);
                 timeIn = new TimeSpan(timeIn.Hours, timeIn.Minutes, 00);
 
                 var timeOut = TimeSpan.Zero;
                 if (i != listOfAccessEvent.Count - 1)
                 {
-                    timeOut = CalculateAbsoluteOutTimeAndInTime(listOfAccessEvent[i + 1].EventTime.TimeOfDay, AbsoluteTime.TimeOut); ;
+                    timeOut = CalculateAbsoluteOutTimeAndInTime
+                        (listOfAccessEvent[i + 1].EventTime.TimeOfDay, 
+                        AbsoluteTime.TimeOut); ;
                     timeOut = new TimeSpan(timeOut.Hours, timeOut.Minutes, 00);
                 }
                 if ((listOfAccessEvent.Count % 2) == 0)
@@ -60,17 +64,26 @@ namespace DomainModel
         public TimeSpan CalculateOutsidePremisesTime()
         {
             TimeSpan totalTime = TimeSpan.Zero;
-            var listOfMainEntryAccessEvent = _accessEvents.Where(x=>x.FromMainDoor()).ToList();
+            var listOfMainEntryAccessEvent = _accessEvents
+                .Where(x=>x.FromMainDoor())
+                .ToList();
 
-            listOfMainEntryAccessEvent = listOfMainEntryAccessEvent.Skip(1).ToList();
-            listOfMainEntryAccessEvent.RemoveAt(listOfMainEntryAccessEvent.Count - 1);
+            listOfMainEntryAccessEvent = listOfMainEntryAccessEvent
+                .Skip(1)
+                .ToList();
+            listOfMainEntryAccessEvent
+                .RemoveAt(listOfMainEntryAccessEvent.Count - 1);
 
             for (int i = 0; i < listOfMainEntryAccessEvent.Count; i += 2)
             {
-                var timeOut = CalculateAbsoluteOutTimeAndInTime(listOfMainEntryAccessEvent[i].EventTime.TimeOfDay, AbsoluteTime.TimeOut);
+                var timeOut = CalculateAbsoluteOutTimeAndInTime
+                    (listOfMainEntryAccessEvent[i].EventTime.TimeOfDay,
+                    AbsoluteTime.TimeOut);
                 timeOut = new TimeSpan(timeOut.Hours, timeOut.Minutes, 00);
 
-                var timeIn = CalculateAbsoluteOutTimeAndInTime(listOfMainEntryAccessEvent[i + 1].EventTime.TimeOfDay, AbsoluteTime.TimeIn);
+                var timeIn = CalculateAbsoluteOutTimeAndInTime
+                    (listOfMainEntryAccessEvent[i + 1].EventTime.TimeOfDay,
+                    AbsoluteTime.TimeIn);
                 timeIn = new TimeSpan(timeIn.Hours, timeIn.Minutes, 00);
 
                 totalTime += timeIn - timeOut;
