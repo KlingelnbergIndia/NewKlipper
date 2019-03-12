@@ -17,7 +17,8 @@ namespace RepositoryImplementation
 
         public Department GetDepartment(Departments department)
         {
-            var departmentDetails =_departmentDBContext.Departments
+            var departmentDetails =_departmentDBContext
+                .Departments
                 .AsQueryable()
                 .Where( x => x.ID == (int)department)
                 .FirstOrDefault();

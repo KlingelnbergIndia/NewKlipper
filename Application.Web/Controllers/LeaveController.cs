@@ -69,7 +69,8 @@ namespace Application.Web.Controllers
                 (_leavesRepository, _employeeRepository,
                 _departmentRepository, _carryForwardLeaves);
             var response = leaveService
-                .ApplyLeave(loggedInEmpId, fromDate, toDate, LeaveType, isHalfDay, remark);
+                .ApplyLeave(loggedInEmpId, fromDate, toDate,
+                    LeaveType, isHalfDay, remark);
 
             GetResponseMessageForLeaveRecord(response);
             return RedirectToAction("Index");
@@ -100,6 +101,17 @@ namespace Application.Web.Controllers
         public FileResult ExportLeaveReport()
         {
             var stream = new System.IO.MemoryStream();
+            CreateExcelSheet(stream);
+            string fileName = @"LeaveReport_" +
+                              DateTime.Now.ToString("dd_MM") + ".xlsx";
+            string fileType =
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            stream.Position = 0;
+            return File(stream, fileType, fileName);
+        }
+
+        private void CreateExcelSheet(System.IO.MemoryStream stream)
+        {
             using (ExcelPackage package = new ExcelPackage(stream))
             {
                 var empList = GetLeaveDataOfAllReporteesAndTeamLead();
@@ -107,27 +119,28 @@ namespace Application.Web.Controllers
                 var worksheet = package.Workbook.Worksheets.Add("LeaveReport");
                 worksheet.TabColor = Color.Gold;
                 worksheet.DefaultColWidth = 20;
-               
+
                 int totalRows = empList.Count();
                 int j = 1;
-                foreach (var perEmployeeRecord in empList)
-                {
-                    FormatEmployeeDetail(worksheet, j, perEmployeeRecord);
-
-                    int i = FormatLeaveSummary(worksheet, j, perEmployeeRecord);
-
-                    int k = j + i + 1;
-                    k = FormatLeaveRecord(worksheet, perEmployeeRecord, k);
-                    j = k + 2;
-                }
+                j = FormatExcelSheetRecord(empList, worksheet, j);
                 package.Save();
             }
-            string fileName = @"LeaveReport_" + 
-                              DateTime.Now.ToString("dd_MM") + ".xlsx";
-            string fileType =
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            stream.Position = 0;
-            return File(stream, fileType, fileName);
+        }
+
+        private static int FormatExcelSheetRecord
+            (List<EmployeeViewModel> empList, ExcelWorksheet worksheet, int j)
+        {
+            foreach (var perEmployeeRecord in empList)
+            {
+                FormatEmployeeDetail(worksheet, j, perEmployeeRecord);
+
+                int i = FormatLeaveSummary(worksheet, j, perEmployeeRecord);
+
+                int k = j + i + 1;
+                k = FormatLeaveRecord(worksheet, perEmployeeRecord, k);
+                j = k + 2;
+            }
+            return j;
         }
 
         private static LeaveType GetLeaveType(string leaveType)
@@ -295,7 +308,8 @@ namespace Application.Web.Controllers
                 var leaveSummary = leaveService.GetTotalSummary(reportee.ID);
 
                 if (leaveSummary != null)
-                    employeeViewModel.LeaveViewModel.LeaveSummary = new ReporteeViewModel()
+                    employeeViewModel.LeaveViewModel.LeaveSummary = 
+                        new ReporteeViewModel()
                     .ConvertToLeaveSummaryViewModel(leaveSummary);
                 listOfReporteesLeaveRecord.Add(employeeViewModel);
             }

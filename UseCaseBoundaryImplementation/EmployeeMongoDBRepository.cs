@@ -19,9 +19,11 @@ namespace UseCaseBoundaryImplementation
             _authDBContext = AuthDBContext.Instance;
             _employeeDBContext = EmployeeDBContext.Instance;
         }
+
         public Employee GetEmployee(string userName)
         {
-            var employeeFromAuthDBContext = _authDBContext.Users.AsQueryable()
+            var employeeFromAuthDBContext = _authDBContext.Users
+                .AsQueryable()
                 .Where(x => x.UserName.ToLower() == userName)
                 .FirstOrDefault();
 
@@ -30,10 +32,15 @@ namespace UseCaseBoundaryImplementation
                 return null;
             }
 
-            var filterForEmployeeDBContext = Builders<EmployeeEntityModel>.Filter.Eq("ID", employeeFromAuthDBContext.ID);
-            var employeeFromEmployeeDBContext = _employeeDBContext.Employees.Find(filterForEmployeeDBContext).FirstOrDefault();
+            var filterForEmployeeDBContext = Builders<EmployeeEntityModel>
+                .Filter
+                .Eq("ID", employeeFromAuthDBContext.ID);
+            var employeeFromEmployeeDBContext = _employeeDBContext
+                .Employees
+                .Find(filterForEmployeeDBContext)
+                .FirstOrDefault();
 
-            List<int> reportees = new List<int>();
+           var reportees = new List<int>();
 
             int _id = employeeFromAuthDBContext.ID;
             string _userName = employeeFromAuthDBContext.UserName;
@@ -42,10 +49,13 @@ namespace UseCaseBoundaryImplementation
             string lastName = employeeFromEmployeeDBContext.LastName;
             string title = employeeFromEmployeeDBContext.Title;
             reportees = employeeFromEmployeeDBContext.Reportees;
-            Departments department = (Departments)employeeFromEmployeeDBContext.DepartmentId;
-
-            List<EmployeeRoles> _roles = ConvertStringRolesToEnumRoles(employeeFromEmployeeDBContext.Roles);
-            Employee domainEmployee = new Employee(_id, _userName, _password, firstName, lastName, title, _roles, reportees, department);
+            var department = (Departments)employeeFromEmployeeDBContext
+                .DepartmentId;
+            var _roles = ConvertStringRolesToEnumRoles
+                (employeeFromEmployeeDBContext.Roles);
+            var domainEmployee = new Employee
+                (_id, _userName, _password, firstName, lastName,
+                title, _roles, reportees, department);
 
             return domainEmployee;
         }
@@ -61,10 +71,15 @@ namespace UseCaseBoundaryImplementation
                 return null;
             }
 
-            var filterForEmployeeDBContext = Builders<EmployeeEntityModel>.Filter.Eq("ID", employeeFromAuthDBContext.ID);
-            var employeeFromEmployeeDBContext = _employeeDBContext.Employees.Find(filterForEmployeeDBContext).FirstOrDefault();
+            var filterForEmployeeDBContext = Builders<EmployeeEntityModel>
+                .Filter
+                .Eq("ID", employeeFromAuthDBContext.ID);
+            var employeeFromEmployeeDBContext = _employeeDBContext
+                .Employees
+                .Find(filterForEmployeeDBContext)
+                .FirstOrDefault();
 
-            List<int> reportees = new List<int>();
+            var reportees = new List<int>();
 
             int _id = employeeFromAuthDBContext.ID;
             string _userName = employeeFromAuthDBContext.UserName;
@@ -73,10 +88,14 @@ namespace UseCaseBoundaryImplementation
             string lastName = employeeFromEmployeeDBContext.LastName;
             string title = employeeFromEmployeeDBContext.Title;
             reportees = employeeFromEmployeeDBContext.Reportees;
-            Departments department = (Departments)employeeFromEmployeeDBContext.DepartmentId;
+            var department = (Departments)employeeFromEmployeeDBContext
+                .DepartmentId;
 
-            List<EmployeeRoles> _roles = ConvertStringRolesToEnumRoles(employeeFromEmployeeDBContext.Roles);
-            Employee domainEmployee = new Employee(_id, _userName, _password, firstName, lastName, title, _roles,reportees, department);
+            var _roles = ConvertStringRolesToEnumRoles
+                (employeeFromEmployeeDBContext.Roles);
+            var domainEmployee = new Employee
+                (_id, _userName, _password, firstName, lastName, 
+                title, _roles,reportees, department);
 
             return domainEmployee;
 
@@ -84,7 +103,7 @@ namespace UseCaseBoundaryImplementation
 
         private List<EmployeeRoles> ConvertStringRolesToEnumRoles(List<string> roles)
         {
-            List<EmployeeRoles> empRoles = new List<EmployeeRoles>();
+            var empRoles = new List<EmployeeRoles>();
             foreach (var role in roles)
             {
                 switch (role)

@@ -9,6 +9,5 @@ namespace UseCaseBoundary
     public interface ICarryForwardLeaves
     {
         Task<CarryForwardLeaves> GetCarryForwardLeaveAsync(int employeeId);
-       
     }
 }

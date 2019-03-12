@@ -49,19 +49,9 @@ namespace Application.Web.Controllers
             (_accessEventRepository, _employeeRepository,
                 _departmentRepository, _attendanceRegularizationRepository,
                 _leavesRepository);
-
             var employeeViewModel = new EmployeeViewModel();
-
-            if (searchFilter == SearchFilter.AccessEventsByDateRange.ToString())
-            {
-                GetFilterSelectedDateRangeAttendanceRecord
-                    (employeeId, attendanceService, employeeViewModel);
-            }
-            else
-            {
-                GetCurrentWeekAttendanceRecord
-                    (employeeId, attendanceService, employeeViewModel);
-            }
+            GetAttendanceRecord(searchFilter, employeeId,
+                attendanceService, employeeViewModel);
 
             employeeViewModel.EmployeeId = employeeId;
 
@@ -81,11 +71,11 @@ namespace Application.Web.Controllers
         public IActionResult Reportees(string selectedViewTabs)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            ReporteeService reporteeService = new ReporteeService(_employeeRepository);
+            var reporteeService = new ReporteeService(_employeeRepository);
 
             var reportees = reporteeService.GetReporteesData(employeeId);
 
-            ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
+            var reporteeViewModel = new ReporteeViewModel();
 
             if (reportees.Count != 0)
             {
@@ -110,10 +100,10 @@ namespace Application.Web.Controllers
         public IActionResult GetSelectedreportee(string selectedViewTabs)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            ReporteeService reporteeService = new ReporteeService(_employeeRepository);
+            var reporteeService = new ReporteeService(_employeeRepository);
 
             var reportees = reporteeService.GetReporteesData(employeeId);
-            ReporteeViewModel reporteeViewModel = new ReporteeViewModel();
+            var reporteeViewModel = new ReporteeViewModel();
 
             foreach (var reportee in reportees)
             {
@@ -225,6 +215,20 @@ namespace Application.Web.Controllers
         {
             return View(new ErrorViewModel
                 { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private void GetAttendanceRecord(string searchFilter, int employeeId, AttendanceService attendanceService, EmployeeViewModel employeeViewModel)
+        {
+            if (searchFilter == SearchFilter.AccessEventsByDateRange.ToString())
+            {
+                GetFilterSelectedDateRangeAttendanceRecord
+                    (employeeId, attendanceService, employeeViewModel);
+            }
+            else
+            {
+                GetCurrentWeekAttendanceRecord
+                    (employeeId, attendanceService, employeeViewModel);
+            }
         }
 
         private static int HiglLightWithBlueColor(ExcelWorksheet worksheet, int j)
