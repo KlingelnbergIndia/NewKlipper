@@ -78,7 +78,7 @@ namespace UseCases
         }
 
        
-        public List<LeaveRecordDTO> GetAppliedLeaves(int employeeId)
+        public List<LeaveRecordDTO> AppliedLeaves(int employeeId)
         {
             List<Leave> leavesInfo = _leavesRepository.GetAllLeavesInfo(employeeId);
             List<LeaveRecordDTO> listOfLeaveDTO = new List<LeaveRecordDTO>();
@@ -102,7 +102,7 @@ namespace UseCases
             return listOfLeaveDTO.OrderByDescending(x=>x.FromDate).ToList();
         }
 
-        public LeaveSummaryDTO GetTotalSummary(int employeeId)
+        public LeaveSummaryDTO TotalSummary(int employeeId)
         {
             var carryForwardLeave = _carryForwardLeaves.GetCarryForwardLeaveAsync(employeeId)
                 .GetAwaiter()
@@ -288,7 +288,7 @@ namespace UseCases
         {
             if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
             {
-                var leaveSummmary = GetTotalSummary(employeeId);
+                var leaveSummmary = TotalSummary(employeeId);
                 float CountOfTakenLeaveDates = takenLeaveDates.Count;
                 if (leaveSummmary == null)
                     return false;
@@ -313,7 +313,7 @@ namespace UseCases
         {
             if (leaveType == LeaveType.SickLeave || leaveType == LeaveType.CompOff)
             {
-                var leaveSummmary = GetTotalSummary(employeeId);
+                var leaveSummmary = TotalSummary(employeeId);
                 float CountOfTakenLeaveDates = takenLeaveDates.Count;
                 if (leaveSummmary == null)
                     return false;

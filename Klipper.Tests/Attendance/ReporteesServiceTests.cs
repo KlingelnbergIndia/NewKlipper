@@ -71,7 +71,7 @@ namespace Klipper.Tests
             employeeDataContainer.GetEmployee(46).Returns(reportee46);
 
             // Execute usecase
-            var actualreporteesData = reporteeService.GetReporteesData(29);
+            var actualreporteesData = reporteeService.ReporteesData(29);
             var dummyreporteesData = new List<UseCaseBoundary.DTO.ReporteeDTO>();
             dummyreporteesData.Add(ConvertEmployeeToReporteeData(reportee40));
             dummyreporteesData.Add(ConvertEmployeeToReporteeData(reportee46));
@@ -92,7 +92,7 @@ namespace Klipper.Tests
             employeeDataContainer.GetEmployee(29).Returns(employee);
 
             // Execute usecase
-            var actualreporteesData = reporteeService.GetReporteesData(29);
+            var actualreporteesData = reporteeService.ReporteesData(29);
             var dummyreporteesData = new List<UseCaseBoundary.DTO.ReporteeDTO>();
 
             Assert.That(dummyreporteesData, Is.EquivalentTo(actualreporteesData));

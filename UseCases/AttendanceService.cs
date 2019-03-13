@@ -34,7 +34,7 @@ namespace UseCases
         public AttendanceRecordsDTO AttendanceReportForDateRange
             (int employeeId, DateTime fromDate, DateTime toDate)
         {
-            WorkLogs accessEvents = _accessEventsRepository
+            var accessEvents = _accessEventsRepository
                 .GetAccessEventsForDateRange(employeeId, fromDate, toDate);
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
 
@@ -62,7 +62,7 @@ namespace UseCases
             };
         }
 
-        public async Task<List<AccessPointRecord>> GetAccessPointDetails
+        public async Task<List<AccessPointRecord>> AccessPointDetails
             (int employeeId, DateTime date)
         {
             PerDayWorkRecord perDayWorkRecord = _accessEventsRepository
@@ -136,7 +136,7 @@ namespace UseCases
         private List<AccessPointRecord> GetAccessPointRecord
             (List<AccessEvent> listOfAccessEvent, AccessPoint accessPoint)
         {
-            List<AccessPointRecord> listOfaccessPointRecords = new List<AccessPointRecord>();
+            var listOfaccessPointRecords = new List<AccessPointRecord>();
             for (int i = 0; i < listOfAccessEvent.Count; i += 2)
             {
                 var timeIn = CalculateAbsoluteOutTimeAndInTime
@@ -152,7 +152,7 @@ namespace UseCases
                 {
                     timeSpend = (timeOut - timeIn);
                 }
-                AccessPointRecord accessPointRecord = new AccessPointRecord()
+                var accessPointRecord = new AccessPointRecord()
                 {
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
                     TimeOut = new Time(timeOut.Hours, timeOut.Minutes),
@@ -235,7 +235,7 @@ namespace UseCases
         private List<PerDayAttendanceRecordDTO> CreatePerDayAttendanceRecord
             (int employeeId,IList<PerDayWorkRecord> workRecordByDate,List<Leave> listOfLeave)
         {
-            List<PerDayAttendanceRecordDTO> listOfPerDayAttendanceRecordDTO =
+            var listOfPerDayAttendanceRecordDTO =
                 new List<PerDayAttendanceRecordDTO>();
             Employee employeeData = _employeeRepository.
                 GetEmployee(employeeId);
@@ -274,7 +274,7 @@ namespace UseCases
                 string remark = GetRemark(leaveOfParticularDate, reguralizedEntry);
                 var dayStatus = GetDayStatus(leaveOfParticularDate, isValidWorkingDay);
                
-                PerDayAttendanceRecordDTO attendanceRecord = new PerDayAttendanceRecordDTO()
+                var attendanceRecord = new PerDayAttendanceRecordDTO()
                 {
                     Date = perDayWorkRecord.Date,
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
@@ -354,7 +354,7 @@ namespace UseCases
         }
         private Time GetExtraHours(TimeSpan workingHours, double noOfHoursToBeWorked)
         {
-            TimeSpan TotalWorkingHours = TimeSpan.FromHours(noOfHoursToBeWorked);
+            var TotalWorkingHours = TimeSpan.FromHours(noOfHoursToBeWorked);
             var extraHour = workingHours - TotalWorkingHours;
             return new Time(extraHour.Hours, extraHour.Minutes);
         }
@@ -409,7 +409,7 @@ namespace UseCases
         private TimeSpan GetRegularizedHours(Regularization reguralizedEntry,
             Leave leaveOfParticularDate,Department department)
         {
-            TimeSpan regularizedHours=TimeSpan.Zero;
+            var regularizedHours=TimeSpan.Zero;
             if (leaveOfParticularDate != null)
             {
                 if(leaveOfParticularDate.IsHalfDayLeave()==true)

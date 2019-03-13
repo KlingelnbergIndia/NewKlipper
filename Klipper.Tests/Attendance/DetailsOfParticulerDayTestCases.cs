@@ -39,7 +39,7 @@ namespace Klipper.Tests
             var dummyAccessevents = new AccessEventsBuilder().BuildForADay(DateTime.Parse("2018-10-01"));
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-01")).Returns(dummyAccessevents);
 
-            var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-10-01"));
+            var listOfAccessEventsRecord = await attendanceService.AccessPointDetails(48, DateTime.Parse("2018-10-01"));
 
             Assert.That(listOfAccessEventsRecord.Count, Is.EqualTo(4));
         }
@@ -54,7 +54,7 @@ namespace Klipper.Tests
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
 
             // Execute usecase
-            var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-10-05"));
+            var listOfAccessEventsRecord = await attendanceService.AccessPointDetails(48, DateTime.Parse("2018-10-05"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeSpend.Hour, Is.EqualTo(8));
             Assert.That(listOfAccessEventsRecord[0].TimeSpend.Minute, Is.EqualTo(35));
@@ -70,7 +70,7 @@ namespace Klipper.Tests
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-08")).Returns(dummyAccessevents);
 
             // Execute usecase
-            var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-10-08"));
+            var listOfAccessEventsRecord = await attendanceService.AccessPointDetails(48, DateTime.Parse("2018-10-08"));
 
             Assert.That(listOfAccessEventsRecord[1].TimeSpend.Hour, Is.EqualTo(0));
             Assert.That(listOfAccessEventsRecord[1].TimeSpend.Minute, Is.EqualTo(45));
@@ -88,7 +88,7 @@ namespace Klipper.Tests
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-09-28")).Returns(dummyAccessevents);
 
             // Execute usecase
-            var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-09-28"));
+            var listOfAccessEventsRecord = await attendanceService.AccessPointDetails(48, DateTime.Parse("2018-09-28"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeSpend.Hour, Is.EqualTo(0));
             Assert.That(listOfAccessEventsRecord[0].TimeSpend.Minute, Is.EqualTo(7));
@@ -106,7 +106,7 @@ namespace Klipper.Tests
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-09-29")).Returns(dummyAccessevents);
 
             // Execute usecase
-            var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-09-29"));
+            var listOfAccessEventsRecord = await attendanceService.AccessPointDetails(48, DateTime.Parse("2018-09-29"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeOut.Hour, Is.EqualTo(0));
             Assert.That(listOfAccessEventsRecord[0].TimeOut.Minute, Is.EqualTo(0));
@@ -127,7 +127,7 @@ namespace Klipper.Tests
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-09-29")).Returns(dummyAccessevents);
 
             // Execute usecase
-            var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-09-29"));
+            var listOfAccessEventsRecord = await attendanceService.AccessPointDetails(48, DateTime.Parse("2018-09-29"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeOut.Hour, Is.EqualTo(0));
             Assert.That(listOfAccessEventsRecord[0].TimeOut.Minute, Is.EqualTo(0));
@@ -148,7 +148,7 @@ namespace Klipper.Tests
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-09-29")).Returns(dummyAccessevents);
 
             // Execute usecase
-            var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-09-29"));
+            var listOfAccessEventsRecord = await attendanceService.AccessPointDetails(48, DateTime.Parse("2018-09-29"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeOut.Hour, Is.EqualTo(0));
             Assert.That(listOfAccessEventsRecord[0].TimeOut.Minute, Is.EqualTo(0));
@@ -169,7 +169,7 @@ namespace Klipper.Tests
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-10-01")).Returns(dummyAccessevents);
 
             // Execute usecase
-            var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-10-01"));
+            var listOfAccessEventsRecord = await attendanceService.AccessPointDetails(48, DateTime.Parse("2018-10-01"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeIn.Hour, Is.EqualTo(3));
             Assert.That(listOfAccessEventsRecord[0].TimeIn.Minute, Is.EqualTo(4));
@@ -198,7 +198,7 @@ namespace Klipper.Tests
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-09-30")).Returns(dummyAccessevents);
 
             // Execute usecase
-            var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-09-30"));
+            var listOfAccessEventsRecord = await attendanceService.AccessPointDetails(48, DateTime.Parse("2018-09-30"));
 
             Assert.That(listOfAccessEventsRecord[0].TimeIn.Hour, Is.EqualTo(7));
             Assert.That(listOfAccessEventsRecord[0].TimeIn.Minute, Is.EqualTo(56));
@@ -227,7 +227,7 @@ namespace Klipper.Tests
             accessEventsContainer.GetAccessEventsForADay(48, DateTime.Parse("2018-09-30")).Returns(dummyAccessevents);
 
             // Execute usecase
-            var listOfAccessEventsRecord = await attendanceService.GetAccessPointDetails(48, DateTime.Parse("2018-09-30"));
+            var listOfAccessEventsRecord = await attendanceService.AccessPointDetails(48, DateTime.Parse("2018-09-30"));
 
             Assert.That(listOfAccessEventsRecord[2].TimeIn.Hour, Is.EqualTo(12));
             Assert.That(listOfAccessEventsRecord[2].TimeIn.Minute, Is.EqualTo(52));

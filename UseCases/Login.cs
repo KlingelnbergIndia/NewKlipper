@@ -15,7 +15,8 @@ namespace UseCases
 
         public EmployeeDTO LoginUser(string userName, string password)
         {
-            Employee employee = _employeeRepository.GetEmployee(userName.ToLower());
+            Employee employee = _employeeRepository
+                .GetEmployee(userName.ToLower());
             if (employee == null)
             {
                 return null;

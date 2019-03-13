@@ -483,7 +483,7 @@ namespace Klipper.Tests
                 dummyLeaveRecord = listOfLeave;
             }
 
-            var summaryReport = leaveService.GetTotalSummary(63);
+            var summaryReport = leaveService.TotalSummary(63);
 
             Assert.That(summaryReport.RemainingCompOffLeave, Is.EqualTo(3));
             Assert.That(summaryReport.TotalCompOffLeaveTaken, Is.EqualTo(2));
@@ -528,7 +528,7 @@ namespace Klipper.Tests
                 dummyLeaveRecord = listOfLeave;
             }
 
-            var summaryReport = leaveService.GetTotalSummary(63);
+            var summaryReport = leaveService.TotalSummary(63);
 
             Assert.That(summaryReport.RemainingCasualLeave, Is.EqualTo(18));
             Assert.That(summaryReport.TotalCasualLeaveTaken, Is.EqualTo(3));
@@ -573,7 +573,7 @@ namespace Klipper.Tests
                 dummyLeaveRecord = listOfLeave;
             }
 
-            var summaryReport = leaveService.GetTotalSummary(63);
+            var summaryReport = leaveService.TotalSummary(63);
 
             Assert.That(summaryReport.RemainingSickLeave, Is.EqualTo(2));
             Assert.That(summaryReport.TotalSickLeaveTaken, Is.EqualTo(4));
@@ -621,7 +621,7 @@ namespace Klipper.Tests
                 listOfLeave.Add(leave);
                 dummyLeaveRecord = listOfLeave;
             }
-            var summaryReport = leaveService.GetTotalSummary(63);
+            var summaryReport = leaveService.TotalSummary(63);
 
             Assert.That(summaryReport.RemainingSickLeave, Is.EqualTo(3.5));
             Assert.That(summaryReport.TotalSickLeaveTaken, Is.EqualTo(2.5));
@@ -668,7 +668,7 @@ namespace Klipper.Tests
                 listOfLeave.Add(leave);
                 dummyLeaveRecord = listOfLeave;
             }
-            var summaryReport = leaveService.GetTotalSummary(63);
+            var summaryReport = leaveService.TotalSummary(63);
 
             Assert.That(summaryReport.RemainingCasualLeave, Is.EqualTo(18.5));
             Assert.That(summaryReport.TotalCasualLeaveTaken, Is.EqualTo(2.5));
@@ -715,7 +715,7 @@ namespace Klipper.Tests
                 listOfLeave.Add(leave);
                 dummyLeaveRecord = listOfLeave;
             }
-            var summaryReport = leaveService.GetTotalSummary(63);
+            var summaryReport = leaveService.TotalSummary(63);
 
             Assert.That(summaryReport.RemainingCompOffLeave, Is.EqualTo(4.5));
             Assert.That(summaryReport.TotalCompOffLeaveTaken, Is.EqualTo(0.5));

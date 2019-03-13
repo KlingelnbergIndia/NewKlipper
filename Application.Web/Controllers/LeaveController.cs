@@ -42,8 +42,8 @@ namespace Application.Web.Controllers
                 (_leavesRepository, _employeeRepository, 
                 _departmentRepository, _carryForwardLeaves);
             var leaveViewModel = new LeaveViewModel();
-            var appliedLeaves = leaveService.GetAppliedLeaves(loggedInEmpId);
-            var leaveSummary = leaveService.GetTotalSummary(loggedInEmpId);
+            var appliedLeaves = leaveService.AppliedLeaves(loggedInEmpId);
+            var leaveSummary = leaveService.TotalSummary(loggedInEmpId);
 
             if (appliedLeaves != null)
                 leaveViewModel.GetAppliedLeaves = appliedLeaves;
@@ -279,12 +279,12 @@ namespace Application.Web.Controllers
             var reporteeService = new ReporteeService(_employeeRepository);
             var leaveService = new LeaveService(_leavesRepository, _employeeRepository,
               _departmentRepository, _carryForwardLeaves);
-            var reportees = reporteeService.GetReporteesData(employeeId);
+            var reportees = reporteeService.ReporteesData(employeeId);
             var listOfReporteesLeaveRecord = new List<EmployeeViewModel>();
 
             if (reportees.Count() != 0)
             {
-                reportees.Add(reporteeService.GetTeamLeadData(employeeId));
+                reportees.Add(reporteeService.TeamLeadData(employeeId));
                 GetReporteeAndTeamLeadData(leaveService, reportees, listOfReporteesLeaveRecord);
                 return listOfReporteesLeaveRecord;
             }
@@ -303,9 +303,9 @@ namespace Application.Web.Controllers
                 employeeViewModel.EmployeeName = string
                     .Concat(reportee.FirstName, " ", reportee.LastName);
                 employeeViewModel.LeaveViewModel.GetAppliedLeaves =
-                    leaveService.GetAppliedLeaves(reportee.ID);
+                    leaveService.AppliedLeaves(reportee.ID);
 
-                var leaveSummary = leaveService.GetTotalSummary(reportee.ID);
+                var leaveSummary = leaveService.TotalSummary(reportee.ID);
 
                 if (leaveSummary != null)
                     employeeViewModel.LeaveViewModel.LeaveSummary = 
