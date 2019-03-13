@@ -32,10 +32,11 @@ namespace UseCases
             {
                 foreach (var reportee in reporteesOfCurrentEmployee)
                 {
-                    ReporteeDTO reporteeDto = new ReporteeDTO();
+                    //ReporteeDTO reporteeDto = new ReporteeDTO();
                     var reporteeData = _employeeRepository.GetEmployee(reportee);
                     if (reporteeData != null)
                     {
+                        var reporteeDto = new ReporteeDTO();
                         reporteeDto.ID = reporteeData.Id();
                         reporteeDto.FirstName = reporteeData.FirstName();
                         reporteeDto.LastName = reporteeData.LastName();

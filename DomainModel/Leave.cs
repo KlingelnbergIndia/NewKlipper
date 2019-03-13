@@ -33,7 +33,7 @@ namespace DomainModel
 
         public Leave(int employeeId, List<DateTime> leaveDates, 
             LeaveType leaveType,bool isHalfDayLeave, string remark, 
-            StatusType status, string leaveId)
+            StatusType status, string leaveId = null)
         {
             _employeeId = employeeId;
             _leaveDates = leaveDates;

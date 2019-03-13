@@ -18,9 +18,9 @@ namespace UseCases
         private ILeavesRepository _leavesRepository;
 
         public AttendanceService(
-            IAccessEventsRepository accessEventsRepository, 
+            IAccessEventsRepository accessEventsRepository,
             IEmployeeRepository employeeRepository,
-            IDepartmentRepository departmentRepository, 
+            IDepartmentRepository departmentRepository,
             IAttendanceRegularizationRepository attendanceRegularizationRepository,
             ILeavesRepository leavesRepository)
         {
@@ -36,13 +36,11 @@ namespace UseCases
         {
             var accessEvents = _accessEventsRepository
                 .GetAccessEventsForDateRange(employeeId, fromDate, toDate);
+
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
-
             var listOfLeave = _leavesRepository.GetAllLeavesInfo(employeeId);
-
-            var listOfPerDayAttendanceRecord =
-                CreatePerDayAttendanceRecord
-                    (employeeId,datewiseAccessEvents,  listOfLeave);
+            var listOfPerDayAttendanceRecord = CreatePerDayAttendanceRecord(
+                employeeId, datewiseAccessEvents, listOfLeave);
 
             listOfPerDayAttendanceRecord = IncludeHolidays
                 (listOfPerDayAttendanceRecord, listOfLeave, fromDate, toDate, employeeId);
@@ -62,10 +60,10 @@ namespace UseCases
             };
         }
 
-        public async Task<List<AccessPointRecord>> AccessPointDetails
-            (int employeeId, DateTime date)
+        public async Task<List<AccessPointRecord>> AccessPointDetails(
+            int employeeId, DateTime date)
         {
-            PerDayWorkRecord perDayWorkRecord = _accessEventsRepository
+            var perDayWorkRecord = _accessEventsRepository
                 .GetAccessEventsForADay(employeeId, date);
 
             var RecreationPointAccessEvents = perDayWorkRecord
@@ -89,7 +87,7 @@ namespace UseCases
 
             listOfAccessPointRecord.Sort((x, y) =>
                 x.TimeIn.Hour.CompareTo(y.TimeIn.Hour) == 0 ?
-                x.TimeIn.Minute.CompareTo(y.TimeIn.Minute) 
+                x.TimeIn.Minute.CompareTo(y.TimeIn.Minute)
                 : x.TimeIn.Hour.CompareTo(y.TimeIn.Hour));
 
             return await Task.Run(() =>
@@ -102,7 +100,7 @@ namespace UseCases
         {
             if (GetRegularizationEntry(reguraliozationDTO.EmployeeID).Any())
             {
-                return 
+                return
                     _attendanceRegularizationRepository
                     .OverrideRegularizationRecord(reguraliozationDTO);
             }
@@ -122,36 +120,37 @@ namespace UseCases
             Regularization regularizedDataOfADay = null;
             var listOfRegularizedData = _attendanceRegularizationRepository
                 .GetRegularizedRecords(employeeId).ToList();
-            
-            if (listOfRegularizedData!=null)
+
+            if (listOfRegularizedData != null)
             {
                 regularizedDataOfADay = listOfRegularizedData
                 .Where(x => x.RegularizedDate().Date == date.Date)
                 .FirstOrDefault();
             }
-            
+
             return regularizedDataOfADay;
         }
 
-        private List<AccessPointRecord> GetAccessPointRecord
-            (List<AccessEvent> listOfAccessEvent, AccessPoint accessPoint)
+        private List<AccessPointRecord> GetAccessPointRecord(
+            List<AccessEvent> listOfAccessEvent, AccessPoint accessPoint)
         {
             var listOfaccessPointRecords = new List<AccessPointRecord>();
             for (int i = 0; i < listOfAccessEvent.Count; i += 2)
             {
                 var timeIn = CalculateAbsoluteOutTimeAndInTime
                     (listOfAccessEvent[i].EventTime.TimeOfDay, AbsoluteTime.TimeIn);
-                var timeOut = TimeSpan.Zero;
-                if (i != listOfAccessEvent.Count - 1)
-                {
-                    timeOut = CalculateAbsoluteOutTimeAndInTime
-                        (listOfAccessEvent[i + 1].EventTime.TimeOfDay, AbsoluteTime.TimeOut); 
-                }
-                var timeSpend = TimeSpan.Zero;
-                if ((listOfAccessEvent.Count % 2) == 0)
-                {
-                    timeSpend = (timeOut - timeIn);
-                }
+
+                var timeOut =
+                    i != listOfAccessEvent.Count - 1
+                    ? CalculateAbsoluteOutTimeAndInTime
+                        (listOfAccessEvent[i + 1].EventTime.TimeOfDay, AbsoluteTime.TimeOut)
+                    : TimeSpan.Zero;
+
+                var timeSpend =
+                    (listOfAccessEvent.Count % 2) == 0
+                        ? timeOut - timeIn
+                        : TimeSpan.Zero;
+
                 var accessPointRecord = new AccessPointRecord()
                 {
                     TimeIn = new Time(timeIn.Hours, timeIn.Minutes),
@@ -159,6 +158,7 @@ namespace UseCases
                     TimeSpend = new Time(timeSpend.Hours, timeSpend.Minutes),
                     AccessPoint = accessPoint
                 };
+
                 listOfaccessPointRecords.Add(accessPointRecord);
             }
             return listOfaccessPointRecords;
@@ -187,14 +187,7 @@ namespace UseCases
                 {
                     if (department.IsValidWorkingDay(i.Date.Date) == true)
                     {
-                        Leave leaveOfParticularDay = null;
-                        if (listOfLeave != null)
-                        {
-                            leaveOfParticularDay = listOfLeave
-                            .Where(x => x.GetLeaveDate().Contains(i.Date.Date)
-                            && x.GetStatus() != Leave.StatusType.Cancelled)
-                            .FirstOrDefault();
-                        }
+                        var leaveOfParticularDay = LeaveOfParticularDay(listOfLeave, i);
                         var reguralizedEntry = GetRegularizationEntryByDate
                             (employeeId, i.Date.Date);
                         string remark = GetRemark(leaveOfParticularDay, reguralizedEntry);
@@ -225,15 +218,28 @@ namespace UseCases
             }
             listOfPerDayAttendanceRecordDTOs = Enumerable
                 .OrderByDescending<PerDayAttendanceRecordDTO, DateTime>
-                (listOfPerDayAttendanceRecordDTOs, 
+                (listOfPerDayAttendanceRecordDTOs,
                 (Func<PerDayAttendanceRecordDTO, DateTime>)(x => (DateTime)x.Date))
                 .ToList();
 
             return listOfPerDayAttendanceRecordDTOs;
         }
 
+        private static Leave LeaveOfParticularDay(List<Leave> listOfLeave, DateTime fromDate)
+        {
+            if (listOfLeave != null)
+            {
+                return listOfLeave
+                    .Where(x => x.GetLeaveDate().Contains(fromDate.Date.Date)
+                                && x.GetStatus() != Leave.StatusType.Cancelled)
+                    .FirstOrDefault();
+            }
+
+            return null;
+        }
+
         private List<PerDayAttendanceRecordDTO> CreatePerDayAttendanceRecord
-            (int employeeId,IList<PerDayWorkRecord> workRecordByDate,List<Leave> listOfLeave)
+            (int employeeId, IList<PerDayWorkRecord> workRecordByDate, List<Leave> listOfLeave)
         {
             var listOfPerDayAttendanceRecordDTO =
                 new List<PerDayAttendanceRecordDTO>();
@@ -252,7 +258,7 @@ namespace UseCases
                     && x.GetStatus() != Leave.StatusType.Cancelled)
                     .FirstOrDefault();
                 }
-                
+
                 var timeIn = perDayWorkRecord.GetTimeIn();
                 var timeOut = perDayWorkRecord.GetTimeOut();
                 var workingHours = perDayWorkRecord.CalculateWorkingHours();
@@ -265,15 +271,15 @@ namespace UseCases
                 bool flag = IsRegularizedEntry
                     (leaveOfParticularDate, reguralizedEntry);
                 var overTime = GetOverTime
-                    (isValidWorkingDay,workingHours, regularizedHours,
+                    (isValidWorkingDay, workingHours, regularizedHours,
                     flag, department.GetNoOfHoursToBeWorked());
                 var lateBy = GetLateByTime
-                    (isValidWorkingDay,workingHours, regularizedHours, 
+                    (isValidWorkingDay, workingHours, regularizedHours,
                     flag, department.GetNoOfHoursToBeWorked());
                 var haveLeave = HaveLeave(leaveOfParticularDate);
                 string remark = GetRemark(leaveOfParticularDate, reguralizedEntry);
                 var dayStatus = GetDayStatus(leaveOfParticularDate, isValidWorkingDay);
-               
+
                 var attendanceRecord = new PerDayAttendanceRecordDTO()
                 {
                     Date = perDayWorkRecord.Date,
@@ -295,10 +301,10 @@ namespace UseCases
             return listOfPerDayAttendanceRecordDTO;
         }
 
-        private Time GetOverTime(bool isValidWorkingDay,TimeSpan workingHours, 
-            TimeSpan regularizedHours,bool flag, double noOfHoursToBeWorked)
+        private Time GetOverTime(bool isValidWorkingDay, TimeSpan workingHours,
+            TimeSpan regularizedHours, bool flag, double noOfHoursToBeWorked)
         {
-            Time extraHour ;
+            Time extraHour;
             if (isValidWorkingDay == true)
             {
                 if (flag == false)
@@ -314,16 +320,16 @@ namespace UseCases
                 {
                     return extraHour;
                 }
-                    return new Time(0, 0);
+                return new Time(0, 0);
             }
             else
             {
                 return new Time(workingHours.Hours, workingHours.Minutes);
             }
-            
+
         }
-        private Time GetLateByTime(bool isValidWorkingDay,TimeSpan workingHours,
-            TimeSpan regularizedHours,bool flag, double noOfHoursToBeWorked)
+        private Time GetLateByTime(bool isValidWorkingDay, TimeSpan workingHours,
+            TimeSpan regularizedHours, bool flag, double noOfHoursToBeWorked)
         {
             Time extraHour;
             if (isValidWorkingDay == true)
@@ -350,7 +356,7 @@ namespace UseCases
             {
                 return new Time(0, 0);
             }
-            
+
         }
         private Time GetExtraHours(TimeSpan workingHours, double noOfHoursToBeWorked)
         {
@@ -366,7 +372,7 @@ namespace UseCases
             }
             return false;
         }
-        private DayStatus GetDayStatus(Leave leaveOfParticularDay,bool isValidWorkingDay)
+        private DayStatus GetDayStatus(Leave leaveOfParticularDay, bool isValidWorkingDay)
         {
             if (leaveOfParticularDay != null)
             {
@@ -383,16 +389,16 @@ namespace UseCases
                     return DayStatus.NonWorkingDay;
             }
         }
-        private string GetRemark(Leave leaveOfParticularDate,Regularization reguralizedEntry)
+        private string GetRemark(Leave leaveOfParticularDate, Regularization reguralizedEntry)
         {
-            string remark=null;
+            string remark = null;
             if (leaveOfParticularDate != null)
             {
                 var leaveType = leaveOfParticularDate.GetLeaveType();
-                if(leaveOfParticularDate.IsHalfDayLeave()==true)
-                remark = string
-                    .Concat(EnumHelperMethod.EnumDisplayNameFor(leaveType).ToString(), 
-                        " - Half Day");
+                if (leaveOfParticularDate.IsHalfDayLeave() == true)
+                    remark = string
+                        .Concat(EnumHelperMethod.EnumDisplayNameFor(leaveType).ToString(),
+                            " - Half Day");
                 else
                     remark = EnumHelperMethod.EnumDisplayNameFor(leaveType).ToString();
             }
@@ -407,13 +413,13 @@ namespace UseCases
         }
 
         private TimeSpan GetRegularizedHours(Regularization reguralizedEntry,
-            Leave leaveOfParticularDate,Department department)
+            Leave leaveOfParticularDate, Department department)
         {
-            var regularizedHours=TimeSpan.Zero;
+            var regularizedHours = TimeSpan.Zero;
             if (leaveOfParticularDate != null)
             {
-                if(leaveOfParticularDate.IsHalfDayLeave()==true)
-                 regularizedHours = TimeSpan.FromHours(department.GetNoOfHoursToBeWorked() / 2);
+                if (leaveOfParticularDate.IsHalfDayLeave() == true)
+                    regularizedHours = TimeSpan.FromHours(department.GetNoOfHoursToBeWorked() / 2);
                 else
                     regularizedHours = TimeSpan.FromHours(department.GetNoOfHoursToBeWorked());
             }
@@ -475,9 +481,9 @@ namespace UseCases
             {
                 return new Time(00, 00);
             }
-             double totalRequiredHoursToBeWorked = listOfPerDayAttendanceRecord
-               .Count(x => x.DayStatus != DayStatus.NonWorkingDay) * noOfHoursToBeWorked;
-            return new Time ((int)totalRequiredHoursToBeWorked,00);
+            double totalRequiredHoursToBeWorked = listOfPerDayAttendanceRecord
+              .Count(x => x.DayStatus != DayStatus.NonWorkingDay) * noOfHoursToBeWorked;
+            return new Time((int)totalRequiredHoursToBeWorked, 00);
         }
 
         private Time CalculateTotalWorkingHours
@@ -492,38 +498,38 @@ namespace UseCases
 
             foreach (var AttendanceRecordDTO in listOfAttendanceRecordDTO)
             {
-                    if (AttendanceRecordDTO.HaveLeave==true)
+                if (AttendanceRecordDTO.HaveLeave == true)
+                {
+                    var workingHours = new TimeSpan
+                        (AttendanceRecordDTO.WorkingHours.Hour,
+                        AttendanceRecordDTO.WorkingHours.Minute,
+                        00);
+                    var regularizedHours = new TimeSpan
+                        (AttendanceRecordDTO.RegularizedHours.Hour,
+                        AttendanceRecordDTO.RegularizedHours.Minute,
+                        00);
+                    sumOfTotalWorkingHours += workingHours + regularizedHours;
+                }
+                else
+                {
+                    if (AttendanceRecordDTO.IsHoursRegularized == true)
                     {
-                        var workingHours = new TimeSpan
-                            (AttendanceRecordDTO.WorkingHours.Hour,
-                            AttendanceRecordDTO.WorkingHours.Minute,
-                            00); 
-                        var regularizedHours = new TimeSpan
-                            (AttendanceRecordDTO.RegularizedHours.Hour,
-                            AttendanceRecordDTO.RegularizedHours.Minute,
-                            00); 
-                        sumOfTotalWorkingHours += workingHours + regularizedHours;
+                        var regularizedHours = AttendanceRecordDTO
+                            .RegularizedHours;
+                        sumOfTotalWorkingHours +=
+                            new TimeSpan(regularizedHours.Hour,
+                            regularizedHours.Minute,
+                            00);
                     }
-                    else
-                    {
-                        if (AttendanceRecordDTO.IsHoursRegularized == true)
-                        {
-                            var regularizedHours = AttendanceRecordDTO
-                                .RegularizedHours;
-                            sumOfTotalWorkingHours += 
-                                new TimeSpan(regularizedHours.Hour,
-                                regularizedHours.Minute,
-                                00);
-                        }
                     else
                     {
                         var workingHours = AttendanceRecordDTO.WorkingHours;
                         sumOfTotalWorkingHours += new TimeSpan
                             (workingHours.Hour, workingHours.Minute, 00);
                     }
-                    }
+                }
             }
-           
+
             return new Time(
                 (int)sumOfTotalWorkingHours.TotalHours,
                 (int)sumOfTotalWorkingHours.Minutes);

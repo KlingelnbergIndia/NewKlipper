@@ -45,20 +45,14 @@ namespace Application.Web.Controllers
         public IActionResult Index(string searchFilter)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
-            var attendanceService = new AttendanceService
-            (_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository,
+            var attendanceService = new AttendanceService(
+                _accessEventRepository,
+                _employeeRepository,
+                _departmentRepository,
+                _attendanceRegularizationRepository,
                 _leavesRepository);
-            var employeeViewModel = new EmployeeViewModel();
-            GetAttendanceRecord(searchFilter, employeeId,
-                attendanceService, employeeViewModel);
-
-            employeeViewModel.EmployeeId = employeeId;
-
-            employeeViewModel
-                .employeeAttendaceRecords
-                .ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST
-                (employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO);
+            var employeeViewModel = GetAttendanceRecord(
+                searchFilter, employeeId, attendanceService);
 
             ViewData["VisibilityReporteesTab"] =
                 HttpContext.Session.GetString("VisibilityOfReporteesTab");
@@ -72,9 +66,7 @@ namespace Application.Web.Controllers
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             var reporteeService = new ReporteeService(_employeeRepository);
-
             var reportees = reporteeService.ReporteesData(employeeId);
-
             var reporteeViewModel = new ReporteeViewModel();
 
             if (reportees.Count != 0)
@@ -141,14 +133,16 @@ namespace Application.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> AccessPointDetail(DateTime date, int employeeId)
         {
-            var attendanceService = new AttendanceService
-            (_accessEventRepository, _employeeRepository,
-                _departmentRepository, _attendanceRegularizationRepository,
+            var attendanceService = new AttendanceService(
+                _accessEventRepository, 
+                _employeeRepository,
+                _departmentRepository,
+                _attendanceRegularizationRepository,
                 _leavesRepository);
             var listofaccesspointdetail = 
                 await attendanceService.AccessPointDetails(employeeId, date);
-            listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST
-                (date, listofaccesspointdetail);
+            listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST(
+                date, listofaccesspointdetail);
             return View(listofaccesspointdetail);
         }
 
@@ -217,8 +211,12 @@ namespace Application.Web.Controllers
                 { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private void GetAttendanceRecord(string searchFilter, int employeeId, AttendanceService attendanceService, EmployeeViewModel employeeViewModel)
+        private EmployeeViewModel GetAttendanceRecord(
+            string searchFilter,
+            int employeeId,
+            AttendanceService attendanceService)
         {
+            var employeeViewModel = new EmployeeViewModel();
             if (searchFilter == SearchFilter.AccessEventsByDateRange.ToString())
             {
                 FilterSelectedDateRangeAttendanceRecord
@@ -229,6 +227,12 @@ namespace Application.Web.Controllers
                 CurrentWeekAttendanceRecord
                     (employeeId, attendanceService, employeeViewModel);
             }
+            employeeViewModel.EmployeeId = employeeId;
+            employeeViewModel
+                .employeeAttendaceRecords
+                .ListOfAttendanceRecordDTO = ConvertAttendanceRecordsTimeToIST(
+                employeeViewModel.employeeAttendaceRecords.ListOfAttendanceRecordDTO);
+            return employeeViewModel;
         }
 
         private static int HiglLightWithBlueColor(ExcelWorksheet worksheet, int j)
