@@ -1,10 +1,6 @@
-﻿using DataAccess.EntityModel.Employment;
-using DataAccess.EntityModel.Leave;
+﻿using DataAccess.EntityModel.Leave;
 using DataAccess.Helper;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DataAccess
 {
@@ -34,8 +30,10 @@ namespace DataAccess
             _database = mongoClient.GetDatabase("LeaveManagementDB");
         }
 
-        public IMongoCollection<LeaveEntityModel> AppliedLeaves => _database.GetCollection<LeaveEntityModel>("AppliedLeaves");
-        public IMongoCollection<CarryForwardLeavesEntityModel> CarryForwardLeaves => _database.GetCollection<CarryForwardLeavesEntityModel>("CarryForwardLeaves");
+        public IMongoCollection<LeaveEntityModel> AppliedLeaves =>
+            _database.GetCollection<LeaveEntityModel>("AppliedLeaves");
+        public IMongoCollection<CarryForwardLeavesEntityModel> CarryForwardLeaves => 
+            _database.GetCollection<CarryForwardLeavesEntityModel>("CarryForwardLeaves");
 
     }
 }

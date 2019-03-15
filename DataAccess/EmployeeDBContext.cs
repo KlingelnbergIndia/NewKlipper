@@ -33,7 +33,8 @@ namespace DataAccess
             _database = mongoClient.GetDatabase("EmployeeDB");
         }
 
-        public IMongoCollection<EmployeeEntityModel> Employees => _database.GetCollection<EmployeeEntityModel>("Employees");
+        public IMongoCollection<EmployeeEntityModel> Employees =>
+            _database.GetCollection<EmployeeEntityModel>("Employees");
 
     }
 }

@@ -1,10 +1,6 @@
 ﻿using DataAccess.EntityModel.Department;
-using DataAccess.EntityModel.Leave;
 using DataAccess.Helper;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DataAccess
 {
@@ -36,8 +32,7 @@ namespace DataAccess
             _database = mongoClient.GetDatabase("OperationalsDB");
         }
 
-        public IMongoCollection<DepartmentEntityModel> Departments => _database.GetCollection<DepartmentEntityModel>("Departments"); 
-        //public IMongoCollection<CarryForwardLeavesEntityModel> CarryForwardLeaves => _database.GetCollection<CarryForwardLeavesEntityModel>("CarryForwardLeaves"); 
-
+        public IMongoCollection<DepartmentEntityModel> Departments => 
+            _database.GetCollection<DepartmentEntityModel>("Departments"); 
     }
 }

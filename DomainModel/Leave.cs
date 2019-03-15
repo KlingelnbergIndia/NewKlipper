@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace DomainModel
 {
@@ -32,7 +31,9 @@ namespace DomainModel
             LeaveAdded
         }
 
-        public Leave(int employeeId, List<DateTime> leaveDates, LeaveType leaveType,bool isHalfDayLeave, string remark, StatusType status, string leaveId)
+        public Leave(int employeeId, List<DateTime> leaveDates, 
+            LeaveType leaveType,bool isHalfDayLeave, string remark, 
+            StatusType status, string leaveId)
         {
             _employeeId = employeeId;
             _leaveDates = leaveDates;

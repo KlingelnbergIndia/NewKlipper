@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using UseCaseBoundary;
-using UseCaseBoundary.DTO;
 using UseCases;
 
 namespace Application.Web.Controllers
@@ -19,7 +18,6 @@ namespace Application.Web.Controllers
         public LoginController(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
-            
         }
 
         public IActionResult Login()
@@ -39,10 +37,15 @@ namespace Application.Web.Controllers
 
             if (loggedInUserDetails != null)
             {
-                HttpContext.Session.SetString("EmployeeName", $"{loggedInUserDetails.FirstName()} {loggedInUserDetails.LastName()}");
-                HttpContext.Session.SetString("Title", loggedInUserDetails.Title());
-                HttpContext.Session.SetInt32("ID", loggedInUserDetails.Id());
-                HttpContext.Session.SetString("EmployeeRoles", setEmployeeRolesJson(loggedInUserDetails.Roles()));
+                HttpContext.Session.SetString
+                    ("EmployeeName", 
+                    $"{loggedInUserDetails.FirstName()} {loggedInUserDetails.LastName()}");
+                HttpContext.Session.SetString
+                    ("Title", loggedInUserDetails.Title());
+                HttpContext.Session.SetInt32
+                    ("ID", loggedInUserDetails.Id());
+                HttpContext.Session.SetString
+                    ("EmployeeRoles", setEmployeeRolesJson(loggedInUserDetails.Roles()));
 
                 return RedirectToAction("Index", "Home");
             }

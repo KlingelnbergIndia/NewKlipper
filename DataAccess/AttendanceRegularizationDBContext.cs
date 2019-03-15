@@ -1,9 +1,6 @@
 ﻿using DataAccess.EntityModel.Attendance;
 using DataAccess.Helper;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DataAccess
 {

@@ -17,7 +17,8 @@ namespace UseCaseBoundary.Model
 
         private List<EmployeeRoles> _roles;
 
-        public EmployeeDTO(int id, string userName, string firstName, string lastName,string title,List<EmployeeRoles> roles)
+        public EmployeeDTO(int id, string userName, string firstName, 
+            string lastName,string title,List<EmployeeRoles> roles)
         {
             _id = id;
             _userName = userName;
