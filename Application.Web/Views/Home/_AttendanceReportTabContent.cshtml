@@ -182,7 +182,8 @@
                                 :@item.OverTime.Minute.ToString("D2")</td>
                         }
                         @if (item.RegularizedHours.Hour == 0 && item.RegularizedHours.Minute == 0
-                            && item.WorkingHours.Hour == 0 && item.WorkingHours.Minute == 0)
+                            && item.WorkingHours.Hour == 0 && item.WorkingHours.Minute == 0
+                            && item.TimeIn.Hour == 0 && item.TimeIn.Hour == 0)
                         {
                             <td>
                                 Missing entry
