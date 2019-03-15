@@ -30,13 +30,13 @@ namespace UseCaseBoundaryImplementation
             return accessEvents;
         }
 
-        public List<DomainModel.AccessEvent> ConvertEntityAccessEventToDomainModelAccessEvent(List<AccessEventEntityModel> listOfEntityAccessEvent)
+        public List<AccessEvent> ConvertEntityAccessEventToDomainModelAccessEvent(List<AccessEventEntityModel> listOfEntityAccessEvent)
         {
-            List<DomainModel.AccessEvent> listOfDomainModelAccessEvent = new List<DomainModel.AccessEvent>();
+            var listOfDomainModelAccessEvent = new List<AccessEvent>();
             foreach (var domainModelAccessEvent in listOfEntityAccessEvent)
             {
-                DomainModel.AccessEvent accessEvent =
-                    new DomainModel.AccessEvent(
+               var accessEvent =
+                    new AccessEvent(
                         domainModelAccessEvent.AccessPointID,
                         domainModelAccessEvent.AccessPointName,
                         domainModelAccessEvent.EmployeeID,
@@ -68,6 +68,21 @@ namespace UseCaseBoundaryImplementation
                 .ToList();
             var listOfAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
             return new PerDayWorkRecord(date, listOfAccessEvent);
+        }
+
+        public List<WorkLogs> GetAccessEventsForAllEmployeeExceptAdmin(int adminEmployeeId, DateTime fromDate, DateTime toDate)
+        {
+            DateTime toDateWithMaxTimeOfTheDay = toDate.Date + DateTime.MaxValue.TimeOfDay;
+            var accessEvents = _context.AccessEvents.AsQueryable()
+                .Where(x => x.EmployeeID != adminEmployeeId && x.EventTime <= toDateWithMaxTimeOfTheDay && x.EventTime >= fromDate)
+                .ToList();
+
+            var listOfDomainModelAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
+           
+            return listOfDomainModelAccessEvent
+                .GroupBy(x => x.EmployeeID)
+                .Select(x => new WorkLogs(x.Select(y => y).ToList()))
+                .ToList(); 
         }
     }
 }
