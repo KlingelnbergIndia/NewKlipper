@@ -109,7 +109,7 @@ namespace Application.Web.Controllers
 
         [HttpPost]
         [AuthenticateTeamLeaderRole]
-        public IActionResult GetSelectedreportee(string selectedViewTabs)
+        public IActionResult Selectedreportee(string selectedViewTabs)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             ReporteeService reporteeService = new ReporteeService(_employeeRepository);
