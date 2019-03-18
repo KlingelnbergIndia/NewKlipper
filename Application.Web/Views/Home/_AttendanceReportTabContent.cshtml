@@ -9,9 +9,7 @@
     <div class="panel-info" style="@(Model.reportees.Count==0 ? "visibility:hidden" : "visibility:visible")">
         <div class="panel panel-heading col-md-12 col-sm-12">
             <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                @*@using (Html.BeginForm("GetSelectedreportee?tab=attendanceReportMenu", "Home", FormMethod.Post))
-                    {*@
-                <form action="GetSelectedreportee?selectedViewTabs=attendanceReportMenu" method="post">
+                <form action="Selectedreportee?selectedViewTabs=attendanceReportMenu" method="post">
                     <div class="form-inline">
                         <div class="form-group" style="margin-right:10px;">
                             <label for="reporteesId">Reportee</label>
