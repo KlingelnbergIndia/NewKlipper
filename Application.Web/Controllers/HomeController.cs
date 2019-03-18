@@ -81,6 +81,7 @@ namespace Application.Web.Controllers
         public IActionResult Reportees(string selectedViewTabs)
         {
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
+
             ReporteeService reporteeService = new ReporteeService(_employeeRepository);
 
             var reportees = reporteeService.GetReporteesData(employeeId);
@@ -451,7 +452,7 @@ namespace Application.Web.Controllers
             if (reportees.Count() != 0)
             {
                 reportees.Add(reporteeService.GetTeamLeadData(employeeId));
-                foreach (var reportee in reportees)
+                foreach (var reportee in reportees.OrderBy(i=>i.ID))
                 {
                     GenerateAttendanceDataInEmployeeViewModel
                         (fromDate, toDate, attendanceService, listOfReporteesAttendanceRecord, reportee);
@@ -537,5 +538,7 @@ namespace Application.Web.Controllers
             Time convertedTime = new Time(TimeZone_IST.Hour, TimeZone_IST.Minute);
             return convertedTime;
         }
+
+        
     }
 }

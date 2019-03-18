@@ -22,7 +22,7 @@ namespace Klipper.Tests
             employeeDataContainer = Substitute.For<IEmployeeRepository>();
             employeeRoles = new List<EmployeeRoles>()
             {
-                EmployeeRoles.Ädmin,
+                EmployeeRoles.Admin,
                 EmployeeRoles.TeamLeader,
                 EmployeeRoles.Employee
             };
@@ -47,8 +47,8 @@ namespace Klipper.Tests
                 .WithID(29)
                 .WithUserName("Kiran.Kharade")
                 .WithPassword("01-06-1975")
-                .WithRoles(employeeRoles)
                 .WithReportees(dummyreportees)
+                .WithRole(EmployeeRoles.TeamLeader)
                 .BuildEmployee();
             employeeDataContainer.GetEmployee(29).Returns(teamLead);
 

@@ -82,6 +82,41 @@ namespace UseCaseBoundaryImplementation
 
         }
 
+        public List<Employee> GetAllEmployeeExceptAdmin(int employeeId)
+        {
+            var AllEmployeeFromAuthDBContext = _authDBContext.Users.AsQueryable()
+                .Where(x => x.ID != employeeId)
+                .ToList();
+
+            if (AllEmployeeFromAuthDBContext == null)
+            {
+                return null;
+            }
+
+            var allemployeesExceptAdmin = _employeeDBContext.Employees.Find(x=>x.ID != employeeId).ToList();
+
+            var listOfEmployee = new List<Employee>();
+            foreach (var employee in allemployeesExceptAdmin)
+            {
+                List<int> reportees = new List<int>();
+
+                var employeeFromAuthDBContext = AllEmployeeFromAuthDBContext.Where(x=>x.ID == employee.ID).FirstOrDefault();
+                int id = employeeFromAuthDBContext.ID;
+                string userName = employeeFromAuthDBContext.UserName;
+                string password = employeeFromAuthDBContext.PasswordHash;
+                string firstName = employee.FirstName;
+                string lastName = employee.LastName;
+                string title = employee.Title;
+                reportees = employee.Reportees;
+                Departments department = (Departments)employee.DepartmentId;
+                List<EmployeeRoles> _roles = ConvertStringRolesToEnumRoles(employee.Roles);
+                Employee domainEmployee = new Employee(id, userName, password, firstName, lastName, title, _roles, reportees, department);
+                listOfEmployee.Add(domainEmployee);
+            }
+
+            return listOfEmployee;
+        }
+
         private List<EmployeeRoles> ConvertStringRolesToEnumRoles(List<string> roles)
         {
             List<EmployeeRoles> empRoles = new List<EmployeeRoles>();
@@ -89,8 +124,8 @@ namespace UseCaseBoundaryImplementation
             {
                 switch (role)
                 {
-                    case "Ädmin":
-                        empRoles.Add(EmployeeRoles.Ädmin);
+                    case "Admin":
+                        empRoles.Add(EmployeeRoles.Admin);
                         break;
                     case "TeamLeader":
                         empRoles.Add(EmployeeRoles.TeamLeader);

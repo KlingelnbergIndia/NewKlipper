@@ -1,4 +1,5 @@
 ﻿using DomainModel;
+using System.Collections.Generic;
 
 namespace UseCaseBoundary
 {
@@ -6,5 +7,6 @@ namespace UseCaseBoundary
     {
         Employee GetEmployee(string UserName);
         Employee GetEmployee(int employeeId);
+        List<Employee> GetAllEmployeeExceptAdmin(int employeeId);
     }
 }

@@ -272,7 +272,7 @@ namespace Application.Web.Controllers
             if (reportees.Count() != 0)
             {
                 reportees.Add(reporteeService.GetTeamLeadData(employeeId));
-                GetReporteeAndTeamLeadData(leaveService, reportees, listOfReporteesLeaveRecord);
+                GetReporteeAndTeamLeadData(leaveService, reportees.OrderBy(i=>i.ID).ToList(), listOfReporteesLeaveRecord);
                 return listOfReporteesLeaveRecord;
             }
             return null;
