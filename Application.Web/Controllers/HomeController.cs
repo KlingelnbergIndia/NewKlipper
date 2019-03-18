@@ -90,6 +90,7 @@ namespace Application.Web.Controllers
 
             if (reportees.Count != 0)
             {
+                reportees = reportees.OrderBy(x => x.FirstName).ThenBy(x => x.LastName).ToList();
                 foreach (var reportee in reportees)
                 {
                     string reporteeName = reportee.FirstName + " " + reportee.LastName;
