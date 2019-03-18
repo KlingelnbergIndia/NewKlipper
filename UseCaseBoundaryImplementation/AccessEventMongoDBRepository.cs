@@ -85,5 +85,20 @@ namespace UseCaseBoundaryImplementation
                 ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
             return new PerDayWorkRecord(date, listOfAccessEvent);
         }
+
+        public List<WorkLogs> GetAccessEventsForAllEmployeeExceptAdmin(int adminEmployeeId, DateTime fromDate, DateTime toDate)
+        {
+            DateTime toDateWithMaxTimeOfTheDay = toDate.Date + DateTime.MaxValue.TimeOfDay;
+            var accessEvents = _context.AccessEvents.AsQueryable()
+                .Where(x => x.EmployeeID != adminEmployeeId && x.EventTime <= toDateWithMaxTimeOfTheDay && x.EventTime >= fromDate)
+                .ToList();
+
+            var listOfDomainModelAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
+           
+            return listOfDomainModelAccessEvent
+                .GroupBy(x => x.EmployeeID)
+                .Select(x => new WorkLogs(x.Select(y => y).ToList()))
+                .ToList(); 
+        }
     }
 }

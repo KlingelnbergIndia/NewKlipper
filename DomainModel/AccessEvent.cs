@@ -40,7 +40,7 @@ namespace DomainModel
         }
         private string AccessPointName { get; set; }
 
-        private int EmployeeID { get; set; }
+        public int EmployeeID { get; set; }
 
         public DateTime EventTime { get; set; }
     }

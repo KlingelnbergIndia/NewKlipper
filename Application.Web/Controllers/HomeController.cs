@@ -71,6 +71,7 @@ namespace Application.Web.Controllers
 
             if (reportees.Count != 0)
             {
+                reportees = reportees.OrderBy(x => x.FirstName).ThenBy(x => x.LastName).ToList();
                 foreach (var reportee in reportees)
                 {
                     string reporteeName = reportee.FirstName + " " + reportee.LastName;
@@ -459,7 +460,7 @@ namespace Application.Web.Controllers
             if (reportees.Count() != 0)
             {
                 reportees.Add(reporteeService.TeamLeadData(employeeId));
-                foreach (var reportee in reportees)
+                foreach (var reportee in reportees.OrderBy(i=>i.ID))
                 {
                     GenerateAttendanceDataInEmployeeViewModel
                         (fromDate, toDate, attendanceService, listOfReporteesAttendanceRecord, reportee);

@@ -1,5 +1,6 @@
 ﻿using DomainModel;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UseCaseBoundary;
 using UseCaseBoundary.DTO;
 
@@ -24,27 +25,12 @@ namespace UseCases
                 return null;
             }
 
-            List<ReporteeDTO> reporteeDtobjs = new List<ReporteeDTO>();
-
-            var reporteesOfCurrentEmployee = currentEmployee.Reportees();
-
-            if (reporteesOfCurrentEmployee.Count != 0)
+            if (TeamLeadIsAdmin(currentEmployee) == true)
             {
-                foreach (var reportee in reporteesOfCurrentEmployee)
-                {
-                    //ReporteeDTO reporteeDto = new ReporteeDTO();
-                    var reporteeData = _employeeRepository.GetEmployee(reportee);
-                    if (reporteeData != null)
-                    {
-                        var reporteeDto = new ReporteeDTO();
-                        reporteeDto.ID = reporteeData.Id();
-                        reporteeDto.FirstName = reporteeData.FirstName();
-                        reporteeDto.LastName = reporteeData.LastName();
-                        reporteeDtobjs.Add(reporteeDto);
-                    }
-                }
+                return GetAllEmployeeDataAsAReportees(currentEmployee.Id());
             }
-            return reporteeDtobjs;
+
+           return GetAllReporteesData(currentEmployee);
         }
 
         public ReporteeDTO TeamLeadData(int employeeId)
@@ -55,7 +41,7 @@ namespace UseCases
             {
                 var reporteesOfCurrentEmployee = currentEmployee.Reportees();
 
-                if (reporteesOfCurrentEmployee.Count != 0)
+                if (reporteesOfCurrentEmployee.Count != 0 || currentEmployee.Roles().Contains(EmployeeRoles.Admin))
                 {
                     ReporteeDTO reporteeDto = new ReporteeDTO();
                     var teamLeadData = _employeeRepository.GetEmployee(employeeId);
@@ -69,6 +55,58 @@ namespace UseCases
                 }
             }
             return null;
+        }
+
+        public bool TeamLeadIsAdmin(Employee Employee)
+        {
+            return Employee.Roles().Contains(EmployeeRoles.Admin);
+        }
+
+        private List<ReporteeDTO> GetAllEmployeeDataAsAReportees(int adminId)
+        {
+            _employeeRepository.GetAllEmployeeExceptAdmin(adminId);
+           
+                var reporteeDtobjs = new List<ReporteeDTO>();
+
+                var reporteesOfAdmin = _employeeRepository.GetAllEmployeeExceptAdmin(adminId);
+
+            if (reporteesOfAdmin.Count != 0)
+                {
+                foreach (var reportee in reporteesOfAdmin)
+                {
+                var reporteeDto = new ReporteeDTO();
+                reporteeDto.ID = reportee.Id();
+                reporteeDto.FirstName = reportee.FirstName();
+                reporteeDto.LastName = reportee.LastName();
+                reporteeDto.LastName = reportee.LastName();
+                reporteeDtobjs.Add(reporteeDto);
+            }
+            }
+            return reporteeDtobjs;
+        }
+
+        private List<ReporteeDTO> GetAllReporteesData(Employee currentEmployee)
+        {
+            List<ReporteeDTO> reporteeDtobjs = new List<ReporteeDTO>();
+
+            var reporteesOfCurrentEmployee = currentEmployee.Reportees();
+
+            if (reporteesOfCurrentEmployee.Count != 0)
+            {
+                foreach (var reportee in reporteesOfCurrentEmployee)
+                {
+                    ReporteeDTO reporteeDto = new ReporteeDTO();
+                    var reporteeData = _employeeRepository.GetEmployee(reportee);
+                    if (reporteeData != null)
+                    {
+                        reporteeDto.ID = reporteeData.Id();
+                        reporteeDto.FirstName = reporteeData.FirstName();
+                        reporteeDto.LastName = reporteeData.LastName();
+                        reporteeDtobjs.Add(reporteeDto);
+                    }
+                }
+            }
+            return reporteeDtobjs;
         }
     }
 }

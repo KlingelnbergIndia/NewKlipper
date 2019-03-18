@@ -5,14 +5,14 @@ namespace DomainModel
 {
     public enum EmployeeRoles
     {
-        Ädmin,
+        Admin,
         TeamLeader,
         Employee
     }
 
     public enum ValidRole
     {
-        Ädmin,
+        Admin,
         TeamLeader
     }
 

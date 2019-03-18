@@ -24,8 +24,8 @@ namespace Tests
             userName = "dummy";
             password = "dummy";
             employeeRoles.Add(EmployeeRoles.Employee);
-
         }
+
         public EmployeeBuilder WithUserName(string userName)
         {
             this.userName = userName;
@@ -43,6 +43,7 @@ namespace Tests
             this.id = id;
             return this;
         }
+
         public EmployeeBuilder WithRoles(List<EmployeeRoles> roles)
         {
             this.employeeRoles = roles;
@@ -61,13 +62,12 @@ namespace Tests
             return this;
         }
 
-        public Employee BuildEmployee(string firstName="Sidhdesh", string lastName="Vadgaonkar", 
-                                      string title="Software Developer",
-                                      List<EmployeeRoles> roles=null,
-                                      List<int> reportees=null)
+        public Employee BuildEmployee(string firstName = "Sidhdesh", string lastName = "Vadgaonkar",
+                                      string title = "Software Developer",
+                                      List<int> reportees = null)
         {
             return new Employee(id, userName, password, firstName,
-                                lastName, title, roles, this.reportees, Department);
+                                lastName, title, employeeRoles, this.reportees, Department);
         }
 
         internal EmployeeBuilder WithRole(EmployeeRoles employee)
