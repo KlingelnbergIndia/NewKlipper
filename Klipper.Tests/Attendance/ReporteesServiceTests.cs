@@ -132,7 +132,7 @@ namespace Klipper.Tests
             employeeDataContainer.GetAllEmployeeExceptAdmin(29).Returns(listOfEmployees);
 
             // Execute usecase
-            var actualreporteesData = reporteeService.GetReporteesData(29);
+            var actualreporteesData = reporteeService.ReporteesData(29);
 
             Assert.AreEqual(actualreporteesData.Count(),2);
 
