@@ -38,7 +38,7 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public void GivenEmployeeWithValidRoleGetReportees()
+        public void GivenEmployeeWithTeamLeadRoleGetReportees()
         {
             ReporteeService reporteeService = new ReporteeService(employeeDataContainer);
             List<int> dummyreportees = new List<int>() { 40, 46 };
@@ -80,14 +80,14 @@ namespace Klipper.Tests
         }
 
         [Test]
-        public void GivenEmployeeWithValidRoleAndWithNoReporteesGetEmptyListOfReportees()
+        public void GivenEmployeeAsEmployeeRoleGetEmptyListOfReportees()
         {
             ReporteeService reporteeService = new ReporteeService(employeeDataContainer);
             var employee = new EmployeeBuilder()
                 .WithID(29)
                 .WithUserName("Kiran.Kharade")
                 .WithPassword("01-06-1975")
-                .WithRoles(employeeRoles)
+                .WithRole(EmployeeRoles.Employee)
                 .BuildEmployee();
             employeeDataContainer.GetEmployee(29).Returns(employee);
 
@@ -99,5 +99,43 @@ namespace Klipper.Tests
 
         }
 
+        [Test]
+        public void GivenEmployeeAsAdminRoleGetAllEmployeeListAsAReportees()
+        {
+            ReporteeService reporteeService = new ReporteeService(employeeDataContainer);
+            var employee = new EmployeeBuilder()
+                .WithID(29)
+                .WithUserName("Kiran.Kharade")
+                .WithPassword("01-06-1975")
+                .WithRole(EmployeeRoles.Admin)
+                .BuildEmployee();
+            employeeDataContainer.GetEmployee(29).Returns(employee);
+
+            var listOfEmployees = new List<Employee>()
+            {
+                new EmployeeBuilder()
+                    .WithID(40)
+                    .WithUserName("Sagar.Shende")
+                    .WithPassword("0-03-1987")
+                    .WithRole(EmployeeRoles.Employee)
+                    .WithRole(EmployeeRoles.TeamLeader)
+                    .BuildEmployee(),
+                new EmployeeBuilder()
+                    .WithID(41)
+                    .WithUserName("Sagar.Shende")
+                    .WithPassword("0-03-1987")
+                    .WithRole(EmployeeRoles.Employee)
+                    .WithRole(EmployeeRoles.TeamLeader)
+                    .BuildEmployee()
+            };
+              
+            employeeDataContainer.GetAllEmployeeExceptAdmin(29).Returns(listOfEmployees);
+
+            // Execute usecase
+            var actualreporteesData = reporteeService.GetReporteesData(29);
+
+            Assert.AreEqual(actualreporteesData.Count(),2);
+
+        }
     }
 }
