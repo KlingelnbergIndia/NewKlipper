@@ -6,6 +6,7 @@ namespace Application.Web.Models
 {
     public class AttendanceRecordViewModel
     {
-        public List<PerDayAttendanceRecordDTO> attendanceRecordDtos = new List<PerDayAttendanceRecordDTO>();
+        public List<PerDayAttendanceRecordDTO> attendanceRecordDtos = 
+            new List<PerDayAttendanceRecordDTO>();
     }
 }

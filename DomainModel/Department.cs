@@ -38,7 +38,7 @@ namespace DomainModel
 
         public bool IsValidWorkingDay(DateTime date)
         {
-            DayOfWeek WeekDay = date.DayOfWeek;
+            var WeekDay = date.DayOfWeek;
             int weekOfMonth = GetWeekNumberOfMonth(date);
 
             if (WeekDay == DayOfWeek.Sunday)
@@ -48,8 +48,8 @@ namespace DomainModel
                 && WeekDay == DayOfWeek.Saturday)
                 return false;
 
-            if (!(_department == Departments.Software || _department == Departments.Design) &&
-                (weekOfMonth == 2 || weekOfMonth == 4) && WeekDay == DayOfWeek.Saturday)
+            if (!(_department == Departments.Software || _department == Departments.Design)
+                && (weekOfMonth == 2 || weekOfMonth == 4) && WeekDay == DayOfWeek.Saturday)
                 return false;
 
             return true;
@@ -57,14 +57,16 @@ namespace DomainModel
 
         private static int GetWeekNumberOfMonth(DateTime date)
         {
-            DateTime beginningOfMonth = new DateTime(date.Year, date.Month, 1);
+            var beginningOfMonth = new DateTime(date.Year, date.Month, 1);
 
             while (date.Date.AddDays(1).DayOfWeek != 
                    CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)
                 date = date.AddDays(1);
 
             return 
-                (int)Math.Truncate((double)date.Subtract(beginningOfMonth).TotalDays / 7f) + 1;
+                (int)Math
+                    .Truncate((double)date.Subtract(beginningOfMonth).TotalDays / 7f)
+                + 1;
         }
     }
 }

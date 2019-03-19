@@ -17,13 +17,9 @@ namespace RepositoryImplementation
 
         public async Task<CarryForwardLeaves> GetCarryForwardLeaveAsync(int employeeId)
         {
-            //var leaves = _dbContext.CarryForwardLeaves
-            //    .AsQueryable()
-            //    .Where(x => x.EmployeeId == employeeId)
-            //    .FirstOrDefault();
-
             var leaves = (await _dbContext.CarryForwardLeaves
-                .FindAsync(x => x.EmployeeId == employeeId)).FirstOrDefault();
+                .FindAsync(x => x.EmployeeId == employeeId))
+                .FirstOrDefault();
 
             if (leaves != null)
             {
@@ -36,7 +32,6 @@ namespace RepositoryImplementation
                    leaves.MaxCasualLeaves,
                    leaves.MaxSickLeaves,
                    leaves.MaxCompoffLeaves);
-
             }
             return null;
                

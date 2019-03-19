@@ -22,7 +22,7 @@ namespace RepositoryImplementation
 
         public bool AddNewLeave(Leave leaveDetails)
         {
-            LeaveEntityModel takenLeaves = new LeaveEntityModel()
+            var takenLeaves = new LeaveEntityModel()
             {
                 EmployeeId = leaveDetails.GetEmployeeId(),
                 FromDate = leaveDetails.GetLeaveDate().Min(),
@@ -33,7 +33,6 @@ namespace RepositoryImplementation
                 AppliedLeaveDates = leaveDetails.GetLeaveDate(),
                 Status = leaveDetails.GetStatus()
             };
-
             __leaveDBContext.AppliedLeaves
                 .InsertOneAsync(takenLeaves)
                 .GetAwaiter()
@@ -44,7 +43,7 @@ namespace RepositoryImplementation
 
         public List<Leave> GetAllLeavesInfo(int employeeId)
         {
-            List<Leave> leaves = new List<Leave>();
+            var leaves = new List<Leave>();
             var empLeaves = __leaveDBContext.AppliedLeaves
                 .AsQueryable()
                 .Where(x => x.EmployeeId == employeeId)
@@ -62,7 +61,6 @@ namespace RepositoryImplementation
                     leave._objectId.ToString()
                     ));
             }
-
             return leaves;
         }
 
@@ -71,7 +69,8 @@ namespace RepositoryImplementation
             return
                 __leaveDBContext.AppliedLeaves
                 .AsQueryable()
-                .Where(x => x.EmployeeId == employeeId && x.AppliedLeaveDates.Contains(leaveDate.Date))
+                .Where(x => x.EmployeeId == employeeId && 
+                            x.AppliedLeaveDates.Contains(leaveDate.Date))
                 .Any();
         }
 
@@ -84,7 +83,8 @@ namespace RepositoryImplementation
 
             if (isLeaveExist)
             {
-                __leaveDBContext.AppliedLeaves.DeleteOneAsync(x => x._objectId == ObjectId.Parse(leaveId));
+                __leaveDBContext.AppliedLeaves
+                    .DeleteOneAsync(x => x._objectId == ObjectId.Parse(leaveId));
 
                 var leaveEntity = new LeaveEntityModel()
                 {
@@ -100,30 +100,30 @@ namespace RepositoryImplementation
                     .GetAwaiter()
                     .GetResult();
                 return true;
-                
             }
             else
             {
                 return false;
             }
-
         }
 
         public bool CancelLeave(string LeaveId)
         {
-            FilterDefinition<LeaveEntityModel> filter = Builders<LeaveEntityModel>.Filter.Eq("_id", ObjectId.Parse(LeaveId));
-            UpdateDefinition<LeaveEntityModel> update = Builders<LeaveEntityModel>.Update.Set(x => x.Status, StatusType.Cancelled);
+            var filter = Builders<LeaveEntityModel>.Filter
+                .Eq("_id", ObjectId.Parse(LeaveId));
+            var update = Builders<LeaveEntityModel>.Update
+                .Set(x => x.Status, StatusType.Cancelled);
 
             var opts = new FindOneAndUpdateOptions<LeaveEntityModel>()
             {
                 IsUpsert = true,
             };
 
-            var model = __leaveDBContext.AppliedLeaves.FindOneAndUpdate(filter, update, opts);
+            var model = __leaveDBContext.AppliedLeaves
+                .FindOneAndUpdate(filter, update, opts);
 
             if (model != null)
             {
-
                 return true;
             }
             else
@@ -135,7 +135,8 @@ namespace RepositoryImplementation
         public Leave GetLeaveByLeaveId(string leaveId)
         {
             var leave = __leaveDBContext.AppliedLeaves.AsQueryable()
-                .Where(x => x._objectId == ObjectId.Parse(leaveId)).FirstOrDefault();
+                .Where(x => x._objectId == ObjectId.Parse(leaveId))
+                .FirstOrDefault();
 
             var leaveToLeaveObject = new Leave(leave.EmployeeId, leave.AppliedLeaveDates, 
                 leave.TypeOfLeave,leave.IsHalfDayLeave,leave.Remark, leave.Status,

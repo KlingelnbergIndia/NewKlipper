@@ -9,7 +9,8 @@ namespace Application.Web.Models
 {
     public class EmployeeViewModel
     {
-        public AttendanceRecordsDTO employeeAttendaceRecords = new AttendanceRecordsDTO();
+        public AttendanceRecordsDTO employeeAttendaceRecords = 
+            new AttendanceRecordsDTO();
 
         public DateTime fromDate;
 
@@ -19,6 +20,7 @@ namespace Application.Web.Models
 
         public string EmployeeName;
 
-        public LeaveViewModel LeaveViewModel = new LeaveViewModel();
+        public LeaveViewModel LeaveViewModel =
+            new LeaveViewModel();
     }
 }

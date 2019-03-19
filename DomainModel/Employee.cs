@@ -105,8 +105,9 @@ namespace DomainModel
         {
             if (roles != null)
             {
-                return roles.Any(x => x.ToString() == ValidRole.TeamLeader.ToString() ||
-                                      x.ToString() == ValidRole.TeamLeader.ToString());
+                return roles
+                    .Any(x => x.ToString() == ValidRole.TeamLeader.ToString()
+                              || x.ToString() == ValidRole.TeamLeader.ToString());
             }
             else
             {

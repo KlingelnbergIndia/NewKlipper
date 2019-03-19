@@ -27,12 +27,16 @@ namespace DomainModel
         {
             var AccessEventsOFServerRoom = _accessEvents.Where(x =>x.FromServerRoom());
             var AccessEventsOfUSBRoom = _accessEvents.Where(x => x.FromUSBDeviceDoor());
-            var AccessEventForTimeOut = _accessEvents.Except(AccessEventsOFServerRoom).ToList();
+            var AccessEventForTimeOut = _accessEvents.Except(AccessEventsOFServerRoom)
+                .ToList();
 
-            AccessEventForTimeOut= AccessEventForTimeOut.Except(AccessEventsOfUSBRoom).ToList();
+            AccessEventForTimeOut= AccessEventForTimeOut.Except(AccessEventsOfUSBRoom)
+                .ToList();
 
-            var minTime = AccessEventForTimeOut.Select(x => x.EventTime.TimeOfDay).Min();
-            var maxTime = AccessEventForTimeOut.Select(x => x.EventTime.TimeOfDay).Max();
+            var minTime = AccessEventForTimeOut.Select(x => x.EventTime.TimeOfDay)
+                .Min();
+            var maxTime = AccessEventForTimeOut.Select(x => x.EventTime.TimeOfDay)
+                .Max();
 
             if (minTime == maxTime)
             {
@@ -51,26 +55,43 @@ namespace DomainModel
                 return TimeSpan.Zero;
             }
 
-            var minTime = CalculateAbsoluteOutTimeAndInTime(accessEventsOfMainEntry.Select(x => x.EventTime.TimeOfDay).Min(), AbsoluteTime.TimeIn);
-            var maxTime = CalculateAbsoluteOutTimeAndInTime(accessEventsOfMainEntry.Select(x => x.EventTime.TimeOfDay).Max(), AbsoluteTime.TimeOut);
+            var minTime = CalculateAbsoluteOutTimeAndInTime(
+                accessEventsOfMainEntry.Select(x => x.EventTime.TimeOfDay).Min(),
+                AbsoluteTime.TimeIn);
+            var maxTime = CalculateAbsoluteOutTimeAndInTime(
+                accessEventsOfMainEntry.Select(x => x.EventTime.TimeOfDay).Max(),
+                AbsoluteTime.TimeOut);
 
-            var timeIn = new TimeSpan(minTime.Hours, minTime.Minutes,00);
+            var timeIn = new TimeSpan(minTime.Hours, minTime.Minutes, 00);
             var timeOut = new TimeSpan(maxTime.Hours, maxTime.Minutes, 00);
 
             var GymnasiumPointAccessEvents = new WorkLogs(accessEventsOfGymEntry);
             var MainEntryPointAccessEvents = new WorkLogs(accessEventsOfMainEntry);
 
-            TimeSpan totalWorkingHours = TimeSpan.Zero;
+            return GetWorkingHours(accessEventsOfMainEntry,accessEventsOfGymEntry,
+                timeIn, timeOut, GymnasiumPointAccessEvents,
+                MainEntryPointAccessEvents);
+        }
 
-            if (accessEventsOfMainEntry.Count % 2 == 0 && accessEventsOfGymEntry.Count % 2 ==0)
+        private static TimeSpan GetWorkingHours(List<AccessEvent> accessEventsOfMainEntry,
+            List<AccessEvent> accessEventsOfGymEntry, TimeSpan timeIn, TimeSpan timeOut,
+            WorkLogs GymnasiumPointAccessEvents, WorkLogs MainEntryPointAccessEvents)
+        {
+            var totalWorkingHours = TimeSpan.Zero;
+
+            if (accessEventsOfMainEntry.Count % 2 == 0 
+                && accessEventsOfGymEntry.Count % 2 == 0)
             {
                 if (timeOut != TimeSpan.Zero)
                 {
-                    totalWorkingHours = (timeOut - timeIn) - GymnasiumPointAccessEvents.CalculateTotalTimeSpend();
+                    totalWorkingHours = 
+                        (timeOut - timeIn) - GymnasiumPointAccessEvents
+                            .CalculateTotalTimeSpend();
                 }
 
-                TimeSpan lunchTime = TimeSpan.Parse("00:45:00");
-                TimeSpan RefreshmentTime = MainEntryPointAccessEvents.CalculateOutsidePremisesTime();
+                var lunchTime = TimeSpan.Parse("00:45:00");
+                var RefreshmentTime = MainEntryPointAccessEvents
+                    .CalculateOutsidePremisesTime();
 
                 if (RefreshmentTime > lunchTime)
                 {
@@ -83,15 +104,18 @@ namespace DomainModel
 
         public List<AccessEvent> GetRecreationPointAccessEvents()
         {
-            return _accessEvents.Where(x => x.FromRecreationDoor()).OrderBy(x => x.EventTime).ToList();
+            return _accessEvents.Where(x => x.FromRecreationDoor())
+                .OrderBy(x => x.EventTime).ToList();
         }
         public List<AccessEvent> GetGymnasiumPointAccessEvents()
         {
-            return _accessEvents.Where(x => x.FromGymnasiumDoor()).OrderBy(x => x.EventTime).ToList();
+            return _accessEvents.Where(x => x.FromGymnasiumDoor())
+                .OrderBy(x => x.EventTime).ToList();
         }
         public List<AccessEvent> GetMainEntryPointAccessEvents()
         {
-            return _accessEvents.Where(x => x.FromMainDoor()).OrderBy(x => x.EventTime).ToList();
+            return _accessEvents.Where(x => x.FromMainDoor())
+                .OrderBy(x => x.EventTime).ToList();
         }
 
         private enum AbsoluteTime
@@ -99,13 +123,13 @@ namespace DomainModel
             TimeIn,
             TimeOut
         }
-        private TimeSpan CalculateAbsoluteOutTimeAndInTime(TimeSpan timeSpan, AbsoluteTime time)
+        private TimeSpan CalculateAbsoluteOutTimeAndInTime(
+            TimeSpan timeSpan, AbsoluteTime time)
         {
             if (time == AbsoluteTime.TimeOut && timeSpan.Seconds > 0)
             {
                 return new TimeSpan(timeSpan.Hours, timeSpan.Minutes + 1, 00);
             }
-
             return new TimeSpan(timeSpan.Hours, timeSpan.Minutes, 00);
         }
 

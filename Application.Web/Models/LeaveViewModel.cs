@@ -30,15 +30,25 @@ namespace Application.Web.Models
             foreach (int value in Enum.GetValues(enumerationType))
             {
                 if (value == (int)LeaveType.CompOff)
-                    leaveTypes.Add(EnumHelperMethod.EnumDisplayNameFor(LeaveType.CompOff).ToString());
+                    leaveTypes.Add
+                        (EnumHelperMethod
+                        .EnumDisplayNameFor(LeaveType.CompOff)
+                        .ToString());
                 else if (value == (int)LeaveType.CasualLeave)
-                    leaveTypes.Add(EnumHelperMethod.EnumDisplayNameFor(LeaveType.CasualLeave).ToString());
+                    leaveTypes.Add
+                        (EnumHelperMethod
+                        .EnumDisplayNameFor(LeaveType.CasualLeave)
+                        .ToString());
                 else if (value == (int)LeaveType.SickLeave)
-                    leaveTypes.Add(EnumHelperMethod.EnumDisplayNameFor(LeaveType.SickLeave).ToString());
+                    leaveTypes.Add
+                        (EnumHelperMethod
+                        .EnumDisplayNameFor(LeaveType.SickLeave)
+                        .ToString());
             }
 
             return leaveTypes;
         }
-        public List<LeaveSummaryViewModel> LeaveSummary = new List<LeaveSummaryViewModel>();
+        public List<LeaveSummaryViewModel> LeaveSummary =
+            new List<LeaveSummaryViewModel>();
     }
 }

@@ -31,7 +31,4 @@ namespace UseCaseBoundary.DTO
         Leave,
         HalfDayLeave
     }
-
-    
-
 }

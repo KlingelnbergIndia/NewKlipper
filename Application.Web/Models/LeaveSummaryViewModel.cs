@@ -13,6 +13,5 @@ namespace Application.Web.Models
         public float TotalAvailableLeave;
         public float LeaveTaken;
         public float RemainingLeave;
-        //private LeaveSummaryDTO leaveSummary;
     }
 }

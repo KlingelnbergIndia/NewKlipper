@@ -9,7 +9,8 @@ namespace DomainModel
         private TimeSpan _reguralizedHours { get; set; }
         private string _remark { get; set; }
 
-        public Regularization(int employeeID,DateTime regularizedDate,TimeSpan reguralizedHours, string remark)
+        public Regularization(int employeeID,DateTime regularizedDate,
+            TimeSpan reguralizedHours, string remark)
         {
             _employeeID = employeeID;
             _regularizedDate = regularizedDate;

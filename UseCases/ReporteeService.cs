@@ -15,7 +15,7 @@ namespace UseCases
             _employeeRepository = employeeRepository;
         }
 
-        public List<ReporteeDTO> GetReporteesData(int employeeId)
+        public List<ReporteeDTO> ReporteesData(int employeeId)
         {
             Employee currentEmployee = 
                 _employeeRepository.GetEmployee(employeeId);
@@ -33,7 +33,7 @@ namespace UseCases
            return GetAllReporteesData(currentEmployee);
         }
 
-        public ReporteeDTO GetTeamLeadData(int employeeId)
+        public ReporteeDTO TeamLeadData(int employeeId)
         {
             Employee currentEmployee = _employeeRepository.GetEmployee(employeeId);
 

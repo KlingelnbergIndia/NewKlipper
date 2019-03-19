@@ -6,7 +6,8 @@ namespace UseCaseBoundary.Model
 {
     public class AttendanceRecordsDTO
     {
-        public List<PerDayAttendanceRecordDTO> ListOfAttendanceRecordDTO = new List<PerDayAttendanceRecordDTO>();
+        public List<PerDayAttendanceRecordDTO> ListOfAttendanceRecordDTO = 
+            new List<PerDayAttendanceRecordDTO>();
         public Time TotalWorkingHours;
         public Time TotalDeficitOrExtraHours;
         public Time EstimatedHours;

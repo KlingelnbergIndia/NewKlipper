@@ -20,28 +20,31 @@ namespace UseCaseBoundaryImplementation
 
         public WorkLogs GetAccessEvents(int employeeid)
         {
-            var filter = Builders<AccessEventEntityModel>.Filter.Eq("EmployeeID", employeeid);
+            var filter = Builders<AccessEventEntityModel>
+                .Filter.Eq("EmployeeID", employeeid);
             var listOfEntityAccessEvent = _context.AccessEvents
                 .Find(filter)
                 .ToList();
 
-            var listOfDomainModelAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(listOfEntityAccessEvent);
+            var listOfDomainModelAccessEvent = 
+                ConvertEntityAccessEventToDomainModelAccessEvent(listOfEntityAccessEvent);
             WorkLogs accessEvents = new WorkLogs(listOfDomainModelAccessEvent);
             return accessEvents;
         }
 
-        public List<AccessEvent> ConvertEntityAccessEventToDomainModelAccessEvent(List<AccessEventEntityModel> listOfEntityAccessEvent)
+        public List<DomainModel.AccessEvent> ConvertEntityAccessEventToDomainModelAccessEvent
+            (List<AccessEventEntityModel> listOfEntityAccessEvent)
         {
-            var listOfDomainModelAccessEvent = new List<AccessEvent>();
+            var listOfDomainModelAccessEvent =
+                new List<DomainModel.AccessEvent>();
             foreach (var domainModelAccessEvent in listOfEntityAccessEvent)
             {
-               var accessEvent =
+                var accessEvent =
                     new AccessEvent(
                         domainModelAccessEvent.AccessPointID,
                         domainModelAccessEvent.AccessPointName,
                         domainModelAccessEvent.EmployeeID,
                         domainModelAccessEvent.EventTime);
-
 
                 listOfDomainModelAccessEvent.Add(accessEvent);
             }
@@ -49,24 +52,37 @@ namespace UseCaseBoundaryImplementation
             return listOfDomainModelAccessEvent;
         }
 
-        public WorkLogs GetAccessEventsForDateRange(int employeeId, DateTime fromDate, DateTime toDate)
+        public WorkLogs GetAccessEventsForDateRange
+            (int employeeId, DateTime fromDate, DateTime toDate)
         {
-            DateTime toDateWithMaxTimeOfTheDay = toDate.Date + DateTime.MaxValue.TimeOfDay;
-            var accessEvents = _context.AccessEvents.AsQueryable()
-                .Where(x => x.EmployeeID == employeeId && x.EventTime <= toDateWithMaxTimeOfTheDay && x.EventTime >= fromDate)
+            DateTime toDateWithMaxTimeOfTheDay = 
+                toDate.Date + DateTime.MaxValue.TimeOfDay;
+            var accessEvents = _context
+                .AccessEvents
+                .AsQueryable()
+                .Where(x => x.EmployeeID == employeeId &&
+                            x.EventTime <= toDateWithMaxTimeOfTheDay && 
+                            x.EventTime >= fromDate)
                 .ToList();
 
-            var listOfDomainModelAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
+            var listOfDomainModelAccessEvent = 
+                ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
             return new WorkLogs(listOfDomainModelAccessEvent);
         }
 
         public PerDayWorkRecord GetAccessEventsForADay(int employeeId, DateTime date)
         {
-            DateTime dateWithMaxTimeOfTheDay = date.Date + DateTime.MaxValue.TimeOfDay;
-            var accessEvents = _context.AccessEvents.AsQueryable()
-                .Where(x => x.EmployeeID == employeeId && x.EventTime <= dateWithMaxTimeOfTheDay && x.EventTime >= date)
+            DateTime dateWithMaxTimeOfTheDay = 
+                date.Date + DateTime.MaxValue.TimeOfDay;
+            var accessEvents = _context
+                .AccessEvents
+                .AsQueryable()
+                .Where(x => x.EmployeeID == employeeId &&
+                            x.EventTime <= dateWithMaxTimeOfTheDay &&
+                            x.EventTime >= date)
                 .ToList();
-            var listOfAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
+            var listOfAccessEvent = 
+                ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
             return new PerDayWorkRecord(date, listOfAccessEvent);
         }
 

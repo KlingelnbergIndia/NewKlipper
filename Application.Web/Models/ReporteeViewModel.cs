@@ -9,11 +9,14 @@ namespace Application.Web.Models
 {
     public class ReporteeViewModel
     {
-        public Dictionary<int,string> reportees = new Dictionary<int, string>();
+        public Dictionary<int,string> reportees = 
+            new Dictionary<int, string>();
 
-        public AttendanceRecordsDTO AttendaceRecordsOfSelectedReportee = new AttendanceRecordsDTO();
+        public AttendanceRecordsDTO AttendaceRecordsOfSelectedReportee = 
+            new AttendanceRecordsDTO();
 
-        public List<LeaveRecordDTO> leaveRecordsOfSelectedReportee = new List<LeaveRecordDTO>();
+        public List<LeaveRecordDTO> leaveRecordsOfSelectedReportee =
+            new List<LeaveRecordDTO>();
         
         public DateTime fromDate;
 
@@ -25,13 +28,17 @@ namespace Application.Web.Models
         public string AttendanceFormName { get; set; }
         public int SelectedEmpIdForAttendanceTab { get; set; }
         public int SelectedEmpIdForLeaveTab { get; set; }
-        public List<LeaveSummaryViewModel> LeaveSummary = new List<LeaveSummaryViewModel>();
+        public List<LeaveSummaryViewModel> LeaveSummary = 
+            new List<LeaveSummaryViewModel>();
 
-        public LeaveViewModel leaveViewModel = new LeaveViewModel();
+        public LeaveViewModel leaveViewModel =
+            new LeaveViewModel();
 
-        public List<LeaveSummaryViewModel> ConvertToLeaveSummaryViewModel(LeaveSummaryDTO leaveSummary)
+        public List<LeaveSummaryViewModel> ConvertToLeaveSummaryViewModel
+            (LeaveSummaryDTO leaveSummary)
         {
-            List<LeaveSummaryViewModel> listOfleaveSummary = new List<LeaveSummaryViewModel>()
+            var listOfleaveSummary = 
+                new List<LeaveSummaryViewModel>()
             {
                 new LeaveSummaryViewModel()
                 {
