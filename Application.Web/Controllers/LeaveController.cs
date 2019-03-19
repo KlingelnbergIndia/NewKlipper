@@ -95,6 +95,26 @@ namespace Application.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult ApplyCompOff(DateTime fromDate, DateTime toDate,
+            string remark)
+        {
+            if (fromDate > toDate)
+            {
+                TempData["errorMessage"] = "Please select valid date range !";
+                return RedirectToAction("Index");
+            }
+
+            var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
+            var leaveService = new LeaveService
+            (_leavesRepository, _employeeRepository,
+                _departmentRepository, _carryForwardLeaves);
+            var response = leaveService
+                .ApplyLeave(loggedInEmpId, fromDate, toDate,
+                    LeaveType.CompOff, false, remark);
+
+            GetResponseMessageForLeaveRecord(response);
+            return RedirectToAction("Index");
+        }
 
         [HttpPost]
         [AuthenticateTeamLeaderRole]

@@ -51,6 +51,7 @@ namespace DomainModel
             float noOfCompOffLeaveTaken = _listOfLeave
                 .Where(x => x.GetLeaveType() == LeaveType.CompOff
             && x.GetStatus() != StatusType.Cancelled 
+            && x.GetStatus() != StatusType.CompOffAdded
             && x.IsHalfDayLeave() == false)
             .Sum(x => x.GetLeaveDate().Count);
 
@@ -63,5 +64,12 @@ namespace DomainModel
             return noOfCompOffLeaveTaken + noOfHalfDayCompOffLeaveTaken/2;
         }
 
+        public float CountAddedCompoffLeaves()
+        {
+            return _listOfLeave
+                .Where(x=>x.GetLeaveType() == LeaveType.CompOff
+                          && x.GetStatus() == StatusType.CompOffAdded)
+                .Sum(x => x.GetLeaveDate().Count);
+        }
     }
 }
