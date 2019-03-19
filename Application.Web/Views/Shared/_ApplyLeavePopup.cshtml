@@ -5,7 +5,7 @@
 }
 
 <div class="modal fade" id="ApplyLeaveModal" role="dialog">
-    <div class="modal-dialog modal-sm" style="width:370px;">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -13,7 +13,7 @@
             </div>
             <div id="ModalBody" style="margin-left:9px;margin-right:10px">
                 <div class="col-md-12">
-                        <div class="col-md-6">
+                        <div class="col-md-6"  style="margin-top:8px;">
                             <label for="from">From</label>
                             <input type="date" class="form-control input-sm"
                                    value="@DateTime.Now.ToString("yyyy-MM-dd")"
@@ -24,7 +24,7 @@
                                    style="width:150px;"
                                    required>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6"  style="margin-top:8px;">
                             <label for="to">To</label>
                             <input type="date" class="form-control input-sm "
                                    value="@DateTime.Now.ToString("yyyy-MM-dd")"
@@ -72,19 +72,6 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        var _convertStringToDateObject;
-        var _employeeId;
-
-        applyLeave = function (date, employeeId) {
-            _convertStringToDateObject = new Date(date);
-            _employeeId = employeeId;
-
-            $("#popupDateSpan").html(dateToYMD(_convertStringToDateObject));
-            $('#HoursRegularizationModal').modal({ 'show': true, 'backdrop': true });
-        }
-
-    });
 
     $(document).ajaxError(function (e, xhr, settings) {
         if (xhr.status == 401) {
@@ -92,8 +79,6 @@
             window.location = "/";
         }
     });
-
-   
 
     function dateToYMD(date) {
         try {

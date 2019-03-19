@@ -95,6 +95,7 @@ namespace Application.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
         public IActionResult ApplyCompOff(DateTime fromDate, DateTime toDate,
             string remark)
         {
