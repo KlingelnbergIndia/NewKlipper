@@ -36,15 +36,19 @@ namespace UseCases
         {
             var accessEvents = _accessEventsRepository
                 .GetAccessEventsForDateRange(employeeId, fromDate, toDate);
+
             var datewiseAccessEvents = accessEvents.GetAllAccessEvents();
             var listOfLeave = _leavesRepository.GetAllLeavesInfo(employeeId);
             var listOfPerDayAttendanceRecord = CreatePerDayAttendanceRecord(
                 employeeId, datewiseAccessEvents, listOfLeave);
 
             listOfPerDayAttendanceRecord = IncludeLeaves(
-                listOfPerDayAttendanceRecord, listOfLeave, fromDate, toDate, employeeId);
+                listOfPerDayAttendanceRecord, listOfLeave, 
+                fromDate, toDate, employeeId);
 
-            Employee employeeData = _employeeRepository.GetEmployee(employeeId);
+            Employee employeeData = _employeeRepository
+                .GetEmployee(employeeId);
+
             Department department = _departmentRepository
                 .GetDepartment(employeeData.Department());
 
@@ -127,7 +131,6 @@ namespace UseCases
                 .Where(x => x.RegularizedDate().Date == date.Date)
                 .FirstOrDefault()
                 : null;
-
         }
 
         private List<AccessPointRecord> GetAccessPointRecord(
