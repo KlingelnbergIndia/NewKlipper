@@ -110,7 +110,7 @@ namespace Application.Web.Controllers
             (_leavesRepository, _employeeRepository,
                 _departmentRepository, _carryForwardLeaves);
             var response = leaveService
-                .ApplyLeave(loggedInEmpId, fromDate, toDate,
+                .ApplyCompOff(loggedInEmpId, fromDate, toDate,
                     LeaveType.CompOff, false, remark);
 
             GetResponseMessageForLeaveRecord(response);
@@ -186,6 +186,16 @@ namespace Application.Web.Controllers
                 TempData["errorMessage"] = "Please select valid date range !";
             else if (response == ServiceResponseDTO.CanNotApplied)
                 TempData["errorMessage"] = "Selected leave is not available !";
+        }
+
+        private void GetResponseMessageForApplyCompOff(ServiceResponseDTO response)
+        {
+            if (response == ServiceResponseDTO.Saved)
+                TempData["responseMessage"] = "Comp-Off added sucessfully !";
+            else if (response == ServiceResponseDTO.RecordExists)
+                TempData["errorMessage"] = "Leave record is available for selected date !";
+            else if (response == ServiceResponseDTO.InvalidDays)
+                TempData["errorMessage"] = "Please select valid date range !";
         }
 
         public IActionResult UpdateLeave
