@@ -439,18 +439,13 @@ namespace UseCases
         private TimeSpan GetRegularizedHours(Regularization reguralizedEntry,
             Leave leaveOfParticularDate, Department department)
         {
-            if (leaveOfParticularDate != null)
-            {
-                return
-                      leaveOfParticularDate.IsHalfDayLeave() == true
+            return leaveOfParticularDate != null
+                ? leaveOfParticularDate.IsHalfDayLeave() == true
                     ? TimeSpan.FromHours(department.GetNoOfHoursToBeWorked() / 2)
-                    : TimeSpan.FromHours(department.GetNoOfHoursToBeWorked());
-            }
-
-            return reguralizedEntry != null 
+                    : TimeSpan.FromHours(department.GetNoOfHoursToBeWorked())
+                : reguralizedEntry != null
                 ? (reguralizedEntry.GetRegularizedHours())
                 : TimeSpan.Zero;
-
         }
 
         private bool IsRegularizedEntry(Leave leaveOfParticularDate,
