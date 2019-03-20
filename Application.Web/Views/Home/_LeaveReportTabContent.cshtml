@@ -46,10 +46,7 @@
             <div class="col-md-12" style="@(isLeaveCountZero == false ? "display:none" : "display:block")">
                     <div class="row" style="color:#23527C;">No applied leaves found for @Model.LeaveFormName</div>
             </div>
-            <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                    data-target="#ApplyCompOffModal" style="float:right">
-                + Apply Comp-Off
-            </button>
+            
             @if (isleaveSummaryZero == false)
             {
                 <div class="col-md-12">

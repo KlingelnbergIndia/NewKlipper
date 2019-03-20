@@ -9,7 +9,7 @@
 
 <div class="main">
 
-    <div class="col-md-12" style="margin-bottom:10px;" >
+    <div class="col-md-12" style="margin-bottom:10px;">
         @if (@TempData["responseMessage"] != null)
         {
             <div class="alert alert-success success-alert-animation ">
@@ -25,9 +25,14 @@
     </div>
 
     <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-            data-target="#ApplyLeaveModal" style="float:right">
+            data-target="#ApplyCompOffModal" style="float:right">
+        + Apply Comp-Off
+    </button>
+    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+            data-target="#ApplyLeaveModal" style="float:right;margin-right: 8px;">
         + Apply Leave
     </button>
+
     <div class="col-md-12" style="@(isSummaryLeaveCountZero ? "visibility:hidden" :"visibility:visible")">
         <h3> Leave Summary</h3>
         <table class="table table-responsive table-striped table-bordered">
@@ -74,7 +79,7 @@
                     @foreach (var leave in @Model.GetAppliedLeaves)
                     {
                         string displayLeaveType;
-                        string leaveType =leave.GetLeaveDisplayName().ToString();
+                        string leaveType = leave.GetLeaveDisplayName().ToString();
                         if (leave.isHalfDayLeave == true)
                         {
                             string addedStringToHalfDay = " - Half Day";
@@ -221,6 +226,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ApplyLeavePopup", @Model);}
     @{await Html.RenderPartialAsync("_UpdateLeavePopup", @Model);}
+    @{await Html.RenderPartialAsync("_ApplyCompOff", @Model);}
 }
 <style>
     #ApplyLeaveModal > div > div {
