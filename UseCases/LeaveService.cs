@@ -134,7 +134,7 @@ namespace UseCases
                 };
                 listOfLeaveDTO.Add(leaveDTO);
             }
-            return listOfLeaveDTO.OrderByDescending(x => x.FromDate).ToList();
+            return listOfLeaveDTO.OrderByDescending(x => x.FromDate).ThenByDescending(x=>x.LeaveId).ToList();
         }
 
         public LeaveSummaryDTO TotalSummary(int employeeId)
