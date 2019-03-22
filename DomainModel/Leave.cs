@@ -28,8 +28,11 @@ namespace DomainModel
             Approved,
             Updated,
             Cancelled,
+            [Display(Name = "Comp-Off Added")]
             CompOffAdded,
+            [Display(Name = "Comp-Off Updated")]
             CompOffUpdated,
+            [Display(Name = "Comp-Off Cancelled")]
             CompOffCancelled
         }
 

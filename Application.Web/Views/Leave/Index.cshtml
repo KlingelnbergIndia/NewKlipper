@@ -91,6 +91,7 @@
                         {
                             displayLeaveType = leave.GetLeaveDisplayName().ToString();
                         }
+                        var displayLeaveStatus = leave.GetStatusDisplayName().ToString();
                         var isRealisedLeave = leave.IsRealizedLeave.ToString().ToLower();
                         string disableColor = leave.IsRealizedLeave || leave.Status == Leave.StatusType.Cancelled || leave.Status == Leave.StatusType.CompOffCancelled? "lightslategray" : "black";
                         string isCancelLeave = leave.Status == Leave.StatusType.Cancelled || leave.Status == Leave.StatusType.CompOffCancelled ? "true" : "false";
@@ -103,7 +104,7 @@
                             <td>@leave.NoOfDays</td>
                             <td>@displayLeaveType</td>
                             <td>@leave.Remark</td>
-                            <td>@leave.Status</td>
+                            <td>@displayLeaveStatus</td>
                             <td class="text-center">
                                 @if (disable == "true")
                                 {
