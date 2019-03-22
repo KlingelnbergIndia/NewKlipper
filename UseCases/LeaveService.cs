@@ -62,12 +62,12 @@ namespace UseCases
             var allAppliedLeaves = _leavesRepository
                 .GetAllLeavesInfo(employeeId);
 
-            var takenLeaveDates = TakenLeaveDates
+            var takenCompOffDates = TakenCompOffDates
             (fromDate, toDate,
-                department, allAppliedLeaves, employeeId, null);
+              allAppliedLeaves, employeeId, null);
 
             return AddCompOff(employeeId, remark,
-                takenLeaveDates, InvalidDays(department, fromDate, toDate),
+                takenCompOffDates, InvalidDays(department, fromDate, toDate),
                 TotalAppliedDays(department, fromDate, toDate));
         }
 
@@ -200,7 +200,7 @@ namespace UseCases
                                        .MaxSickLeaves();
             totalCompOffLeaveAvailable =
                 carryForwardLeave.MaxCompoffLeaves()
-                + listOfAppliedLeaves.CountAddedCompoffLeaves();
+                 + listOfAppliedLeaves.CountAddedCompoffLeaves();
             
             casualLeaveTaken = listOfAppliedLeaves.CalculateCasualLeaveTaken()
                                      + carryForwardLeave.TakenCasualLeaves();
@@ -253,13 +253,13 @@ namespace UseCases
             var allAppliedLeaves = _leavesRepository
                 .GetAllLeavesInfo(employeeId);
 
-            var takenLeaveDates = TakenLeaveDates
-            (fromDate, toDate, department, allAppliedLeaves, 
+            var takenCompOffDates = TakenCompOffDates
+            (fromDate, toDate,allAppliedLeaves, 
                 employeeId, leaveId);
 
             return ServiceResponseForUpdateExistingAddedCompOff(
                 leaveId, employeeId,
-                remark, takenLeaveDates,
+                remark, takenCompOffDates,
                 InvalidDays(department, fromDate, toDate),
                 TotalAppliedDays(department, fromDate, toDate),
                  allAppliedLeaves);
@@ -402,26 +402,49 @@ namespace UseCases
                             eachLeaveDay <= toDate;
                             eachLeaveDay = eachLeaveDay.AddDays(1).Date)
             {
-                bool isLeaveExist = leaveId == null
-                    ? allAppliedLeaves
-                        .Any(x => x.GetEmployeeId() == employeeId
-                                  && x.GetLeaveDate()
-                                      .Contains(eachLeaveDay.Date)
-                                  && x.GetStatus() != StatusType.Cancelled
-                                  && x.GetStatus()!= StatusType.CompOffCancelled)
-                    : allAppliedLeaves
-                            .Any(x => x.GetEmployeeId() == employeeId
-                                      && x.GetLeaveDate()
-                                          .Contains(eachLeaveDay.Date)
-                                      && x.GetLeaveId() != leaveId
-                                      && x.GetStatus() != StatusType.Cancelled
-                                      && x.GetStatus() != StatusType.CompOffCancelled);
+                bool isLeaveExist = CheckIsLeaveExist(allAppliedLeaves, employeeId, leaveId, eachLeaveDay);
                 if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
                 {
                     takenLeaveDates.Add(eachLeaveDay);
                 }
             }
             return takenLeaveDates;
+        }
+
+        private List<DateTime> TakenCompOffDates
+        (DateTime fromDate, DateTime toDate,
+            List<Leave> allAppliedLeaves, int employeeId, string leaveId)
+        {
+            var takenLeaveDates = new List<DateTime>();
+            for (DateTime eachLeaveDay = fromDate.Date;
+                eachLeaveDay <= toDate;
+                eachLeaveDay = eachLeaveDay.AddDays(1).Date)
+            {
+                bool isLeaveExist = CheckIsLeaveExist(allAppliedLeaves, employeeId, leaveId, eachLeaveDay);
+                if (!isLeaveExist)
+                {
+                    takenLeaveDates.Add(eachLeaveDay);
+                }
+            }
+            return takenLeaveDates;
+        }
+
+        private static bool CheckIsLeaveExist(List<Leave> allAppliedLeaves, int employeeId, string leaveId, DateTime eachLeaveDay)
+        {
+            return leaveId == null
+                ? allAppliedLeaves
+                    .Any(x => x.GetEmployeeId() == employeeId
+                              && x.GetLeaveDate()
+                                  .Contains(eachLeaveDay.Date)
+                              && x.GetStatus() != StatusType.Cancelled
+                              && x.GetStatus() != StatusType.CompOffCancelled)
+                : allAppliedLeaves
+                        .Any(x => x.GetEmployeeId() == employeeId
+                                  && x.GetLeaveDate()
+                                      .Contains(eachLeaveDay.Date)
+                                  && x.GetLeaveId() != leaveId
+                                  && x.GetStatus() != StatusType.Cancelled
+                                  && x.GetStatus() != StatusType.CompOffCancelled);
         }
 
         private int TotalAppliedDays(Department department, DateTime fromDate, DateTime toDate)
