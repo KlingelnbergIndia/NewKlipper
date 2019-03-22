@@ -109,11 +109,38 @@ namespace Application.Web.Controllers
             var leaveService = new LeaveService
             (_leavesRepository, _employeeRepository,
                 _departmentRepository, _carryForwardLeaves);
+
             var response = leaveService
                 .ApplyCompOff(loggedInEmpId, fromDate, toDate,
-                    LeaveType.CompOff, false, remark);
+                    remark);
 
-            GetResponseMessageForLeaveRecord(response);
+            GetResponseMessageForApplyCompOff(response);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult UpdateAddedCompOff(string leaveId, 
+            DateTime fromDate, DateTime toDate, string remark)
+        {
+            if (leaveId != null)
+            {
+                if (fromDate > toDate)
+                {
+                    TempData["errorMessage"] = "Please select valid date range !";
+                    return RedirectToAction("Index");
+                }
+
+                var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
+                var leaveService = new LeaveService
+                (_leavesRepository, _employeeRepository,
+                    _departmentRepository, _carryForwardLeaves);
+
+                var response = leaveService
+                    .UpdateAddedCompOff
+                        (leaveId, loggedInEmpId, fromDate, toDate, remark);
+
+                GetResponseMessageOfUpdateAddedCompOff(response);
+            }
             return RedirectToAction("Index");
         }
 
@@ -217,12 +244,12 @@ namespace Application.Web.Controllers
                 var response = leaveService
                     .UpdateLeave
                         (leaveId, loggedInEmpId, fromDate, toDate, LeaveType, isHalfDay, remark);
-                GetResponseMessageOfAttendanceRecord(response);
+                GetResponseMessageOfUpdateLeave(response);
             }
             return RedirectToAction("Index");
         }
 
-        private void GetResponseMessageOfAttendanceRecord(ServiceResponseDTO response)
+        private void GetResponseMessageOfUpdateLeave(ServiceResponseDTO response)
         {
             if (response == ServiceResponseDTO.Updated)
                 TempData["responseMessage"] = "Leave updated sucessfully !";
@@ -238,6 +265,19 @@ namespace Application.Web.Controllers
                 TempData["errorMessage"] = "Passed leaves can not be updated !";
         }
 
+        private void GetResponseMessageOfUpdateAddedCompOff(ServiceResponseDTO response)
+        {
+            if (response == ServiceResponseDTO.Updated)
+                TempData["responseMessage"] = "CompOff updated sucessfully !";
+            else if (response == ServiceResponseDTO.RecordExists)
+                TempData["errorMessage"] = "Leave record is available for selected date !";
+            else if (response == ServiceResponseDTO.InvalidDays)
+                TempData["errorMessage"] = "Please select valid date range !";
+            else if (response == ServiceResponseDTO.Deleted)
+                TempData["errorMessage"] = "Cancelled CompOff can not be updated !";
+            else if (response == ServiceResponseDTO.RealizedLeave)
+                TempData["errorMessage"] = "Passed CompOff can not be updated !";
+        }
 
         private static void FormatEmployeeDetail(ExcelWorksheet worksheet, int j, EmployeeViewModel perEmployeeRecord)
         {

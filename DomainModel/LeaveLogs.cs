@@ -68,7 +68,8 @@ namespace DomainModel
         {
             return _listOfLeave
                 .Where(x=>x.GetLeaveType() == LeaveType.CompOff
-                          && x.GetStatus() == StatusType.CompOffAdded)
+                      && (x.GetStatus() == StatusType.CompOffAdded
+                          || x.GetStatus() == StatusType.CompOffUpdated))
                 .Sum(x => x.GetLeaveDate().Count);
         }
     }

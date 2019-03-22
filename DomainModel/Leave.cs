@@ -28,7 +28,9 @@ namespace DomainModel
             Approved,
             Updated,
             Cancelled,
-            CompOffAdded
+            CompOffAdded,
+            CompOffUpdated,
+            CompOffCancelled
         }
 
         public Leave(int employeeId, List<DateTime> leaveDates, 

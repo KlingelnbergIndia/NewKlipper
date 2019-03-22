@@ -1,4 +1,5 @@
-﻿@model Application.Web.Models.LeaveViewModel
+﻿@using DomainModel
+@model Application.Web.Models.LeaveViewModel
 
 @{
     var leaveTypes = @Model.GetAllLeaveTypes();
@@ -91,11 +92,11 @@
                             displayLeaveType = leave.GetLeaveDisplayName().ToString();
                         }
                         var isRealisedLeave = leave.IsRealizedLeave.ToString().ToLower();
-                        string disableColor = leave.IsRealizedLeave || leave.Status == DomainModel.Leave.StatusType.Cancelled ? "lightslategray" : "black";
-                        string isCancelLeave = leave.Status == DomainModel.Leave.StatusType.Cancelled ? "true" : "false";
+                        string disableColor = leave.IsRealizedLeave || leave.Status == Leave.StatusType.Cancelled || leave.Status == Leave.StatusType.CompOffCancelled? "lightslategray" : "black";
+                        string isCancelLeave = leave.Status == Leave.StatusType.Cancelled || leave.Status == Leave.StatusType.CompOffCancelled ? "true" : "false";
                         int LeaveTypeId = (int)leave.TypeOfLeave;
                         var remark = System.Text.RegularExpressions.Regex.Replace(leave.Remark, @"[^0-9a-zA-Z]+", "%");
-                        var disable = leave.IsRealizedLeave || leave.Status == DomainModel.Leave.StatusType.Cancelled ? "true" : "false";
+                        var disable = leave.IsRealizedLeave || leave.Status ==Leave.StatusType.Cancelled || leave.Status == Leave.StatusType.CompOffCancelled ? "true" : "false";
                         <tr>
                             <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
                             <td>@leave.ToDate.ToString("dd-MMM-yyyy")</td>
@@ -118,16 +119,32 @@
                                 }
                                 else
                                 {
-                                    <div class="container3">
-                                        <div class="btn-group ">
-                                            <span data-toggle="tooltip" class="glyphicon glyphicon-pencil " title="Update Leave"
-                                                  onclick="UpdateLeave('@leave.LeaveId','@leave.FromDate.ToString("yyyy-MM-dd")','@leave.ToDate.ToString("yyyy-MM-dd")','@leaveType','@leave.isHalfDayLeave.ToString().ToLower()','@remark','@isRealisedLeave','@isCancelLeave')"
-                                                  style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>
-                                            <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave"
-                                                  onclick=CancelLeave("@leave.LeaveId","@isRealisedLeave","@isCancelLeave")
-                                                  style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>
+                                    if (@leave.Status == Leave.StatusType.CompOffAdded || @leave.Status == Leave.StatusType.CompOffUpdated)
+                                    {
+                                        <div class="container3">
+                                            <div class="btn-group ">
+                                                <span data-toggle="tooltip" class="glyphicon glyphicon-pencil " title="Update Leave"
+                                                      onclick="UpdateAddedCompOff('@leave.LeaveId','@leave.FromDate.ToString("yyyy-MM-dd")','@leave.ToDate.ToString("yyyy-MM-dd")','@remark','@isRealisedLeave','@isCancelLeave')"
+                                                      style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>
+                                                <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave"
+                                                      onclick=CancelAddedCompOff("@leave.LeaveId",'@isRealisedLeave','@isCancelLeave')
+                                                      style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="container3">
+                                            <div class="btn-group ">
+                                                <span data-toggle="tooltip" class="glyphicon glyphicon-pencil " title="Update Leave"
+                                                      onclick="UpdateLeave('@leave.LeaveId','@leave.FromDate.ToString("yyyy-MM-dd")','@leave.ToDate.ToString("yyyy-MM-dd")','@leaveType','@leave.isHalfDayLeave.ToString().ToLower()','@remark','@isRealisedLeave','@isCancelLeave')"
+                                                      style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>
+                                                <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave"
+                                                      onclick=CancelLeave("@leave.LeaveId","@isRealisedLeave","@isCancelLeave")
+                                                      style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>
+                                            </div>
+                                        </div>
+                                    }
                                 }
                             </td>
                         </tr>
@@ -227,6 +244,7 @@
     @{await Html.RenderPartialAsync("_ApplyLeavePopup", @Model);}
     @{await Html.RenderPartialAsync("_UpdateLeavePopup", @Model);}
     @{await Html.RenderPartialAsync("_ApplyCompOff", @Model);}
+    @{await Html.RenderPartialAsync("_UpdateAddedCompOff", @Model);}
 }
 <style>
     #ApplyLeaveModal > div > div {
