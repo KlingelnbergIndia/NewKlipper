@@ -562,7 +562,7 @@ namespace UseCases
                       CalculateNoOfDays(_leavesRepository.GetLeaveByLeaveId(leaveId)))
                      - CountOfTakenLeaveDates < 0) ||
                     (leaveType == LeaveType.CompOff &&
-                     (leaveSummmary.RemainingSickLeave +
+                     (leaveSummmary.RemainingCompOffLeave +
                       CalculateNoOfDays(_leavesRepository.GetLeaveByLeaveId(leaveId)))
                      - CountOfTakenLeaveDates < 0))
                     return false;
