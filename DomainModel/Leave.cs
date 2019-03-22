@@ -21,7 +21,9 @@ namespace DomainModel
             [Display(Name = "Sick Leave")]
             SickLeave,
             [Display(Name = "Comp-Off")]
-            CompOff
+            CompOff,
+            [Display(Name = "On Service Call")]
+            OnServiceCall
         }
         public enum StatusType
         {

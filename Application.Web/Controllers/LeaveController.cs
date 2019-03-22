@@ -221,6 +221,9 @@ namespace Application.Web.Controllers
                 LeaveType = LeaveType.CasualLeave;
             if (leaveType == "Sick Leave")
                 LeaveType = LeaveType.SickLeave;
+            if (leaveType == "On Service Call")
+                LeaveType = LeaveType.OnServiceCall;
+
             return LeaveType;
         }
 

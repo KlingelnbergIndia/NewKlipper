@@ -29,12 +29,7 @@ namespace Application.Web.Models
             var enumerationType = typeof(LeaveType);
             foreach (int value in Enum.GetValues(enumerationType))
             {
-                if (value == (int)LeaveType.CompOff)
-                    leaveTypes.Add
-                        (EnumHelperMethod
-                        .EnumDisplayNameFor(LeaveType.CompOff)
-                        .ToString());
-                else if (value == (int)LeaveType.CasualLeave)
+                 if (value == (int)LeaveType.CasualLeave)
                     leaveTypes.Add
                         (EnumHelperMethod
                         .EnumDisplayNameFor(LeaveType.CasualLeave)
@@ -44,6 +39,16 @@ namespace Application.Web.Models
                         (EnumHelperMethod
                         .EnumDisplayNameFor(LeaveType.SickLeave)
                         .ToString());
+                 else if(value == (int)LeaveType.CompOff)
+                    leaveTypes.Add
+                    (EnumHelperMethod
+                        .EnumDisplayNameFor(LeaveType.CompOff)
+                        .ToString());
+                 else if (value == (int)LeaveType.OnServiceCall)
+                     leaveTypes.Add
+                     (EnumHelperMethod
+                         .EnumDisplayNameFor(LeaveType.OnServiceCall)
+                         .ToString());
             }
 
             return leaveTypes;
