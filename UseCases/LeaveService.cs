@@ -336,7 +336,7 @@ namespace UseCases
 
             return invalidDays == totalAppliedDays ?
                 ServiceResponseDTO.InvalidDays
-                : ServiceResponseDTO.RecordExists;
+                :ServiceResponseDTO.RecordExists;
         }
 
         private ServiceResponseDTO ServiceResponseOfUpdateAddedCompOff(
@@ -414,7 +414,7 @@ namespace UseCases
                             eachLeaveDay <= toDate;
                             eachLeaveDay = eachLeaveDay.AddDays(1).Date)
             {
-                bool isLeaveExist = CheckIsLeaveExist(allAppliedLeaves, employeeId, leaveId, eachLeaveDay);
+                bool isLeaveExist = CheckIsRecordExist(allAppliedLeaves, employeeId, leaveId, eachLeaveDay);
                 if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
                 {
                     takenLeaveDates.Add(eachLeaveDay);
@@ -432,7 +432,7 @@ namespace UseCases
                 eachLeaveDay <= toDate;
                 eachLeaveDay = eachLeaveDay.AddDays(1).Date)
             {
-                bool isLeaveExist = CheckIsLeaveExist(allAppliedLeaves, employeeId, leaveId, eachLeaveDay);
+                bool isLeaveExist = CheckIsRecordExist(allAppliedLeaves, employeeId, leaveId, eachLeaveDay);
                 if (!isLeaveExist)
                 {
                     takenLeaveDates.Add(eachLeaveDay);
@@ -441,7 +441,7 @@ namespace UseCases
             return takenLeaveDates;
         }
 
-        private static bool CheckIsLeaveExist(List<Leave> allAppliedLeaves, int employeeId, string leaveId, DateTime eachLeaveDay)
+        private bool CheckIsRecordExist(List<Leave> allAppliedLeaves, int employeeId, string leaveId, DateTime eachLeaveDay)
         {
             return leaveId == null
                 ? allAppliedLeaves

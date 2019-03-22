@@ -229,9 +229,9 @@ namespace Application.Web.Controllers
             if (response == ServiceResponseDTO.Saved)
                 TempData["responseMessage"] = "Leave applied sucessfully !";
             else if (response == ServiceResponseDTO.RecordExists)
-                TempData["errorMessage"] = "Leave record is available for selected date !";
+                TempData["errorMessage"] = "Record is available for selected date !";
             else if (response == ServiceResponseDTO.InvalidDays)
-                TempData["errorMessage"] = "Please select valid date range !";
+                TempData["errorMessage"] = "Please select valid days!";
             else if (response == ServiceResponseDTO.CanNotApplied)
                 TempData["errorMessage"] = "Selected leave is not available !";
         }
@@ -241,9 +241,9 @@ namespace Application.Web.Controllers
             if (response == ServiceResponseDTO.Saved)
                 TempData["responseMessage"] = "Comp-Off added sucessfully !";
             else if (response == ServiceResponseDTO.RecordExists)
-                TempData["errorMessage"] = "Leave record is available for selected date !";
+                TempData["errorMessage"] = "Record is available for selected date !";
             else if (response == ServiceResponseDTO.InvalidDays)
-                TempData["errorMessage"] = "Please select valid date range !";
+                TempData["errorMessage"] = "Please select valid days !";
         }
 
         public IActionResult UpdateLeave
@@ -275,11 +275,11 @@ namespace Application.Web.Controllers
             if (response == ServiceResponseDTO.Updated)
                 TempData["responseMessage"] = "Leave updated sucessfully !";
             else if (response == ServiceResponseDTO.RecordExists)
-                TempData["errorMessage"] = "Leave record is available for selected date !";
+                TempData["errorMessage"] = "Record is available for selected date !";
             else if (response == ServiceResponseDTO.InvalidDays)
-                TempData["errorMessage"] = "Please select valid date range !";
+                TempData["errorMessage"] = "Please select valid days !";
             else if (response == ServiceResponseDTO.CanNotApplied)
-                TempData["errorMessage"] = "Selected leave is not available!";
+                TempData["errorMessage"] = "Selected leave is not available !";
             else if (response == ServiceResponseDTO.Deleted)
                 TempData["errorMessage"] = "Cancelled leaves can not be updated !";
             else if (response == ServiceResponseDTO.RealizedLeave)
@@ -291,9 +291,9 @@ namespace Application.Web.Controllers
             if (response == ServiceResponseDTO.Updated)
                 TempData["responseMessage"] = "CompOff updated sucessfully !";
             else if (response == ServiceResponseDTO.RecordExists)
-                TempData["errorMessage"] = "Leave record is available for selected date !";
+                TempData["errorMessage"] = "Record is available for selected date !";
             else if (response == ServiceResponseDTO.InvalidDays)
-                TempData["errorMessage"] = "Please select valid date range !";
+                TempData["errorMessage"] = "Please select valid days !";
             else if (response == ServiceResponseDTO.Deleted)
                 TempData["errorMessage"] = "Cancelled CompOff can not be updated !";
             else if (response == ServiceResponseDTO.RealizedLeave)
