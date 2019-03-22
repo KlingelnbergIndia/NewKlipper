@@ -294,13 +294,14 @@ namespace UseCases
             return listOfPerDayAttendanceRecordDTO;
         }
 
-        private static Leave LeaveOfParticularDate(List<Leave> listOfLeave, PerDayWorkRecord perDayWorkRecord)
+        private Leave LeaveOfParticularDate(List<Leave> listOfLeave, PerDayWorkRecord perDayWorkRecord)
         {
             var leaveOfParticularDate =
                 listOfLeave != null
                     ? listOfLeave
                         .Where(x => x.GetLeaveDate().Contains(perDayWorkRecord.Date)
-                                    && x.GetStatus() != Leave.StatusType.Cancelled)
+                                    && (x.GetStatus() == Leave.StatusType.Approved
+                                        || x.GetStatus() == Leave.StatusType.Updated))
                         .FirstOrDefault()
                     : null;
             return leaveOfParticularDate;
@@ -459,10 +460,9 @@ namespace UseCases
             var regularizedHours = TimeSpan.Zero;
             if (leaveOfParticularDate != null)
             {
-                if (leaveOfParticularDate.IsHalfDayLeave() == true)
-                    regularizedHours = TimeSpan.FromHours(department.GetNoOfHoursToBeWorked() / 2);
-                else
-                    regularizedHours = TimeSpan.FromHours(department.GetNoOfHoursToBeWorked());
+                regularizedHours = leaveOfParticularDate.IsHalfDayLeave() == true
+                    ? TimeSpan.FromHours(department.GetNoOfHoursToBeWorked() / 2)
+                    : TimeSpan.FromHours(department.GetNoOfHoursToBeWorked());
             }
             else
             {
