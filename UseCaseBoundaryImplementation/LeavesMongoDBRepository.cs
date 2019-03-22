@@ -122,14 +122,25 @@ namespace RepositoryImplementation
             var model = __leaveDBContext.AppliedLeaves
                 .FindOneAndUpdate(filter, update, opts);
 
-            if (model != null)
+            return model != null ? true : false;
+        }
+
+        public bool CancelCompOff(string LeaveId)
+        {
+            var filter = Builders<LeaveEntityModel>.Filter
+                .Eq("_id", ObjectId.Parse(LeaveId));
+            var update = Builders<LeaveEntityModel>.Update
+                .Set(x => x.Status, StatusType.CompOffCancelled);
+
+            var opts = new FindOneAndUpdateOptions<LeaveEntityModel>()
             {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+                IsUpsert = true,
+            };
+
+            var model = __leaveDBContext.AppliedLeaves
+                .FindOneAndUpdate(filter, update, opts);
+
+            return model != null ? true : false;
         }
 
         public Leave GetLeaveByLeaveId(string leaveId)

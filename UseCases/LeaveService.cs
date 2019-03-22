@@ -377,17 +377,29 @@ namespace UseCases
             var empIdOfLeaveToBeUpdate = _leavesRepository
                 .GetLeaveByLeaveId(leaveId)
                 .GetEmployeeId();
-            if (empIdOfLeaveToBeUpdate == employeeId)
-            {
-                if (IsRealizedLeave(leaveId))
-                {
+
+            if (empIdOfLeaveToBeUpdate == employeeId &&
+                IsRealizedLeave(leaveId))
                     return ServiceResponseDTO.RealizedLeave;
-                }
-            }
+           
             if (_leavesRepository.CancelLeave(leaveId))
-            {
                 return ServiceResponseDTO.Deleted;
-            }
+
+            return ServiceResponseDTO.InvalidDays;
+        }
+
+        public ServiceResponseDTO CancelCompOff(string leaveId, int employeeId)
+        {
+            var empIdOfLeaveToBeUpdate = _leavesRepository
+                .GetLeaveByLeaveId(leaveId)
+                .GetEmployeeId();
+
+            if (empIdOfLeaveToBeUpdate == employeeId &&
+                IsRealizedLeave(leaveId))
+                return ServiceResponseDTO.RealizedLeave;
+
+            if (_leavesRepository.CancelCompOff(leaveId))
+                return ServiceResponseDTO.Deleted;
 
             return ServiceResponseDTO.InvalidDays;
         }

@@ -82,11 +82,12 @@ namespace Application.Web.Controllers
             var leaveService = new LeaveService
                 (_leavesRepository, _employeeRepository, 
                 _departmentRepository, _carryForwardLeaves);
+
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var response = leaveService.CancelLeave(LeaveId, loggedInEmpId);
 
             if (response == ServiceResponseDTO.Deleted)
-                TempData["responseMessage"] = "Leave deleted sucessfully !";
+                TempData["responseMessage"] = "Leave cancelled sucessfully !";
             else if (response == ServiceResponseDTO.RealizedLeave)
                 TempData["errorMessage"] = "Passed leaves can not be cancelled !";
             else
@@ -94,6 +95,26 @@ namespace Application.Web.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public IActionResult CancelAddedCompOff(string LeaveId)
+        {
+            var leaveService = new LeaveService
+            (_leavesRepository, _employeeRepository,
+                _departmentRepository, _carryForwardLeaves);
+            var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
+            var response = leaveService.CancelCompOff(LeaveId, loggedInEmpId);
+
+            if (response == ServiceResponseDTO.Deleted)
+                TempData["responseMessage"] = "CompOff cancelled sucessfully !";
+            else if (response == ServiceResponseDTO.RealizedLeave)
+                TempData["errorMessage"] = "Passed CompOff can not be cancelled !";
+            else
+                TempData["errorMessage"] = "Cancelled CompOff can not be updated !";
+
+            return RedirectToAction("Index");
+        }
+
 
         [HttpPost]
         public IActionResult ApplyCompOff(DateTime fromDate, DateTime toDate,

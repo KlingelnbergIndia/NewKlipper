@@ -14,5 +14,6 @@ namespace UseCaseBoundary
         bool OverrideLeave(string leaveId, Leave leaveData);
         bool CancelLeave(string LeaveId);
         Leave GetLeaveByLeaveId(string LeaveId);
+        bool CancelCompOff(string LeaveId);
     }
 }
