@@ -248,13 +248,14 @@ namespace UseCases
             });
         }
 
-        private static Leave LeaveOfParticularDay(List<Leave> listOfLeave, DateTime fromDate)
+        private Leave LeaveOfParticularDay(List<Leave> listOfLeave, DateTime fromDate)
         {
             if (listOfLeave != null)
             {
                 return listOfLeave
                     .Where(x => x.GetLeaveDate().Contains(fromDate.Date.Date)
-                                && x.GetStatus() != Leave.StatusType.Cancelled)
+                                && (x.GetStatus() == Leave.StatusType.Approved
+                                    || x.GetStatus() == Leave.StatusType.Updated))
                     .FirstOrDefault();
             }
 
