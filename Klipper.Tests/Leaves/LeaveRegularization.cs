@@ -171,7 +171,7 @@ namespace Klipper.Tests.Leaves
             Leave leave = new DummyLeaveBuilder()
                 .WithEmployeeId(63)
                 .WithLeaveType(LeaveType.CasualLeave)
-                .WithLeaveStatusType(StatusType.Approved)
+                .WithLeaveStatusType(StatusType.CompOffAdded)
                 .WithLeaveDates(new List<DateTime>() {DateTime.Parse("2019-02-22")})
                 .Build();
             leaveRecordData.GetAllLeavesInfo(63).Returns(new List<Leave>() {leave});
@@ -200,7 +200,8 @@ namespace Klipper.Tests.Leaves
             var attendanceRecord = attendanceService.AttendanceReportForDateRange(63, DateTime.Parse("2019-02-22"),
                 DateTime.Parse("2019-02-22"));
 
-            Assert.That(attendanceRecord.ListOfAttendanceRecordDTO[0].RegularizedHours.Hour, Is.EqualTo(9));
+            Assert.That(attendanceRecord.ListOfAttendanceRecordDTO[0].RegularizedHours.Hour, Is.EqualTo(0));
+            Assert.That(attendanceRecord.ListOfAttendanceRecordDTO[0].RegularizedHours.Minute, Is.EqualTo(0));
         }
     }
 }
