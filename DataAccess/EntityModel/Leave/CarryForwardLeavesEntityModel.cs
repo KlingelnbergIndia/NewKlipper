@@ -18,13 +18,13 @@ namespace DataAccess.EntityModel.Leave
         public DateTime LeaveBalanceTillDate { get; set; }
 
 
-        public int TakenCasualLeaves { get; set; }
-        public int TakenSickLeaves { get; set; }
-        public int TakenCompoffLeaves { get; set; }
+        public float TakenCasualLeaves { get; set; }
+        public float TakenSickLeaves { get; set; }
+        public float TakenCompoffLeaves { get; set; }
 
 
-        public int MaxCasualLeaves { get; set; }
-        public int MaxSickLeaves { get; set; }
-        public int MaxCompoffLeaves { get; set; }
+        public float MaxCasualLeaves { get; set; }
+        public float MaxSickLeaves { get; set; }
+        public float MaxCompoffLeaves { get; set; }
     }
 }
