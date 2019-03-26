@@ -249,10 +249,11 @@ namespace UseCases
             return listOfLeave != null
                 ? listOfLeave
                     .Where(x => x.GetLeaveDate().Contains(fromDate.Date.Date)
-                                && x.GetStatus() != Leave.StatusType.Cancelled)
+                                && (x.GetStatus() == Leave.StatusType.Approved
+                                    || x.GetStatus() == Leave.StatusType.Updated))
                     .FirstOrDefault()
                 : null;
-        }
+            }
 
         private List<PerDayAttendanceRecordDTO> CreatePerDayAttendanceRecord
             (int employeeId, IList<PerDayWorkRecord> workRecordByDate, List<Leave> listOfLeave)
@@ -295,7 +296,8 @@ namespace UseCases
                 listOfLeave != null
                     ? listOfLeave
                         .Where(x => x.GetLeaveDate().Contains(perDayWorkRecord.Date)
-                                    && x.GetStatus() != Leave.StatusType.Cancelled)
+                                    && (x.GetStatus() == Leave.StatusType.Approved
+                                        || x.GetStatus() == Leave.StatusType.Updated))
                         .FirstOrDefault()
                     : null;
             return leaveOfParticularDate;

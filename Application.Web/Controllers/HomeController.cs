@@ -98,6 +98,7 @@ namespace Application.Web.Controllers
             var reportees = reporteeService.ReporteesData(employeeId);
             var reporteeViewModel = new ReporteeViewModel();
 
+            reportees = reportees.OrderBy(x => x.FirstName).ThenBy(x => x.LastName).ToList();
             foreach (var reportee in reportees)
             {
                 string reporteeName = reportee.FirstName + " " + reportee.LastName;

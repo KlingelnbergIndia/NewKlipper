@@ -16,14 +16,17 @@ namespace UseCaseBoundary.DTO
         {
             return EnumHelperMethod.EnumDisplayNameFor(TypeOfLeave);
         }
+
         public DateTime FromDate;
         public DateTime ToDate;
         public string Remark;
         public StatusType Status;
+
         public HtmlString GetStatusDisplayName()
         {
             return EnumHelperMethod.EnumDisplayNameFor(Status);
         }
+
         public float NoOfDays;
         public bool IsRealizedLeave;
         public bool IsRecordSaved;

@@ -21,14 +21,21 @@ namespace DomainModel
             [Display(Name = "Sick Leave")]
             SickLeave,
             [Display(Name = "Comp-Off")]
-            CompOff
+            CompOff,
+            [Display(Name = "On Service Call")]
+            OnServiceCall
         }
         public enum StatusType
         {
             Approved,
             Updated,
             Cancelled,
-            LeaveAdded
+            [Display(Name = "Comp-Off Added")]
+            CompOffAdded,
+            [Display(Name = "Comp-Off Updated")]
+            CompOffUpdated,
+            [Display(Name = "Comp-Off Cancelled")]
+            CompOffCancelled
         }
 
         public Leave(int employeeId, List<DateTime> leaveDates, 

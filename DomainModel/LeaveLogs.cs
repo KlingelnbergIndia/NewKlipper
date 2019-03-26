@@ -50,18 +50,28 @@ namespace DomainModel
         {
             float noOfCompOffLeaveTaken = _listOfLeave
                 .Where(x => x.GetLeaveType() == LeaveType.CompOff
-            && x.GetStatus() != StatusType.Cancelled 
+            &&( x.GetStatus() == StatusType.Approved
+            || x.GetStatus() == StatusType.Updated)
             && x.IsHalfDayLeave() == false)
             .Sum(x => x.GetLeaveDate().Count);
 
             float noOfHalfDayCompOffLeaveTaken = _listOfLeave
                 .Where(x => x.GetLeaveType() == LeaveType.CompOff
-           && x.GetStatus() != StatusType.Cancelled
+                      && (x.GetStatus() == StatusType.Approved
+                                || x.GetStatus() == StatusType.Updated)
            && x.IsHalfDayLeave() == true)
            .Sum(x => x.GetLeaveDate().Count) ;
 
             return noOfCompOffLeaveTaken + noOfHalfDayCompOffLeaveTaken/2;
         }
 
+        public float CountAddedCompoffLeaves()
+        {
+            return _listOfLeave
+                .Where(x=>x.GetLeaveType() == LeaveType.CompOff
+                      && (x.GetStatus() == StatusType.CompOffAdded
+                          || x.GetStatus() == StatusType.CompOffUpdated))
+                .Sum(x => x.GetLeaveDate().Count);
+        }
     }
 }

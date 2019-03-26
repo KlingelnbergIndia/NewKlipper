@@ -749,5 +749,98 @@ namespace Klipper.Tests
             
             Assert.That(response, Is.EqualTo(ServiceResponseDTO.InvalidDays));
         }
+
+        [Test]
+        public void OnUpdateLeaveGetResponseUpdated()
+        {
+            //SETUP
+            var dummyEmployee =
+                new EmployeeBuilder()
+                    .WithID(63)
+                    .BuildEmployee();
+            employeeData.GetEmployee(63).Returns(dummyEmployee);
+
+            Leave leave = new DummyLeaveBuilder()
+                .WithEmployeeId(63)
+                .WithLeaveType(LeaveType.CompOff)
+                .WithLeaveStatusType(StatusType.CompOffUpdated)
+                .WithLeaveDates(new List<DateTime>() { DateTime.Now.AddDays(1) })
+                .Build();
+            leaveRecordData.GetAllLeavesInfo(63).Returns(new List<Leave>() { leave });
+
+            leaveRecordData.GetLeaveByLeaveId("sadjkf").Returns(leave);
+
+            //CALL USECASE
+            LeaveService leaveService =
+                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
+            var response = leaveService.UpdateLeave("sadjkf", 63, DateTime.Parse("2019-01-01"),
+                DateTime.Parse("2019-01-01"),LeaveType.CasualLeave,false, " ");
+
+            Assert.That(response, Is.EqualTo(ServiceResponseDTO.Updated));
+        }
+
+        [Test]
+        public void OnCancelLeaveGetResponseCancel()
+        {
+            //SETUP
+            var dummyEmployee =
+                new EmployeeBuilder()
+                    .WithID(63)
+                    .BuildEmployee();
+            employeeData.GetEmployee(63).Returns(dummyEmployee);
+
+            Leave leave = new DummyLeaveBuilder()
+                .WithEmployeeId(63)
+                .WithLeaveType(LeaveType.CompOff)
+                .WithLeaveStatusType(StatusType.CompOffUpdated)
+                .WithLeaveDates(new List<DateTime>() { DateTime.Now.AddDays(1) })
+                .Build();
+            leaveRecordData.GetAllLeavesInfo(63).Returns(new List<Leave>() { leave });
+
+            leaveRecordData.GetLeaveByLeaveId("sadjkf").Returns(leave);
+            leaveRecordData.CancelLeave("sadjkf").Returns(true);
+
+            //CALL USECASE
+            LeaveService leaveService =
+                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
+            var response = leaveService.CancelLeave("sadjkf", 63);
+
+            Assert.That(response, Is.EqualTo(ServiceResponseDTO.Deleted));
+        }
+
+        [Test]
+        public void ApplyOnServiceCallThenGetSavedResponse()
+        {
+            // Setup
+            LeaveService leaveService =
+                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
+
+            List<Leave> listOfLeave = new List<Leave>();
+            List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };
+            listOfLeave.Add(new Leave(63, listOfDate, LeaveType.SickLeave,
+                false, "one day sick leave apply", StatusType.Approved, null));
+
+            var dummyLeaveRecord = listOfLeave;
+            leaveRecordData.GetAllLeavesInfo(63).Returns(dummyLeaveRecord);
+
+            var dummyCarryForwardLeave = new CarryForwardLeaves(63, DateTime.Parse("2019-02-22"), 2, 2, 2, 21, 6, 0);
+            carryForwardLeavesData.GetCarryForwardLeaveAsync(63).Returns(dummyCarryForwardLeave);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                    .WithUserName("Sidhdesh.Vadgaonkar")
+                    .WithPassword("26-12-1995")
+                    .BuildEmployee();
+            employeeData.GetEmployee(63).Returns(dummyEmployee);
+
+            var department = new Department(Departments.Software);
+            departmentData.GetDepartment(Departments.Software).Returns(department);
+
+            //CALL USECASE
+            var respone = leaveService.ApplyLeave(63, DateTime.Parse("2019-02-05"),
+                DateTime.Parse("2019-02-05"), Leave.LeaveType.SickLeave, false, "one day sick leave apply");
+
+            Assert.That(respone, Is.EqualTo(ServiceResponseDTO.Saved));
+        }
     }
 }

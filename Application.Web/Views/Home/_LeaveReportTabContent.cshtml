@@ -8,7 +8,7 @@
 <div class="panel-info" style="@(Model.reportees.Count==0 ? "visibility:hidden" : "visibility:visible")">
     <div class="panel panel-heading col-md-12 col-sm-12">
         <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <form action="GetSelectedreportee?selectedViewTabs=leaveReportMenu" method="post">
+            <form action="Selectedreportee?selectedViewTabs=leaveReportMenu" method="post">
                 <div class="form-inline">
                     <div class="form-group">
                         <label for="reporteesId">Reportee</label>
@@ -37,35 +37,30 @@
         </div>
     </div>
 
-
-    <div class="main">
-        <div class="col-md-12" style="@(isleaveSummaryZero ==false ? "display:none" : "display:block")">
-            @if (!string.IsNullOrEmpty(@Model.LeaveFormName))
+    @if (!string.IsNullOrEmpty(@Model.LeaveFormName))
+    {
+        <div class="main">
+            <div class="col-md-12" style="@(isleaveSummaryZero == false ? "display:none" : "display:block")">
+                    <div class="row" style="color:#23527C;">No applied leave summary found for @Model.LeaveFormName</div>
+            </div>
+            <div class="col-md-12" style="@(isLeaveCountZero == false ? "display:none" : "display:block")">
+                    <div class="row" style="color:#23527C;">No applied leaves found for @Model.LeaveFormName</div>
+            </div>
+            
+            @if (isleaveSummaryZero == false)
             {
-            <div class="row" style="color:#23527C;">No applied leave summary found for @Model.LeaveFormName</div>
-            }
-        </div>
-        <div class="col-md-12" style="@(isLeaveCountZero ==false ? "display:none" : "display:block")">
-            @if (!string.IsNullOrEmpty(@Model.LeaveFormName))
-            {
-                <div class="row" style="color:#23527C;">No applied leaves found for @Model.LeaveFormName</div>
-            }
-        </div>
-
-        @if (isleaveSummaryZero == false)
-        {
-            <div class="col-md-12">
-                <h4> Leave Summary</h4>
-                <table class="table table-responsive table-striped table-bordered">
-                    <thead>
+                <div class="col-md-12">
+                    <h4> Leave Summary</h4>
+                    <table class="table table-responsive table-striped table-bordered">
+                        <thead>
                         <tr>
                             <th class="col-md-2 col-lg-2 col-xs-2">Leave Type</th>
                             <th class="col-md-2 col-lg-2 col-xs-2">Total Leave Available</th>
                             <th class="col-md-2 col-lg-2 col-xs-2">Leave Taken</th>
                             <th class="col-md-2 col-lg-2 col-xs-2">Remaining Leave</th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         @foreach (var leaveSummary in @Model.LeaveSummary)
                         {
                             <tr>
@@ -75,14 +70,14 @@
                                 <td>@leaveSummary.RemainingLeave</td>
                             </tr>
                         }
-                    </tbody>
-                </table>
-            </div>
-        }
-        <div class="col-md-12" style="@(isLeaveCountZero ? "display:none" : "display:block")">
-            <h4>Leave Details</h4>
-            <table class="table table-responsive table-striped table-bordered">
-                <thead>
+                        </tbody>
+                    </table>
+                </div>
+            }
+            <div class="col-md-12" style="@(isLeaveCountZero ? "display:none" : "display:block")">
+                <h4>Leave Details</h4>
+                <table class="table table-responsive table-striped table-bordered">
+                    <thead>
                     <tr>
                         <th class="col-md-1 col-lg-1 col-xs-1">From Date</th>
                         <th class="col-md-1 col-lg-1 col-xs-1">To Date</th>
@@ -92,8 +87,8 @@
                         <th class="col-md-1 col-lg-1 col-xs-1">Status</th>
                         <th class="col-md-1 col-lg-1 col-xs-1">Change Plan</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     @foreach (var leave in @Model.leaveRecordsOfSelectedReportee)
                     {
                         string displayLeaveType;
@@ -110,8 +105,8 @@
                         var isRealisedLeave = "false";
                         string disableColor = @leave.Status == DomainModel.Leave.StatusType.Cancelled ? "lightslategray" : "black";
                         string isCancelledLeave = @leave.Status == DomainModel.Leave.StatusType.Cancelled ? "true" : "false";
-                        int LeaveTypeId = (int)@leave.TypeOfLeave;
-                        var disable =leave.Status == DomainModel.Leave.StatusType.Cancelled ? "true" : "false";
+                        int LeaveTypeId = (int) @leave.TypeOfLeave;
+                        var disable = leave.Status == DomainModel.Leave.StatusType.Cancelled ? "true" : "false";
 
                         <tr>
                             <td>@leave.FromDate.ToString("dd-MMM-yyyy")</td>
@@ -125,7 +120,7 @@
                                 {
                                     <div class="container3">
                                         <div class="btn-group ">
-                                            <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave"
+                                            <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="CancelLeave Leave"
                                                   onclick="return false"
                                                   style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>
                                         </div>
@@ -135,8 +130,8 @@
                                 {
                                     <div class="container3">
                                         <div class="btn-group ">
-                                            <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="Cancel Leave"
-                                                   onclick=CancelLeave("@leave.LeaveId","@isRealisedLeave","@isCancelledLeave")
+                                            <span data-toggle="tooltip" class="glyphicon glyphicon-remove" title="CancelLeave Leave"
+                                                  onclick=CancelLeave("@leave.LeaveId","@isRealisedLeave","@isCancelledLeave")
                                                   style="cursor:pointer;margin-right:10px;color:@disableColor;"></span>
                                         </div>
                                     </div>
@@ -144,12 +139,12 @@
                             </td>
                         </tr>
                     }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
-
-    </div>
-
+    }
 </div>
 
 <script src="~/js/common.Leave.js"></script>
