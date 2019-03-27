@@ -2,6 +2,8 @@
 using DomainModel;
 using UseCaseBoundary;
 using UseCaseBoundary.Model;
+using System.Security.Cryptography;
+using System;
 
 namespace UseCases
 {
@@ -15,13 +17,14 @@ namespace UseCases
 
         public EmployeeDTO LoginUser(string userName, string password)
         {
+            var encryptedPassword = ToSha256(password);
             Employee employee = _employeeRepository
                 .GetEmployee(userName.ToLower());
             if (employee == null)
             {
                 return null;
             }
-            bool result  = employee.Authenticate(userName, password);
+            bool result  = employee.Authenticate(userName, encryptedPassword);
             if (result)
             {
                 int id = employee.Id();
@@ -44,6 +47,17 @@ namespace UseCases
             else
             {
                 return null;
+            }
+        }
+        private string ToSha256(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return string.Empty;
+
+            using (var sha = SHA256.Create())
+            {
+                var bytes = System.Text.Encoding.ASCII.GetBytes(input);
+                var hash = sha.ComputeHash(bytes);
+                return Convert.ToBase64String(hash);
             }
         }
     }

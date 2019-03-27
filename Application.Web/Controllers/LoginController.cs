@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using Application.Web.Models;
 using DomainModel;
 using Microsoft.AspNetCore.Http;
@@ -31,7 +29,7 @@ namespace Application.Web.Controllers
             Login userLogin = new Login(_employeeRepository);
             var loggedInUserDetails = userLogin.LoginUser(
                 login.UserName, 
-                ToSha256(login.Password));
+               login.Password);
 
             DisplayOfReporteeTab(loggedInUserDetails?.Roles());
 
@@ -75,16 +73,5 @@ namespace Application.Web.Controllers
             return RedirectToAction("Login");
         }
 
-        private static string ToSha256(string input)
-        {
-            if (string.IsNullOrWhiteSpace(input)) return string.Empty;
-
-            using (var sha = SHA256.Create())
-            {
-                var bytes = System.Text.Encoding.ASCII.GetBytes(input);
-                var hash = sha.ComputeHash(bytes);
-                return Convert.ToBase64String(hash);
-            }
-        }
     }
 }

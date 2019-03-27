@@ -7,7 +7,7 @@ using DomainModel;
 using MongoDB.Driver;
 using UseCaseBoundary;
 
-namespace UseCaseBoundaryImplementation
+namespace RepositoryImplementation
 {
     public class EmployeeMongoDBRepository : IEmployeeRepository
     {
