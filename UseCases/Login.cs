@@ -4,15 +4,20 @@ using UseCaseBoundary;
 using UseCaseBoundary.Model;
 using System.Security.Cryptography;
 using System;
+using UseCaseBoundary.DTO;
 
 namespace UseCases
 {
     public class Login
     {
         private IEmployeeRepository _employeeRepository;
-        public Login(IEmployeeRepository employeeRepository)
+        private IAuthMongoDBRepository _authMongoDbRepository;
+
+        public Login(IEmployeeRepository employeeRepository,
+            IAuthMongoDBRepository authMongoDbRepository)
         {
             _employeeRepository = employeeRepository;
+            _authMongoDbRepository = authMongoDbRepository;
         }
 
         public EmployeeDTO LoginUser(string userName, string password)
@@ -49,6 +54,33 @@ namespace UseCases
                 return null;
             }
         }
+
+        public ServiceResponseDTO ChangePassword(
+            string userName, string currentPassword,string newPassword)
+        {
+            var encryptedCurrentPassword = ToSha256(currentPassword);
+            var encryptedNewPassword = ToSha256(newPassword);
+            var employee = _employeeRepository
+                .GetEmployee(userName.ToLower());
+
+            var id = _authMongoDbRepository.UserIdByUserName(userName);
+
+            if (employee == null || id!= employee.Id())
+                return ServiceResponseDTO.UserNameNotExists;
+          
+            bool result = employee
+                .Authenticate(userName, encryptedCurrentPassword);
+           
+            if (result)
+            {
+                _authMongoDbRepository
+                    .ChangePassword(employee.Id(), newPassword);
+                return ServiceResponseDTO.Saved;
+            }
+
+            return ServiceResponseDTO.PassWordIncorrect;
+        }
+
         private string ToSha256(string input)
         {
             if (string.IsNullOrWhiteSpace(input)) return string.Empty;

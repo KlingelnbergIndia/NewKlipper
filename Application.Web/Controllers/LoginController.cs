@@ -13,20 +13,25 @@ namespace Application.Web.Controllers
     public class LoginController : Controller
     {
         private IEmployeeRepository _employeeRepository;
-        public LoginController(IEmployeeRepository employeeRepository)
+        private IAuthMongoDBRepository _authMongoDbRepository;
+
+        public LoginController(IEmployeeRepository employeeRepository,
+            IAuthMongoDBRepository authMongoDbRepository)
         {
             _employeeRepository = employeeRepository;
+            _authMongoDbRepository = authMongoDbRepository;
         }
 
         public IActionResult Login()
         {
-           
             return View();
         }
 
         public IActionResult Authenticate([FromForm] LoginViewModel login)
         {
-            Login userLogin = new Login(_employeeRepository);
+            var userLogin = new Login(_employeeRepository,
+                _authMongoDbRepository);
+
             var loggedInUserDetails = userLogin.LoginUser(
                 login.UserName, 
                login.Password);

@@ -18,7 +18,7 @@ namespace RepositoryImplementation
             _authDBContext = AuthDBContext.Instance;
         }
 
-        public bool ChangePassword(int id, string password)
+        public void ChangePassword(int id, string password)
         {
             _authDBContext.Users.UpdateOneAsync(
                 x=>x.ID == id, 
@@ -26,7 +26,6 @@ namespace RepositoryImplementation
                     .Update
                     .Set(a => a.PasswordHash,password));
 
-            return true;
         }
 
         public int UserIdByUserName(string userName)

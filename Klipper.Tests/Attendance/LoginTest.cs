@@ -81,11 +81,13 @@ namespace Tests
     public class LoginTest
     {
         private IEmployeeRepository employeeDataContainer;
+        private IAuthMongoDBRepository userDataContainer;
 
         [SetUp]
         public void Setup()
         {
             employeeDataContainer = Substitute.For<IEmployeeRepository>();
+            userDataContainer = Substitute.For<IAuthMongoDBRepository>();
         }
 
         [Test]
@@ -93,7 +95,7 @@ namespace Tests
         {
 
             // Setup
-            Login login = new Login(employeeDataContainer);
+            Login login = new Login(employeeDataContainer,userDataContainer);
 
             var dummyEmployee =
                 new EmployeeBuilder()
@@ -114,7 +116,8 @@ namespace Tests
         [Test]
         public void GivenInvalidUserIdAndCorrectPasswordLoginFails()
         {
-            Login login = new Login(employeeDataContainer);
+            var login = new Login(employeeDataContainer,
+                userDataContainer);
 
             var dummyEmployee =
                 new EmployeeBuilder()
@@ -133,7 +136,8 @@ namespace Tests
         [Test]
         public void GivenValidUserIdAndIncorrectPasswordLoginFails()
         {
-            Login login = new Login(employeeDataContainer);
+            var login = new Login(employeeDataContainer,
+                userDataContainer);
 
             var dummyEmployee =
                 new EmployeeBuilder()
@@ -152,7 +156,8 @@ namespace Tests
         [Test]
         public void OnSuccessfullLoginEmployeeNameAndTitleAreDisplayed()
         {
-            Login login = new Login(employeeDataContainer);
+            var login = new Login(employeeDataContainer,
+                userDataContainer);
 
             var dummyEmployee =
                 new EmployeeBuilder()
@@ -173,7 +178,8 @@ namespace Tests
         [Test]
         public void EmployeeUserNameIsNotCaseSensitive()
         {
-            Login login = new Login(employeeDataContainer);
+            var login = new Login(employeeDataContainer,
+                userDataContainer);
 
             var dummyEmployee =
                 new EmployeeBuilder()

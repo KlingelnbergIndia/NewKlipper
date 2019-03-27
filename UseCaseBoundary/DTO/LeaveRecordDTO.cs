@@ -41,6 +41,8 @@ namespace UseCaseBoundary.DTO
         RecordExists,
         InvalidDays,
         CanNotApplied,
-        RealizedLeave
+        RealizedLeave,
+        UserNameNotExists,
+        PassWordIncorrect
     }
 }
