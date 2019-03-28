@@ -15,15 +15,15 @@ namespace RepositoryImplementation
             _dbContext = LeaveManagementDBContext.Instance;
         }
 
-        public async Task<CarryForwardLeaves> GetCarryForwardLeaveAsync(int employeeId)
+        public async Task<CarryForwardLeaves> GetCarryForwardLeaveAsync(
+            int employeeId)
         {
             var leaves = (await _dbContext.CarryForwardLeaves
                 .FindAsync(x => x.EmployeeId == employeeId))
                 .FirstOrDefault();
 
-            if (leaves != null)
-            {
-                return new CarryForwardLeaves(
+            return leaves != null
+                ? new CarryForwardLeaves(
                    leaves.EmployeeId,
                    leaves.LeaveBalanceTillDate,
                    leaves.TakenCasualLeaves,
@@ -31,10 +31,8 @@ namespace RepositoryImplementation
                    leaves.TakenCompoffLeaves,
                    leaves.MaxCasualLeaves,
                    leaves.MaxSickLeaves,
-                   leaves.MaxCompoffLeaves);
-            }
-            return null;
-               
+                   leaves.MaxCompoffLeaves)
+                : null;
         }
     }
 }
