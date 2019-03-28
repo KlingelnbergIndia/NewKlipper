@@ -7,6 +7,6 @@ namespace Application.Web.Models
 {
     public enum SearchFilter
     {
-        AccessEventsByDateRange,
+        GetAccessEventsByDateRange,
     }
 }

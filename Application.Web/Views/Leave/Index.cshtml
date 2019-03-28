@@ -49,7 +49,7 @@
                 @foreach (var leaveSummary in @Model.LeaveSummary)
                 {
                     <tr>
-                        <td>@leaveSummary.LeaveType</td>
+                        <td>@leaveSummary.GetLeaveDisplayName().ToString()</td>
                         <td>@leaveSummary.TotalAvailableLeave</td>
                         <td>@leaveSummary.LeaveTaken</td>
                         <td>@leaveSummary.RemainingLeave</td>

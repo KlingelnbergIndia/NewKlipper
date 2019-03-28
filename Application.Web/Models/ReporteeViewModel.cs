@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DomainModel;
 using UseCaseBoundary.DTO;
 using UseCaseBoundary.Model;
 
@@ -42,21 +43,21 @@ namespace Application.Web.Models
             {
                 new LeaveSummaryViewModel()
                 {
-                    LeaveType = "Casual Leave",
+                    LeaveType = Leave.LeaveType.CasualLeave,
                     TotalAvailableLeave = leaveSummary.MaximumCasualLeave,
                     LeaveTaken = leaveSummary.TotalCasualLeaveTaken,
                     RemainingLeave = leaveSummary.RemainingCasualLeave
                 },
                 new LeaveSummaryViewModel()
                 {
-                    LeaveType = "Sick Leave",
+                    LeaveType = Leave.LeaveType.SickLeave,
                     TotalAvailableLeave = leaveSummary.MaximumSickLeave,
                     LeaveTaken = leaveSummary.TotalSickLeaveTaken,
                     RemainingLeave = leaveSummary.RemainingSickLeave
                 },
                 new LeaveSummaryViewModel()
                 {
-                    LeaveType = "Comp-Off",
+                    LeaveType = Leave.LeaveType.CompOff,
                     TotalAvailableLeave = leaveSummary.MaximumCompOffLeave,
                     LeaveTaken = leaveSummary.TotalCompOffLeaveTaken,
                     RemainingLeave = leaveSummary.RemainingCompOffLeave

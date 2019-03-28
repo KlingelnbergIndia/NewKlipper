@@ -219,7 +219,7 @@ namespace Application.Web.Controllers
             AttendanceService attendanceService)
         {
             var employeeViewModel = new EmployeeViewModel();
-            if (searchFilter == SearchFilter.AccessEventsByDateRange.ToString())
+            if (searchFilter == SearchFilter.GetAccessEventsByDateRange.ToString())
             {
                 FilterSelectedDateRangeAttendanceRecord
                     (employeeId, attendanceService, employeeViewModel);
@@ -427,7 +427,6 @@ namespace Application.Web.Controllers
             reporteeViewModel.LeaveFormName = reporteeViewModel.reportees[selectedReporteeId];
             reporteeViewModel.SelectedEmpIdForLeaveTab = selectedReporteeId;
         }
-
 
         private LeaveViewModel Leave()
         {

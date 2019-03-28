@@ -217,11 +217,11 @@ namespace Application.Web.Controllers
             LeaveType LeaveType = LeaveType.CasualLeave;
             if (leaveType == "Comp-Off")
                 LeaveType = LeaveType.CompOff;
-            if (leaveType == "Casual Leave")
+            if (leaveType == "Privilege Leave")
                 LeaveType = LeaveType.CasualLeave;
             if (leaveType == "Sick Leave")
                 LeaveType = LeaveType.SickLeave;
-            if (leaveType == "On Service Call")
+            if (leaveType == "On Site Service Call")
                 LeaveType = LeaveType.OnServiceCall;
 
             return LeaveType;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Html;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,9 +10,14 @@ namespace Application.Web.Models
 {
     public class LeaveSummaryViewModel
     {
-        public string LeaveType;
+        public LeaveType LeaveType;
         public float TotalAvailableLeave;
         public float LeaveTaken;
         public float RemainingLeave;
+
+        public HtmlString GetLeaveDisplayName()
+        {
+            return EnumHelperMethod.EnumDisplayNameFor(LeaveType);
+        }
     }
 }
