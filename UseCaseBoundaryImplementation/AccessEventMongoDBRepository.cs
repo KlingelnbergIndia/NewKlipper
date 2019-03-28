@@ -22,21 +22,26 @@ namespace RepositoryImplementation
         {
             var filter = Builders<AccessEventEntityModel>
                 .Filter.Eq("EmployeeID", employeeid);
+
             var listOfEntityAccessEvent = _context.AccessEvents
                 .Find(filter)
                 .ToList();
 
             var listOfDomainModelAccessEvent = 
-                ConvertEntityAccessEventToDomainModelAccessEvent(listOfEntityAccessEvent);
-            WorkLogs accessEvents = new WorkLogs(listOfDomainModelAccessEvent);
+                ConvertEntityAccessEventToDomainModelAccessEvent(
+                    listOfEntityAccessEvent);
+
+            var accessEvents = new WorkLogs(listOfDomainModelAccessEvent);
+
             return accessEvents;
         }
 
-        public List<DomainModel.AccessEvent> ConvertEntityAccessEventToDomainModelAccessEvent
-            (List<AccessEventEntityModel> listOfEntityAccessEvent)
+        public List<AccessEvent> ConvertEntityAccessEventToDomainModelAccessEvent(
+            List<AccessEventEntityModel> listOfEntityAccessEvent)
         {
             var listOfDomainModelAccessEvent =
-                new List<DomainModel.AccessEvent>();
+                new List<AccessEvent>();
+
             foreach (var domainModelAccessEvent in listOfEntityAccessEvent)
             {
                 var accessEvent =
@@ -55,8 +60,9 @@ namespace RepositoryImplementation
         public WorkLogs GetAccessEventsForDateRange
             (int employeeId, DateTime fromDate, DateTime toDate)
         {
-            DateTime toDateWithMaxTimeOfTheDay = 
+            var toDateWithMaxTimeOfTheDay = 
                 toDate.Date + DateTime.MaxValue.TimeOfDay;
+
             var accessEvents = _context
                 .AccessEvents
                 .AsQueryable()
@@ -67,13 +73,16 @@ namespace RepositoryImplementation
 
             var listOfDomainModelAccessEvent = 
                 ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
+
             return new WorkLogs(listOfDomainModelAccessEvent);
         }
 
-        public PerDayWorkRecord GetAccessEventsForADay(int employeeId, DateTime date)
+        public PerDayWorkRecord GetAccessEventsForADay(
+            int employeeId, DateTime date)
         {
-            DateTime dateWithMaxTimeOfTheDay = 
+            var dateWithMaxTimeOfTheDay = 
                 date.Date + DateTime.MaxValue.TimeOfDay;
+
             var accessEvents = _context
                 .AccessEvents
                 .AsQueryable()
@@ -81,19 +90,27 @@ namespace RepositoryImplementation
                             x.EventTime <= dateWithMaxTimeOfTheDay &&
                             x.EventTime >= date)
                 .ToList();
+
             var listOfAccessEvent = 
                 ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
+
             return new PerDayWorkRecord(date, listOfAccessEvent);
         }
 
-        public List<WorkLogs> GetAccessEventsForAllEmployeeExceptAdmin(int adminEmployeeId, DateTime fromDate, DateTime toDate)
+        public List<WorkLogs> GetAccessEventsForAllEmployeeExceptAdmin(
+            int adminEmployeeId, DateTime fromDate, DateTime toDate)
         {
-            DateTime toDateWithMaxTimeOfTheDay = toDate.Date + DateTime.MaxValue.TimeOfDay;
+            var toDateWithMaxTimeOfTheDay = 
+                toDate.Date + DateTime.MaxValue.TimeOfDay;
+
             var accessEvents = _context.AccessEvents.AsQueryable()
-                .Where(x => x.EmployeeID != adminEmployeeId && x.EventTime <= toDateWithMaxTimeOfTheDay && x.EventTime >= fromDate)
+                .Where(x => x.EmployeeID != adminEmployeeId 
+                            && x.EventTime <= toDateWithMaxTimeOfTheDay 
+                            && x.EventTime >= fromDate)
                 .ToList();
 
-            var listOfDomainModelAccessEvent = ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
+            var listOfDomainModelAccessEvent = 
+                ConvertEntityAccessEventToDomainModelAccessEvent(accessEvents);
            
             return listOfDomainModelAccessEvent
                 .GroupBy(x => x.EmployeeID)
