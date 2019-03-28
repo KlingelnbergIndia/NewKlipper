@@ -25,10 +25,10 @@ namespace UseCases
             var encryptedPassword = ToSha256(password);
             Employee employee = _employeeRepository
                 .GetEmployee(userName.ToLower());
+
             if (employee == null)
-            {
                 return null;
-            }
+            
             bool result  = employee.Authenticate(userName, encryptedPassword);
             if (result)
             {
@@ -49,10 +49,7 @@ namespace UseCases
 
                 return employeeDto;
             }
-            else
-            {
                 return null;
-            }
         }
 
         public ServiceResponseDTO ChangePassword(

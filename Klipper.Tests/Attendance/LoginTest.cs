@@ -5,6 +5,7 @@ using UseCases;
 using DomainModel;
 using System.Collections.Generic;
 using System;
+using UseCaseBoundary.DTO;
 
 namespace Tests
 {
@@ -100,7 +101,7 @@ namespace Tests
             var dummyEmployee =
                 new EmployeeBuilder()
                 .WithUserName("Sidhdesh.Vadgaonkar")
-                .WithPassword("26-12-1995")
+                .WithPassword("LxkwbyCWEaPHOOUJKq4nmSuTIfhz8JBZhvGlSq0L5j0=")
                 .BuildEmployee();
 
             employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
@@ -162,7 +163,7 @@ namespace Tests
             var dummyEmployee =
                 new EmployeeBuilder()
                 .WithUserName("Sidhdesh.Vadgaonkar")
-                .WithPassword("26-12-1995")
+                .WithPassword("LxkwbyCWEaPHOOUJKq4nmSuTIfhz8JBZhvGlSq0L5j0=")
                 .BuildEmployee();
 
             employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
@@ -184,7 +185,7 @@ namespace Tests
             var dummyEmployee =
                 new EmployeeBuilder()
                 .WithUserName("Sidhdesh.Vadgaonkar")
-                .WithPassword("26-12-1995")
+                .WithPassword("LxkwbyCWEaPHOOUJKq4nmSuTIfhz8JBZhvGlSq0L5j0=")
                 .BuildEmployee();
 
             employeeDataContainer.GetEmployee("sidhdesh.vadgaonkar").
@@ -195,5 +196,60 @@ namespace Tests
             Assert.IsNotNull(employeeDetails);
         }
 
+        [Test]
+        public void GivenCorrectCurrentPasswordGetNewPasswordSaveResponse()
+        {
+            // Setup
+            Login login = new Login(employeeDataContainer, userDataContainer);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                    .WithID(63)
+                    .WithUserName("Sidhdesh.Vadgaonkar")
+                    .WithPassword("LxkwbyCWEaPHOOUJKq4nmSuTIfhz8JBZhvGlSq0L5j0=")
+                    .BuildEmployee();
+
+            employeeDataContainer.GetEmployee(63).
+                Returns(dummyEmployee);
+
+            // Execute the use case
+            var response = login.ChangePassword(63, "26-12-1995","123");
+
+            Assert.That(response, Is.EqualTo(ServiceResponseDTO.Saved));
+        }
+
+        [Test]
+        public void GivenInCorrectCurrentPasswordGetInCorrectPasswordResponse()
+        {
+            // Setup
+            Login login = new Login(employeeDataContainer, userDataContainer);
+
+            var dummyEmployee =
+                new EmployeeBuilder()
+                    .WithID(63)
+                    .WithUserName("Sidhdesh.Vadgaonkar")
+                    .WithPassword("LxkwbyCWEaPHO")
+                    .BuildEmployee();
+
+            employeeDataContainer.GetEmployee(63).
+                Returns(dummyEmployee);
+
+            // Execute the use case
+            var response = login.ChangePassword(63, "26-12-1995", "123");
+
+            Assert.That(response, Is.EqualTo(ServiceResponseDTO.PassWordIncorrect));
+        }
+
+        [Test]
+        public void GivenNewPasswordAndIncorrectEmployeeIdGetUserNameNotExistsResponse()
+        {
+            // Setup
+            Login login = new Login(employeeDataContainer, userDataContainer);
+
+            // Execute the use case
+            var response = login.ChangePassword(63, "26-12-1995", "123");
+
+            Assert.That(response, Is.EqualTo(ServiceResponseDTO.UserNameNotExists));
+        }
     }
 }
