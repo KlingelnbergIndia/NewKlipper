@@ -23,7 +23,7 @@ namespace RepositoryImplementation
                 .Where( x => x.ID == (int)department)
                 .FirstOrDefault();
 
-            Departments dept = (Departments)departmentDetails.ID;
+            var dept = (Departments)departmentDetails.ID;
             return new Department(dept);
         }
     }

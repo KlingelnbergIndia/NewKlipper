@@ -28,36 +28,19 @@ namespace RepositoryImplementation
                 .FirstOrDefault();
 
             if (employeeFromAuthDBContext == null)
-            {
                 return null;
-            }
 
             var filterForEmployeeDBContext = Builders<EmployeeEntityModel>
                 .Filter
                 .Eq("ID", employeeFromAuthDBContext.ID);
+
             var employeeFromEmployeeDBContext = _employeeDBContext
                 .Employees
                 .Find(filterForEmployeeDBContext)
                 .FirstOrDefault();
 
-           var reportees = new List<int>();
-
-            int _id = employeeFromAuthDBContext.ID;
-            string _userName = employeeFromAuthDBContext.UserName;
-            string _password = employeeFromAuthDBContext.PasswordHash;
-            string firstName = employeeFromEmployeeDBContext.FirstName;
-            string lastName = employeeFromEmployeeDBContext.LastName;
-            string title = employeeFromEmployeeDBContext.Title;
-            reportees = employeeFromEmployeeDBContext.Reportees;
-            var department = (Departments)employeeFromEmployeeDBContext
-                .DepartmentId;
-            var _roles = ConvertStringRolesToEnumRoles
-                (employeeFromEmployeeDBContext.Roles);
-            var domainEmployee = new Employee
-                (_id, _userName, _password, firstName, lastName,
-                title, _roles, reportees, department);
-
-            return domainEmployee;
+            return Employee(employeeFromAuthDBContext,
+                employeeFromEmployeeDBContext);
         }
 
         public Employee GetEmployee(int employeeId)
@@ -67,72 +50,45 @@ namespace RepositoryImplementation
                 .FirstOrDefault();
 
             if (employeeFromAuthDBContext == null)
-            {
                 return null;
-            }
 
             var filterForEmployeeDBContext = Builders<EmployeeEntityModel>
                 .Filter
                 .Eq("ID", employeeFromAuthDBContext.ID);
+
             var employeeFromEmployeeDBContext = _employeeDBContext
                 .Employees
                 .Find(filterForEmployeeDBContext)
                 .FirstOrDefault();
 
-            var reportees = new List<int>();
-
-            int _id = employeeFromAuthDBContext.ID;
-            string _userName = employeeFromAuthDBContext.UserName;
-            string _password = employeeFromAuthDBContext.PasswordHash;
-            string firstName = employeeFromEmployeeDBContext.FirstName;
-            string lastName = employeeFromEmployeeDBContext.LastName;
-            string title = employeeFromEmployeeDBContext.Title;
-            reportees = employeeFromEmployeeDBContext.Reportees;
-            var department = (Departments)employeeFromEmployeeDBContext
-                .DepartmentId;
-
-            var _roles = ConvertStringRolesToEnumRoles
-                (employeeFromEmployeeDBContext.Roles);
-            var domainEmployee = new Employee
-                (_id, _userName, _password, firstName, lastName, 
-                title, _roles,reportees, department);
-
-            return domainEmployee;
-
+            return Employee(employeeFromAuthDBContext,
+                employeeFromEmployeeDBContext);
         }
 
         public List<Employee> GetAllEmployeeExceptAdmin(int employeeId)
         {
-            var AllEmployeeFromAuthDBContext = _authDBContext.Users.AsQueryable()
+            var AllEmployeeFromAuthDBContext = _authDBContext.Users
+                .AsQueryable()
                 .Where(x => x.ID != employeeId)
                 .ToList();
 
             if (AllEmployeeFromAuthDBContext == null)
-            {
                 return null;
-            }
 
-            var allemployeesExceptAdmin = _employeeDBContext.Employees.Find(x=>x.ID != employeeId).ToList();
+            var allemployeesExceptAdmin = _employeeDBContext.Employees
+                .Find(x=>x.ID != employeeId)
+                .ToList();
 
             var listOfEmployee = new List<Employee>();
             foreach (var employee in allemployeesExceptAdmin)
             {
-                List<int> reportees = new List<int>();
+                var employeeFromAuthDBContext = AllEmployeeFromAuthDBContext
+                    .Where(x=>x.ID == employee.ID)
+                    .FirstOrDefault();
 
-                var employeeFromAuthDBContext = AllEmployeeFromAuthDBContext.Where(x=>x.ID == employee.ID).FirstOrDefault();
-                int id = employeeFromAuthDBContext.ID;
-                string userName = employeeFromAuthDBContext.UserName;
-                string password = employeeFromAuthDBContext.PasswordHash;
-                string firstName = employee.FirstName;
-                string lastName = employee.LastName;
-                string title = employee.Title;
-                reportees = employee.Reportees;
-                Departments department = (Departments)employee.DepartmentId;
-                List<EmployeeRoles> _roles = ConvertStringRolesToEnumRoles(employee.Roles);
-                Employee domainEmployee = new Employee(id, userName, password, firstName, lastName, title, _roles, reportees, department);
-                listOfEmployee.Add(domainEmployee);
+                listOfEmployee.Add(
+                    Employee(employeeFromAuthDBContext,employee));
             }
-
             return listOfEmployee;
         }
 
@@ -154,8 +110,33 @@ namespace RepositoryImplementation
                         break;
                 } 
             }
-
             return empRoles;
         }
+
+        private Employee Employee(UsersEntityModel employeeFromAuthDBContext,
+            EmployeeEntityModel employeeFromEmployeeDBContext)
+        {
+            var _id = employeeFromAuthDBContext.ID;
+            var _userName = employeeFromAuthDBContext.UserName;
+            var _password = employeeFromAuthDBContext.PasswordHash;
+            var firstName = employeeFromEmployeeDBContext.FirstName;
+            var lastName = employeeFromEmployeeDBContext.LastName;
+            var title = employeeFromEmployeeDBContext.Title;
+            var reportees = new List<int>();
+
+            reportees = employeeFromEmployeeDBContext.Reportees;
+            var department = (Departments)employeeFromEmployeeDBContext
+                .DepartmentId;
+
+            var _roles = ConvertStringRolesToEnumRoles
+                (employeeFromEmployeeDBContext.Roles);
+
+            var domainEmployee = new Employee
+            (_id, _userName, _password, firstName, lastName,
+                title, _roles, reportees, department);
+
+            return domainEmployee;
+        }
+
     }
 }

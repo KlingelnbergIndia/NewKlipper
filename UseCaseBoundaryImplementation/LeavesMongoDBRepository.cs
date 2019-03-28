@@ -84,7 +84,8 @@ namespace RepositoryImplementation
             if (isLeaveExist)
             {
                 __leaveDBContext.AppliedLeaves
-                    .DeleteOneAsync(x => x._objectId == ObjectId.Parse(leaveId));
+                    .DeleteOneAsync(
+                        x => x._objectId == ObjectId.Parse(leaveId));
 
                 var leaveEntity = new LeaveEntityModel()
                 {
@@ -99,12 +100,10 @@ namespace RepositoryImplementation
                     .InsertOneAsync(leaveEntity)
                     .GetAwaiter()
                     .GetResult();
+
                 return true;
             }
-            else
-            {
                 return false;
-            }
         }
 
         public bool CancelLeave(string LeaveId)
@@ -149,8 +148,9 @@ namespace RepositoryImplementation
                 .Where(x => x._objectId == ObjectId.Parse(leaveId))
                 .FirstOrDefault();
 
-            var leaveToLeaveObject = new Leave(leave.EmployeeId, leave.AppliedLeaveDates, 
-                leave.TypeOfLeave,leave.IsHalfDayLeave,leave.Remark, leave.Status,
+            var leaveToLeaveObject = new Leave(leave.EmployeeId,
+                leave.AppliedLeaveDates,leave.TypeOfLeave,
+                leave.IsHalfDayLeave,leave.Remark, leave.Status,
                 leave._objectId.ToString());
 
             return leaveToLeaveObject;
