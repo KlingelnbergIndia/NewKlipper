@@ -56,25 +56,23 @@ namespace UseCases
         }
 
         public ServiceResponseDTO ChangePassword(
-            string userName, string currentPassword,string newPassword)
+            int employeeId, string currentPassword,string newPassword)
         {
             var encryptedCurrentPassword = ToSha256(currentPassword);
             var encryptedNewPassword = ToSha256(newPassword);
             var employee = _employeeRepository
-                .GetEmployee(userName.ToLower());
+                .GetEmployee(employeeId);
 
-            var id = _authMongoDbRepository.UserIdByUserName(userName);
-
-            if (employee == null || id!= employee.Id())
+            if (employee == null)
                 return ServiceResponseDTO.UserNameNotExists;
-          
+
             bool result = employee
-                .Authenticate(userName, encryptedCurrentPassword);
+                .Authenticate(employee.UserName(), encryptedCurrentPassword);
            
             if (result)
             {
                 _authMongoDbRepository
-                    .ChangePassword(employee.Id(), newPassword);
+                    .ChangePassword(employee.UserName(), encryptedNewPassword);
                 return ServiceResponseDTO.Saved;
             }
 

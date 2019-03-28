@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DataAccess.EntityModel.Authentication;
+using UseCaseBoundary;
 using UseCaseBoundary.DTO;
 
 namespace RepositoryImplementation
 {
-    public class AuthMongoDBRepository
+    public class AuthMongoDBRepository:IAuthMongoDBRepository
     {
         private readonly AuthDBContext _authDBContext = null;
 
@@ -18,20 +19,14 @@ namespace RepositoryImplementation
             _authDBContext = AuthDBContext.Instance;
         }
 
-        public void ChangePassword(int id, string password)
+        public void ChangePassword(string username, string password)
         {
             _authDBContext.Users.UpdateOneAsync(
-                x=>x.ID == id, 
+                x=>x.UserName.ToLower() == username.ToLower(), 
                 Builders<UsersEntityModel>
                     .Update
                     .Set(a => a.PasswordHash,password));
 
-        }
-
-        public int UserIdByUserName(string userName)
-        {
-           var user = _authDBContext.Users.FindAsync(x=>x.UserName.ToLower() == userName);
-           return user.Id;
         }
 
     }

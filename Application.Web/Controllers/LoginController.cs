@@ -2,10 +2,12 @@
 using System.Linq;
 using Application.Web.Models;
 using DomainModel;
+using Klipper.Web.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using UseCaseBoundary;
+using UseCaseBoundary.DTO;
 using UseCases;
 
 namespace Application.Web.Controllers
@@ -56,6 +58,47 @@ namespace Application.Web.Controllers
             TempData["errorMessage"] = "Invalid username or password";
             return RedirectToAction("Login");
         }
+
+        [AuthenticateSession]
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ChangePassword([FromForm] ChangedPasswordViewModel changedPasswordViewModel)
+        {
+            var LoginService = new Login(_employeeRepository,
+                _authMongoDbRepository);
+
+            if (changedPasswordViewModel.NewPassword == changedPasswordViewModel.ConfirmPassword)
+            {
+                var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
+
+                var response = LoginService.ChangePassword(
+                    employeeId,
+                    changedPasswordViewModel.CurrentPassword,
+                    changedPasswordViewModel.NewPassword);
+
+                if (response == ServiceResponseDTO.Saved)
+                {
+                    TempData["successMessage"] = "Password changed successfully";
+                    return RedirectToAction("Login");
+                }
+                   
+                if (response == ServiceResponseDTO.UserNameNotExists)
+                    TempData["errorMessage"] = "User name Does Not Exists";
+                if (response == ServiceResponseDTO.PassWordIncorrect)
+                    TempData["errorMessage"] = "User name and password does not match";
+            }
+            else
+            {
+                TempData["errorMessage"] = "New password and confirm password does not match";
+            }
+            return View();
+        }
+
 
         private void DisplayOfReporteeTab(List<EmployeeRoles> roles)
         {

@@ -41,7 +41,7 @@ namespace Application.Web.ViewComponents
             {
                 menuList.Add(new MenuLinksViewModel
                 {
-                    IndexPosition = 2,
+                    IndexPosition = 3,
                     Label = "Reportees",
                     Controller = "Home",
                     Action = "Reportees",
@@ -61,7 +61,7 @@ namespace Application.Web.ViewComponents
 
             menuList.Add(new MenuLinksViewModel
             {
-                IndexPosition = 1,
+                IndexPosition = 2,
                 Label = "Leave",
                 Controller = "Leave",
                 Action = "Index",
@@ -70,7 +70,16 @@ namespace Application.Web.ViewComponents
 
             menuList.Add(new MenuLinksViewModel
             {
-                IndexPosition = 10,
+                IndexPosition = 4,
+                Label = "Change Password",
+                Controller = "Login",
+                Action = "ChangePassword",
+                Glyphicon = "glyphicon glyphicon-duplicate"
+            });
+
+            menuList.Add(new MenuLinksViewModel
+            {
+                IndexPosition = 5,
                 Label = "Logout",
                 Controller = "Login",
                 Action = "Logout",

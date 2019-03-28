@@ -39,6 +39,15 @@
                     @TempData["errorMessage"]
                 </div>
             }
+            else
+            {
+                @if (@TempData["successMessage"] != null)
+                 {
+                     <div class="alert alert-success success-alert-animation ">
+                         @TempData["successMessage"]
+                     </div>
+                 }
+            }
         </div>
     </div>
 </div>
