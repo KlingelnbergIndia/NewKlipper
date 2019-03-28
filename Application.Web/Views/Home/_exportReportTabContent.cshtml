@@ -2,27 +2,28 @@
     <div class="panel panel-heading col-md-12 col-sm-12">
         <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
             <label>Attendance Report</label>
-        <form action="ExportAttendanceReport" method="post">
-            <div class="form-inline">
-                <div class="form-group">
-                    <label for="fromDate">From</label>
-                    <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
-                           min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
-                           max="@DateTime.Today.ToString("yyyy-MM-dd")"
-                           value="@(Model.fromDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd"))" required>
+            <form action="ExportAttendanceReport" method="post">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label for="fromDate">From</label>
+                        <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
+                               min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                               max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                               value="@(Model.fromDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd"))" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="toDate" style="margin-left:10px;">To</label>
+                        <input type="date" id="toDate" name="toDate" class="form-control input-sm"
+                               min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                               max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                               value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Export" class="btn btn-info btn-sm pull" style="margin-left:10px;" />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="toDate" style="margin-left:10px;">To</label>
-                    <input type="date" id="toDate" name="toDate" class="form-control input-sm"
-                           min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
-                           max="@DateTime.Today.ToString("yyyy-MM-dd")"
-                           value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Export" class="btn btn-info btn-sm pull" style="margin-left:10px;" />
-                </div>
-            </div>
-        </form>
+            </form>
+            <br/>
         <label>Leave Report</label>
             <form  asp-action="ExportLeaveReport" asp-controller="Leave" method="post">
                 <div class="form-inline">
