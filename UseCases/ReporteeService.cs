@@ -35,16 +35,20 @@ namespace UseCases
 
         public ReporteeDTO TeamLeadData(int employeeId)
         {
-            Employee currentEmployee = _employeeRepository.GetEmployee(employeeId);
+            var currentEmployee = _employeeRepository
+                .GetEmployee(employeeId);
 
             if (currentEmployee != null)
             {
                 var reporteesOfCurrentEmployee = currentEmployee.Reportees();
 
-                if (reporteesOfCurrentEmployee.Count != 0 || currentEmployee.Roles().Contains(EmployeeRoles.Admin))
+                if (reporteesOfCurrentEmployee.Count != 0 
+                    || currentEmployee.Roles().Contains(EmployeeRoles.Admin))
                 {
-                    ReporteeDTO reporteeDto = new ReporteeDTO();
-                    var teamLeadData = _employeeRepository.GetEmployee(employeeId);
+                    var reporteeDto = new ReporteeDTO();
+                    var teamLeadData = _employeeRepository
+                        .GetEmployee(employeeId);
+
                     if (teamLeadData != null)
                     {
                         reporteeDto.ID = teamLeadData.Id();
@@ -68,7 +72,8 @@ namespace UseCases
            
                 var reporteeDtobjs = new List<ReporteeDTO>();
 
-                var reporteesOfAdmin = _employeeRepository.GetAllEmployeeExceptAdmin(adminId);
+                var reporteesOfAdmin = _employeeRepository
+                    .GetAllEmployeeExceptAdmin(adminId);
 
             if (reporteesOfAdmin.Count != 0)
                 {
@@ -87,7 +92,7 @@ namespace UseCases
 
         private List<ReporteeDTO> GetAllReporteesData(Employee currentEmployee)
         {
-            List<ReporteeDTO> reporteeDtobjs = new List<ReporteeDTO>();
+           var reporteeDtobjs = new List<ReporteeDTO>();
 
             var reporteesOfCurrentEmployee = currentEmployee.Reportees();
 
@@ -95,8 +100,10 @@ namespace UseCases
             {
                 foreach (var reportee in reporteesOfCurrentEmployee)
                 {
-                    ReporteeDTO reporteeDto = new ReporteeDTO();
-                    var reporteeData = _employeeRepository.GetEmployee(reportee);
+                    var reporteeDto = new ReporteeDTO();
+                    var reporteeData = _employeeRepository
+                        .GetEmployee(reportee);
+
                     if (reporteeData != null)
                     {
                         reporteeDto.ID = reporteeData.Id();

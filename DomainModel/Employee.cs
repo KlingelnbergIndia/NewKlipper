@@ -103,16 +103,11 @@ namespace DomainModel
 
         public static bool CanContainReportees(List<EmployeeRoles> roles)
         {
-            if (roles != null)
-            {
-                return roles
+            return roles != null
+                ? roles
                     .Any(x => x.ToString() == ValidRole.TeamLeader.ToString()
-                              || x.ToString() == ValidRole.TeamLeader.ToString());
-            }
-            else
-            {
-                return false;
-            }
+                            || x.ToString() == ValidRole.TeamLeader.ToString())
+                : false;
         }
     }
 }

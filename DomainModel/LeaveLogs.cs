@@ -23,8 +23,9 @@ namespace DomainModel
 
            float noOfHalfDayCasualLeaveTaken = _listOfLeave
                .Where(x => x.GetLeaveType() == LeaveType.CasualLeave
-            && x.GetStatus() != StatusType.Cancelled && x.IsHalfDayLeave() == true)
-            .Sum(x => x.GetLeaveDate().Count);
+                        && x.GetStatus() != StatusType.Cancelled 
+                        && x.IsHalfDayLeave() == true)
+               .Sum(x => x.GetLeaveDate().Count);
 
             return noOfCasualLeaveTaken + noOfHalfDayCasualLeaveTaken/2;
         }

@@ -227,7 +227,8 @@ namespace Application.Web.Controllers
             return LeaveType;
         }
 
-        private void GetResponseMessageForLeaveRecord(ServiceResponseDTO response)
+        private void GetResponseMessageForLeaveRecord(
+            ServiceResponseDTO response)
         {
             if (response == ServiceResponseDTO.Saved)
                 TempData["responseMessage"] = "Leave applied sucessfully !";
@@ -239,7 +240,8 @@ namespace Application.Web.Controllers
                 TempData["errorMessage"] = "Selected leave is not available !";
         }
 
-        private void GetResponseMessageForApplyCompOff(ServiceResponseDTO response)
+        private void GetResponseMessageForApplyCompOff(
+            ServiceResponseDTO response)
         {
             if (response == ServiceResponseDTO.Saved)
                 TempData["responseMessage"] = "Comp-Off added sucessfully !";
@@ -265,15 +267,18 @@ namespace Application.Web.Controllers
                 var leaveService = new LeaveService
                     (_leavesRepository, _employeeRepository,
                     _departmentRepository, _carryForwardLeaves);
+
                 var response = leaveService
-                    .UpdateLeave
-                        (leaveId, loggedInEmpId, fromDate, toDate, LeaveType, isHalfDay, remark);
+                    .UpdateLeave(leaveId, loggedInEmpId, fromDate, 
+                        toDate, LeaveType, isHalfDay, remark);
+
                 GetResponseMessageOfUpdateLeave(response);
             }
             return RedirectToAction("Index");
         }
 
-        private void GetResponseMessageOfUpdateLeave(ServiceResponseDTO response)
+        private void GetResponseMessageOfUpdateLeave(
+            ServiceResponseDTO response)
         {
             if (response == ServiceResponseDTO.Updated)
                 TempData["responseMessage"] = "Leave updated sucessfully !";
@@ -289,7 +294,8 @@ namespace Application.Web.Controllers
                 TempData["errorMessage"] = "Passed leaves can not be updated !";
         }
 
-        private void GetResponseMessageOfUpdateAddedCompOff(ServiceResponseDTO response)
+        private void GetResponseMessageOfUpdateAddedCompOff(
+            ServiceResponseDTO response)
         {
             if (response == ServiceResponseDTO.Updated)
                 TempData["responseMessage"] = "CompOff updated sucessfully !";
@@ -303,7 +309,8 @@ namespace Application.Web.Controllers
                 TempData["errorMessage"] = "Passed CompOff can not be updated !";
         }
 
-        private static void FormatEmployeeDetail(ExcelWorksheet worksheet, int j, EmployeeViewModel perEmployeeRecord)
+        private static void FormatEmployeeDetail(ExcelWorksheet worksheet,
+            int j, EmployeeViewModel perEmployeeRecord)
         {
             worksheet.Cells[j, 1].Value = "Employee ID";
             worksheet.Cells[j + 1, 1].Value = "Employee Name";
@@ -311,7 +318,8 @@ namespace Application.Web.Controllers
             worksheet.Cells[j + 1, 2].Value = perEmployeeRecord.EmployeeName;
         }
 
-        private static int FormatLeaveSummary(ExcelWorksheet worksheet, int j, EmployeeViewModel perEmployeeRecord)
+        private static int FormatLeaveSummary(ExcelWorksheet worksheet, 
+            int j, EmployeeViewModel perEmployeeRecord)
         {
             worksheet.Cells[j, 4].Value = "Leave Type";
             worksheet.Cells[j, 5].Value = "Total Leave Available";
@@ -335,8 +343,8 @@ namespace Application.Web.Controllers
             return i;
         }
 
-        private static int FormatLeaveRecord
-            (ExcelWorksheet worksheet, EmployeeViewModel perEmployeeRecord, int k)
+        private static int FormatLeaveRecord(ExcelWorksheet worksheet,
+            EmployeeViewModel perEmployeeRecord, int k)
         {
             worksheet.Cells[k, 1].Value = "From Date";
             worksheet.Cells[k, 2].Value = "To Date";
@@ -380,7 +388,10 @@ namespace Application.Web.Controllers
             if (reportees.Count() != 0)
             {
                 reportees.Add(reporteeService.TeamLeadData(employeeId));
-                GetReporteeAndTeamLeadData(leaveService, reportees.OrderBy(i=>i.ID).ToList(), listOfReporteesLeaveRecord);
+                GetReporteeAndTeamLeadData(
+                    leaveService, reportees.OrderBy(i=>i.ID).ToList(), 
+                    listOfReporteesLeaveRecord);
+
                 return listOfReporteesLeaveRecord;
             }
             return null;

@@ -44,18 +44,21 @@ namespace DomainModel
             if (WeekDay == DayOfWeek.Sunday)
                 return false;
 
-            if ((_department == Departments.Software || _department == Departments.Design)
+            if ((_department == Departments.Software 
+                  || _department == Departments.Design)
                 && WeekDay == DayOfWeek.Saturday)
                 return false;
 
-            if (!(_department == Departments.Software || _department == Departments.Design)
-                && (weekOfMonth == 2 || weekOfMonth == 4) && WeekDay == DayOfWeek.Saturday)
+            if (!(_department == Departments.Software 
+                   || _department == Departments.Design)
+                && (weekOfMonth == 2 || weekOfMonth == 4) 
+                && WeekDay == DayOfWeek.Saturday)
                 return false;
 
             return true;
         }
 
-        private static int GetWeekNumberOfMonth(DateTime date)
+        private int GetWeekNumberOfMonth(DateTime date)
         {
             var beginningOfMonth = new DateTime(date.Year, date.Month, 1);
 

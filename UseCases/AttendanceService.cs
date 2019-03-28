@@ -46,10 +46,10 @@ namespace UseCases
                 listOfPerDayAttendanceRecord, listOfLeave, 
                 fromDate, toDate, employeeId);
 
-            Employee employeeData = _employeeRepository
+            var employeeData = _employeeRepository
                 .GetEmployee(employeeId);
 
-            Department department = _departmentRepository
+            var department = _departmentRepository
                 .GetDepartment(employeeData.Department());
 
             return new AttendanceRecordsDTO
@@ -286,6 +286,7 @@ namespace UseCases
                     overTime, lateBy, remark, dayStatus);
                 listOfPerDayAttendanceRecordDTO.Add(attendanceRecord);
             }
+
             return listOfPerDayAttendanceRecordDTO;
         }
 
@@ -300,6 +301,7 @@ namespace UseCases
                                         || x.GetStatus() == Leave.StatusType.Updated))
                         .FirstOrDefault()
                     : null;
+
             return leaveOfParticularDate;
         }
 
@@ -366,6 +368,7 @@ namespace UseCases
                     ? GetExtraHours(workingHours + regularizedHours,
                         noOfHoursToBeWorked)
                     : GetExtraHours(workingHours, noOfHoursToBeWorked);
+
                 return 
                     extraHour.Hour > 0 || extraHour.Minute > 0
                     ? extraHour
@@ -433,6 +436,7 @@ namespace UseCases
                             " - Half Day")
                     : EnumHelperMethod.EnumDisplayNameFor(leaveType).ToString();
             }
+
             return reguralizedEntry != null 
                 ? reguralizedEntry.GetRemark() 
                 : null;
@@ -489,11 +493,12 @@ namespace UseCases
             double noOfHoursToBeWorked)
         {
             if (listOfPerDayAttendanceRecord.Count == 0)
-            {
                 return new Time(00, 00);
-            }
+           
             double totalRequiredHoursToBeWorked = listOfPerDayAttendanceRecord
-              .Count(x => x.DayStatus != DayStatus.NonWorkingDay) * noOfHoursToBeWorked;
+              .Count(x => x.DayStatus != DayStatus.NonWorkingDay) 
+                                                  * noOfHoursToBeWorked;
+
             return new Time((int)totalRequiredHoursToBeWorked, 00);
         }
 
@@ -501,9 +506,7 @@ namespace UseCases
             List<PerDayAttendanceRecordDTO> listOfAttendanceRecordDTO)
         {
             if (listOfAttendanceRecordDTO.Count == 0)
-            {
                 return new Time(00, 00);
-            }
 
             var sumOfTotalWorkingHours = TimeSpan.Zero;
 
@@ -522,10 +525,9 @@ namespace UseCases
             PerDayAttendanceRecordDTO AttendanceRecordDTO)
         {
             if (AttendanceRecordDTO.HaveLeave == true)
-            {
                return sumOfTotalWorkingHours = WorkingHoursForLeave(
                     sumOfTotalWorkingHours, AttendanceRecordDTO);
-            }
+           
             switch (AttendanceRecordDTO.IsHoursRegularized)
             {
                 case true:
@@ -554,10 +556,12 @@ namespace UseCases
                 (AttendanceRecordDTO.WorkingHours.Hour,
                 AttendanceRecordDTO.WorkingHours.Minute,
                 00);
+
             var regularizedHours = new TimeSpan
                 (AttendanceRecordDTO.RegularizedHours.Hour,
                 AttendanceRecordDTO.RegularizedHours.Minute,
                 00);
+
             sumOfTotalWorkingHours += workingHours + regularizedHours;
             return sumOfTotalWorkingHours;
         }

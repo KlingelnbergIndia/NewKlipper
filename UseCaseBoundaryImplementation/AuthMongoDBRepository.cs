@@ -1,12 +1,7 @@
 ﻿using DataAccess;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DataAccess.EntityModel.Authentication;
 using UseCaseBoundary;
-using UseCaseBoundary.DTO;
 
 namespace RepositoryImplementation
 {
@@ -26,7 +21,6 @@ namespace RepositoryImplementation
                 Builders<UsersEntityModel>
                     .Update
                     .Set(a => a.PasswordHash,password));
-
         }
 
     }
