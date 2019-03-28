@@ -10,12 +10,14 @@ using UseCaseBoundary.DTO;
 
 namespace RepositoryImplementation
 {
-    public class AttendanceRegularizationMongoDBRepository : IAttendanceRegularizationRepository
+    public class AttendanceRegularizationMongoDBRepository :
+        IAttendanceRegularizationRepository
     {
         private readonly AttendanceRegularizationDBContext _regularizationDBContext;
         public AttendanceRegularizationMongoDBRepository()
         {
-            _regularizationDBContext = AttendanceRegularizationDBContext.Instance;
+            _regularizationDBContext = 
+                AttendanceRegularizationDBContext.Instance;
         }
 
         public List<Regularization> GetRegularizedRecords(int employeeId)
@@ -40,7 +42,8 @@ namespace RepositoryImplementation
             return data;
         }
 
-        public bool SaveRegularizationRecord(RegularizationDTO reguraliozationDTO)
+        public bool SaveRegularizationRecord(
+            RegularizationDTO reguraliozationDTO)
         {
             var data = new AttendanceRegularizationEntityModel()
             {
@@ -52,15 +55,18 @@ namespace RepositoryImplementation
                     reguraliozationDTO.ReguralizedHours.Minute,
                     00)
             };
+
             _regularizationDBContext
                 .AttendanceRegularization
                 .InsertOneAsync(data)
                 .GetAwaiter()
                 .GetResult();
+
             return true;
         }
 
-        public bool OverrideRegularizationRecord(RegularizationDTO reguraliozationDTO)
+        public bool OverrideRegularizationRecord(
+            RegularizationDTO reguraliozationDTO)
         {
             var data =new AttendanceRegularizationEntityModel()
             {
@@ -75,8 +81,9 @@ namespace RepositoryImplementation
 
             _regularizationDBContext
                 .AttendanceRegularization
-                .DeleteOneAsync(x=>x.EmployeeID == reguraliozationDTO.EmployeeID 
-                                   && x.RegularizedDate == reguraliozationDTO.RegularizedDate)
+                .DeleteOneAsync(
+                    x=>x.EmployeeID == reguraliozationDTO.EmployeeID 
+                    && x.RegularizedDate == reguraliozationDTO.RegularizedDate)
                 .GetAwaiter()
                 .GetResult(); ;
 
