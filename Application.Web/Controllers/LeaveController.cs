@@ -333,7 +333,7 @@ namespace Application.Web.Controllers
             int i = 1;
             foreach (var leaveSummary in perEmployeeRecord.LeaveViewModel.LeaveSummary)
             {
-                worksheet.Cells[j + i, 4].Value = leaveSummary.LeaveType;
+                worksheet.Cells[j + i, 4].Value = leaveSummary.GetLeaveDisplayName();
                 worksheet.Cells[j + i, 5].Value = leaveSummary.TotalAvailableLeave;
                 worksheet.Cells[j + i, 6].Value = leaveSummary.LeaveTaken;
                 worksheet.Cells[j + i, 7].Value = leaveSummary.RemainingLeave;
