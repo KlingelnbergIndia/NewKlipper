@@ -26,6 +26,7 @@ namespace Klipper.Tests
         private IDepartmentRepository departmentData;
         private IAttendanceRegularizationRepository regularizationData;
         private ILeavesRepository leaveData;
+        private ICompanyHolidayRepository holidayData;
 
         [SetUp]
         public void setup()
@@ -35,6 +36,8 @@ namespace Klipper.Tests
             departmentData = Substitute.For<IDepartmentRepository>();
             regularizationData = Substitute.For<IAttendanceRegularizationRepository>();
             leaveData= Substitute.For<ILeavesRepository>();
+            holidayData = Substitute.For<ICompanyHolidayRepository>();
+
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
             regularizationData.GetRegularizedRecords(48).Returns(new List<Regularization>());
@@ -45,7 +48,7 @@ namespace Klipper.Tests
         {
             //Setup
             AttendanceService attendanceService = new AttendanceService
-                (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
+                (accessEventsData, employeeData, departmentData, regularizationData, leaveData, holidayData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-08"));
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-08"))
                 .Returns(dummyAccessevents);
@@ -72,7 +75,7 @@ namespace Klipper.Tests
         {
             //Setup
             AttendanceService attendanceService = new AttendanceService
-                (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
+                (accessEventsData, employeeData, departmentData, regularizationData, leaveData, holidayData);
 
             var dummyAccessevents = new AccessEventsBuilder()
                 .BuildBetweenDate(DateTime.Parse("2018/10/09"), DateTime.Parse("2018/10/09"));
@@ -126,7 +129,7 @@ namespace Klipper.Tests
         {
             // Setup
             AttendanceService attendanceService = new AttendanceService
-                (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
+                (accessEventsData, employeeData, departmentData, regularizationData, leaveData, holidayData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsData
                 .GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"))
@@ -156,7 +159,7 @@ namespace Klipper.Tests
         {
             // Setup
             AttendanceService attendanceService = new AttendanceService
-                (accessEventsData, employeeData, departmentData, regularizationData, leaveData);
+                (accessEventsData, employeeData, departmentData, regularizationData, leaveData, holidayData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-09"), DateTime.Parse("2018-10-09"));
             accessEventsData
@@ -186,7 +189,7 @@ namespace Klipper.Tests
         public void  GivenOddNOoFGymEntryAccessEventsSetWorkingHoursZero()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData, leaveData);
+                new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData, leaveData, holidayData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-30"), DateTime.Parse("2018-10-30"));
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-30"), DateTime.Parse("2018-10-30")).Returns(dummyAccessevents);
@@ -216,7 +219,7 @@ namespace Klipper.Tests
         public void GivenOddNOoFMainEntryAccessEventsSetWorkingHoursZero()
         {
             AttendanceService attendanceService =
-                new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData, leaveData);
+                new AttendanceService(accessEventsData, employeeData, departmentData, regularizationData, leaveData, holidayData);
 
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-01"));
             accessEventsData.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-01"), DateTime.Parse("2018-10-01")).Returns(dummyAccessevents);

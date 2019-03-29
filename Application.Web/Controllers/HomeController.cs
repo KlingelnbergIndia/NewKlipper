@@ -26,13 +26,15 @@ namespace Application.Web.Controllers
         private IAttendanceRegularizationRepository _attendanceRegularizationRepository;
         private ILeavesRepository _leavesRepository;
         private ICarryForwardLeaves _carryForwardLeaves;
+        private ICompanyHolidayRepository _companyHolidayRepository;
 
         public HomeController(IAccessEventsRepository accessEventRepository,
             IEmployeeRepository employeeRepository,
             IDepartmentRepository departmentRepository,
             IAttendanceRegularizationRepository attendanceRegularizationRepository,
             ILeavesRepository leavesRepository,
-            ICarryForwardLeaves carryForwardLeaves)
+            ICarryForwardLeaves carryForwardLeaves,
+            ICompanyHolidayRepository companyHolidayRepository)
         {
             _accessEventRepository = accessEventRepository;
             _employeeRepository = employeeRepository;
@@ -40,6 +42,7 @@ namespace Application.Web.Controllers
             _attendanceRegularizationRepository = attendanceRegularizationRepository;
             _leavesRepository = leavesRepository;
             _carryForwardLeaves = carryForwardLeaves;
+            _companyHolidayRepository = companyHolidayRepository;
         }
 
         public IActionResult Index(string searchFilter)
@@ -50,7 +53,8 @@ namespace Application.Web.Controllers
                 _employeeRepository,
                 _departmentRepository,
                 _attendanceRegularizationRepository,
-                _leavesRepository);
+                _leavesRepository,
+                _companyHolidayRepository);
             var employeeViewModel = GetAttendanceRecord(
                 searchFilter, employeeId, attendanceService);
 
@@ -140,7 +144,8 @@ namespace Application.Web.Controllers
                 _employeeRepository,
                 _departmentRepository,
                 _attendanceRegularizationRepository,
-                _leavesRepository);
+                _leavesRepository,
+                _companyHolidayRepository);
             var listofaccesspointdetail = 
                 await attendanceService.AccessPointDetails(employeeId, date);
             listofaccesspointdetail = ConvertAccessPointRecordsTimeToIST(
@@ -156,7 +161,7 @@ namespace Application.Web.Controllers
             var attendanceService = new AttendanceService
             (_accessEventRepository, _employeeRepository,
                 _departmentRepository, _attendanceRegularizationRepository,
-                _leavesRepository);
+                _leavesRepository, _companyHolidayRepository);
             var redularizationData = new RegularizationDTO()
             {
                 EmployeeID = employeeId,
@@ -260,7 +265,7 @@ namespace Application.Web.Controllers
             (ExcelWorksheet worksheet, int j, EmployeeViewModel empdata)
         {
             worksheet.Cells[j, 1].Value = "Employee ID";
-            worksheet.Cells[j + 1, 1].Value = "Employee Name";
+            worksheet.Cells[j + 1, 1].Value = "Employee Holiday";
             worksheet.Cells[j, 2].Value = empdata.EmployeeId;
             worksheet.Cells[j + 1, 2].Value = empdata.EmployeeName;
             worksheet.Cells[j, 6].Value = "Estimated Hours";
@@ -386,7 +391,7 @@ namespace Application.Web.Controllers
                 var attendanceService = new AttendanceService
                 (_accessEventRepository, _employeeRepository,
                     _departmentRepository, _attendanceRegularizationRepository,
-                    _leavesRepository);
+                    _leavesRepository , _companyHolidayRepository);
 
                 var listOfAttendanceRecord = attendanceService
                     .AttendanceReportForDateRange(selectedReporteeId,
@@ -453,7 +458,7 @@ namespace Application.Web.Controllers
             var attendanceService = new AttendanceService
             (_accessEventRepository, _employeeRepository,
                 _departmentRepository, _attendanceRegularizationRepository,
-                _leavesRepository);
+                _leavesRepository, _companyHolidayRepository);
 
             var reportees = reporteeService.ReporteesData(employeeId);
             var listOfReporteesAttendanceRecord = new List<EmployeeViewModel>();

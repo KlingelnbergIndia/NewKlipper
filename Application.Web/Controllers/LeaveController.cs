@@ -313,7 +313,7 @@ namespace Application.Web.Controllers
             int j, EmployeeViewModel perEmployeeRecord)
         {
             worksheet.Cells[j, 1].Value = "Employee ID";
-            worksheet.Cells[j + 1, 1].Value = "Employee Name";
+            worksheet.Cells[j + 1, 1].Value = "Employee Holiday";
             worksheet.Cells[j, 2].Value = perEmployeeRecord.EmployeeId;
             worksheet.Cells[j + 1, 2].Value = perEmployeeRecord.EmployeeName;
         }

@@ -24,7 +24,7 @@
                     <label for="to">to</label>
                     <input type="date" name="toDate" class="form-control input-sm"
                            min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
-                           max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                           max="@DateTime.Today.AddYears(+1).ToString("yyyy-MM-dd")"
                            value="@(Model.toDate == DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
                     <button type="submit" class="btn btn-info btn-sm">Show</button>
                 </div>
@@ -98,6 +98,12 @@
                             dayStatus = "Non working day";
                         }
 
+                        @if (item.DayStatus.ToString() == "Holiday")
+                         {
+                             nonWorkingDayClass = "warning";
+                             dayStatus = "Holiday";
+                         }
+
                         <tr class="@nonWorkingDayClass popoverClass" data-content="@dayStatus" data-placement="bottom">
                             <td style="vertical-align: text-top;">@item.Date.ToString("dd MMMM yyyy")</td>
                             <td>@item.Date.ToString("dddd")</td>
@@ -146,7 +152,7 @@
                             }
                             else
                             {
-                                @if (item.DayStatus.ToString() == "Leave")
+                                @if (item.DayStatus.ToString() == "Leave" || item.DayStatus.ToString() == "Holiday")
                                 {
                                     <td> @item.WorkingHours.Hour.ToString("D2"):@item.WorkingHours.Minute.ToString("D2")</td>
                                 }

@@ -53,7 +53,7 @@ namespace DataAccess.Helper
                     Address = "localhost",
                     Port = "27017",
                     DBUser = "ApiUser",
-                    Password = "Operationals#98765"
+                    Password = "Employee#98765"
                 }
             },
             {

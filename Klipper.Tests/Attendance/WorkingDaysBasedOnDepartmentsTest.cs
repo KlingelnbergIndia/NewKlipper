@@ -20,6 +20,7 @@ namespace Klipper.Tests
         private IDepartmentRepository departmentContainer;
         private IAttendanceRegularizationRepository regularizationData;
         private ILeavesRepository leaveData;
+        private ICompanyHolidayRepository holidayData;
 
         [SetUp]
         public void setup()
@@ -29,6 +30,7 @@ namespace Klipper.Tests
             departmentContainer = Substitute.For<IDepartmentRepository>();
             regularizationData = Substitute.For<IAttendanceRegularizationRepository>();
             leaveData = Substitute.For<ILeavesRepository>();
+            holidayData = Substitute.For<ICompanyHolidayRepository>();
 
             departmentContainer.GetDepartment(Departments.Software).Returns(
                 new Department(Departments.Software));
@@ -44,7 +46,7 @@ namespace Klipper.Tests
         {
             //SETUP
             AttendanceService attendanceService = new AttendanceService
-                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData);
+                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData, holidayData);
 
             var dummyAccessevents = new AccessEventsBuilder()
                 .BuildBetweenDate(DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
@@ -87,7 +89,7 @@ namespace Klipper.Tests
         {
             //SETUP
             AttendanceService attendanceService = new AttendanceService
-                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData);
+                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData, holidayData);
 
             var dummyAccessevents = new AccessEventsBuilder()
                 .BuildBetweenDate(DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
@@ -131,7 +133,7 @@ namespace Klipper.Tests
         {
             //SETUP
             AttendanceService attendanceService = new AttendanceService
-                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData);
+                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData, holidayData);
 
             var dummyAccessevents = new AccessEventsBuilder()
                 .BuildBetweenDate(DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
@@ -163,7 +165,7 @@ namespace Klipper.Tests
         {
             //SETUP
             AttendanceService attendanceService = new AttendanceService
-                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData);
+                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData, holidayData);
 
             var dummyAccessevents = new AccessEventsBuilder()
                 .BuildBetweenDate(DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
@@ -194,7 +196,7 @@ namespace Klipper.Tests
         {
             //SETUP
             AttendanceService attendanceService = new AttendanceService
-                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData);
+                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData, holidayData);
 
             var dummyAccessevents = new AccessEventsBuilder()
                 .BuildBetweenDate(DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
@@ -226,7 +228,7 @@ namespace Klipper.Tests
         {
             //SETUP
             AttendanceService attendanceService = new AttendanceService
-                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData);
+                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData, holidayData);
 
             var dummyAccessevents = new AccessEventsBuilder()
                 .BuildBetweenDate(DateTime.Parse("2019/02/02"), DateTime.Parse("2019/02/02"));
@@ -259,7 +261,7 @@ namespace Klipper.Tests
         {
             //SETUP
             AttendanceService attendanceService = new AttendanceService
-                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData);
+                (accessEventsContainer, employeeContainer, departmentContainer, regularizationData, leaveData, holidayData);
 
             var dummyAccessevents = new AccessEventsBuilder()
                 .BuildBetweenDate(DateTime.Parse("2019/02/09"), DateTime.Parse("2019/02/09"));

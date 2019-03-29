@@ -21,7 +21,7 @@ namespace Klipper.Tests.Leaves
         private ICarryForwardLeaves carryForwardLeavesData;
         private IAccessEventsRepository accessEventsData;
         private IAttendanceRegularizationRepository regularizationData;
-
+        private ICompanyHolidayRepository holidayData;
         List<DateTime> appliedLeaveDates = new List<DateTime>()
         {
             DateTime.Parse("2019-01-01"),
@@ -38,6 +38,7 @@ namespace Klipper.Tests.Leaves
             carryForwardLeavesData = Substitute.For<ICarryForwardLeaves>();
             accessEventsData = Substitute.For<IAccessEventsRepository>();
             regularizationData = Substitute.For<IAttendanceRegularizationRepository>();
+            holidayData = Substitute.For<ICompanyHolidayRepository>();
 
             var department = new Department(Departments.Software);
             departmentData.GetDepartment(Departments.Software).Returns(department);
@@ -155,7 +156,7 @@ namespace Klipper.Tests.Leaves
                 departmentData, carryForwardLeavesData);
 
             var attendanceService = new AttendanceService(accessEventsData, employeeData,
-                departmentData, regularizationData, leaveRecordData);
+                departmentData, regularizationData, leaveRecordData, holidayData);
 
 
             var attendanceRecord = attendanceService.AttendanceReportForDateRange(63, DateTime.Parse("2019-02-22"),
@@ -195,7 +196,7 @@ namespace Klipper.Tests.Leaves
                 departmentData, carryForwardLeavesData);
 
             var attendanceService = new AttendanceService(accessEventsData, employeeData,
-                departmentData, regularizationData, leaveRecordData);
+                departmentData, regularizationData, leaveRecordData, holidayData);
 
             var attendanceRecord = attendanceService.AttendanceReportForDateRange(63, DateTime.Parse("2019-02-22"),
                 DateTime.Parse("2019-02-22"));
