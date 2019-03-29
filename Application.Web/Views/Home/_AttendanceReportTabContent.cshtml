@@ -207,21 +207,12 @@
                         }
                         else
                         {
-                            @if (item.DayStatus == DayStatus.Leave)
+                            @if (item.DayStatus == DayStatus.Leave || item.DayStatus.ToString() == "Holiday")
                             {
-                                <td>
-                                    @item.WorkingHours.Hour.ToString("D2")
-                                :@item.WorkingHours.Minute.ToString("D2")
-                            </td>
+                                <td>-</td>
                         }
                         else
                         {
-                            @if (item.DayStatus.ToString() == "Holiday")
-                            {
-                                <td>-</td>
-                            }
-                            else
-                            {
                                 @if (item.DayStatus == DayStatus.HalfDayLeave)
                                 {
                                     <td>
@@ -248,8 +239,6 @@
                                               title="Regularize hrs"></span>
                                     </td>
                                 }
-                            }
-
                         }
                         }
 

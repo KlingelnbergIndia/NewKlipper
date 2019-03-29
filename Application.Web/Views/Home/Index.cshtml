@@ -153,24 +153,17 @@
                         }
                         else
                         {
-                            @if (item.DayStatus.ToString() == "Leave")
+                            @if (item.DayStatus.ToString() == "Leave" || item.DayStatus.ToString() == "Holiday")
                             {
-                                <td> @item.WorkingHours.Hour.ToString("D2"):@item.WorkingHours.Minute.ToString("D2")</td>
+                                <td>-</td>
                             }
                             else
                             {
-                                @if (item.DayStatus.ToString() == "Holiday")
-                                {
-                                    <td>-</td>
-                                }
-                                 else
-                                 {
                                      <td>
                                          <u class="open-Dialog" data-toggle="modal" onclick=getDailyData('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID) style="cursor:pointer">
                                              @item.WorkingHours.Hour.ToString("D2"):@item.WorkingHours.Minute.ToString("D2")
                                          </u>
                                      </td>
-                                 }
                             }
                         }
 
