@@ -132,6 +132,11 @@
                             nonWorkingDayClass = "warning";
                             dayStatus = "Non working day";
                         }
+                        @if (item.DayStatus.ToString() == "Holiday")
+                         {
+                             nonWorkingDayClass = "warning";
+                             dayStatus = "Holiday";
+                         }
 
                         <tr class="@nonWorkingDayClass popoverClass" 
                             data-content="@dayStatus" data-placement="bottom">
@@ -180,8 +185,8 @@
                                 :@item.OverTime.Minute.ToString("D2")</td>
                         }
                         @if (item.RegularizedHours.Hour == 0 && item.RegularizedHours.Minute == 0
-                            && item.WorkingHours.Hour == 0 && item.WorkingHours.Minute == 0
-                            && item.TimeIn.Hour == 0 && item.TimeIn.Hour == 0)
+                           && item.WorkingHours.Hour == 0 && item.WorkingHours.Minute == 0
+                           && item.TimeIn.Hour == 0 && item.TimeIn.Hour == 0 && item.DayStatus == DayStatus.WorkingDay)
                         {
                             <td>
                                 Missing entry
@@ -193,7 +198,7 @@
                         }
                         else
                         {
-                            @if (item.DayStatus == DayStatus.Leave)
+                            @if (item.DayStatus == DayStatus.Leave || item.DayStatus == DayStatus.Holiday)
                              {
                                  <td>@item.WorkingHours.Hour.ToString("D2")
                                      :@item.WorkingHours.Minute.ToString("D2")</td>
