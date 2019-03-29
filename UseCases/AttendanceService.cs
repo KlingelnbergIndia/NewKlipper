@@ -503,9 +503,12 @@ namespace UseCases
             }
 
             double totalRequiredHoursToBeWorked = listOfAttendanceRecordDTO
-                .Count(x => x.DayStatus != DayStatus.NonWorkingDay) * noOfHoursToBeWorked;
+                .Count(x => x.DayStatus != DayStatus.NonWorkingDay
+                            && x.DayStatus!= DayStatus.Holiday) * noOfHoursToBeWorked;
+
             var totalWorkedTime = CalculateTotalWorkingHours
                 (listOfAttendanceRecordDTO);
+
             var totalWorkedSpan = new TimeSpan
                 (totalWorkedTime.Hour, totalWorkedTime.Minute, 00);
 
@@ -527,7 +530,8 @@ namespace UseCases
                 return new Time(00, 00);
            
             double totalRequiredHoursToBeWorked = listOfPerDayAttendanceRecord
-              .Count(x => x.DayStatus != DayStatus.NonWorkingDay) 
+              .Count(x => x.DayStatus != DayStatus.NonWorkingDay && 
+                          x.DayStatus!= DayStatus.Holiday) 
                                                   * noOfHoursToBeWorked;
 
             return new Time((int)totalRequiredHoursToBeWorked, 00);
