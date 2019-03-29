@@ -22,7 +22,7 @@ namespace DomainModel
             SickLeave,
             [Display(Name = "Comp-Off")]
             CompOff,
-            [Display(Name = "On Site Service Call")]
+            [Display(Name = "On-Site Service Call")]
             OnServiceCall
         }
         public enum StatusType

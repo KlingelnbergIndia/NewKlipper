@@ -55,7 +55,7 @@ namespace Application.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
             HttpContext.Session.Clear();
-            TempData["errorMessage"] = "Invalid username or password";
+            TempData["errorMessage"] = "Please provide valid Username and Password !";
             return RedirectToAction("Login");
         }
 
@@ -83,18 +83,18 @@ namespace Application.Web.Controllers
 
                 if (response == ServiceResponseDTO.Saved)
                 {
-                    TempData["successMessage"] = "Password changed successfully";
+                    TempData["successMessage"] = "Password changed successfully. Please login again. ";
                     return RedirectToAction("Login");
                 }
                    
                 if (response == ServiceResponseDTO.UserNameNotExists)
-                    TempData["errorMessage"] = "User name Does Not Exists";
+                    TempData["errorMessage"] = "Please provide valid User name.";
                 if (response == ServiceResponseDTO.PassWordIncorrect)
-                    TempData["errorMessage"] = "User name and password does not match";
+                    TempData["errorMessage"] = "User name and password does not match.";
             }
             else
             {
-                TempData["errorMessage"] = "New password and confirm password does not match";
+                TempData["errorMessage"] = "New password and confirm password does not match.";
             }
             return View();
         }
