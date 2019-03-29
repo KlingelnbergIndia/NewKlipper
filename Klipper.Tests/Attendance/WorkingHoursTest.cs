@@ -22,6 +22,7 @@ namespace Klipper.Tests
         private ILeavesRepository leaveData;
         private IAttendanceRegularizationRepository regularizationData;
         private ICarryForwardLeaves carryForwardLeavesData;
+        private ICompanyHolidayRepository holidayData;
 
         [SetUp]
         public void Setup()
@@ -33,6 +34,7 @@ namespace Klipper.Tests
             regularizationData = Substitute.For<IAttendanceRegularizationRepository>();
             regularizationData.GetRegularizedRecords(48).Returns(new List<Regularization>());
             carryForwardLeavesData = Substitute.For<ICarryForwardLeaves>();
+            holidayData = Substitute.For<ICompanyHolidayRepository>();
         }
 
         [Test]
@@ -55,7 +57,7 @@ namespace Klipper.Tests
         
 
         AttendanceService attendanceService =
-                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
+                new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData, holidayData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsContainer.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
 
@@ -89,7 +91,7 @@ namespace Klipper.Tests
             leaveData.GetAllLeavesInfo(63).Returns(dummyLeaves);
 
             AttendanceService attendanceService =
-                    new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
+                    new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData, holidayData);
             var dummyAccessevents = new AccessEventsBuilder().BuildBetweenDate(DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05"));
             accessEventsContainer.GetAccessEventsForDateRange(48, DateTime.Parse("2018-10-05"), DateTime.Parse("2018-10-05")).Returns(dummyAccessevents);
 
@@ -138,7 +140,7 @@ namespace Klipper.Tests
                 .Returns(dummyAccessevents);
 
             AttendanceService attendanceService =
-                   new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
+                   new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData, holidayData);
 
             // Execute usecase
             var listOfAccessEventsRecord = attendanceService
@@ -185,7 +187,7 @@ namespace Klipper.Tests
                 .Returns(dummyAccessevents);
 
             AttendanceService attendanceService =
-                   new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData);
+                   new AttendanceService(accessEventsContainer, employeeData, departmentData, regularizationData, leaveData, holidayData);
 
             // Execute usecase
             var listOfAccessEventsRecord = attendanceService

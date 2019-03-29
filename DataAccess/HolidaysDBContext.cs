@@ -1,23 +1,27 @@
-﻿using DataAccess.EntityModel.Department;
-using DataAccess.Helper;
+﻿using DataAccess.Helper;
 using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using DataAccess.EntityModel.Holiday;
 
 namespace DataAccess
 {
-    public class DepartmentDBContext
+    public class HolidaysDBContext
     {
+
         protected readonly IMongoDatabase _database = null;
 
         #region Instance
 
-        private static DepartmentDBContext _instance = null;
-        public static DepartmentDBContext Instance
+        private static HolidaysDBContext _instance = null;
+        public static HolidaysDBContext Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new DepartmentDBContext();
+                    _instance = new HolidaysDBContext();
                 }
                 return _instance;
             }
@@ -25,14 +29,15 @@ namespace DataAccess
 
         #endregion
 
-        public DepartmentDBContext()
+        public HolidaysDBContext()
         {
             var connectionString = DBConfigurator.GetConnectionString("OperationalsDB");
             var mongoClient = new MongoClient(connectionString);
             _database = mongoClient.GetDatabase("OperationalsDB");
         }
 
-        public IMongoCollection<DepartmentEntityModel> Departments => 
-            _database.GetCollection<DepartmentEntityModel>("Departments"); 
+        public IMongoCollection<HolidayEntityModel> holidays =>
+            _database.GetCollection<HolidayEntityModel>("Holidays");
     }
 }
+

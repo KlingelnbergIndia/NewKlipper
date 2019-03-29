@@ -135,12 +135,17 @@
                             nonWorkingDayClass = "warning";
                             dayStatus = "Non working day";
                         }
+                        @if (item.DayStatus.ToString() == "Holiday")
+                         {
+                             nonWorkingDayClass = "warning";
+                             dayStatus = "Holiday";
+                         }
 
-                        <tr class="@nonWorkingDayClass popoverClass" 
-                            data-content="@dayStatus" data-placement="bottom">
-                            <td style="vertical-align: text-top;">
-                                @item.Date.ToString("dd MMMM yyyy")
-                            </td>
+                    <tr class="@nonWorkingDayClass popoverClass"
+                        data-content="@dayStatus" data-placement="bottom">
+                        <td style="vertical-align: text-top;">
+                            @item.Date.ToString("dd MMMM yyyy")
+                        </td>
                         <td>@item.Date.ToString("dddd")</td>
 
                         @if (item.TimeIn.Hour == 0 && item.TimeIn.Minute == 0)
@@ -149,9 +154,11 @@
                         }
                         else
                         {
-                            <td>@item.TimeIn.Hour.ToString("D2") 
-                                : @item.TimeIn.Minute.ToString("D2")</td>
-                        }
+                            <td>
+                                @item.TimeIn.Hour.ToString("D2")
+                            : @item.TimeIn.Minute.ToString("D2")
+                        </td>
+                    }
 
                         @if (item.TimeOut.Hour == 0 && item.TimeOut.Minute == 0)
                         {
@@ -159,9 +166,11 @@
                         }
                         else
                         {
-                            <td>@item.TimeOut.Hour.ToString("D2")
-                                :@item.TimeOut.Minute.ToString("D2")</td>
-                        }
+                            <td>
+                                @item.TimeOut.Hour.ToString("D2")
+                            :@item.TimeOut.Minute.ToString("D2")
+                        </td>
+                    }
 
                         @if (item.LateBy.Hour == 0 && item.LateBy.Minute == 0)
                         {
@@ -169,9 +178,11 @@
                         }
                         else
                         {
-                            <td class="@lateByClass">@item.LateBy.Hour.ToString("D2")
-                                :@item.LateBy.Minute.ToString("D2")</td>
-                        }
+                            <td class="@lateByClass">
+                                @item.LateBy.Hour.ToString("D2")
+                            :@item.LateBy.Minute.ToString("D2")
+                        </td>
+                    }
 
                         @if (item.OverTime.Hour == 0 && item.OverTime.Minute == 0)
                         {
@@ -179,12 +190,15 @@
                         }
                         else
                         {
-                            <td class="@overTimeClass">@item.OverTime.Hour.ToString("D2")
-                                :@item.OverTime.Minute.ToString("D2")</td>
-                        }
+                            <td class="@overTimeClass">
+                                @item.OverTime.Hour.ToString("D2")
+                            :@item.OverTime.Minute.ToString("D2")
+                        </td>
+                    }
+
                         @if (item.RegularizedHours.Hour == 0 && item.RegularizedHours.Minute == 0
-                            && item.WorkingHours.Hour == 0 && item.WorkingHours.Minute == 0
-                            && item.TimeIn.Hour == 0 && item.TimeIn.Hour == 0)
+                          && item.WorkingHours.Hour == 0 && item.WorkingHours.Minute == 0
+                          && item.TimeIn.Hour == 0 && item.TimeIn.Hour == 0 && item.DayStatus == DayStatus.WorkingDay)
                         {
                             <td>
                                 Missing entry
@@ -196,44 +210,52 @@
                         }
                         else
                         {
-                            @if (item.DayStatus == DayStatus.Leave)
-                             {
-                                 <td>@item.WorkingHours.Hour.ToString("D2")
-                                     :@item.WorkingHours.Minute.ToString("D2")</td>
-                             }
-                             else
-                             {
-                                 @if (item.DayStatus == DayStatus.HalfDayLeave)
-                                  {
-                                      <td>
-                                          <u class="open-Dialog" data-toggle="modal"
-                                             onclick=getDailyData('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID)
-                                             style="cursor:pointer">
-                                              @item.WorkingHours.Hour.ToString("D2")
-                                              :@item.WorkingHours.Minute.ToString("D2")
-                                          </u>
-                                      </td>
-                                  }
-                                  else
-                                  {
-                                      <td>
-                                          <u class="open-Dialog" data-toggle="modal"
-                                             onclick=getDailyData('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID)
-                                             style="cursor:pointer">
-                                              @item.WorkingHours.Hour.ToString("D2")
-                                              :@item.WorkingHours.Minute.ToString("D2")
-                                          </u>
-                                          <span data-toggle="tooltip" 
-                                                class="glyphicon glyphicon-time pull-right"
-                                                onclick=regularizeHours('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID)
-                                                title="Regularize hrs"></span>
-                                      </td>
-                                  }
-                             }
+                            @if (item.DayStatus == DayStatus.Leave || item.DayStatus.ToString() == "Holiday")
+                            {
+                                <td>-</td>
                         }
-                        <td>@item.RegularizedHours.Hour.ToString("D2")
-                            :@item.RegularizedHours.Minute.ToString("D2")</td>
-                        <td class="text-left small">@item.Remark</td>
+                        else
+                        {
+                                @if (item.DayStatus == DayStatus.HalfDayLeave)
+                                {
+                                    <td>
+                                        <u class="open-Dialog" data-toggle="modal"
+                                           onclick=getDailyData('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID)
+                                           style="cursor:pointer">
+                                            @item.WorkingHours.Hour.ToString("D2")
+                                            :@item.WorkingHours.Minute.ToString("D2")
+                                        </u>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <u class="open-Dialog" data-toggle="modal"
+                                           onclick=getDailyData('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID)
+                                           style="cursor:pointer">
+                                            @item.WorkingHours.Hour.ToString("D2")
+                                            :@item.WorkingHours.Minute.ToString("D2")
+                                        </u>
+                                        <span data-toggle="tooltip"
+                                              class="glyphicon glyphicon-time pull-right"
+                                              onclick=regularizeHours('@item.Date.ToString("yyyy-MM-dd")',@EmployeeID)
+                                              title="Regularize hrs"></span>
+                                    </td>
+                                }
+                        }
+                        }
+
+                        @if (item.RegularizedHours.Hour == 0 && item.RegularizedHours.Minute == 0)
+                        {
+                            <td>-</td>
+                        }
+                        else
+                        {
+                            <td>@item.RegularizedHours.Hour.ToString("D2"):@item.RegularizedHours.Minute.ToString("D2")</td>
+
+                        }
+
+                        <td class="text-center">@item.Remark</td>
                     </tr>
                     }
                 </tbody>

@@ -45,6 +45,7 @@ namespace Application.Web
             services.AddTransient<ILeavesRepository, LeavesMongoDBRepository>();
             services.AddTransient<ICarryForwardLeaves, CarryForwardLeavesRepository>();
             services.AddTransient<IAuthMongoDBRepository,AuthMongoDBRepository>();
+            services.AddTransient<ICompanyHolidayRepository,CompanyHolidayMongoDBRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
            
