@@ -35,8 +35,8 @@
     </button>
 
     <div class="col-md-12" style="@(isSummaryLeaveCountZero ? "visibility:hidden" :"visibility:visible")">
-        <h3> Leave Summary</h3>
-        <table class="table table-responsive table-striped table-bordered">
+        <label style="font-size:x-large;"> Leave Summary</label>
+        <table class="table table-responsive table-striped table-bordered" style="margin-top:10px;">
             <thead>
                 <tr>
                     <th class="col-md-2 col-lg-2 col-xs-2">Leave Type</th>
@@ -58,11 +58,11 @@
             </tbody>
         </table>
     </div>
+   
 
-
-    <div class="col-md-12" style="@(isLeaveCountZero ? "visibility:hidden" :"visibility:visible")">
-        <h3> Leave Report</h3>
-        <table class="table table-responsive table-striped table-bordered">
+    <div class="col-md-12" style="@(isLeaveCountZero ? "visibility:hidden" :"visibility:visible");margin-top:20px;">
+        <label style="font-size: medium;"> Leave Report</label>
+        <table class="table table-responsive table-striped table-bordered" style="margin-top:10px;">
             <thead>
                 <tr>
                     <th class="col-md-1 col-lg-1 col-xs-1">From Date</th>

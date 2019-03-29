@@ -1,7 +1,7 @@
 ﻿<div class="panel-info" style="@(Model.reportees.Count==0 ? "visibility:hidden" : "visibility:visible")">
     <div class="panel panel-heading col-md-12 col-sm-12">
         <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <label style="font-size: medium">Attendance Report</label>
+            <label >Attendance Report</label>
             <form action="ExportAttendanceReport" method="post">
                 <div class="form-inline" style="margin-left:15px;">
                        <div class="form-group">
@@ -28,7 +28,7 @@
                 </div>
             </form>
             <br/>
-            <label style="font-size: medium">Leave Report</label>
+            <label >Leave Report</label>
             <form  asp-action="ExportLeaveReport" asp-controller="Leave" method="post">
                 <div class="form-inline">
                     <div class="form-group">
