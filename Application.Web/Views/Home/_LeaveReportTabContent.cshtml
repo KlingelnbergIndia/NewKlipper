@@ -62,7 +62,7 @@
                         @foreach (var leaveSummary in @Model.LeaveSummary)
                         {
                             <tr>
-                                <td>@leaveSummary.LeaveType</td>
+                                <td>@leaveSummary.GetLeaveDisplayName().ToString()</td>
                                 <td>@leaveSummary.TotalAvailableLeave</td>
                                 <td>@leaveSummary.LeaveTaken</td>
                                 <td>@leaveSummary.RemainingLeave</td>
@@ -78,7 +78,7 @@
                     <div class="row" style="color:#23527C;">No applied leaves found for @Model.LeaveFormName</div>
                 </div>
                 <table class="table table-responsive table-striped table-bordered" 
-                       style="@(isLeaveCountZero ? "display:none" : "display:block")">
+                       style="@(isLeaveCountZero ? "visibility:hidden" :"visibility:visible")">
                     <thead>
                     <tr>
                         <th class="col-md-1 col-lg-1 col-xs-1">From Date</th>
@@ -104,6 +104,7 @@
                         {
                             displayLeaveType = @leave.GetLeaveDisplayName().ToString();
                         }
+                        var displayLeaveStatus = leave.GetStatusDisplayName().ToString();
                         var isRealisedLeave = "false";
                         string disableColor = @leave.Status == DomainModel.Leave.StatusType.Cancelled ? "lightslategray" : "black";
                         string isCancelledLeave = @leave.Status == DomainModel.Leave.StatusType.Cancelled ? "true" : "false";
@@ -116,7 +117,7 @@
                             <td>@leave.NoOfDays</td>
                             <td>@displayLeaveType</td>
                             <td>@leave.Remark</td>
-                            <td>@leave.Status</td>
+                            <td>@displayLeaveStatus</td>
                             <td class="text-center">
                                 @if (disable == "true")
                                 {

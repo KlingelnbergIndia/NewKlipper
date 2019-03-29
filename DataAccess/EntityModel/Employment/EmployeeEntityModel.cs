@@ -20,13 +20,13 @@ namespace DataAccess.EntityModel.Employment
         [Required]
         [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
         [StringLength(50)]
-        [Display(Name = "First Holiday")]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required]
         [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
         [StringLength(50)]
-        [Display(Name = "Last Holiday")]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
         public string Title { get; set; } = "";
 
