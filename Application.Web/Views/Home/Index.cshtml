@@ -20,13 +20,17 @@
                     <input type="date" name="fromDate" class="form-control input-sm"
                            min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
                            max="@DateTime.Today.ToString("yyyy-MM-dd")"
-                           value=@(Model.fromDate == DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd")) required>
-                    <label for="to">to</label>
+                           value=@(Model.fromDate == DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd")) 
+                           style="margin-left:5px"
+                           required>
+                    <label for="to" style="margin-left:10px;">To</label>
                     <input type="date" name="toDate" class="form-control input-sm"
                            min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
                            max="@DateTime.Today.ToString("yyyy-MM-dd")"
-                           value="@(Model.toDate == DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
-                    <button type="submit" class="btn btn-info btn-sm">Show</button>
+                           value="@(Model.toDate == DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))"
+                           style="margin-left:5px"
+                           required>
+                    <button type="submit" class="btn btn-info btn-sm" style="margin-left:10px;">Show</button>
                 </div>
 
                 <div class="col-md-4 col-sm-4 col-xs-4">

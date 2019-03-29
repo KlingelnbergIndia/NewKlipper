@@ -6,14 +6,14 @@
 }
 
 <div>
-    <div class="panel-info" style="@(Model.reportees.Count==0 ? "visibility:hidden" : "visibility:visible")">
+    <div class="panel-info" style="@(Model.reportees.Count==0 ? "visibility:hidden" :"visibility:visible")">
         <div class="panel panel-heading col-md-12 col-sm-12">
             <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                 <form action="Selectedreportee?selectedViewTabs=attendanceReportMenu" method="post">
                     <div class="form-inline">
                         <div class="form-group" style="margin-right:10px;">
                             <label for="reporteesId">Reportee</label>
-                            <select id="reporteesId" name="selectMenu" class="form-control input-sm">
+                            <select id="reporteesId" name="selectMenu" class="form-control input-sm" style="margin-left:5px">
                                 @if (Model.AttendanceFormName == string.Empty || Model.AttendanceFormName == null)
                                 {
                                     <option selected value="0" disabled>---Select Reportee---</option>
@@ -34,17 +34,20 @@
                         </div>
                         <div class="form-group">
                             <label for="fromDate">From</label>
-                            <input type="date" id="fromDate" name="fromDate" class="form-control input-sm"
-                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
+                            <input type="date" id="fromDate" name="fromDate" 
+                                   class="form-control input-sm"
+                                   min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")" 
                                    max="@DateTime.Today.ToString("yyyy-MM-dd")"
-                                   value="@(Model.fromDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.fromDate.ToString("yyyy-MM-dd"))" required>
+                                   value="@(Model.fromDate==DateTime.MinValue ? "dd-mm-yyyy" :Model.fromDate.ToString("yyyy-MM-dd"))" 
+                                   style="margin-left:5px;" required>
                         </div>
                         <div class="form-group">
                             <label for="toDate" style="margin-left:10px;">To</label>
-                            <input type="date" id="toDate" name="toDate" class="form-control input-sm"
+                            <input type="date" id="toDate" name="toDate" class="form-control input-sm" 
                                    min="@DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd")"
                                    max="@DateTime.Today.ToString("yyyy-MM-dd")"
-                                   value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" required>
+                                   value="@(Model.toDate==DateTime.MinValue ? "dd-mm-yyyy" : Model.toDate.ToString("yyyy-MM-dd"))" 
+                                   style="margin-left:5px;"required>
                         </div>
                         <div class="form-group">
                             <input type="submit" value="Show" class="btn btn-info btn-sm pull" style="margin-left:10px;" />
