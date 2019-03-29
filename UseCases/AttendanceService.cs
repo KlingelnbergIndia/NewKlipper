@@ -238,7 +238,7 @@ namespace UseCases
                 (leaveOfParticularDay, department
                 .IsValidWorkingDay(i.Date.Date), companyHolidayOfParticularDay);
             var regularizedHours = GetRegularizedHours
-                (reguralizedEntry, leaveOfParticularDay, department, companyHolidayOfParticularDay);
+                (reguralizedEntry, leaveOfParticularDay, department,null);
             var haveLeave = HaveLeave(leaveOfParticularDay);
             listOfPerDayAttendanceRecordDTOs.Add(new PerDayAttendanceRecordDTO()
             {
@@ -476,15 +476,13 @@ namespace UseCases
         private TimeSpan GetRegularizedHours(Regularization reguralizedEntry,
             Leave leaveOfParticularDate, Department department, Holiday companyHoliday)
         {
-            return companyHoliday != null
-                ? TimeSpan.FromHours(department.GetNoOfHoursToBeWorked())
-                : leaveOfParticularDate != null
-                   ? leaveOfParticularDate.IsHalfDayLeave() == true
-                      ? TimeSpan.FromHours(department.GetNoOfHoursToBeWorked() / 2)
-                      : TimeSpan.FromHours(department.GetNoOfHoursToBeWorked())
-                  : reguralizedEntry != null
-                      ? (reguralizedEntry.GetRegularizedHours())
-                      : TimeSpan.Zero;
+            return (leaveOfParticularDate != null && companyHoliday == null)
+                ? leaveOfParticularDate.IsHalfDayLeave() == true
+                    ? TimeSpan.FromHours(department.GetNoOfHoursToBeWorked() / 2)
+                    : TimeSpan.FromHours(department.GetNoOfHoursToBeWorked())
+                : reguralizedEntry != null
+                ? (reguralizedEntry.GetRegularizedHours())
+                : TimeSpan.Zero;
         }
 
         private bool IsRegularizedEntry(Leave leaveOfParticularDate,
