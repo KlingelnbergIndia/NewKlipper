@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Web.Controllers;
 using Application.Web.Models;
+using EmailImplementation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RepositoryImplementation;
 using UseCaseBoundary;
+using UseCaseBoundary.Email;
 
 namespace Application.Web
 {
@@ -46,6 +48,11 @@ namespace Application.Web
             services.AddTransient<ICarryForwardLeaves, CarryForwardLeavesRepository>();
             services.AddTransient<IAuthMongoDBRepository,AuthMongoDBRepository>();
             services.AddTransient<ICompanyHolidayRepository,CompanyHolidayMongoDBRepository>();
+
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IEmailConfiguration, EmailConfiguration>();
+            services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
            

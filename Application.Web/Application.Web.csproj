@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EmailService\EmailImplementation.csproj" />
     <ProjectReference Include="..\UseCaseBoundaryImplementation\RepositoryImplementation.csproj" />
     <ProjectReference Include="..\UseCaseBoundary\UseCaseBoundary.csproj" />
     <ProjectReference Include="..\UseCases\UseCases.csproj" />

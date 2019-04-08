@@ -8,6 +8,7 @@ using System.Text;
 using Tests;
 using UseCaseBoundary;
 using UseCaseBoundary.DTO;
+using UseCaseBoundary.Email;
 using UseCases;
 using static DomainModel.Leave;
 
@@ -19,6 +20,7 @@ namespace Klipper.Tests.Leaves
         private IEmployeeRepository employeeData;
         private IDepartmentRepository departmentData;
         private ICarryForwardLeaves carryForwardLeavesData;
+        private IEmailService emailService;
 
         [SetUp]
         public void setup()
@@ -38,7 +40,12 @@ namespace Klipper.Tests.Leaves
         {
             // Setup
             LeaveService leaveService =
-                new LeaveService(leaveRecordData, employeeData, departmentData, carryForwardLeavesData);
+                new LeaveService(
+                    leaveRecordData, 
+                    employeeData, 
+                    departmentData, 
+                    carryForwardLeavesData,
+                    );
 
             List<Leave> listOfLeave = new List<Leave>();
             List<DateTime> listOfDate = new List<DateTime>() { DateTime.Parse("2019-02-22"), DateTime.Parse("2019-02-22") };

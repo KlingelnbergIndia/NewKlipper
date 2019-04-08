@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UseCaseBoundary;
 using UseCaseBoundary.DTO;
+using UseCaseBoundary.Email;
 using static DomainModel.Leave;
 
 namespace UseCases
@@ -14,17 +15,20 @@ namespace UseCases
         private IEmployeeRepository _employeeRepository;
         private IDepartmentRepository _departmentRepository;
         private ICarryForwardLeaves _carryForwardLeaves;
+        private IEmailService _emailService;
 
         public LeaveService(
             ILeavesRepository leavesRepository,
             IEmployeeRepository employeeRepository,
             IDepartmentRepository departmentRepository,
-            ICarryForwardLeaves carryForwardLeavesRepository)
+            ICarryForwardLeaves carryForwardLeavesRepository,
+            IEmailService emailService)
         {
             _leavesRepository = leavesRepository;
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
             _carryForwardLeaves = carryForwardLeavesRepository;
+            _emailService = emailService;
         }
 
         public ServiceResponseDTO ApplyLeave
@@ -229,6 +233,8 @@ namespace UseCases
                     leaveType, isHalfDay, remark, status);
 
                 _leavesRepository.AddNewLeave(takenLeave);
+                _emailService.SendMailForAddNewLeave(takenLeave);
+
                 return ServiceResponseDTO.Saved;
             }
             return

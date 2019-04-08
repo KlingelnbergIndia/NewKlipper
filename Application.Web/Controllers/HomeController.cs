@@ -14,6 +14,7 @@ using Application.Web.PageAccessAuthentication;
 using UseCaseBoundary.DTO;
 using OfficeOpenXml;
 using System.Drawing;
+using UseCaseBoundary.Email;
 
 namespace Application.Web.Controllers
 {
@@ -27,6 +28,7 @@ namespace Application.Web.Controllers
         private ILeavesRepository _leavesRepository;
         private ICarryForwardLeaves _carryForwardLeaves;
         private ICompanyHolidayRepository _companyHolidayRepository;
+        private IEmailService _emailService;
 
         public HomeController(IAccessEventsRepository accessEventRepository,
             IEmployeeRepository employeeRepository,
@@ -34,7 +36,8 @@ namespace Application.Web.Controllers
             IAttendanceRegularizationRepository attendanceRegularizationRepository,
             ILeavesRepository leavesRepository,
             ICarryForwardLeaves carryForwardLeaves,
-            ICompanyHolidayRepository companyHolidayRepository)
+            ICompanyHolidayRepository companyHolidayRepository,
+            IEmailService emailService)
         {
             _accessEventRepository = accessEventRepository;
             _employeeRepository = employeeRepository;
@@ -43,6 +46,7 @@ namespace Application.Web.Controllers
             _leavesRepository = leavesRepository;
             _carryForwardLeaves = carryForwardLeaves;
             _companyHolidayRepository = companyHolidayRepository;
+            _emailService = emailService;
         }
 
         public IActionResult Index(string searchFilter)
@@ -419,7 +423,7 @@ namespace Application.Web.Controllers
 
             var leaveService = new LeaveService
             (_leavesRepository, _employeeRepository,
-                _departmentRepository, _carryForwardLeaves);
+                _departmentRepository, _carryForwardLeaves, _emailService);
 
             reporteeViewModel.leaveRecordsOfSelectedReportee =
                 leaveService.AppliedLeaves(selectedReporteeId);
@@ -438,7 +442,7 @@ namespace Application.Web.Controllers
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var leaveService = new LeaveService
             (_leavesRepository, _employeeRepository, _departmentRepository,
-                _carryForwardLeaves);
+                _carryForwardLeaves,_emailService);
 
             var leaveViewModel = new LeaveViewModel();
             leaveViewModel.GetAppliedLeaves = leaveService.AppliedLeaves(loggedInEmpId);

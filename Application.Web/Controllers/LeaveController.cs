@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using UseCaseBoundary;
 using UseCaseBoundary.DTO;
+using UseCaseBoundary.Email;
 using UseCases;
 using static DomainModel.Leave;
 
@@ -22,25 +23,30 @@ namespace Application.Web.Controllers
         private IEmployeeRepository _employeeRepository;
         private IDepartmentRepository _departmentRepository;
         private ICarryForwardLeaves _carryForwardLeaves;
+        private IEmailService _emailService;
 
         public LeaveController(
             ILeavesRepository leavesRepository, 
             IEmployeeRepository employeeRepository,
             IDepartmentRepository departmentRepository, 
-            ICarryForwardLeaves carryForwardLeaves)
+            ICarryForwardLeaves carryForwardLeaves,
+            IEmailService emailService)
         {
             _leavesRepository = leavesRepository;
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
             _carryForwardLeaves = carryForwardLeaves;
-
+            _emailService = emailService;
         }
         public IActionResult Index()
         {
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
-            var leaveService = new LeaveService
-                (_leavesRepository, _employeeRepository, 
-                _departmentRepository, _carryForwardLeaves);
+            var leaveService = new LeaveService(
+                _leavesRepository, 
+                _employeeRepository, 
+                _departmentRepository, 
+                _carryForwardLeaves,
+                _emailService);
             var leaveViewModel = new LeaveViewModel();
             var appliedLeaves = leaveService.AppliedLeaves(loggedInEmpId);
             var leaveSummary = leaveService.TotalSummary(loggedInEmpId);
@@ -67,7 +73,7 @@ namespace Application.Web.Controllers
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var leaveService = new LeaveService
                 (_leavesRepository, _employeeRepository,
-                _departmentRepository, _carryForwardLeaves);
+                _departmentRepository, _carryForwardLeaves, _emailService);
             var response = leaveService
                 .ApplyLeave(loggedInEmpId, fromDate, toDate,
                     LeaveType, isHalfDay, remark);
@@ -81,7 +87,7 @@ namespace Application.Web.Controllers
         {
             var leaveService = new LeaveService
                 (_leavesRepository, _employeeRepository, 
-                _departmentRepository, _carryForwardLeaves);
+                _departmentRepository, _carryForwardLeaves,_emailService);
 
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var response = leaveService.CancelLeave(LeaveId, loggedInEmpId);
@@ -101,7 +107,7 @@ namespace Application.Web.Controllers
         {
             var leaveService = new LeaveService
             (_leavesRepository, _employeeRepository,
-                _departmentRepository, _carryForwardLeaves);
+                _departmentRepository, _carryForwardLeaves, _emailService);
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var response = leaveService.CancelCompOff(LeaveId, loggedInEmpId);
 
@@ -129,7 +135,7 @@ namespace Application.Web.Controllers
             var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
             var leaveService = new LeaveService
             (_leavesRepository, _employeeRepository,
-                _departmentRepository, _carryForwardLeaves);
+                _departmentRepository, _carryForwardLeaves, _emailService);
 
             var response = leaveService
                 .ApplyCompOff(loggedInEmpId, fromDate, toDate,
@@ -154,7 +160,7 @@ namespace Application.Web.Controllers
                 var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
                 var leaveService = new LeaveService
                 (_leavesRepository, _employeeRepository,
-                    _departmentRepository, _carryForwardLeaves);
+                    _departmentRepository, _carryForwardLeaves, _emailService);
 
                 var response = leaveService
                     .UpdateAddedCompOff
@@ -266,7 +272,7 @@ namespace Application.Web.Controllers
                 var loggedInEmpId = HttpContext.Session.GetInt32("ID") ?? 0;
                 var leaveService = new LeaveService
                     (_leavesRepository, _employeeRepository,
-                    _departmentRepository, _carryForwardLeaves);
+                    _departmentRepository, _carryForwardLeaves, _emailService);
 
                 var response = leaveService
                     .UpdateLeave(leaveId, loggedInEmpId, fromDate, 
@@ -381,7 +387,7 @@ namespace Application.Web.Controllers
             var employeeId = HttpContext.Session.GetInt32("ID") ?? 0;
             var reporteeService = new ReporteeService(_employeeRepository);
             var leaveService = new LeaveService(_leavesRepository, _employeeRepository,
-              _departmentRepository, _carryForwardLeaves);
+              _departmentRepository, _carryForwardLeaves, _emailService);
             var reportees = reporteeService.ReporteesData(employeeId);
             var listOfReporteesLeaveRecord = new List<EmployeeViewModel>();
 
