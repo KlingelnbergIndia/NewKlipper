@@ -50,7 +50,7 @@ namespace Application.Web
             services.AddTransient<ICompanyHolidayRepository,CompanyHolidayMongoDBRepository>();
 
             services.AddTransient<IEmailService, EmailService>();
-            services.AddTransient<IEmailConfiguration, EmailConfiguration>();
+            //services.AddTransient<IEmailConfiguration, EmailConfiguration>();
             services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
 
 
