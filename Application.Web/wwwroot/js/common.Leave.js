@@ -3,10 +3,12 @@
 function CancelLeave(leaveId, isRealisedLeave, isCancelledLeave) {
     var controllerName = "Leave";
     var actionName = "CancelLeave";
+    alert(window.location.href);
     var urlArray = window.location.href.split('/');
     urlArray[urlArray.length - 2] = controllerName;
     urlArray[urlArray.length - 1] = actionName;
-    var newURL = urlArray.join('/');
+    var urlArray = urlArray.join('/');
+    alert(urlArray);
     //var newURL = window.location.origin  + "/" + controllerName + "/" + actionName;
 
     if (isRealisedLeave == "true") {
