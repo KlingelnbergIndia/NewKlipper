@@ -3,7 +3,11 @@
 function CancelLeave(leaveId, isRealisedLeave, isCancelledLeave) {
     var controllerName = "Leave";
     var actionName = "CancelLeave";
-    var newURL = window.location.protocol + "//" + window.location.host + "/" + controllerName + "/" + actionName;
+    var urlArray = window.location.href.split('/');
+    urlArray[urlArray.length - 2] = controllerName;
+    urlArray[urlArray.length - 1] = actionName;
+    var newURL = urlArray.join('/');
+    //var newURL = window.location.origin  + "/" + controllerName + "/" + actionName;
 
     if (isRealisedLeave == "true") {
         alert('Passed leaves can not be cancelled !');
@@ -11,9 +15,9 @@ function CancelLeave(leaveId, isRealisedLeave, isCancelledLeave) {
     }
     if (isCancelledLeave == "true") {
         alert('cancelled leaves can not be updated !');
-            return;
+        return;
     }
-   
+
 
     if (confirm('Do you want to cancel this leave ?')) {
         $.ajax({
@@ -33,7 +37,10 @@ function CancelLeave(leaveId, isRealisedLeave, isCancelledLeave) {
 function CancelAddedCompOff(leaveId, isRealised, isCancelled) {
     var controllerName = "Leave";
     var actionName = "CancelAddedCompOff";
-    var newURL = window.location.protocol + "//" + window.location.host + "/" + controllerName + "/" + actionName;
+    var urlArray = window.location.href.split('/');
+    urlArray[urlArray.length - 2] = controllerName;
+    urlArray[urlArray.length - 1] = actionName;
+    var newURL = urlArray.join('/');
 
     if (isRealised == "true") {
         alert('Passed leaves can not be cancelled !');

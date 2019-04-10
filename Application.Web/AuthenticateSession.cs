@@ -26,7 +26,7 @@ namespace Klipper.Web.UI
                 }
                 else
                 {
-                    filterContext.Result = new RedirectResult("/");
+                    filterContext.Result = new RedirectResult("/klipper");
                 }
             }
 

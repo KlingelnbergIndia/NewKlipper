@@ -69,10 +69,17 @@
     });
 
     $(document).ajaxError(function (e, xhr, settings) {
+        url: newURL
         if (xhr.status == 401) {
             alert("Your Session time expired. Please login again.");
-            window.location = "/";
+            var urlArray = window.location.href.split('/');
+            urlArray[urlArray.length - 2] = "Login";
+            urlArray[urlArray.length - 1] = "Login";
+            var newURL = urlArray.join('/');
+            window.location.href = newURL;
         }
+        
+       
     });
 
 
