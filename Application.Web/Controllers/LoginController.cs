@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using UseCaseBoundary;
 using UseCaseBoundary.DTO;
+using UseCaseBoundary.Email;
 using UseCases;
 
 namespace Application.Web.Controllers
@@ -18,10 +19,12 @@ namespace Application.Web.Controllers
         private IAuthMongoDBRepository _authMongoDbRepository;
 
         public LoginController(IEmployeeRepository employeeRepository,
-            IAuthMongoDBRepository authMongoDbRepository)
+            IAuthMongoDBRepository authMongoDbRepository,
+            IEmailService emailService)
         {
             _employeeRepository = employeeRepository;
             _authMongoDbRepository = authMongoDbRepository;
+            emailService.SendMailForAddNewLeave(null);
         }
 
         public IActionResult Login()

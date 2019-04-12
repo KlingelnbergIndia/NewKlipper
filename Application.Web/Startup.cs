@@ -51,7 +51,8 @@ namespace Application.Web
 
             services.AddTransient<IEmailService, EmailService>();
             //services.AddTransient<IEmailConfiguration, EmailConfiguration>();
-            services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+            services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>());
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

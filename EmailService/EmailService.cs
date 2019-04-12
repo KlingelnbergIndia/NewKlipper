@@ -22,19 +22,35 @@ namespace EmailImplementation
         {
             using (var emailClient = new SmtpClient())
             {
-                //The last parameter here is to use SSL (Which you should!)
-                emailClient.Connect(
-                    _emailConfiguration.SmtpServer,
-                    _emailConfiguration.SmtpPortNumber, 
-                    true);
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Klipper", "naikskt07@gmail.com"));
+                message.To.Add(new MailboxAddress("Klipper", "naikskt07@gmail.com"));
+                message.Subject = "How you doin'?";
+                message.Body = new TextPart("plain")
+                {
+                    Text = @"Hello there, your leave is approved by your manager.. ENJOY :D"
+                };
+
+                emailClient.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
                 emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
-                emailClient.Authenticate(
-                    _emailConfiguration.Username,
-                    _emailConfiguration.Password);
+                emailClient.Authenticate("USER_NAME", "PASSWORD");
 
-                emailClient.Send(GetMessage());
-
+                emailClient.Send(message);
                 emailClient.Disconnect(true);
+
+                //The last parameter here is to use SSL (Which you should!)
+                //emailClient.Connect(
+                //    _emailConfiguration.SmtpServer,
+                //    _emailConfiguration.SmtpPortNumber, 
+                //    true);
+                //emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
+                //emailClient.Authenticate(
+                //    _emailConfiguration.Username,
+                //    _emailConfiguration.Password);
+
+                //emailClient.Send(GetMessage());
+
+                //emailClient.Disconnect(true);
             }
         }
 
