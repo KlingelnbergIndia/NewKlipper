@@ -8,6 +8,7 @@ namespace UseCaseBoundary.Email
     {
         string SmtpServer { get; }
         int SmtpPortNumber { get; }
+        bool UseSSL { get; }
 
         string EmailId { get; }
         string Username { get; }

@@ -56,10 +56,15 @@ namespace EmailImplementation
                     Text = mailBodyText
                 };
 
+                //emailClient.Connect(
+                //    _emailConfiguration.SmtpServer,
+                //    _emailConfiguration.SmtpPortNumber, 
+                //    MailKit.Security.SecureSocketOptions.StartTlsWhenAvailable);
+
                 emailClient.Connect(
                     _emailConfiguration.SmtpServer,
-                    _emailConfiguration.SmtpPortNumber, 
-                    MailKit.Security.SecureSocketOptions.StartTlsWhenAvailable);
+                    _emailConfiguration.SmtpPortNumber,
+                    _emailConfiguration.UseSSL);
 
                 emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
                 emailClient.Authenticate(
