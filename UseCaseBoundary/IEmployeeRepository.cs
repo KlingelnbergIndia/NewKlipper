@@ -8,5 +8,6 @@ namespace UseCaseBoundary
         Employee GetEmployee(string UserName);
         Employee GetEmployee(int employeeId);
         List<Employee> GetAllEmployeeExceptAdmin(int employeeId);
+        Employee GetSupervisorDetaileOfEmployee(int employeeId);
     }
 }

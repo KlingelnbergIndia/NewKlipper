@@ -5,6 +5,7 @@ using DomainModel;
 using MailKit.Net.Smtp;
 using MimeKit;
 using MimeKit.Text;
+using UseCaseBoundary;
 using UseCaseBoundary.Email;
 
 namespace EmailImplementation
@@ -12,23 +13,47 @@ namespace EmailImplementation
     public class EmailService : IEmailService
     {
         private readonly IEmailConfiguration _emailConfiguration;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public EmailService(IEmailConfiguration emailConfiguration)
+        public EmailService(
+            IEmailConfiguration emailConfiguration,
+            IEmployeeRepository employeeRepository)
         {
             _emailConfiguration = emailConfiguration;
+            _employeeRepository = employeeRepository;
         }
 
         public void SendMailForAddNewLeave(Leave takenLeave)
         {
+            var employeeDetails = _employeeRepository.GetEmployee(
+                takenLeave.GetEmployeeId());
+            var managerDetails = _employeeRepository.GetSupervisorDetaileOfEmployee(
+                takenLeave.GetEmployeeId());
+
+            var toEmail = employeeDetails.EmailId();
+            var ccEmail = managerDetails.EmailId();
+
+            var subject = "New Leave Added In Klipper";
+            var mailBodyText = "New Leave Added In Klipper";
+            SendMail(toEmail, ccEmail, subject, mailBodyText);
+        }
+
+        private void SendMail(
+            string toEmail, 
+            string ccEmail, 
+            string subject, 
+            string mailBodyText)
+        {
             using (var emailClient = new SmtpClient())
             {
                 var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("Klipper", "naikskt07@gmail.com"));
-                message.To.Add(new MailboxAddress("Klipper", "naikskt07@gmail.com"));
-                message.Subject = "How you doin'?";
+                message.From.Add(new MailboxAddress("Klipper Admin", _emailConfiguration.EmailId));
+                message.To.Add(new MailboxAddress(toEmail));
+                message.Cc.Add(new MailboxAddress(ccEmail));
+                message.Subject = subject;
                 message.Body = new TextPart("plain")
                 {
-                    Text = @"Hello there, your leave is approved by your manager.. ENJOY :D"
+                    Text = mailBodyText
                 };
 
                 emailClient.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
@@ -37,20 +62,6 @@ namespace EmailImplementation
 
                 emailClient.Send(message);
                 emailClient.Disconnect(true);
-
-                //The last parameter here is to use SSL (Which you should!)
-                //emailClient.Connect(
-                //    _emailConfiguration.SmtpServer,
-                //    _emailConfiguration.SmtpPortNumber, 
-                //    true);
-                //emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
-                //emailClient.Authenticate(
-                //    _emailConfiguration.Username,
-                //    _emailConfiguration.Password);
-
-                //emailClient.Send(GetMessage());
-
-                //emailClient.Disconnect(true);
             }
         }
 

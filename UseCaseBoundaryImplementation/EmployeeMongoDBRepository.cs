@@ -119,6 +119,8 @@ namespace RepositoryImplementation
             var _id = employeeFromAuthDBContext.ID;
             var _userName = employeeFromAuthDBContext.UserName;
             var _password = employeeFromAuthDBContext.PasswordHash;
+            var email = employeeFromAuthDBContext.Email;
+
             var firstName = employeeFromEmployeeDBContext.FirstName;
             var lastName = employeeFromEmployeeDBContext.LastName;
             var title = employeeFromEmployeeDBContext.Title;
@@ -133,10 +135,14 @@ namespace RepositoryImplementation
 
             var domainEmployee = new Employee
             (_id, _userName, _password, firstName, lastName,
-                title, _roles, reportees, department);
+                title, _roles, reportees, department, email);
 
             return domainEmployee;
         }
 
+        public Employee GetSupervisorDetaileOfEmployee(int employeeId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
