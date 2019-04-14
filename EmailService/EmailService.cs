@@ -33,7 +33,7 @@ namespace EmailImplementation
             var toEmail = employeeDetails.EmailId();
             var ccEmail = managerDetails.EmailId();
 
-            var subject = "New Leave Added In Klipper";
+            var subject = "Testing : Manager-in-CC";
             var mailBodyText = "New Leave Added In Klipper";
             SendMail(toEmail, ccEmail, subject, mailBodyText);
         }
@@ -56,11 +56,17 @@ namespace EmailImplementation
                     Text = mailBodyText
                 };
 
-                emailClient.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
-                emailClient.Authenticate("USER_NAME", "PASSWORD");
+                emailClient.Connect(
+                    _emailConfiguration.SmtpServer,
+                    _emailConfiguration.SmtpPortNumber, 
+                    MailKit.Security.SecureSocketOptions.StartTlsWhenAvailable);
 
+                emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
+                emailClient.Authenticate(
+                    _emailConfiguration.Username,
+                    _emailConfiguration.Password);
                 emailClient.Send(message);
+
                 emailClient.Disconnect(true);
             }
         }
