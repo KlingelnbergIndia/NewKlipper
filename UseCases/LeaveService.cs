@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UseCaseBoundary;
 using UseCaseBoundary.DTO;
 using UseCaseBoundary.Email;
@@ -58,7 +59,7 @@ namespace UseCases
         (int employeeId, DateTime fromDate, DateTime toDate,
             string remark)
         {
-           
+
             var employeeData = _employeeRepository.GetEmployee(employeeId);
             var department = _departmentRepository
                 .GetDepartment(employeeData.Department());
@@ -77,8 +78,8 @@ namespace UseCases
 
         public List<LeaveRecordDTO> AppliedLeaves(int employeeId)
         {
-           var leavesInfo = _leavesRepository.GetAllLeavesInfo(employeeId);
-           var listOfLeaveDTO = new List<LeaveRecordDTO>();
+            var leavesInfo = _leavesRepository.GetAllLeavesInfo(employeeId);
+            var listOfLeaveDTO = new List<LeaveRecordDTO>();
             foreach (var eachLeave in leavesInfo)
             {
                 var leaveDTO = new LeaveRecordDTO()
@@ -162,7 +163,7 @@ namespace UseCases
                 UpdateLeaveAndAppliedLeaveTypeIsSame, allAppliedLeaves);
         }
 
-        public ServiceResponseDTO UpdateAddedCompOff(string leaveId,int employeeId,
+        public ServiceResponseDTO UpdateAddedCompOff(string leaveId, int employeeId,
             DateTime fromDate, DateTime toDate, string remark)
         {
             var employeeData = _employeeRepository.GetEmployee(employeeId);
@@ -232,8 +233,15 @@ namespace UseCases
                 var takenLeave = new Leave(employeeId, takenLeaveDates,
                     leaveType, isHalfDay, remark, status);
 
-                _leavesRepository.AddNewLeave(takenLeave);
-                _emailService.SendMailForAddNewLeave(takenLeave);
+                var isLeaveAdded = _leavesRepository.AddNewLeave(takenLeave);
+
+                if (isLeaveAdded)
+                {
+                    Task.Run(() =>
+                    {
+                        _emailService.SendMailForAddNewLeave(takenLeave);
+                    });
+                }
 
                 return ServiceResponseDTO.Saved;
             }
@@ -253,7 +261,14 @@ namespace UseCases
                 var takenLeave = new Leave(employeeId, takenLeaveDates,
                     LeaveType.CompOff, false, remark, status);
 
-                _leavesRepository.AddNewLeave(takenLeave);
+                var isCompoffAdded = _leavesRepository.AddNewLeave(takenLeave);
+                if (isCompoffAdded)
+                {
+                    Task.Run(() =>
+                    {
+                        _emailService.SendMailForAddNewLeave(takenLeave);
+                    });
+                }
                 return ServiceResponseDTO.Saved;
             }
             return
@@ -262,7 +277,7 @@ namespace UseCases
                     : ServiceResponseDTO.RecordExists;
         }
 
-       
+
         private LeaveSummaryDTO GetLeaveSummaryDto(
             float totalCasualLeaveAvailable, float totalSickLeaveAvailable,
             float totalCompOffLeaveAvailable, float casualLeaveTaken,
@@ -300,7 +315,7 @@ namespace UseCases
             totalCompOffLeaveAvailable =
                 carryForwardLeave.MaxCompoffLeaves()
                  + listOfAppliedLeaves.CountAddedCompoffLeaves();
-            
+
             casualLeaveTaken = listOfAppliedLeaves.CalculateCasualLeaveTaken()
                                      + carryForwardLeave.TakenCasualLeaves();
             sickLeaveTaken = listOfAppliedLeaves.CalculateSickLeaveTaken()
@@ -309,12 +324,12 @@ namespace UseCases
                                     + carryForwardLeave.TakenCompoffLeaves();
         }
 
-      
+
         private ServiceResponseDTO ServiceResponseForUpdateExistingLeave(
-            string leaveId, int employeeId,LeaveType leaveType, 
+            string leaveId, int employeeId, LeaveType leaveType,
             bool isHalfDayLeave, string remark, List<DateTime> takenLeaveDates,
             int invalidDays, int totalAppliedDays,
-            bool UpdateLeaveAndAppliedLeaveTypeIsSame,List<Leave> allAppliedLeaves)
+            bool UpdateLeaveAndAppliedLeaveTypeIsSame, List<Leave> allAppliedLeaves)
         {
             var empIdOfLeaveToBeUpdate = _leavesRepository
                 .GetLeaveByLeaveId(leaveId).GetEmployeeId();
@@ -325,9 +340,9 @@ namespace UseCases
             if (existingLeaveIsCancelledLeave)
                 return ServiceResponseDTO.Deleted;
 
-            if (empIdOfLeaveToBeUpdate == employeeId 
+            if (empIdOfLeaveToBeUpdate == employeeId
                 && IsRealizedLeave(leaveId))
-                    return ServiceResponseDTO.RealizedLeave;
+                return ServiceResponseDTO.RealizedLeave;
 
             if (takenLeaveDates.Any())
                 return ServiceResponseOfUpdateLeave(
@@ -355,7 +370,7 @@ namespace UseCases
 
             if (existingAddedCompOffIsCancelled)
                 return ServiceResponseDTO.Deleted;
-            
+
             if (empIdOfAddedCompOffToBeUpdate == employeeId
                 && IsRealizedLeave(leaveId))
                 return ServiceResponseDTO.RealizedLeave;
@@ -367,7 +382,7 @@ namespace UseCases
 
             return invalidDays == totalAppliedDays ?
                 ServiceResponseDTO.InvalidDays
-                :ServiceResponseDTO.RecordExists;
+                : ServiceResponseDTO.RecordExists;
         }
 
         private ServiceResponseDTO ServiceResponseOfUpdateAddedCompOff(
@@ -376,7 +391,7 @@ namespace UseCases
             List<DateTime> takenLeaveDates)
         {
             var takenLeave = new Leave
-            (employeeId, takenLeaveDates, LeaveType.CompOff,false,
+            (employeeId, takenLeaveDates, LeaveType.CompOff, false,
                 remark, StatusType.CompOffUpdated, null);
             _leavesRepository.OverrideLeave(leaveId, takenLeave);
 
@@ -384,17 +399,17 @@ namespace UseCases
         }
 
         private ServiceResponseDTO ServiceResponseOfUpdateLeave(
-            string leaveId, int employeeId, LeaveType leaveType, 
-            bool isHalfDayLeave, string remark, 
-            List<DateTime> takenLeaveDates, 
+            string leaveId, int employeeId, LeaveType leaveType,
+            bool isHalfDayLeave, string remark,
+            List<DateTime> takenLeaveDates,
             bool UpdateLeaveAndAppliedLeaveTypeIsSame)
         {
             if (IsSelectedLeaveIsAvailableToUpdate
-                (employeeId, leaveType, isHalfDayLeave, 
+                (employeeId, leaveType, isHalfDayLeave,
                     UpdateLeaveAndAppliedLeaveTypeIsSame,
                     takenLeaveDates, leaveId) == false)
                 return ServiceResponseDTO.CanNotApplied;
-            
+
             var takenLeave = new Leave
                 (employeeId, takenLeaveDates, leaveType, isHalfDayLeave,
                 remark, StatusType.Updated, null);
@@ -403,7 +418,7 @@ namespace UseCases
             return ServiceResponseDTO.Updated;
         }
 
-       
+
         private List<DateTime> TakenLeaveDates
            (DateTime fromDate, DateTime toDate,
             Department department,
@@ -414,8 +429,8 @@ namespace UseCases
                             eachLeaveDay <= toDate;
                             eachLeaveDay = eachLeaveDay.AddDays(1).Date)
             {
-                bool isLeaveExist = 
-                    CheckIsRecordExist(allAppliedLeaves, employeeId, 
+                bool isLeaveExist =
+                    CheckIsRecordExist(allAppliedLeaves, employeeId,
                         leaveId, eachLeaveDay);
 
                 if (!isLeaveExist && department.IsValidWorkingDay(eachLeaveDay))
@@ -433,8 +448,8 @@ namespace UseCases
                 eachLeaveDay <= toDate;
                 eachLeaveDay = eachLeaveDay.AddDays(1).Date)
             {
-                bool isLeaveExist = 
-                    CheckIsRecordExist(allAppliedLeaves, employeeId, 
+                bool isLeaveExist =
+                    CheckIsRecordExist(allAppliedLeaves, employeeId,
                         leaveId, eachLeaveDay);
 
                 if (!isLeaveExist)
@@ -443,7 +458,7 @@ namespace UseCases
             return takenLeaveDates;
         }
 
-        private bool CheckIsRecordExist(List<Leave> allAppliedLeaves, 
+        private bool CheckIsRecordExist(List<Leave> allAppliedLeaves,
             int employeeId, string leaveId, DateTime eachLeaveDay)
         {
             return leaveId == null
@@ -493,7 +508,7 @@ namespace UseCases
         private bool IsSelectedLeaveIsAvailableToApply(int employeeId,
             LeaveType leaveType, List<DateTime> takenLeaveDates, bool isHalfDay)
         {
-            if (leaveType == LeaveType.SickLeave 
+            if (leaveType == LeaveType.SickLeave
                 || leaveType == LeaveType.CompOff)
             {
                 var leaveSummmary = TotalSummary(employeeId);
@@ -503,12 +518,12 @@ namespace UseCases
 
                 if (isHalfDay == true)
                     CountOfTakenLeaveDates = CountOfTakenLeaveDates / 2;
-               
+
                 if ((leaveType == LeaveType.SickLeave &&
-                     leaveSummmary.RemainingSickLeave 
-                     - CountOfTakenLeaveDates < 0) 
+                     leaveSummmary.RemainingSickLeave
+                     - CountOfTakenLeaveDates < 0)
                     || (leaveType == LeaveType.CompOff &&
-                     leaveSummmary.RemainingCompOffLeave 
+                     leaveSummmary.RemainingCompOffLeave
                      - CountOfTakenLeaveDates < 0))
                     return false;
             }
@@ -517,10 +532,10 @@ namespace UseCases
 
         private bool IsSelectedLeaveIsAvailableToUpdate(
             int employeeId, LeaveType leaveType, bool isHalfDayLeave,
-            bool UpdateLeaveAndAppliedLeaveTypeIsSame, 
+            bool UpdateLeaveAndAppliedLeaveTypeIsSame,
             List<DateTime> takenLeaveDates, string leaveId)
         {
-            if (leaveType == LeaveType.SickLeave 
+            if (leaveType == LeaveType.SickLeave
                 || leaveType == LeaveType.CompOff)
             {
                 var leaveSummmary = TotalSummary(employeeId);
@@ -542,7 +557,7 @@ namespace UseCases
             return true;
         }
 
-        private bool IsLeaveAvailable(LeaveType leaveType, 
+        private bool IsLeaveAvailable(LeaveType leaveType,
             bool UpdateLeaveAndAppliedLeaveTypeIsSame, string leaveId,
             LeaveSummaryDTO leaveSummmary, float CountOfTakenLeaveDates)
         {
@@ -573,7 +588,7 @@ namespace UseCases
         {
             var leave = _leavesRepository.GetLeaveByLeaveId(LeaveId);
 
-            return leave != null && 
+            return leave != null &&
                    leave.GetLeaveDate().Min() <= DateTime.Now.Date
                 ? true
                 : false;
@@ -582,15 +597,15 @@ namespace UseCases
         private bool IsMultipleDateForHalfDayLeave
             (DateTime fromDate, DateTime toDate, bool isHalfDayLeave)
         {
-            return isHalfDayLeave == true && fromDate.Date != toDate.Date 
-                ? true 
+            return isHalfDayLeave == true && fromDate.Date != toDate.Date
+                ? true
                 : false;
         }
 
         private float CalculateNoOfDays(Leave leave)
         {
-            return leave.IsHalfDayLeave() == true 
-                ? (float)leave.GetLeaveDate().Count() / 2 
+            return leave.IsHalfDayLeave() == true
+                ? (float)leave.GetLeaveDate().Count() / 2
                 : leave.GetLeaveDate().Count();
         }
     }

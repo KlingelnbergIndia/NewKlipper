@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using DomainModel;
+using UseCaseBoundary.DTO;
 
 namespace UseCaseBoundary.Email
 {

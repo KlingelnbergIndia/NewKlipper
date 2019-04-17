@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using DomainModel;
 using MailKit.Net.Smtp;
 using MimeKit;
 using MimeKit.Text;
 using UseCaseBoundary;
+using UseCaseBoundary.DTO;
 using UseCaseBoundary.Email;
 
 namespace EmailImplementation
@@ -33,16 +35,50 @@ namespace EmailImplementation
             var toEmail = employeeDetails.EmailId();
             var ccEmail = managerDetails.EmailId();
 
-            var subject = "Testing : Manager-in-CC";
-            var mailBodyText = "New Leave Added In Klipper";
-            SendMail(toEmail, ccEmail, subject, mailBodyText);
+            var subject = "New leave applied";
+            var htmlBody = CreateHtmlBodyForNewLeave(employeeDetails, takenLeave);
+            SendMail(toEmail, ccEmail, subject, htmlBody);
+        }
+
+        private string CreateHtmlBodyForNewLeave(Employee employeeDetails, Leave takenLeave)
+        {
+            string htmlText = "<p><span style=\"color: #333399;\"><strong>Klipper:</strong> <strong>New Leave Added</strong></span></p>" +
+            "<p><strong>Summary</strong></p>" +
+            "<table style=\"border-collapse: collapse; width: 100%;\" border=\"1\">" +
+            "<tbody>" +
+            "<tr>" +
+            "<td style=\"width: 299px;\">Name</td>" +
+            "<td style=\"width: 298px;\">" +
+            employeeDetails.FirstName() + " " + employeeDetails.LastName() +
+            "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td style=\"width: 299px;\">From</td>" +
+            "<td style=\"width: 298px;\">" + takenLeave.GetLeaveDate().Min() + "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td style=\"width: 299px;\">To</td>" +
+            "<td style=\"width: 298px;\">" + takenLeave.GetLeaveDate().Max() + "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td style=\"width: 299px;\">Leave Type</td>" +
+            "<td style=\"width: 298px;\">" + takenLeave.GetLeaveType().ToString() + "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td style=\"width: 299px;\">Applied Date</td>" +
+            "<td style=\"width: 298px;\"> " + DateTime.Now + "</td>" +
+            "</tr>" +
+            "</tbody>" +
+            "</table>";
+
+            return htmlText;
         }
 
         private void SendMail(
-            string toEmail, 
-            string ccEmail, 
-            string subject, 
-            string mailBodyText)
+            string toEmail,
+            string ccEmail,
+            string subject,
+            string htmlBody)
         {
             using (var emailClient = new SmtpClient())
             {
@@ -51,9 +87,9 @@ namespace EmailImplementation
                 message.To.Add(new MailboxAddress(toEmail));
                 message.Cc.Add(new MailboxAddress(ccEmail));
                 message.Subject = subject;
-                message.Body = new TextPart("plain")
+                message.Body = new TextPart(MimeKit.Text.TextFormat.Html)
                 {
-                    Text = mailBodyText
+                    Text = htmlBody
                 };
 
                 //emailClient.Connect(
@@ -92,5 +128,6 @@ namespace EmailImplementation
 
             return message;
         }
+
     }
 }
